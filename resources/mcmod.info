@@ -1,0 +1,22 @@
+[
+  {
+    "description":"Dinner party for crows!",
+    "parent":"",
+    "logoFile":"",
+    "credits":"defeatedcrow",
+    "dependencies":[],
+    "modid":"dcs_dinner",
+    "mcversion":"1.8.9",
+    "screenshots":[],
+    "authorList":[
+      "defeatedcrow"
+    ],
+    "name":"CrowsDinnerMod",
+    "url":"http://defeatedcrow.jp/modwiki/Mainpage",
+    "updateUrl":"",
+    "version":"1.8.9_0.1a",
+    "requiredMods":[
+      "Minecraft Forge1.8.9-11.15.1.1722+"
+    ]
+  }
+]
