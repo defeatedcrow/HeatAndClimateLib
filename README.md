@@ -19,11 +19,11 @@ the Mod necessary for defeatedcrow's mod in 1.8.9+
 ## Function
 1. Climate System  They are similar to the heat source system of pots and iron plate in AMT2. Changing it in more general. It is used as "IClimate" interface for heat, humidity, air flow in current BlockPos. <br> AMT2の鍋・鉄板のHeatSourceをより汎用化したシステムです。ある座標の温度・湿度・通気性を「気候」としてIClimateインターフェイスを定義し、調理や装置稼働の条件として使用します。<br>
 Example:  <br>
-- For cooking, using the natural climate elements with the biome block.  <br>自然の熱源など、その座標の気候を利用した調理。
-- Using the climate of the coordinates to the growth of the plant.  <br>植物の生長に特定の気候条件を要求する。  
+ For cooking, using the natural climate elements with the biome block.  <br>自然の熱源など、その座標の気候を利用した調理。<br>
+ Using the climate of the coordinates to the growth of the plant.  <br>植物の生長に特定の気候条件を要求する。 <br> 
   
 2. HeatSource  They are used in order to change the temperature of the coordinates. It is used for the devices or recipes that require high temperature.  <br>座標の持つ温度を増減させる熱源。高温を必要とする装置やレシピに利用されます。<br>
 Example:  <br>
-When you place the "raw dough" near the fire as an object, it becomes "bread". <br> 火の近くにEntityとして「生のパン生地」を置いておくと、「焼けたパン」に変わります。  <br>
+ When you place the "raw dough" near the fire as an object, it becomes "bread". <br>  火の近くにEntityとして「生のパン生地」を置いておくと、「焼けたパン」に変わります。  <br>
 <br>
 (c) defeatedcrow 2016
