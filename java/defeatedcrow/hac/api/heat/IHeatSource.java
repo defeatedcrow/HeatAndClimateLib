@@ -10,14 +10,24 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
  */
 public interface IHeatSource {
 
+	/**
+	 * 発生HeatTier
+	 */
 	DCHeatTier getTier();
 
+	/**
+	 * 一度の受け渡しで伝熱出来る最大量
+	 */
 	int getMaxTransfer();
 
-	int getCurrentTransfer();
-
+	/**
+	 * このTileの持つ熱量を使用する
+	 */
 	int useHeatTransfer(World world, BlockPos pos, boolean sim);
 
+	/**
+	 * 熱源が稼働中かどうか
+	 */
 	boolean isActive(World world, BlockPos pos);
 
 }
