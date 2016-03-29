@@ -6,8 +6,22 @@ import net.minecraft.util.MathHelper;
  * 熱源の概念。
  */
 public enum DCHeatTier {
-	ABSOLUTE(-273, -2, 0), COLD(-50, -1, 1), NORMAL(20, 0, 2), HOT(50, 1, 3), OVEN(250, 2, 4), KILN(800, 3, 5), SMELTING(
-			1500, 4, 6), UHT(3000, 5, 7);
+	// absolute
+	ABSOLUTE(-273, -2, 0),
+	// icecream making and cooling
+	COLD(-50, -1, 1),
+	// electric or mechanical energy require
+	NORMAL(20, 0, 2),
+	// drying or brewing
+	HOT(50, 1, 3),
+	// cooking
+	OVEN(250, 2, 4),
+	// making charcoal, bronze, burn dust
+	KILN(800, 3, 5),
+	// making iron or another metal
+	SMELTING(1500, 4, 6),
+	// special alloy
+	UHT(3000, 5, 7);
 
 	private final int temp;
 	private final int tier;

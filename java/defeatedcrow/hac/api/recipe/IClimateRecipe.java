@@ -3,6 +3,9 @@ package defeatedcrow.hac.api.recipe;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 
 /**
@@ -48,5 +51,14 @@ public interface IClimateRecipe {
 	 * Climate条件判定
 	 */
 	boolean matchClimate(IClimate climate);
+
+	/**
+	 * おもにレシピ条件表示機能用
+	 */
+	List<DCHeatTier> requiredHeat();
+
+	List<DCHumidity> requiredHum();
+
+	List<DCAirflow> requiredAir();
 
 }

@@ -6,6 +6,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
+/**
+ * EntityとItemを紐付けるインターフェイス。
+ */
 public interface IEntityItem {
 
 	boolean canSpawnHere(World world, BlockPos pos);

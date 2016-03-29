@@ -1,8 +1,8 @@
 package defeatedcrow.hac.api.climate;
 
-public class DCsClimateAPI {
+public class ClimateAPI {
 
-	private DCsClimateAPI() {
+	private ClimateAPI() {
 	}
 
 	public static IBiomeClimateRegister register;

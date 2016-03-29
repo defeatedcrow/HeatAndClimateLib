@@ -13,7 +13,7 @@ public interface IClimateSmeltingRegister {
 	/**
 	 * Recipeのリストを得る。HeatTierごとに別リストになっている。
 	 */
-	List<IClimateRecipe> getRecipeList(DCHeatTier tier);
+	List<? extends IClimateSmelting> getRecipeList(DCHeatTier tier);
 
 	/**
 	 * Recipe登録<br>
@@ -33,16 +33,20 @@ public interface IClimateSmeltingRegister {
 	 * @param input
 	 *            : 材料
 	 */
-	void adRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air,
+	void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air,
 			float secondaryChance, Object input);
 
-	void adRecipe(ItemStack output, ItemStack secondary, int code, float secondaryChance, Object input);
+	void addRecipe(ItemStack output, ItemStack secondary, int code, float secondaryChance, Object input);
+
+	void addRecipe(ItemStack output, DCHeatTier heat, Object... input);
+
+	void addRecipe(IClimateSmelting recipe, DCHeatTier heat);
 
 	/**
 	 * input, Climateでレシピを判定
 	 */
 	IClimateSmelting getRecipe(IClimate clm, ItemStack item);
 
-	IClimateSmelting getRecipe(int code, ItemStack items);
+	IClimateSmelting getRecipe(int code, ItemStack item);
 
 }

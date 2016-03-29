@@ -1,9 +1,9 @@
 package defeatedcrow.hac.api.recipe;
 
 
-public class DCsRecipeAPI {
+public class RecipeAPI {
 
-	private DCsRecipeAPI() {
+	private RecipeAPI() {
 	}
 
 	public static IClimateRecipeRegister registerRecipes;

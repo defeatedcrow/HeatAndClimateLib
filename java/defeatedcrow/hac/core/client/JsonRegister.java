@@ -45,4 +45,6 @@ public class JsonRegister {
 		}
 	}
 
+	/** めもめも。 https://gist.github.com/aksource/9be70a0bef9a46eec468 */
+
 }

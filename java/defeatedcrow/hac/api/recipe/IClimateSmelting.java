@@ -5,6 +5,9 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 
 /**
@@ -16,7 +19,7 @@ public interface IClimateSmelting {
 	/**
 	 * Input登録内容
 	 */
-	Object[] getInput();
+	Object getInput();
 
 	ItemStack getOutput();
 
@@ -32,7 +35,7 @@ public interface IClimateSmelting {
 	/**
 	 * macth条件判定用、鉱石辞書変換後のInputリスト
 	 */
-	List<Object> getProcessedInput();
+	List<ItemStack> getProcessedInput();
 
 	/**
 	 * Input条件判定
@@ -48,6 +51,7 @@ public interface IClimateSmelting {
 
 	/**
 	 * 追加条件
+	 * trueで条件クリア
 	 */
 	boolean additionalRequire(World world, BlockPos pos);
 
@@ -55,4 +59,13 @@ public interface IClimateSmelting {
 	 * 0: 設置不可, 1: Block, 2: Entity
 	 */
 	int hasPlaceableOutput();
+
+	/**
+	 * おもにレシピ条件表示機能用
+	 */
+	List<DCHeatTier> requiredHeat();
+
+	List<DCHumidity> requiredHum();
+
+	List<DCAirflow> requiredAir();
 }

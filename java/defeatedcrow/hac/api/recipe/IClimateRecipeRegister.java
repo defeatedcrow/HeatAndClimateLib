@@ -16,10 +16,11 @@ public interface IClimateRecipeRegister {
 	/**
 	 * Recipeのリストを得る。HeatTierごとに別リストになっている。
 	 */
-	List<IClimateRecipe> getRecipeList(DCHeatTier tier);
+	List<? extends IClimateRecipe> getRecipeList(DCHeatTier tier);
 
 	/**
 	 * Recipe登録<br>
+	 * Humidity、Airはnullでも良い。その場合、そのパラメータを問わないレシピになる。
 	 * 
 	 * @param output
 	 *            : 完成品
@@ -28,18 +29,22 @@ public interface IClimateRecipeRegister {
 	 * @param heat
 	 *            : 要求HeatTier
 	 * @param hum
-	 *            : 要求Humidity
+	 *            : 要求Humidity null可
 	 * @param air
-	 *            : 要求Airflow
+	 *            : 要求Airflow null可
 	 * @param secondaryChance
 	 *            : 副生成物の生成率 0.0F-1.0F
 	 * @param input
 	 *            : 材料
 	 */
-	void adRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat, DCHumidity hum,
+	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat, DCHumidity hum,
 			DCAirflow air, Object... input);
 
-	void adRecipe(ItemStack output, ItemStack secondary, float secondaryChance, int code, Object... input);
+	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat, Object... input);
+
+	void addRecipe(ItemStack output, DCHeatTier heat, Object... input);
+
+	void addRecipe(IClimateRecipe recipe, DCHeatTier heat);
 
 	/**
 	 * inputs, Climateでレシピを判定
