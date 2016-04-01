@@ -3,10 +3,10 @@ package defeatedcrow.hac.core.climate;
 import net.minecraft.block.Block;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.IAirflowTile;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.climate.IClimateCalculator;
@@ -191,7 +191,7 @@ public class ClimateCalculator implements IClimateCalculator {
 				DCAirflow cur = ClimateAPI.registerBlock.getAirflow(block);
 				if (cur.getID() > 0) {
 					hasAir = true;
-					if (world.canBlockSeeSky(pos) && !world.provider.getHasNoSky()) {
+					if (world.canBlockSeeSky(pos.up()) && !world.provider.getHasNoSky()) {
 						hasWind = true;
 					}
 					if (cur == DCAirflow.FLOW) {

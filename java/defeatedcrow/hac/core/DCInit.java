@@ -10,6 +10,9 @@ public class DCInit {
 	public static Block stove_fuel;
 	public static Block stove_en;
 
+	// ores
+	public static Block ores;
+
 	public static Item climate_checker;
 
 }

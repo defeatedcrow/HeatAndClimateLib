@@ -19,12 +19,8 @@ public class DCItemBlock extends ItemBlock {
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		int j = Math.min(stack.getItemDamage(), getMaxMeta());
-		return j > 0 ? super.getUnlocalizedName() + "_" + j : super.getUnlocalizedName();
-	}
-
-	public int getMaxMeta() {
-		return ((DCTileBlock) this.block).getMaxMeta();
+		int j = Math.min(stack.getItemDamage(), 15);
+		return super.getUnlocalizedName() + "_" + j;
 	}
 
 }

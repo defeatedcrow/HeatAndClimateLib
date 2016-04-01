@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.climate.recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -10,8 +11,24 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.IClimateSmeltingRegister;
+import defeatedcrow.hac.api.recipe.RecipeAPI;
 
 public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
+
+	public ClimateSmeltingRegister() {
+		this.absList = new ArrayList<ClimateSmelting>();
+		this.coldList = new ArrayList<ClimateSmelting>();
+		this.normalList = new ArrayList<ClimateSmelting>();
+		this.hotList = new ArrayList<ClimateSmelting>();
+		this.ovenList = new ArrayList<ClimateSmelting>();
+		this.kilnList = new ArrayList<ClimateSmelting>();
+		this.smeltList = new ArrayList<ClimateSmelting>();
+		this.uhtList = new ArrayList<ClimateSmelting>();
+	}
+
+	public IClimateSmeltingRegister instance() {
+		return RecipeAPI.registerSmelting;
+	}
 
 	/*
 	 * RecipeListは温度ごとに別になっている。

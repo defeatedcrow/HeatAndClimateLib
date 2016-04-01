@@ -3,6 +3,8 @@ package defeatedcrow.hac.api.recipe;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
@@ -26,7 +28,7 @@ public interface IClimateRecipe {
 	/**
 	 * Inputのコンテナアイテムのリスト
 	 */
-	List<ItemStack> getContaierItems(List<ItemStack> items);
+	List<ItemStack> getContainerItems(List<ItemStack> items);
 
 	float getSecondaryChance();
 
@@ -51,6 +53,17 @@ public interface IClimateRecipe {
 	 * Climate条件判定
 	 */
 	boolean matchClimate(IClimate climate);
+
+	/**
+	 * 追加条件
+	 * trueで条件クリア
+	 */
+	boolean additionalRequire(World world, BlockPos pos);
+
+	/**
+	 * 0: 設置不可, 1: Block, 2: Entity
+	 */
+	int hasPlaceableOutput();
 
 	/**
 	 * おもにレシピ条件表示機能用

@@ -30,7 +30,7 @@ public interface IClimateSmelting {
 	/**
 	 * Inputのコンテナアイテムのリスト
 	 */
-	ItemStack getContaierItem(ItemStack item);
+	ItemStack getContainerItem(ItemStack item);
 
 	/**
 	 * macth条件判定用、鉱石辞書変換後のInputリスト

@@ -18,7 +18,9 @@ public class JsonRegister {
 	}
 
 	public static void load() {
-		regSimpleBlock(DCInit.stove_fuel, "stovefuel", "machine", 0);
+		regSimpleBlock(DCInit.ores, "dcs_ore_stone", "ores", 15);
+
+		regTEBlock(DCInit.stove_fuel, "stovefuel", "machine", 0);
 
 		regSimpleItem(DCInit.climate_checker, "checker", "tool");
 	}
@@ -29,7 +31,7 @@ public class JsonRegister {
 	}
 
 	// 汎用Tile使用メソッド
-	static void regSimpleBlock(Block block, String s, String p, int maxMeta) {
+	static void regTEBlock(Block block, String s, String p, int maxMeta) {
 		ModelLoader.setCustomStateMapper(block,
 				(new StateMap.Builder()).ignore(((DCTileBlock) block).FACING, ((DCTileBlock) block).TYPE).build());
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(ClimateCore.PACKAGE_ID
@@ -38,6 +40,25 @@ public class JsonRegister {
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
 					ClimateCore.PACKAGE_ID + ":" + p + "/" + s, "inventory"));
 		} else {
+			for (int i = 0; i < maxMeta + 1; i++) {
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
+						ClimateCore.PACKAGE_ID + ":" + p + "/" + s + i, "inventory"));
+			}
+		}
+	}
+
+	static void regSimpleBlock(Block block, String s, String p, int maxMeta) {
+		if (maxMeta == 0) {
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
+					ClimateCore.PACKAGE_ID + ":" + p + "/" + s, "normal"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
+					ClimateCore.PACKAGE_ID + ":" + p + "/" + s, "inventory"));
+		} else {
+			ModelResourceLocation[] models = new ModelResourceLocation[maxMeta + 1];
+			for (int i = 0; i < maxMeta + 1; i++) {
+				models[i] = new ModelResourceLocation(ClimateCore.PACKAGE_ID + ":" + p + "/" + s + i, "type");
+			}
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), models);
 			for (int i = 0; i < maxMeta + 1; i++) {
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
 						ClimateCore.PACKAGE_ID + ":" + p + "/" + s + i, "inventory"));

@@ -26,7 +26,7 @@ public class ItemClimateChecker extends DCItem {
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side,
 			float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
-			IClimate c = ClimateAPI.calculator.getClimate(world, pos.down(), 1);
+			IClimate c = ClimateAPI.calculator.getClimate(world, pos, 1);
 			if (c != null) {
 				player.addChatMessage(new ChatComponentText("== Current Climate =="));
 				player.addChatMessage(new ChatComponentText("Temperature: " + c.getHeat().name()));

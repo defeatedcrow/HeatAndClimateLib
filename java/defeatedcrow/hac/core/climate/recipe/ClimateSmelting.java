@@ -63,12 +63,16 @@ public class ClimateSmelting implements IClimateSmelting {
 
 	@Override
 	public ItemStack getOutput() {
-		return output;
+		return output.copy();
 	}
 
 	@Override
 	public ItemStack getSecondary() {
-		return secondary;
+		if (this.secondary != null) {
+			return this.secondary.copy();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -77,7 +81,7 @@ public class ClimateSmelting implements IClimateSmelting {
 	}
 
 	@Override
-	public ItemStack getContaierItem(ItemStack item) {
+	public ItemStack getContainerItem(ItemStack item) {
 		if (item == null) {
 			return null;
 		} else if (FluidContainerRegistry.isFilledContainer(item)) {
