@@ -40,11 +40,14 @@ public class APILoader {
 
 		// cold
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.ice, DCHeatTier.COLD);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.snow, DCHeatTier.COLD);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.packed_ice, DCHeatTier.COLD);
 
 		// hum
-		ClimateAPI.registerBlock.registerHumBlock(Blocks.flowing_water, DCHumidity.WET);
-		ClimateAPI.registerBlock.registerHumBlock(Blocks.water, DCHumidity.WET);
+		ClimateAPI.registerBlock.registerHumBlock(Blocks.sponge, DCHumidity.DRY);
+
+		ClimateAPI.registerBlock.registerHumBlock(Blocks.flowing_water, DCHumidity.UNDERWATER);
+		ClimateAPI.registerBlock.registerHumBlock(Blocks.water, DCHumidity.UNDERWATER);
 
 		// air
 		ClimateAPI.registerBlock.registerAirBlock(Blocks.air, DCAirflow.NORMAL);

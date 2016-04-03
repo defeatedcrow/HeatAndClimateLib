@@ -38,7 +38,7 @@ public interface IClimateRecipeRegister {
 	 *            : 材料
 	 */
 	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat, DCHumidity hum,
-			DCAirflow air, Object... input);
+			DCAirflow air, boolean needCooling, Object... input);
 
 	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat, Object... input);
 

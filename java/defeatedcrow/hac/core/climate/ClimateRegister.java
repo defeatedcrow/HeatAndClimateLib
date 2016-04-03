@@ -76,6 +76,11 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	}
 
 	@Override
+	public IClimate getClimateFromParam(DCHeatTier heat, DCHumidity hum, DCAirflow air) {
+		return new DCClimate(heat, hum, air);
+	}
+
+	@Override
 	public DCHeatTier getHeatTier(World world, BlockPos pos) {
 		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
 		return getHeatTier(biome);

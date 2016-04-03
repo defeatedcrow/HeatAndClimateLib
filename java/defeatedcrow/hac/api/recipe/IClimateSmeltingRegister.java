@@ -34,7 +34,7 @@ public interface IClimateSmeltingRegister {
 	 *            : 材料
 	 */
 	void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air,
-			float secondaryChance, Object input);
+			float secondaryChance, boolean needCooling, Object input);
 
 	void addRecipe(ItemStack output, ItemStack secondary, int code, float secondaryChance, Object input);
 

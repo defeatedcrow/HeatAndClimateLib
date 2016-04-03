@@ -7,7 +7,7 @@ import net.minecraft.util.MathHelper;
  * 通常バイオームではNormalで、周辺ブロックの要因によって変化する。
  */
 public enum DCAirflow {
-	TIGHT(0), NORMAL(1), FLOW(2);
+	TIGHT(0), NORMAL(1), FLOW(2), WIND(3);
 
 	private final int id;
 
@@ -20,7 +20,7 @@ public enum DCAirflow {
 	}
 
 	public static DCAirflow getTypeByID(int i) {
-		MathHelper.clamp_int(i, 0, 2);
+		MathHelper.clamp_int(i, 0, 3);
 		for (DCAirflow e : values()) {
 			if (i == e.id)
 				return e;

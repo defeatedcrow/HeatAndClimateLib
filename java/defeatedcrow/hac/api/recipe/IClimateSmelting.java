@@ -56,12 +56,20 @@ public interface IClimateSmelting {
 	boolean additionalRequire(World world, BlockPos pos);
 
 	/**
+	 * 冷却が必要か<br>
+	 * 冷却レシピの場合、エリア内の最も低いTierを冷媒としてカウントし、<br>
+	 * 冷媒がNORMAL以下であればレシピが進行する。
+	 */
+	boolean isNeedCooling();
+
+	/**
 	 * 0: 設置不可, 1: Block, 2: Entity
 	 */
 	int hasPlaceableOutput();
 
 	/**
 	 * おもにレシピ条件表示機能用
+	 * HeatTierのみ、Tier+1まで対応範囲になる
 	 */
 	List<DCHeatTier> requiredHeat();
 

@@ -43,7 +43,6 @@ public class DCSimpleBlock extends Block implements IClimateObject {
 		this.setResistance(10.0F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, 0));
 		this.maxMeta = max;
-		this.translucent = false;
 	}
 
 	public int getMaxMeta() {
@@ -61,18 +60,13 @@ public class DCSimpleBlock extends Block implements IClimateObject {
 	}
 
 	@Override
-	public boolean isFullBlock() {
-		return false;
-	}
-
-	@Override
 	public boolean isFullCube() {
 		return false;
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
+		return true;
 	}
 
 	@Override

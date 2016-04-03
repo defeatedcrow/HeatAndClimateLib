@@ -27,17 +27,24 @@ public class ClimateSmelting implements IClimateSmelting {
 	private final ItemStack output;
 	private final ItemStack secondary;
 	private final float chance;
+	private final boolean needCooling;
 	private List<DCHeatTier> heat = new ArrayList<DCHeatTier>();
 	private List<DCHumidity> hum = new ArrayList<DCHumidity>();
 	private List<DCAirflow> air = new ArrayList<DCAirflow>();
 
-	public ClimateSmelting(ItemStack o, ItemStack s, DCHeatTier t, DCHumidity h, DCAirflow a, float c, Object i) {
+	public ClimateSmelting(ItemStack o, ItemStack s, DCHeatTier t, DCHumidity h, DCAirflow a, float c, boolean cooling,
+			Object i) {
 		input = i;
 		output = o;
 		secondary = s;
 		chance = c;
-		if (t != null)
+		needCooling = cooling;
+		if (t != null) {
 			heat.add(t);
+			if (t.getID() < 7) {
+				heat.add(t.addTier(1));
+			}
+		}
 		if (h != null)
 			hum.add(h);
 		if (a != null)
@@ -126,6 +133,9 @@ public class ClimateSmelting implements IClimateSmelting {
 
 	@Override
 	public boolean additionalRequire(World world, BlockPos pos) {
+		if (isNeedCooling()) {
+			return ClimateAPI.calculator.getColdTier(world, pos, 1, false).getID() <= 0;
+		}
 		return true;
 	}
 
@@ -152,6 +162,11 @@ public class ClimateSmelting implements IClimateSmelting {
 	@Override
 	public List<DCAirflow> requiredAir() {
 		return air;
+	}
+
+	@Override
+	public boolean isNeedCooling() {
+		return needCooling;
 	}
 
 }

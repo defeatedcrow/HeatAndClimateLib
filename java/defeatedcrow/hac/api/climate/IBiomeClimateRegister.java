@@ -50,4 +50,6 @@ public interface IBiomeClimateRegister {
 	 * NBT用。
 	 */
 	IClimate getClimateFromInt(int i);
+
+	IClimate getClimateFromParam(DCHeatTier heta, DCHumidity hum, DCAirflow air);
 }

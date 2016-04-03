@@ -14,13 +14,14 @@ public class MaterialRegister {
 	public static void load() {
 		registerBlock();
 		registerItem();
+		registerHarvestLevel();
 	}
 
 	static void registerBlock() {
 		DCInit.stove_fuel = new BlockStoveFuel(Material.clay, ClimateCore.PACKAGE_BASE + "_gen_stovefuel", 0);
 		GameRegistry.registerBlock(DCInit.stove_fuel, DCItemBlock.class, ClimateCore.PACKAGE_BASE + "_gen_stovefuel");
 
-		DCInit.ores = new BlockOres(Material.rock, ClimateCore.PACKAGE_BASE + "_ore_stone", 15);
+		DCInit.ores = new BlockOres(Material.iron, ClimateCore.PACKAGE_BASE + "_ore_stone", 15);
 		GameRegistry.registerBlock(DCInit.ores, DCItemBlock.class, ClimateCore.PACKAGE_BASE + "_ore_stone");
 	}
 
@@ -28,5 +29,9 @@ public class MaterialRegister {
 		DCInit.climate_checker = new ItemClimateChecker().setCreativeTab(ClimateCore.climate).setUnlocalizedName(
 				ClimateCore.PACKAGE_BASE + "_checker");
 		GameRegistry.registerItem(DCInit.climate_checker, ClimateCore.PACKAGE_BASE + "_checker");
+	}
+
+	private static void registerHarvestLevel() {
+		DCInit.ores.setHarvestLevel("pickaxe", 0);
 	}
 }

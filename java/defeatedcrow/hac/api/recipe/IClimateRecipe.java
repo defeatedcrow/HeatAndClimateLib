@@ -50,6 +50,13 @@ public interface IClimateRecipe {
 	boolean matchClimate(int code);
 
 	/**
+	 * 冷却が必要か<br>
+	 * 冷却レシピの場合、エリア内の最も低いTierを冷媒としてカウントし、<br>
+	 * 冷媒がNORMAL以下であればレシピが進行する。
+	 */
+	boolean isNeedCooling();
+
+	/**
 	 * Climate条件判定
 	 */
 	boolean matchClimate(IClimate climate);
@@ -67,6 +74,7 @@ public interface IClimateRecipe {
 
 	/**
 	 * おもにレシピ条件表示機能用
+	 * HeatTierのみ、Tier+1まで対応範囲になる
 	 */
 	List<DCHeatTier> requiredHeat();
 

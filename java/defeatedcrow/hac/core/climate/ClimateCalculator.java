@@ -2,6 +2,7 @@ package defeatedcrow.hac.core.climate;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
@@ -119,6 +120,29 @@ public class ClimateCalculator implements IClimateCalculator {
 	public DCHumidity getHumidity(World world, BlockPos pos, int r, boolean h) {
 		DCHumidity hum = ClimateAPI.register.getHumidity(world, pos);
 		int ret = hum.getID() - 1;
+		boolean isUnderwater = false;
+		boolean hasWater = false;
+		boolean hasAir = false;
+		// さきに水没判定をやる
+		for (EnumFacing face : EnumFacing.VALUES) {
+			BlockPos p1 = new BlockPos(pos.getX() + face.getFrontOffsetX(), pos.getY() + face.getFrontOffsetY(),
+					pos.getZ() + face.getFrontOffsetZ());
+			Block block = world.getBlockState(p1).getBlock();
+			if (block instanceof IHumidityTile) {
+				DCHumidity current = ((IHumidityTile) block).getHumdiity(world, pos);
+				if (current == DCHumidity.UNDERWATER)
+					hasWater = true;
+			} else if (ClimateAPI.registerBlock.isRegisteredHum(block)) {
+				DCHumidity cur = ClimateAPI.registerBlock.getHumidity(block);
+				if (cur == DCHumidity.UNDERWATER)
+					hasWater = true;
+			} else if (!block.isBlockNormalCube()) {
+				hasAir = true;
+			}
+		}
+		if (hasWater && !hasAir) {
+			return DCHumidity.UNDERWATER;
+		}
 		// 雨が降っている
 		if (world.isRaining() && hum != DCHumidity.DRY) {
 			ret++;
@@ -129,14 +153,14 @@ public class ClimateCalculator implements IClimateCalculator {
 				DCHumidity current = ((IHumidityTile) block).getHumdiity(world, pos);
 				if (current == DCHumidity.DRY) {
 					ret--;
-				} else if (current == DCHumidity.WET) {
+				} else if (current.getID() > 1) {
 					ret++;
 				}
 			} else if (ClimateAPI.registerBlock.isRegisteredHum(block)) {
 				DCHumidity cur = ClimateAPI.registerBlock.getHumidity(block);
 				if (cur == DCHumidity.DRY) {
 					ret--;
-				} else if (cur == DCHumidity.WET) {
+				} else if (cur.getID() > 1) {
 					ret++;
 				}
 			}
@@ -151,14 +175,14 @@ public class ClimateCalculator implements IClimateCalculator {
 					DCHumidity current = ((IHumidityTile) block).getHumdiity(world, p2);
 					if (current == DCHumidity.DRY) {
 						ret--;
-					} else if (current == DCHumidity.WET) {
+					} else if (current.getID() > 1) {
 						ret++;
 					}
 				} else if (ClimateAPI.registerBlock.isRegisteredHum(block)) {
 					DCHumidity cur = ClimateAPI.registerBlock.getHumidity(block);
 					if (cur == DCHumidity.DRY) {
 						ret--;
-					} else if (cur == DCHumidity.WET) {
+					} else if (cur.getID() > 1) {
 						ret++;
 					}
 				}
@@ -178,14 +202,17 @@ public class ClimateCalculator implements IClimateCalculator {
 		DCAirflow air = ClimateAPI.register.getAirflow(world, pos);
 		boolean hasAir = false;
 		boolean hasWind = false;
+		boolean hasBlow = false;
 
 		if (r < 0) {
 			Block block = world.getBlockState(pos).getBlock();
 			if (block instanceof IAirflowTile) {
 				DCAirflow current = ((IAirflowTile) block).getAirflow(world, pos);
-				if (current == DCAirflow.FLOW) {
+				if (current.getID() > 1) {
 					hasAir = true;
 					hasWind = true;
+					if (current == DCAirflow.WIND)
+						hasBlow = true;
 				}
 			} else if (ClimateAPI.registerBlock.isRegisteredAir(block)) {
 				DCAirflow cur = ClimateAPI.registerBlock.getAirflow(block);
@@ -194,8 +221,10 @@ public class ClimateCalculator implements IClimateCalculator {
 					if (world.canBlockSeeSky(pos.up()) && !world.provider.getHasNoSky()) {
 						hasWind = true;
 					}
-					if (cur == DCAirflow.FLOW) {
+					if (cur.getID() > 1) {
 						hasWind = true;
+						if (cur == DCAirflow.WIND)
+							hasBlow = true;
 					}
 				}
 			}
@@ -208,11 +237,14 @@ public class ClimateCalculator implements IClimateCalculator {
 				Block block = world.getBlockState(p2).getBlock();
 				if (block instanceof IAirflowTile) {
 					DCAirflow current = ((IAirflowTile) block).getAirflow(world, p2);
-					if (current == DCAirflow.FLOW) {
+					if (current.getID() > 0) {
+						if (current.getID() > 1) {
+							if (current == DCAirflow.WIND)
+								hasBlow = true;
+							hasWind = true;
+						}
 						hasAir = true;
-						hasWind = true;
-					} else if (current == DCAirflow.NORMAL)
-						hasAir = true;
+					}
 				} else if (ClimateAPI.registerBlock.isRegisteredAir(block)) {
 					DCAirflow cur = ClimateAPI.registerBlock.getAirflow(block);
 					if (cur.getID() > 0) {
@@ -220,8 +252,10 @@ public class ClimateCalculator implements IClimateCalculator {
 						if (world.canBlockSeeSky(p2) && !world.provider.getHasNoSky()) {
 							hasWind = true;
 						}
-						if (cur == DCAirflow.FLOW) {
+						if (cur.getID() > 1) {
 							hasWind = true;
+							if (cur == DCAirflow.WIND)
+								hasBlow = true;
 						}
 					}
 				} else if (!block.getMaterial().isLiquid() && block.getMaterial().getMaterialMobility() == 1) {
@@ -229,7 +263,9 @@ public class ClimateCalculator implements IClimateCalculator {
 				}
 			}
 		}
-
+		if (hasBlow) {
+			return DCAirflow.FLOW;
+		}
 		if (hasAir) {
 			if (hasWind) {
 				return DCAirflow.FLOW;

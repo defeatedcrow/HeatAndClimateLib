@@ -68,22 +68,22 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 
 	@Override
 	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat,
-			DCHumidity hum, DCAirflow air, Object... input) {
+			DCHumidity hum, DCAirflow air, boolean cooling, Object... input) {
 		List<IClimateRecipe> list = (List<IClimateRecipe>) getRecipeList(heat);
 		if (input != null && output != null && heat != null) {
-			list.add(new ClimateRecipe(output, secondary, heat, hum, air, secondaryChance, input));
+			list.add(new ClimateRecipe(output, secondary, heat, hum, air, secondaryChance, cooling, input));
 		}
 	}
 
 	@Override
 	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat,
 			Object... input) {
-		this.addRecipe(output, secondary, secondaryChance, heat, null, null, input);
+		this.addRecipe(output, secondary, secondaryChance, heat, null, null, false, input);
 	}
 
 	@Override
 	public void addRecipe(ItemStack output, DCHeatTier heat, Object... input) {
-		this.addRecipe(output, null, heat, null, null, input);
+		this.addRecipe(output, null, 0.0F, heat, null, null, false, input);
 	}
 
 	@Override

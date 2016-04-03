@@ -68,22 +68,23 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 
 	@Override
 	public void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air,
-			float secondaryChance, Object input) {
+			float secondaryChance, boolean cooling, Object input) {
 		List<IClimateSmelting> list = (List<IClimateSmelting>) getRecipeList(heat);
 		if (input != null && output != null && heat != null) {
-			list.add(new ClimateSmelting(output, secondary, heat, hum, air, secondaryChance, input));
+			list.add(new ClimateSmelting(output, secondary, heat, hum, air, secondaryChance, cooling, input));
 		}
 	}
 
 	@Override
 	public void addRecipe(ItemStack output, ItemStack secondary, int code, float secondaryChance, Object input) {
 		IClimate clm = ClimateAPI.register.getClimateFromInt(code);
-		this.addRecipe(output, secondary, clm.getHeat(), clm.getHumidity(), clm.getAirflow(), secondaryChance, input);
+		this.addRecipe(output, secondary, clm.getHeat(), clm.getHumidity(), clm.getAirflow(), secondaryChance, false,
+				input);
 	}
 
 	@Override
 	public void addRecipe(ItemStack output, DCHeatTier heat, Object... input) {
-		this.addRecipe(output, null, heat, null, null, input);
+		this.addRecipe(output, null, heat, null, null, 0.0F, false, input);
 	}
 
 	@Override
