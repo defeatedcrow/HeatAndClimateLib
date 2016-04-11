@@ -10,7 +10,7 @@ public class ClientProxyD extends CommonProxyD {
 	@Override
 	public void loadMaterial() {
 		super.loadMaterial();
-		JsonRegister.load();
+		JsonRegisterHelper.INSTANCE.load();
 	}
 
 	@Override

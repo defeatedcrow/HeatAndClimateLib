@@ -1,5 +1,6 @@
-package defeatedcrow.hac.api.placeable;
+package defeatedcrow.hac.api.recipe;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -9,6 +10,6 @@ import net.minecraft.world.World;
  */
 public interface IClimateObject {
 
-	void onUpdateClimate(World world, BlockPos pos);
+	void onUpdateClimate(World world, BlockPos pos, IBlockState state);
 
 }

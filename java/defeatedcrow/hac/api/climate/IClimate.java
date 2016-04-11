@@ -1,8 +1,8 @@
 package defeatedcrow.hac.api.climate;
 
 /**
- * Biome用の登録情報。
- * 利用側で、現在Biomeの固有情報をチェックするのに使う。
+ * このMODでは、気候の要素(温度、湿度、通気)をClimateとしてセットで扱う。<br>
+ * また、通気、湿度、温度をintに変換して0bAABBCCCという形にもできるため、int型でNBTなどに持たせておくことが出来る。
  */
 public interface IClimate {
 

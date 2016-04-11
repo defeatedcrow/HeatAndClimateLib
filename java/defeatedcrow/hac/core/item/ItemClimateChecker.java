@@ -18,7 +18,8 @@ import defeatedcrow.hac.core.base.DCItem;
 
 public class ItemClimateChecker extends DCItem {
 
-	public static int getMaxMeta() {
+	@Override
+	public int getMaxMeta() {
 		return 0;
 	}
 
@@ -26,7 +27,7 @@ public class ItemClimateChecker extends DCItem {
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side,
 			float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
-			IClimate c = ClimateAPI.calculator.getClimate(world, pos, 1);
+			IClimate c = ClimateAPI.calculator.getClimate(world, pos, 2);
 			if (c != null) {
 				player.addChatMessage(new ChatComponentText("== Current Climate =="));
 				player.addChatMessage(new ChatComponentText("Temperature: " + c.getHeat().name()));
@@ -45,6 +46,21 @@ public class ItemClimateChecker extends DCItem {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		tooltip.add(StatCollector.translateToLocal("dcs.climate.tip.checker"));
+	}
+
+	@Override
+	public String getTexPath(int meta, boolean f) {
+		String s = "items/tool/checker";
+		if (f) {
+			s = "textures/" + s;
+		}
+		return ClimateCore.PACKAGE_ID + ":" + s;
+	}
+
+	@Override
+	public String[] getNameSuffix() {
+		String[] s = { "normal" };
+		return s;
 	}
 
 }

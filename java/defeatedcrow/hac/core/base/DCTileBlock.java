@@ -25,7 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import defeatedcrow.hac.api.placeable.IClimateObject;
+import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.core.ClimateCore;
 
 // TESR持ちブロックのベース
@@ -109,7 +109,7 @@ public class DCTileBlock extends BlockContainer implements IClimateObject {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(worldIn, pos, state, rand);
-		this.onUpdateClimate(worldIn, pos);
+		this.onUpdateClimate(worldIn, pos, state);
 	}
 
 	// 設置・破壊処理
@@ -219,7 +219,7 @@ public class DCTileBlock extends BlockContainer implements IClimateObject {
 	}
 
 	@Override
-	public void onUpdateClimate(World world, BlockPos pos) {
+	public void onUpdateClimate(World world, BlockPos pos, IBlockState state) {
 	}
 
 }

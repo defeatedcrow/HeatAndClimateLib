@@ -21,7 +21,9 @@ public class ClimateCalculator implements IClimateCalculator {
 
 	@Override
 	public IClimate getClimate(World world, BlockPos pos, int r) {
-		DCHeatTier temp = ClimateAPI.calculator.getHeatTier(world, pos.down(), r, false);
+		if (r < 0 || r > 15)
+			r = 1;
+		DCHeatTier temp = ClimateAPI.calculator.getHeatTier(world, pos, r, false);
 		DCHeatTier cold = ClimateAPI.calculator.getColdTier(world, pos, r, false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, r, false);
 		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, r, false);
@@ -125,8 +127,8 @@ public class ClimateCalculator implements IClimateCalculator {
 		boolean hasAir = false;
 		// さきに水没判定をやる
 		for (EnumFacing face : EnumFacing.VALUES) {
-			BlockPos p1 = new BlockPos(pos.getX() + face.getFrontOffsetX(), pos.getY() + face.getFrontOffsetY(),
-					pos.getZ() + face.getFrontOffsetZ());
+			BlockPos p1 = new BlockPos(pos.getX() + face.getFrontOffsetX(), pos.getY() + face.getFrontOffsetY(), pos.getZ()
+					+ face.getFrontOffsetZ());
 			Block block = world.getBlockState(p1).getBlock();
 			if (block instanceof IHumidityTile) {
 				DCHumidity current = ((IHumidityTile) block).getHumdiity(world, pos);

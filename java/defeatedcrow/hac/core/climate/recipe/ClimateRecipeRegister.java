@@ -67,8 +67,8 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 	}
 
 	@Override
-	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat,
-			DCHumidity hum, DCAirflow air, boolean cooling, Object... input) {
+	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat, DCHumidity hum, DCAirflow air,
+			boolean cooling, Object... input) {
 		List<IClimateRecipe> list = (List<IClimateRecipe>) getRecipeList(heat);
 		if (input != null && output != null && heat != null) {
 			list.add(new ClimateRecipe(output, secondary, heat, hum, air, secondaryChance, cooling, input));
@@ -76,9 +76,16 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 	}
 
 	@Override
-	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat,
-			Object... input) {
-		this.addRecipe(output, secondary, secondaryChance, heat, null, null, false, input);
+	public void addRecipe(ItemStack output, DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling, Object... input) {
+		List<IClimateRecipe> list = (List<IClimateRecipe>) getRecipeList(heat);
+		if (input != null && output != null && heat != null) {
+			list.add(new ClimateRecipe(output, null, heat, hum, air, 0.0F, false, input));
+		}
+	}
+
+	@Override
+	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, IClimate clm, Object... input) {
+		this.addRecipe(output, secondary, secondaryChance, clm.getHeat(), clm.getHumidity(), clm.getAirflow(), false, input);
 	}
 
 	@Override

@@ -6,6 +6,10 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
+/**
+ * バイオームの気候登録。
+ * BiomeDictionaryの情報と異なる内容を登録したい場合に使用する。
+ */
 public interface IBiomeClimateRegister {
 
 	/**
@@ -51,5 +55,5 @@ public interface IBiomeClimateRegister {
 	 */
 	IClimate getClimateFromInt(int i);
 
-	IClimate getClimateFromParam(DCHeatTier heta, DCHumidity hum, DCAirflow air);
+	IClimate getClimateFromParam(DCHeatTier heat, DCHumidity hum, DCAirflow air);
 }

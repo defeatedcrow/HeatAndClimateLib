@@ -33,12 +33,14 @@ public interface IClimateSmeltingRegister {
 	 * @param input
 	 *            : 材料
 	 */
-	void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air,
-			float secondaryChance, boolean needCooling, Object input);
+	void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air, float secondaryChance,
+			boolean needCooling, Object input);
 
-	void addRecipe(ItemStack output, ItemStack secondary, int code, float secondaryChance, Object input);
+	void addRecipe(ItemStack output, DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling, Object input);
 
-	void addRecipe(ItemStack output, DCHeatTier heat, Object... input);
+	void addRecipe(ItemStack output, ItemStack secondary, IClimate climate, float secondaryChance, Object input);
+
+	void addRecipe(ItemStack output, DCHeatTier heat, Object input);
 
 	void addRecipe(IClimateSmelting recipe, DCHeatTier heat);
 

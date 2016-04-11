@@ -16,10 +16,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 		acceptedMinecraftVersions = ClimateCore.MOD_ACCEPTED_MC_VERSIONS,
 		useMetadata = true)
 public class ClimateCore {
-	public static final String MOD_ID = "dcs_climate";
+	public static final String MOD_ID = "dcs_climate|lib";
 	public static final String MOD_NAME = "ClimateAndHeatLib";
 	public static final int MOD_MEJOR = 0;
-	public static final int MOD_MINOR = 1;
+	public static final int MOD_MINOR = 3;
 	public static final String MOD_BUILD = "a";
 	public static final String MOD_DEPENDENCIES = "required-after:Forge@[11.15.1.1722,)";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.8.9]";
@@ -29,7 +29,7 @@ public class ClimateCore {
 			serverSide = "defeatedcrow.hac.core.CommonProxyD")
 	public static CommonProxyD proxy;
 
-	@Instance("dcs_climate")
+	@Instance("dcs_climate|lib")
 	public static ClimateCore instance;
 
 	public static final String PACKAGE_BASE = "dcs";

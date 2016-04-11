@@ -21,7 +21,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import defeatedcrow.hac.api.placeable.IClimateObject;
+import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.core.ClimateCore;
 
 // TE無し16種ブロック
@@ -45,28 +45,27 @@ public class DCSimpleBlock extends Block implements IClimateObject {
 		this.maxMeta = max;
 	}
 
+	@Override
+	public int tickRate(World world) {
+		return 100;
+	}
+
+	public String[] getNameSuffix() {
+		return null;
+	}
+
 	public int getMaxMeta() {
 		return maxMeta;
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side,
-			float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX,
+			float hitY, float hitZ) {
 		return false;
 	}
 
 	@Override
 	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
-	}
-
-	@Override
-	public boolean isFullCube() {
-		return false;
-	}
-
-	@Override
-	public boolean isOpaqueCube() {
-		return true;
 	}
 
 	@Override
@@ -82,8 +81,7 @@ public class DCSimpleBlock extends Block implements IClimateObject {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean addDestroyEffects(World world, BlockPos pos,
-			net.minecraft.client.particle.EffectRenderer effectRenderer) {
+	public boolean addDestroyEffects(World world, BlockPos pos, net.minecraft.client.particle.EffectRenderer effectRenderer) {
 		effectRenderer.addBlockDestroyEffects(pos, Blocks.stone.getStateFromMeta(0));
 		return true;
 	}
@@ -99,7 +97,7 @@ public class DCSimpleBlock extends Block implements IClimateObject {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(worldIn, pos, state, rand);
-		this.onUpdateClimate(worldIn, pos);
+		this.onUpdateClimate(worldIn, pos, state);
 	}
 
 	// 設置・破壊処理
@@ -152,7 +150,7 @@ public class DCSimpleBlock extends Block implements IClimateObject {
 	}
 
 	@Override
-	public void onUpdateClimate(World world, BlockPos pos) {
+	public void onUpdateClimate(World world, BlockPos pos, IBlockState state) {
 	}
 
 }

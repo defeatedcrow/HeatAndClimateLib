@@ -37,10 +37,12 @@ public interface IClimateRecipeRegister {
 	 * @param input
 	 *            : 材料
 	 */
-	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat, DCHumidity hum,
-			DCAirflow air, boolean needCooling, Object... input);
+	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat, DCHumidity hum, DCAirflow air,
+			boolean needCooling, Object... input);
 
-	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat, Object... input);
+	void addRecipe(ItemStack output, DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling, Object... input);
+
+	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, IClimate climate, Object... input);
 
 	void addRecipe(ItemStack output, DCHeatTier heat, Object... input);
 

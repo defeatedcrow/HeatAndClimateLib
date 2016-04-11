@@ -5,7 +5,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 
 /**
- * IHeatTileを実装できない、バニラBlockなどを登録する。<br>
+ * IHeatTile等の環境に影響させるインターフェイスを実装できない、バニラBlockなどをここで登録する。<br>
  * IHeatSourceと異なり、環境要因なので燃料などは消費しない、恒久的に稼働する熱源を登録する。
  */
 public interface IHeatBlockRegister {

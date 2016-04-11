@@ -67,8 +67,8 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	}
 
 	@Override
-	public void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air,
-			float secondaryChance, boolean cooling, Object input) {
+	public void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air, float secondaryChance,
+			boolean cooling, Object input) {
 		List<IClimateSmelting> list = (List<IClimateSmelting>) getRecipeList(heat);
 		if (input != null && output != null && heat != null) {
 			list.add(new ClimateSmelting(output, secondary, heat, hum, air, secondaryChance, cooling, input));
@@ -76,14 +76,20 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	}
 
 	@Override
-	public void addRecipe(ItemStack output, ItemStack secondary, int code, float secondaryChance, Object input) {
-		IClimate clm = ClimateAPI.register.getClimateFromInt(code);
-		this.addRecipe(output, secondary, clm.getHeat(), clm.getHumidity(), clm.getAirflow(), secondaryChance, false,
-				input);
+	public void addRecipe(ItemStack output, DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling, Object input) {
+		List<IClimateSmelting> list = (List<IClimateSmelting>) getRecipeList(heat);
+		if (input != null && output != null && heat != null) {
+			list.add(new ClimateSmelting(output, null, heat, hum, air, 0.0F, false, input));
+		}
 	}
 
 	@Override
-	public void addRecipe(ItemStack output, DCHeatTier heat, Object... input) {
+	public void addRecipe(ItemStack output, ItemStack secondary, IClimate clm, float secondaryChance, Object input) {
+		this.addRecipe(output, secondary, clm.getHeat(), clm.getHumidity(), clm.getAirflow(), secondaryChance, false, input);
+	}
+
+	@Override
+	public void addRecipe(ItemStack output, DCHeatTier heat, Object input) {
 		this.addRecipe(output, null, heat, null, null, 0.0F, false, input);
 	}
 
@@ -96,32 +102,41 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	@Override
 	public IClimateSmelting getRecipe(IClimate clm, ItemStack item) {
 		List<IClimateSmelting> list = (List<IClimateSmelting>) getRecipeList(clm.getHeat());
+		IClimateSmelting ret = null;
 		if (list.isEmpty()) {
-			return null;
 		} else {
 			for (IClimateSmelting recipe : list) {
 				if (recipe.matcheInput(item) && recipe.matchClimate(clm)) {
-					return recipe;
+					ret = recipe;
 				}
 			}
-			return null;
 		}
+		/*
+		 * Tier絶対値が1以上の場合、現在環境の1つ下の温度帯のレシピも条件にあてまはる
+		 */
+		if (ret == null && clm.getHeat().getTier() != 0) {
+			int i = clm.getHeat().getTier() < 0 ? 1 : -1;
+			List<IClimateSmelting> list2 = (List<IClimateSmelting>) getRecipeList(clm.getHeat().addTier(i));
+			if (list.isEmpty()) {
+			} else {
+				for (IClimateSmelting recipe : list2) {
+					if (recipe.matcheInput(item) && recipe.matchClimate(clm)) {
+						ret = recipe;
+					}
+				}
+			}
+		}
+
+		if (ret != null && ret.matchClimate(clm)) {
+			return ret;
+		}
+		return null;
 	}
 
 	@Override
 	public IClimateSmelting getRecipe(int code, ItemStack item) {
 		IClimate clm = ClimateAPI.register.getClimateFromInt(code);
-		List<IClimateSmelting> list = (List<IClimateSmelting>) getRecipeList(clm.getHeat());
-		if (list.isEmpty()) {
-			return null;
-		} else {
-			for (IClimateSmelting recipe : list) {
-				if (recipe.matcheInput(item) && recipe.matchClimate(clm)) {
-					return recipe;
-				}
-			}
-			return null;
-		}
+		return getRecipe(clm, item);
 	}
 
 }

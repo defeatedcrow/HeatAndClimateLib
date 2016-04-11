@@ -5,9 +5,9 @@ import net.minecraft.world.World;
 
 /**
  * 任意範囲のHeat、Air、Humの計算。<br>
- * あまり広範囲だと重いと思うので注意。<br>
- * また、ここではIHeatSourceはカウントせず、自然環境要素の確認のみである。<br>
- * IHeatSourceについてはHeatのAPIを使う。
+ * あまり広範囲だと重いと思うので、getClimateのrangeは0~16の制限がかかる。<br>
+ * また、現時点ではIHeatSourceはカウントせず、自然環境要素の確認のみである。<br>
+ * IHeatSourceについては後ほど実装する。
  */
 public interface IClimateCalculator {
 
