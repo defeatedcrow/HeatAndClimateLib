@@ -14,7 +14,7 @@
  */
 @API(
 		apiVersion = "0.1",
-		owner = "dcs_climate",
+		owner = "dcs_climate|lib",
 		provides = "DCsHaCAPI|climate")
 package defeatedcrow.hac.api.climate;
 

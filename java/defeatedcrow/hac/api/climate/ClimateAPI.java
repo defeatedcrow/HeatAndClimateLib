@@ -1,8 +1,11 @@
 package defeatedcrow.hac.api.climate;
 
-public class DCsClimateAPI {
+/**
+ * 気候の登録や参照はここから行って下さい
+ */
+public class ClimateAPI {
 
-	private DCsClimateAPI() {
+	private ClimateAPI() {
 	}
 
 	public static IBiomeClimateRegister register;

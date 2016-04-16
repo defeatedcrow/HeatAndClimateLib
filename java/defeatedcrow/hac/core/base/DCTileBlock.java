@@ -25,10 +25,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.core.ClimateCore;
 
 // TESR持ちブロックのベース
-public class DCTileBlock extends BlockContainer {
+public class DCTileBlock extends BlockContainer implements IClimateObject {
 
 	protected Random rand = new Random();
 
@@ -86,7 +87,7 @@ public class DCTileBlock extends BlockContainer {
 
 	@Override
 	public int getRenderType() {
-		return -1;
+		return 2;
 	}
 
 	@Override
@@ -102,6 +103,13 @@ public class DCTileBlock extends BlockContainer {
 		for (int i = 0; i < maxMeta + 1; i++) {
 			list.add(new ItemStack(this, 1, i));
 		}
+	}
+
+	// update
+	@Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		super.updateTick(worldIn, pos, state, rand);
+		this.onUpdateClimate(worldIn, pos, state);
 	}
 
 	// 設置・破壊処理
@@ -208,6 +216,10 @@ public class DCTileBlock extends BlockContainer {
 		return new BlockState(this, new IProperty[] {
 				FACING,
 				TYPE });
+	}
+
+	@Override
+	public void onUpdateClimate(World world, BlockPos pos, IBlockState state) {
 	}
 
 }

@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "dcs_climate:items/stovefuel_item"
+        "layer0": "dcs_climate:items/tool/checker"
     },
     "display": {
         "thirdperson": {

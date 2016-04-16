@@ -2,11 +2,12 @@ package defeatedcrow.hac.core.climate;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.DCsClimateAPI;
 import defeatedcrow.hac.api.climate.IAirflowTile;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.climate.IClimateCalculator;
@@ -20,23 +21,25 @@ public class ClimateCalculator implements IClimateCalculator {
 
 	@Override
 	public IClimate getClimate(World world, BlockPos pos, int r) {
-		DCHeatTier temp = DCsClimateAPI.calculator.getHeatTier(world, pos.down(), r, false);
-		DCHeatTier cold = DCsClimateAPI.calculator.getColdTier(world, pos, r, false);
-		DCHumidity hum = DCsClimateAPI.calculator.getHumidity(world, pos, r, false);
-		DCAirflow air = DCsClimateAPI.calculator.getAirflow(world, pos, r, false);
+		if (r < 0 || r > 15)
+			r = 1;
+		DCHeatTier temp = ClimateAPI.calculator.getHeatTier(world, pos, r, false);
+		DCHeatTier cold = ClimateAPI.calculator.getColdTier(world, pos, r, false);
+		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, r, false);
+		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, r, false);
 
 		if (temp.getTier() >= 0 && cold.getTier() < 0) {
 			temp = temp.addTier(cold.getTier());
 		}
 
 		int code = (air.getID() << 5) + (hum.getID() << 3) + temp.getID();
-		IClimate clm = DCsClimateAPI.register.getClimateFromInt(code);
+		IClimate clm = ClimateAPI.register.getClimateFromInt(code);
 		return clm;
 	}
 
 	@Override
 	public DCHeatTier getHeatTier(World world, BlockPos pos, int r, boolean h) {
-		DCHeatTier temp = DCsClimateAPI.register.getHeatTier(world, pos);
+		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
 		DCHeatTier hot = temp;
 		if (r < 0) {
 			Block block = world.getBlockState(pos).getBlock();
@@ -45,8 +48,8 @@ public class ClimateCalculator implements IClimateCalculator {
 				if (current.getTier() > hot.getTier()) {
 					hot = current;
 				}
-			} else if (DCsClimateAPI.registerBlock.isRegisteredHeat(block)) {
-				DCHeatTier cur = DCsClimateAPI.registerBlock.getHeatTier(block);
+			} else if (ClimateAPI.registerBlock.isRegisteredHeat(block)) {
+				DCHeatTier cur = ClimateAPI.registerBlock.getHeatTier(block);
 				if (cur.getTier() > hot.getTier()) {
 					hot = cur;
 				}
@@ -63,8 +66,8 @@ public class ClimateCalculator implements IClimateCalculator {
 					if (current.getTier() > hot.getTier()) {
 						hot = current;
 					}
-				} else if (DCsClimateAPI.registerBlock.isRegisteredHeat(block)) {
-					DCHeatTier cur = DCsClimateAPI.registerBlock.getHeatTier(block);
+				} else if (ClimateAPI.registerBlock.isRegisteredHeat(block)) {
+					DCHeatTier cur = ClimateAPI.registerBlock.getHeatTier(block);
 					if (cur.getTier() > hot.getTier()) {
 						hot = cur;
 					}
@@ -76,7 +79,7 @@ public class ClimateCalculator implements IClimateCalculator {
 
 	@Override
 	public DCHeatTier getColdTier(World world, BlockPos pos, int r, boolean h) {
-		DCHeatTier temp = DCsClimateAPI.register.getHeatTier(world, pos);
+		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
 		DCHeatTier hot = temp;
 		if (r < 0) {
 			Block block = world.getBlockState(pos).getBlock();
@@ -85,8 +88,8 @@ public class ClimateCalculator implements IClimateCalculator {
 				if (current.getTier() < hot.getTier()) {
 					hot = current;
 				}
-			} else if (DCsClimateAPI.registerBlock.isRegisteredHeat(block)) {
-				DCHeatTier cur = DCsClimateAPI.registerBlock.getHeatTier(block);
+			} else if (ClimateAPI.registerBlock.isRegisteredHeat(block)) {
+				DCHeatTier cur = ClimateAPI.registerBlock.getHeatTier(block);
 				if (cur.getTier() < hot.getTier()) {
 					hot = cur;
 				}
@@ -103,8 +106,8 @@ public class ClimateCalculator implements IClimateCalculator {
 					if (current.getTier() < hot.getTier()) {
 						hot = current;
 					}
-				} else if (DCsClimateAPI.registerBlock.isRegisteredHeat(block)) {
-					DCHeatTier cur = DCsClimateAPI.registerBlock.getHeatTier(block);
+				} else if (ClimateAPI.registerBlock.isRegisteredHeat(block)) {
+					DCHeatTier cur = ClimateAPI.registerBlock.getHeatTier(block);
 					if (cur.getTier() < hot.getTier()) {
 						hot = cur;
 					}
@@ -117,8 +120,31 @@ public class ClimateCalculator implements IClimateCalculator {
 	// 合計値で考える
 	@Override
 	public DCHumidity getHumidity(World world, BlockPos pos, int r, boolean h) {
-		DCHumidity hum = DCsClimateAPI.register.getHumidity(world, pos);
+		DCHumidity hum = ClimateAPI.register.getHumidity(world, pos);
 		int ret = hum.getID() - 1;
+		boolean isUnderwater = false;
+		boolean hasWater = false;
+		boolean hasAir = false;
+		// さきに水没判定をやる
+		for (EnumFacing face : EnumFacing.VALUES) {
+			BlockPos p1 = new BlockPos(pos.getX() + face.getFrontOffsetX(), pos.getY() + face.getFrontOffsetY(), pos.getZ()
+					+ face.getFrontOffsetZ());
+			Block block = world.getBlockState(p1).getBlock();
+			if (block instanceof IHumidityTile) {
+				DCHumidity current = ((IHumidityTile) block).getHumdiity(world, pos);
+				if (current == DCHumidity.UNDERWATER)
+					hasWater = true;
+			} else if (ClimateAPI.registerBlock.isRegisteredHum(block)) {
+				DCHumidity cur = ClimateAPI.registerBlock.getHumidity(block);
+				if (cur == DCHumidity.UNDERWATER)
+					hasWater = true;
+			} else if (!block.isBlockNormalCube()) {
+				hasAir = true;
+			}
+		}
+		if (hasWater && !hasAir) {
+			return DCHumidity.UNDERWATER;
+		}
 		// 雨が降っている
 		if (world.isRaining() && hum != DCHumidity.DRY) {
 			ret++;
@@ -129,14 +155,14 @@ public class ClimateCalculator implements IClimateCalculator {
 				DCHumidity current = ((IHumidityTile) block).getHumdiity(world, pos);
 				if (current == DCHumidity.DRY) {
 					ret--;
-				} else if (current == DCHumidity.WET) {
+				} else if (current.getID() > 1) {
 					ret++;
 				}
-			} else if (DCsClimateAPI.registerBlock.isRegisteredHum(block)) {
-				DCHumidity cur = DCsClimateAPI.registerBlock.getHumidity(block);
+			} else if (ClimateAPI.registerBlock.isRegisteredHum(block)) {
+				DCHumidity cur = ClimateAPI.registerBlock.getHumidity(block);
 				if (cur == DCHumidity.DRY) {
 					ret--;
-				} else if (cur == DCHumidity.WET) {
+				} else if (cur.getID() > 1) {
 					ret++;
 				}
 			}
@@ -151,14 +177,14 @@ public class ClimateCalculator implements IClimateCalculator {
 					DCHumidity current = ((IHumidityTile) block).getHumdiity(world, p2);
 					if (current == DCHumidity.DRY) {
 						ret--;
-					} else if (current == DCHumidity.WET) {
+					} else if (current.getID() > 1) {
 						ret++;
 					}
-				} else if (DCsClimateAPI.registerBlock.isRegisteredHum(block)) {
-					DCHumidity cur = DCsClimateAPI.registerBlock.getHumidity(block);
+				} else if (ClimateAPI.registerBlock.isRegisteredHum(block)) {
+					DCHumidity cur = ClimateAPI.registerBlock.getHumidity(block);
 					if (cur == DCHumidity.DRY) {
 						ret--;
-					} else if (cur == DCHumidity.WET) {
+					} else if (cur.getID() > 1) {
 						ret++;
 					}
 				}
@@ -175,27 +201,32 @@ public class ClimateCalculator implements IClimateCalculator {
 	// ひとつでもAirがあれば窒息はしない
 	@Override
 	public DCAirflow getAirflow(World world, BlockPos pos, int r, boolean h) {
-		DCAirflow air = DCsClimateAPI.register.getAirflow(world, pos);
+		DCAirflow air = ClimateAPI.register.getAirflow(world, pos);
 		boolean hasAir = false;
 		boolean hasWind = false;
+		boolean hasBlow = false;
 
 		if (r < 0) {
 			Block block = world.getBlockState(pos).getBlock();
 			if (block instanceof IAirflowTile) {
 				DCAirflow current = ((IAirflowTile) block).getAirflow(world, pos);
-				if (current == DCAirflow.FLOW) {
+				if (current.getID() > 1) {
 					hasAir = true;
 					hasWind = true;
+					if (current == DCAirflow.WIND)
+						hasBlow = true;
 				}
-			} else if (DCsClimateAPI.registerBlock.isRegisteredAir(block)) {
-				DCAirflow cur = DCsClimateAPI.registerBlock.getAirflow(block);
+			} else if (ClimateAPI.registerBlock.isRegisteredAir(block)) {
+				DCAirflow cur = ClimateAPI.registerBlock.getAirflow(block);
 				if (cur.getID() > 0) {
 					hasAir = true;
-					if (world.canBlockSeeSky(pos) && !world.provider.getHasNoSky()) {
+					if (world.canBlockSeeSky(pos.up()) && !world.provider.getHasNoSky()) {
 						hasWind = true;
 					}
-					if (cur == DCAirflow.FLOW) {
+					if (cur.getID() > 1) {
 						hasWind = true;
+						if (cur == DCAirflow.WIND)
+							hasBlow = true;
 					}
 				}
 			}
@@ -208,20 +239,25 @@ public class ClimateCalculator implements IClimateCalculator {
 				Block block = world.getBlockState(p2).getBlock();
 				if (block instanceof IAirflowTile) {
 					DCAirflow current = ((IAirflowTile) block).getAirflow(world, p2);
-					if (current == DCAirflow.FLOW) {
+					if (current.getID() > 0) {
+						if (current.getID() > 1) {
+							if (current == DCAirflow.WIND)
+								hasBlow = true;
+							hasWind = true;
+						}
 						hasAir = true;
-						hasWind = true;
-					} else if (current == DCAirflow.NORMAL)
-						hasAir = true;
-				} else if (DCsClimateAPI.registerBlock.isRegisteredAir(block)) {
-					DCAirflow cur = DCsClimateAPI.registerBlock.getAirflow(block);
+					}
+				} else if (ClimateAPI.registerBlock.isRegisteredAir(block)) {
+					DCAirflow cur = ClimateAPI.registerBlock.getAirflow(block);
 					if (cur.getID() > 0) {
 						hasAir = true;
 						if (world.canBlockSeeSky(p2) && !world.provider.getHasNoSky()) {
 							hasWind = true;
 						}
-						if (cur == DCAirflow.FLOW) {
+						if (cur.getID() > 1) {
 							hasWind = true;
+							if (cur == DCAirflow.WIND)
+								hasBlow = true;
 						}
 					}
 				} else if (!block.getMaterial().isLiquid() && block.getMaterial().getMaterialMobility() == 1) {
@@ -229,7 +265,9 @@ public class ClimateCalculator implements IClimateCalculator {
 				}
 			}
 		}
-
+		if (hasBlow) {
+			return DCAirflow.FLOW;
+		}
 		if (hasAir) {
 			if (hasWind) {
 				return DCAirflow.FLOW;

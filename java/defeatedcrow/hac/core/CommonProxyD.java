@@ -10,4 +10,10 @@ public class CommonProxyD {
 		TileRegister.load();
 	}
 
+	public void loadWorldGen() {
+	}
+
+	public void loadInit() {
+	}
+
 }
