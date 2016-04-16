@@ -1,6 +1,5 @@
 package defeatedcrow.hac.core;
 
-
 public class CommonProxyD {
 
 	public void loadMaterial() {
@@ -12,6 +11,9 @@ public class CommonProxyD {
 	}
 
 	public void loadWorldGen() {
+	}
+
+	public void loadInit() {
 	}
 
 }

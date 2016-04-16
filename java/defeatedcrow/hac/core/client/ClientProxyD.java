@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.client;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import defeatedcrow.hac.core.CommonProxyD;
 import defeatedcrow.hac.machine.client.TESRFuelStove;
@@ -17,6 +18,11 @@ public class ClientProxyD extends CommonProxyD {
 	public void loadTE() {
 		super.loadTE();
 		ClientRegistry.bindTileEntitySpecialRenderer(StoveBase.class, new TESRFuelStove());
+	}
+
+	@Override
+	public void loadInit() {
+		MinecraftForge.EVENT_BUS.register(JsonBakery.instance);
 	}
 
 }

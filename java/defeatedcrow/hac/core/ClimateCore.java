@@ -46,6 +46,7 @@ public class ClimateCore {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		proxy.loadInit();
 		proxy.loadTE();
 		proxy.loadWorldGen();
 	}

@@ -43,7 +43,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	private static List<ClimateSmelting> uhtList;
 
 	@Override
-	public List<? extends ClimateSmelting> getRecipeList(DCHeatTier tier) {
+	public List<ClimateSmelting> getRecipeList(DCHeatTier tier) {
 		switch (tier) {
 		case ABSOLUTE:
 			return absList;
@@ -69,7 +69,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	@Override
 	public void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air, float secondaryChance,
 			boolean cooling, Object input) {
-		List<IClimateSmelting> list = (List<IClimateSmelting>) getRecipeList(heat);
+		List<ClimateSmelting> list = getRecipeList(heat);
 		if (input != null && output != null && heat != null) {
 			list.add(new ClimateSmelting(output, secondary, heat, hum, air, secondaryChance, cooling, input));
 		}
@@ -77,7 +77,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 
 	@Override
 	public void addRecipe(ItemStack output, DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling, Object input) {
-		List<IClimateSmelting> list = (List<IClimateSmelting>) getRecipeList(heat);
+		List<ClimateSmelting> list = getRecipeList(heat);
 		if (input != null && output != null && heat != null) {
 			list.add(new ClimateSmelting(output, null, heat, hum, air, 0.0F, false, input));
 		}
@@ -95,13 +95,14 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 
 	@Override
 	public void addRecipe(IClimateSmelting recipe, DCHeatTier heat) {
-		List<IClimateSmelting> list = (List<IClimateSmelting>) getRecipeList(heat);
-		list.add(recipe);
+		List<ClimateSmelting> list = getRecipeList(heat);
+		if (recipe instanceof ClimateSmelting)
+			list.add((ClimateSmelting) recipe);
 	}
 
 	@Override
 	public IClimateSmelting getRecipe(IClimate clm, ItemStack item) {
-		List<IClimateSmelting> list = (List<IClimateSmelting>) getRecipeList(clm.getHeat());
+		List<ClimateSmelting> list = getRecipeList(clm.getHeat());
 		IClimateSmelting ret = null;
 		if (list.isEmpty()) {
 		} else {
@@ -116,7 +117,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 		 */
 		if (ret == null && clm.getHeat().getTier() != 0) {
 			int i = clm.getHeat().getTier() < 0 ? 1 : -1;
-			List<IClimateSmelting> list2 = (List<IClimateSmelting>) getRecipeList(clm.getHeat().addTier(i));
+			List<ClimateSmelting> list2 = getRecipeList(clm.getHeat().addTier(i));
 			if (list.isEmpty()) {
 			} else {
 				for (IClimateSmelting recipe : list2) {

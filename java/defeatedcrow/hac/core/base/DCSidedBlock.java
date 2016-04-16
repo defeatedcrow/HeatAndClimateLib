@@ -6,10 +6,12 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -26,9 +28,10 @@ import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.core.ClimateCore;
 
 /*
- * TEなし16種のブロック
+ * 方向用のメタを一つだけ持つ。
+ * 他のメタは7種のタイプに使われる。
  */
-public class DCSimpleBlock extends Block implements IClimateObject, ISidedTexture {
+public class DCSidedBlock extends Block implements IClimateObject, ISidedTexture {
 
 	protected Random rand = new Random();
 	public static final String CL_TEX = "dcs_climate:blocks/clear";
@@ -37,27 +40,30 @@ public class DCSimpleBlock extends Block implements IClimateObject, ISidedTextur
 	public final int maxMeta;
 
 	// 同系ブロック共通ﾌﾟﾛﾊﾟﾁｰ
-	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 15);
+	public static final PropertyBool FACING = PropertyBool.create("facing");
+	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 7);
 
-	public DCSimpleBlock(Material m, String s, int max) {
+	public DCSidedBlock(Material m, String s, int max) {
 		super(m);
 		this.setCreativeTab(ClimateCore.climate);
 		this.setUnlocalizedName(s);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, 0));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, false).withProperty(TYPE, 0));
+		if (max < 0 || max > 7)
+			max = 7;
 		this.maxMeta = max;
-	}
-
-	@Override
-	public int tickRate(World world) {
-		return 100;
 	}
 
 	/*
 	 * ItemのUnlocalizedNameとかTexture指定とかに使う、メタと名前末尾の照合用リスト。
 	 * 各Blockで中身を入れる
 	 */
+	@Override
+	public int tickRate(World world) {
+		return 100;
+	}
+
 	public String[] getNameSuffix() {
 		return null;
 	}
@@ -111,6 +117,15 @@ public class DCSimpleBlock extends Block implements IClimateObject, ISidedTextur
 
 	// 設置・破壊処理
 	@Override
+	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta,
+			EntityLivingBase placer) {
+		IBlockState state = super.onBlockPlaced(world, pos, facing, hitX, hitY, hitZ, meta, placer);
+		boolean face = placer.getHorizontalFacing() == EnumFacing.NORTH || placer.getHorizontalFacing() == EnumFacing.SOUTH;
+		state = state.withProperty(FACING, face);
+		return state;
+	}
+
+	@Override
 	public int damageDropped(IBlockState state) {
 		int i = state.getValue(TYPE);
 		if (i > maxMeta)
@@ -131,8 +146,9 @@ public class DCSimpleBlock extends Block implements IClimateObject, ISidedTextur
 	// state関連
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		int i = meta & 15;
-		IBlockState state = this.getDefaultState().withProperty(TYPE, i);
+		int i = meta & 7;
+		boolean f = (meta & 8) != 0;
+		IBlockState state = this.getDefaultState().withProperty(FACING, f).withProperty(TYPE, i);
 		return state;
 	}
 
@@ -140,11 +156,12 @@ public class DCSimpleBlock extends Block implements IClimateObject, ISidedTextur
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int i = 0;
-
 		i = state.getValue(TYPE);
 		if (i > maxMeta)
 			i = maxMeta;
-		return i;
+		boolean f = state.getValue(FACING);
+
+		return f ? i : i | 8;
 	}
 
 	@Override
@@ -154,7 +171,9 @@ public class DCSimpleBlock extends Block implements IClimateObject, ISidedTextur
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { TYPE });
+		return new BlockState(this, new IProperty[] {
+				FACING,
+				TYPE });
 	}
 
 	@Override

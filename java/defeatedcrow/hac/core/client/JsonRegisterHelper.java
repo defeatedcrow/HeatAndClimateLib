@@ -111,12 +111,16 @@ public class JsonRegisterHelper {
 	 * テクスチャの取得にITexturePathを使用するため、登録するItemに実装する。
 	 */
 	public void checkAndBuildJson(Object item, String domein, String name, String dir, int meta) {
-		if (!ClimateCore.isDebug || !(item instanceof ITexturePath))
+		if (!(item instanceof ITexturePath))
 			return;
 
 		String filePath = null;
 		File gj = null;
 		boolean find = false;
+		boolean tool = false;
+		if (item instanceof Item && ((Item) item).isFull3D())
+			tool = true;
+
 		try {
 			Path path = Paths.get(basePath);
 			path.normalize();
@@ -141,13 +145,21 @@ public class JsonRegisterHelper {
 			ITexturePath tex = (ITexturePath) item;
 
 			try {
-				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
-				Textures textures = new Textures(tex.getTexPath(meta, false));
-				Disp display = new Disp();
 				Map<String, Object> jsonMap = new HashMap<String, Object>();
-				jsonMap.put("parent", "builtin/generated");
-				jsonMap.put("textures", textures);
-				jsonMap.put("display", display);
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
+				if (tool) {
+					Textures textures = new Textures(tex.getTexPath(meta, false));
+					Disp display = new Disp();
+					jsonMap.put("parent", "builtin/generated");
+					jsonMap.put("textures", textures);
+					jsonMap.put("display", display);
+				} else {
+					Textures textures = new Textures(tex.getTexPath(meta, false));
+					Disp2 display = new Disp2();
+					jsonMap.put("parent", "builtin/generated");
+					jsonMap.put("textures", textures);
+					jsonMap.put("display", display);
+				}
 
 				Gson gson = new Gson();
 				String output = gson.toJson(jsonMap);
@@ -218,7 +230,7 @@ public class JsonRegisterHelper {
 
 	/**
 	 * Jsonあれ 3<br>
-	 * デバッグモード時に限り、標準的な一枚絵アイコン用のJsonを生成する。既に生成済みの場合は生成処理を行わない。<br>
+	 * デバッグモード時に限り、前面同テクスチャのCubeモデルのJsonを生成する。既に生成済みの場合は生成処理を行わない。<br>
 	 * テクスチャの取得にITexturePathを使用するため、登録するblockに実装する。
 	 */
 	public void checkAndBuildJsonCube(ITexturePath block, String domein, String name, String dir, int meta) {
@@ -294,33 +306,53 @@ public class JsonRegisterHelper {
 	}
 
 	private class Third {
-		int[] rotation1 = new int[] {
+		int[] rotation = new int[] {
 				-90,
 				0,
 				0 };
-		int[] translation1 = new int[] {
+		int[] translation = new int[] {
 				0,
 				1,
 				-3 };
-		double[] scale1 = new double[] {
+		double[] scale = new double[] {
 				0.55D,
 				0.55D,
 				0.55D };
 	}
 
+	private class Disp2 {
+		Third2 thirdperson = new Third2();
+		First firstperson = new First();
+	}
+
+	private class Third2 {
+		int[] rotation = new int[] {
+				0,
+				90,
+				-35 };
+		double[] translation = new double[] {
+				0,
+				1.25D,
+				-3.5D };
+		double[] scale = new double[] {
+				0.85D,
+				0.85D,
+				0.85D };
+	}
+
 	private class First {
-		int[] rotation1 = new int[] {
+		int[] rotation = new int[] {
 				0,
 				-135,
 				25 };
-		int[] translation1 = new int[] {
+		int[] translation = new int[] {
 				0,
 				4,
 				2 };
-		double[] scale1 = new double[] {
+		double[] scale = new double[] {
 				1.7D,
 				1.7D,
-				01.7D };
+				1.7D };
 	}
 
 	/** めもめも。 https://gist.github.com/aksource/9be70a0bef9a46eec468 */

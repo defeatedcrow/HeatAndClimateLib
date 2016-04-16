@@ -43,7 +43,7 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 	private static List<ClimateRecipe> uhtList;
 
 	@Override
-	public List<? extends ClimateRecipe> getRecipeList(DCHeatTier tier) {
+	public List<ClimateRecipe> getRecipeList(DCHeatTier tier) {
 		switch (tier) {
 		case ABSOLUTE:
 			return absList;
@@ -69,7 +69,7 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 	@Override
 	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat, DCHumidity hum, DCAirflow air,
 			boolean cooling, Object... input) {
-		List<IClimateRecipe> list = (List<IClimateRecipe>) getRecipeList(heat);
+		List<ClimateRecipe> list = getRecipeList(heat);
 		if (input != null && output != null && heat != null) {
 			list.add(new ClimateRecipe(output, secondary, heat, hum, air, secondaryChance, cooling, input));
 		}
@@ -77,7 +77,7 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 
 	@Override
 	public void addRecipe(ItemStack output, DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling, Object... input) {
-		List<IClimateRecipe> list = (List<IClimateRecipe>) getRecipeList(heat);
+		List<ClimateRecipe> list = getRecipeList(heat);
 		if (input != null && output != null && heat != null) {
 			list.add(new ClimateRecipe(output, null, heat, hum, air, 0.0F, false, input));
 		}
@@ -95,13 +95,14 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 
 	@Override
 	public void addRecipe(IClimateRecipe recipe, DCHeatTier heat) {
-		List<IClimateRecipe> list = (List<IClimateRecipe>) getRecipeList(heat);
-		list.add(recipe);
+		List<ClimateRecipe> list = getRecipeList(heat);
+		if (recipe instanceof ClimateRecipe)
+			list.add((ClimateRecipe) recipe);
 	}
 
 	@Override
 	public IClimateRecipe getRecipe(IClimate clm, List<ItemStack> items) {
-		List<IClimateRecipe> list = (List<IClimateRecipe>) getRecipeList(clm.getHeat());
+		List<ClimateRecipe> list = getRecipeList(clm.getHeat());
 		if (list.isEmpty()) {
 			return null;
 		} else {
@@ -117,7 +118,7 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 	@Override
 	public IClimateRecipe getRecipe(int code, List<ItemStack> items) {
 		IClimate clm = ClimateAPI.register.getClimateFromInt(code);
-		List<IClimateRecipe> list = (List<IClimateRecipe>) getRecipeList(clm.getHeat());
+		List<ClimateRecipe> list = getRecipeList(clm.getHeat());
 		if (list.isEmpty()) {
 			return null;
 		} else {

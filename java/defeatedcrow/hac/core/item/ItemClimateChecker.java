@@ -24,18 +24,17 @@ public class ItemClimateChecker extends DCItem {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side,
-			float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY,
+			float hitZ) {
 		if (!world.isRemote) {
-			IClimate c = ClimateAPI.calculator.getClimate(world, pos, 2);
+			IClimate c = ClimateAPI.calculator.getClimate(world, pos, 1);
 			if (c != null) {
 				player.addChatMessage(new ChatComponentText("== Current Climate =="));
 				player.addChatMessage(new ChatComponentText("Temperature: " + c.getHeat().name()));
 				player.addChatMessage(new ChatComponentText("Humidity: " + c.getHumidity().name()));
 				player.addChatMessage(new ChatComponentText("Airflow: " + c.getAirflow().name()));
 				if (ClimateCore.isDebug) {
-					player.addChatMessage(new ChatComponentText("Climate int: "
-							+ Integer.toBinaryString(c.getClimateInt())));
+					player.addChatMessage(new ChatComponentText("Climate int: " + Integer.toBinaryString(c.getClimateInt())));
 				}
 			}
 		}
