@@ -146,7 +146,7 @@ public class ClimateCalculator implements IClimateCalculator {
 			return DCHumidity.UNDERWATER;
 		}
 		// 雨が降っている
-		if (world.isRaining() && hum != DCHumidity.DRY) {
+		if (world.isRaining() && hum != DCHumidity.DRY && world.canBlockSeeSky(pos.up())) {
 			ret++;
 		}
 		if (r < 0) {
@@ -202,7 +202,7 @@ public class ClimateCalculator implements IClimateCalculator {
 	@Override
 	public DCAirflow getAirflow(World world, BlockPos pos, int r, boolean h) {
 		DCAirflow air = ClimateAPI.register.getAirflow(world, pos);
-		boolean hasAir = false;
+		int count = 0;
 		boolean hasWind = false;
 		boolean hasBlow = false;
 
@@ -211,7 +211,7 @@ public class ClimateCalculator implements IClimateCalculator {
 			if (block instanceof IAirflowTile) {
 				DCAirflow current = ((IAirflowTile) block).getAirflow(world, pos);
 				if (current.getID() > 1) {
-					hasAir = true;
+					count++;
 					hasWind = true;
 					if (current == DCAirflow.WIND)
 						hasBlow = true;
@@ -219,7 +219,7 @@ public class ClimateCalculator implements IClimateCalculator {
 			} else if (ClimateAPI.registerBlock.isRegisteredAir(block)) {
 				DCAirflow cur = ClimateAPI.registerBlock.getAirflow(block);
 				if (cur.getID() > 0) {
-					hasAir = true;
+					count++;
 					if (world.canBlockSeeSky(pos.up()) && !world.provider.getHasNoSky()) {
 						hasWind = true;
 					}
@@ -245,12 +245,12 @@ public class ClimateCalculator implements IClimateCalculator {
 								hasBlow = true;
 							hasWind = true;
 						}
-						hasAir = true;
+						count++;
 					}
 				} else if (ClimateAPI.registerBlock.isRegisteredAir(block)) {
 					DCAirflow cur = ClimateAPI.registerBlock.getAirflow(block);
 					if (cur.getID() > 0) {
-						hasAir = true;
+						count++;
 						if (world.canBlockSeeSky(p2) && !world.provider.getHasNoSky()) {
 							hasWind = true;
 						}
@@ -260,16 +260,17 @@ public class ClimateCalculator implements IClimateCalculator {
 								hasBlow = true;
 						}
 					}
-				} else if (!block.getMaterial().isLiquid() && block.getMaterial().getMaterialMobility() == 1) {
-					hasAir = true;
 				}
 			}
 		}
 		if (hasBlow) {
-			return DCAirflow.FLOW;
+			return DCAirflow.WIND;
 		}
-		if (hasAir) {
+		if (count > 2) {
 			if (hasWind) {
+				if (world.isThundering()) {
+					return DCAirflow.WIND;
+				}
 				return DCAirflow.FLOW;
 			} else {
 				return air;

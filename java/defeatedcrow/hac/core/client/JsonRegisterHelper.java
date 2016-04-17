@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.base.DCFacelessTileBlock;
 import defeatedcrow.hac.core.base.DCTileBlock;
 import defeatedcrow.hac.core.base.ITexturePath;
 
@@ -66,6 +67,26 @@ public class JsonRegisterHelper {
 	public void regTEBlock(Block block, String domein, String name, String dir, int maxMeta) {
 		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(((DCTileBlock) block).FACING, ((DCTileBlock) block).TYPE)
 				.build());
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":" + "basetile"));
+		if (maxMeta == 0) {
+			INSTANCE.checkAndBuildJson(block, domein, name, dir, 0);
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(domein + ":" + dir + "/"
+					+ name, "inventory"));
+		} else {
+			for (int i = 0; i < maxMeta + 1; i++) {
+				INSTANCE.checkAndBuildJson(block, domein, name, dir, i);
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(domein + ":" + dir
+						+ "/" + name + i, "inventory"));
+			}
+		}
+	}
+
+	/**
+	 * 汎用Tile使用メソッド2
+	 * FACINGがないやつ
+	 */
+	public void regTESimpleBlock(Block block, String domein, String name, String dir, int maxMeta) {
+		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(((DCFacelessTileBlock) block).TYPE).build());
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":" + "basetile"));
 		if (maxMeta == 0) {
 			INSTANCE.checkAndBuildJson(block, domein, name, dir, 0);
@@ -211,7 +232,9 @@ public class JsonRegisterHelper {
 			try {
 				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
 				Map<String, Object> jsonMap = new HashMap<String, Object>();
+				Disp3 display = new Disp3();
 				jsonMap.put("parent", domein + ":block/" + dir + "/" + name + meta);
+				jsonMap.put("display", display);
 
 				Gson gson = new Gson();
 				String output = gson.toJson(jsonMap);
@@ -230,7 +253,7 @@ public class JsonRegisterHelper {
 
 	/**
 	 * Jsonあれ 3<br>
-	 * デバッグモード時に限り、前面同テクスチャのCubeモデルのJsonを生成する。既に生成済みの場合は生成処理を行わない。<br>
+	 * 全面同テクスチャのCubeモデルのJsonを生成する。既に生成済みの場合は生成処理を行わない。<br>
 	 * テクスチャの取得にITexturePathを使用するため、登録するblockに実装する。
 	 */
 	public void checkAndBuildJsonCube(ITexturePath block, String domein, String name, String dir, int meta) {
@@ -355,6 +378,23 @@ public class JsonRegisterHelper {
 				1.7D };
 	}
 
-	/** めもめも。 https://gist.github.com/aksource/9be70a0bef9a46eec468 */
+	private class Disp3 {
+		Third3 thirdperson = new Third3();
+	}
+
+	private class Third3 {
+		int[] rotation = new int[] {
+				10,
+				45,
+				170 };
+		double[] translation = new double[] {
+				0,
+				1.5D,
+				-2.75D };
+		double[] scale = new double[] {
+				0.35D,
+				0.35D,
+				0.35D };
+	}
 
 }
