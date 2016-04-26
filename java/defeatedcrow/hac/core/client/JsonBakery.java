@@ -123,6 +123,7 @@ public class JsonBakery {
 			/* モデル指定がミスるとここに飛ぶ */
 			e.printStackTrace();
 		}
+		/* TB */
 		ResourceLocation rawTB = new ResourceLocation("dcs_climate:block/dcs_cube_tb");
 		ResourceLocation rawTBItem = new ResourceLocation("dcs_climate:item/dcs_cube_tb");
 		try {

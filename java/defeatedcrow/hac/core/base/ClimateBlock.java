@@ -1,0 +1,123 @@
+package defeatedcrow.hac.core.base;
+
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.recipe.IClimateObject;
+import defeatedcrow.hac.api.recipe.IClimateSmelting;
+import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.DCLogger;
+
+/**
+ * ClimateSmeltingレシピを持つBlockのテンプレート
+ */
+public class ClimateBlock extends Block implements IClimateObject {
+
+	public final boolean forceUpdate;
+
+	public ClimateBlock(Material m, boolean f) {
+		super(m);
+		forceUpdate = f;
+	}
+
+	@Override
+	public int tickRate(World world) {
+		return 40;
+	}
+
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		if (this.isForcedTickUpdate()) {
+			world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(21));
+		}
+	}
+
+	@Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		super.updateTick(worldIn, pos, state, rand);
+		if (!worldIn.isRemote && state != null && state.getBlock() != null) {
+			IClimate clm = this.onUpdateClimate(worldIn, pos, state);
+			if (!this.onClimateChange(worldIn, pos, state, clm) && this.isForcedTickUpdate()) {
+				worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn) + rand.nextInt(21));
+			}
+		}
+	}
+
+	@Override
+	public IClimate onUpdateClimate(World world, BlockPos pos, IBlockState state) {
+		DCHeatTier heat = ClimateAPI.calculator.getHeatTier(world, pos, checkingRange()[0], false);
+		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, checkingRange()[1], false);
+		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, checkingRange()[2], false);
+		IClimate c = ClimateAPI.register.getClimateFromParam(heat, hum, air);
+		return c;
+	}
+
+	@Override
+	public boolean onClimateChange(World world, BlockPos pos, IBlockState state, IClimate clm) {
+		if (clm != null) {
+			DCHeatTier heat = clm.getHeat();
+			DCHumidity hum = clm.getHumidity();
+			DCAirflow air = clm.getAirflow();
+			int meta = this.getMetaFromState(state);
+			ItemStack check = new ItemStack(this, 1, meta);
+			IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, check);
+			if (recipe != null) {
+				ItemStack output = recipe.getOutput();
+				if (output != null && output.getItem() instanceof ItemBlock) {
+					Block ret = ((ItemBlock) output.getItem()).block;
+					IBlockState retS = ret.getStateFromMeta(output.getItemDamage());
+					if (world.setBlockState(pos, retS, 3)) {
+						world.markBlockForUpdate(pos);
+
+						// 効果音
+						if (playSEOnChanging(meta)) {
+							double d0 = pos.getX();
+							double d1 = pos.getY();
+							double d2 = pos.getZ();
+							world.playSoundEffect(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D, getSEName(meta), 0.8F, 2.0F);
+							DCLogger.debugLog("Smelting! " + output.getDisplayName());
+						}
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public String getSEName(int meta) {
+		return "random.fizz";
+	}
+
+	@Override
+	public boolean playSEOnChanging(int meta) {
+		return true;
+	}
+
+	@Override
+	public boolean isForcedTickUpdate() {
+		return forceUpdate;
+	}
+
+	@Override
+	public int[] checkingRange() {
+		return new int[] {
+				2,
+				1,
+				1 };
+	}
+
+}

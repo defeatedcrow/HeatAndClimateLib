@@ -3,7 +3,6 @@ package defeatedcrow.hac.core.base;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
@@ -22,31 +21,32 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import defeatedcrow.hac.api.placeable.ISidedTexture;
-import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.core.ClimateCore;
 
 /*
  * TEなし16種のブロック
  */
-public class DCSimpleBlock extends Block implements IClimateObject, ISidedTexture {
+public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameSuffix {
 
 	protected Random rand = new Random();
 	public static final String CL_TEX = "dcs_climate:blocks/clear";
 
 	// Type上限
 	public final int maxMeta;
+	public final boolean forceUpdate;
 
 	// 同系ブロック共通ﾌﾟﾛﾊﾟﾁｰ
 	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 15);
 
-	public DCSimpleBlock(Material m, String s, int max) {
-		super(m);
+	public DCSimpleBlock(Material m, String s, int max, boolean force) {
+		super(m, force);
 		this.setCreativeTab(ClimateCore.climate);
 		this.setUnlocalizedName(s);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, 0));
 		this.maxMeta = max;
+		forceUpdate = force;
 	}
 
 	@Override
@@ -58,6 +58,7 @@ public class DCSimpleBlock extends Block implements IClimateObject, ISidedTextur
 	 * ItemのUnlocalizedNameとかTexture指定とかに使う、メタと名前末尾の照合用リスト。
 	 * 各Blockで中身を入れる
 	 */
+	@Override
 	public String[] getNameSuffix() {
 		return null;
 	}
@@ -100,13 +101,6 @@ public class DCSimpleBlock extends Block implements IClimateObject, ISidedTextur
 		for (int i = 0; i < maxMeta + 1; i++) {
 			list.add(new ItemStack(this, 1, i));
 		}
-	}
-
-	// update
-	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(worldIn, pos, state, rand);
-		this.onUpdateClimate(worldIn, pos, state);
 	}
 
 	// 設置・破壊処理
@@ -155,10 +149,6 @@ public class DCSimpleBlock extends Block implements IClimateObject, ISidedTextur
 	@Override
 	protected BlockState createBlockState() {
 		return new BlockState(this, new IProperty[] { TYPE });
-	}
-
-	@Override
-	public void onUpdateClimate(World world, BlockPos pos, IBlockState state) {
 	}
 
 	/** T, B, N, S, W, E */

@@ -22,6 +22,7 @@ public class ClientProxyD extends CommonProxyD {
 
 	@Override
 	public void loadInit() {
+		super.loadInit();
 		MinecraftForge.EVENT_BUS.register(JsonBakery.instance);
 	}
 

@@ -33,8 +33,7 @@ public class ClimateRecipe implements IClimateRecipe {
 	private List<DCHumidity> hum = new ArrayList<DCHumidity>();
 	private List<DCAirflow> air = new ArrayList<DCAirflow>();
 
-	public ClimateRecipe(ItemStack o, ItemStack s, DCHeatTier t, DCHumidity h, DCAirflow a, float c, boolean cooling,
-			Object... inputs) {
+	public ClimateRecipe(ItemStack o, ItemStack s, DCHeatTier t, DCHumidity h, DCAirflow a, float c, boolean cooling, Object... inputs) {
 		input = inputs;
 		output = o;
 		secondary = s;
@@ -211,7 +210,7 @@ public class ClimateRecipe implements IClimateRecipe {
 
 	@Override
 	public int getRecipeSize() {
-		return 0;
+		return input.length;
 	}
 
 	@Override

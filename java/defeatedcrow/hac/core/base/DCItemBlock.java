@@ -26,10 +26,8 @@ public class DCItemBlock extends ItemBlock implements ITexturePath {
 
 	/* Blockから引っ張ってくる */
 	protected String[] getNameSuffix() {
-		if (this.block instanceof DCSimpleBlock)
-			return ((DCSimpleBlock) this.block).getNameSuffix();
-		else if (this.block instanceof DCSidedBlock)
-			return ((DCSidedBlock) this.block).getNameSuffix();
+		if (this.block instanceof INameSuffix)
+			return ((INameSuffix) this.block).getNameSuffix();
 		else
 			return null;
 	}

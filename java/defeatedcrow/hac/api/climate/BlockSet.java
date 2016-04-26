@@ -1,8 +1,9 @@
-package defeatedcrow.hac.core.util;
+package defeatedcrow.hac.api.climate;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 
+/** ItemStackのようなBlock、metaのセットが欲しかったので作成 */
 public class BlockSet {
 
 	public final Block block;
@@ -21,9 +22,9 @@ public class BlockSet {
 	public boolean equals(Object obj) {
 		if (obj != null && obj instanceof BlockSet) {
 			BlockSet p = (BlockSet) obj;
-			return p.block == block && p.meta == meta;
+			return p.block == block && (meta == 32767 || p.meta == 32767 || p.meta == meta);
 		}
-		return false;
+		return super.equals(obj);
 	}
 
 	@Override
