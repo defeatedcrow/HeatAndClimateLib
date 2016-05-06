@@ -32,7 +32,7 @@ public class DCTileEntity extends TileEntity implements ITickable {
 	}
 
 	public NBTTagCompound getNBT(NBTTagCompound tag) {
-		return null;
+		return tag;
 	}
 
 	public void setNBT(NBTTagCompound tag) {
@@ -49,15 +49,21 @@ public class DCTileEntity extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
+		if (coolTime < 0) {
+			coolTime--;
+		} else {
+			updateTile();
+			coolTime = getMaxCool();
+		}
+
+		onTickUpdate();
+
 		if (!worldObj.isRemote) {
-			if (coolTime < 0) {
-				coolTime--;
-			} else {
-				updateTile();
-				coolTime = getMaxCool();
-			}
 			onServerUpdate();
 		}
+	}
+
+	public void onTickUpdate() {
 	}
 
 	protected void onServerUpdate() {

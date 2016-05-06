@@ -1,7 +1,8 @@
 package defeatedcrow.hac.core;
 
 import net.minecraftforge.common.MinecraftForge;
-import defeatedcrow.hac.core.event.LivingPotionEvent;
+import defeatedcrow.hac.core.client.base.ModelThinBiped;
+import defeatedcrow.hac.core.event.LivingEventDC;
 
 public class CommonProxyD {
 
@@ -17,9 +18,25 @@ public class CommonProxyD {
 	}
 
 	public void loadInit() {
-		MinecraftForge.EVENT_BUS.register(new LivingPotionEvent());
+		MinecraftForge.EVENT_BUS.register(new LivingEventDC());
 		// VanillaRecipeRegister.load();
 		// MinecraftForge.EVENT_BUS.register(new NotifyClimateEvent());
+	}
+
+	public ModelThinBiped getArmorModel(int slot) {
+		return null;
+	}
+
+	public boolean isJumpKeyDown() {
+		return false;
+	}
+
+	public boolean isShiftKeyDown() {
+		return false;
+	}
+
+	public boolean isWarpKeyDown() {
+		return false;
 	}
 
 }

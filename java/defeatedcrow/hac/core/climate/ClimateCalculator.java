@@ -20,21 +20,32 @@ import defeatedcrow.hac.api.climate.IHumidityTile;
 public class ClimateCalculator implements IClimateCalculator {
 
 	@Override
-	public IClimate getClimate(World world, BlockPos pos, int r) {
-		if (r < 0 || r > 15)
-			r = 1;
-		DCHeatTier temp = ClimateAPI.calculator.getHeatTier(world, pos, r, false);
-		DCHeatTier cold = ClimateAPI.calculator.getColdTier(world, pos, r, false);
-		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, r, false);
-		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, r, false);
-
-		if (temp.getTier() >= 0 && cold.getTier() < 0) {
-			temp = temp.addTier(cold.getTier());
-		}
+	public IClimate getClimate(World world, BlockPos pos, int[] r) {
+		if (r == null || r.length < 3)
+			r = new int[] {
+					2,
+					1,
+					1 };
+		DCHeatTier temp = ClimateAPI.calculator.getTemp(world, pos, r[0], false);
+		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, r[1], false);
+		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, r[2], false);
 
 		int code = (air.getID() << 5) + (hum.getID() << 3) + temp.getID();
 		IClimate clm = ClimateAPI.register.getClimateFromInt(code);
 		return clm;
+	}
+
+	@Override
+	public DCHeatTier getTemp(World world, BlockPos pos, int r, boolean h) {
+		if (r < 0 || r > 15)
+			r = 1;
+		DCHeatTier temp = ClimateAPI.calculator.getHeatTier(world, pos, r, false);
+		DCHeatTier cold = ClimateAPI.calculator.getColdTier(world, pos, r, false);
+
+		if (temp.getTier() > cold.getTier() && cold.getTier() < 0) {
+			temp = temp.addTier(cold.getTier());
+		}
+		return temp;
 	}
 
 	@Override
@@ -124,6 +135,8 @@ public class ClimateCalculator implements IClimateCalculator {
 	// 合計値で考える
 	@Override
 	public DCHumidity getHumidity(World world, BlockPos pos, int r, boolean h) {
+		if (r < 0 || r > 15)
+			r = 1;
 		DCHumidity hum = ClimateAPI.register.getHumidity(world, pos);
 		int ret = hum.getID() - 1;
 		boolean isUnderwater = false;
@@ -208,6 +221,8 @@ public class ClimateCalculator implements IClimateCalculator {
 	// ひとつでもAirがあれば窒息はしない
 	@Override
 	public DCAirflow getAirflow(World world, BlockPos pos, int r, boolean h) {
+		if (r < 0 || r > 15)
+			r = 1;
 		DCAirflow air = ClimateAPI.register.getAirflow(world, pos);
 		int count = 0;
 		boolean hasWind = false;

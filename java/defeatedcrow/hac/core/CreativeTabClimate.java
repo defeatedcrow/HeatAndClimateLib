@@ -15,7 +15,7 @@ public class CreativeTabClimate extends CreativeTabs {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getTranslatedTabLabel() {
-		return "DCsHeatAndCimate";
+		return "HeatAndCimate";
 	}
 
 	@Override

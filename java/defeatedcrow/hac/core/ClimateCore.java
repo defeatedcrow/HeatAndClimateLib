@@ -7,6 +7,9 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import defeatedcrow.hac.config.ClimateConfig;
+import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.util.DCUtil;
 
 @Mod(
 		modid = ClimateCore.MOD_ID,
@@ -17,7 +20,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 		useMetadata = true)
 public class ClimateCore {
 	public static final String MOD_ID = "dcs_climate|lib";
-	public static final String MOD_NAME = "ClimateAndHeatLib";
+	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 0;
 	public static final int MOD_MINOR = 3;
 	public static final String MOD_BUILD = "a";
@@ -40,6 +43,8 @@ public class ClimateCore {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		ClimateConfig.INSTANCE.load(event.getModConfigurationDirectory());
+		isDebug = DCUtil.checkDebugModePass(CoreConfigDC.debugPass);
 		APILoader.loadAPI();
 		proxy.loadMaterial();
 	}

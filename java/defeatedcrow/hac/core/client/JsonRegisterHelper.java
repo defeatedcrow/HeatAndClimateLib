@@ -168,7 +168,7 @@ public class JsonRegisterHelper {
 			try {
 				Map<String, Object> jsonMap = new HashMap<String, Object>();
 				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
-				if (tool) {
+				if (!tool) {
 					Textures textures = new Textures(tex.getTexPath(meta, false));
 					Disp display = new Disp();
 					jsonMap.put("parent", "builtin/generated");
@@ -324,43 +324,56 @@ public class JsonRegisterHelper {
 	}
 
 	private class Disp {
-		Third thirdperson = new Third();
-		First firstperson = new First();
-	}
-
-	private class Third {
-		int[] rotation = new int[] {
+		Third thirdperson = new Third(new int[] {
 				-90,
 				0,
-				0 };
-		int[] translation = new int[] {
+				0 }, new double[] {
 				0,
 				1,
-				-3 };
-		double[] scale = new double[] {
+				-3 }, new double[] {
 				0.55D,
 				0.55D,
-				0.55D };
+				0.55D });
+		First firstperson = new First();
 	}
 
 	private class Disp2 {
-		Third2 thirdperson = new Third2();
+		Third thirdperson = new Third(new int[] {
+				0,
+				90,
+				-35 }, new double[] {
+				0,
+				1.25D,
+				-3.5D }, new double[] {
+				0.85D,
+				0.85D,
+				0.85D });
 		First firstperson = new First();
 	}
 
-	private class Third2 {
-		int[] rotation = new int[] {
+	private class Disp3 {
+		Third thirdperson = new Third(new int[] {
+				10,
+				45,
+				170 }, new double[] {
 				0,
-				90,
-				-35 };
-		double[] translation = new double[] {
-				0,
-				1.25D,
-				-3.5D };
-		double[] scale = new double[] {
-				0.85D,
-				0.85D,
-				0.85D };
+				1.5D,
+				-2.75D }, new double[] {
+				0.35D,
+				0.35D,
+				0.35D });
+	}
+
+	private class Third {
+		private Third(int[] i, double[] j, double[] k) {
+			rotation = i;
+			translation = j;
+			scale = k;
+		}
+
+		final int[] rotation;
+		final double[] translation;
+		final double[] scale;
 	}
 
 	private class First {
@@ -376,25 +389,6 @@ public class JsonRegisterHelper {
 				1.7D,
 				1.7D,
 				1.7D };
-	}
-
-	private class Disp3 {
-		Third3 thirdperson = new Third3();
-	}
-
-	private class Third3 {
-		int[] rotation = new int[] {
-				10,
-				45,
-				170 };
-		double[] translation = new double[] {
-				0,
-				1.5D,
-				-2.75D };
-		double[] scale = new double[] {
-				0.35D,
-				0.35D,
-				0.35D };
 	}
 
 }

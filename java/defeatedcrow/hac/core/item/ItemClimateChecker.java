@@ -14,9 +14,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCAirflow;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
@@ -41,19 +38,13 @@ public class ItemClimateChecker extends DCItem {
 			if (state.getBlock() instanceof IClimateObject) {
 				IClimateObject co = (IClimateObject) state.getBlock();
 				if (co.checkingRange() != null) {
-					DCHeatTier heat = ClimateAPI.calculator.getHeatTier(world, pos, co.checkingRange()[0], false);
-					DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, co.checkingRange()[1], false);
-					DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, co.checkingRange()[2], false);
-					c = ClimateAPI.register.getClimateFromParam(heat, hum, air);
+					c = ClimateAPI.calculator.getClimate(world, pos, co.checkingRange());
 				}
 			}
 
 			if (c == null) {
 				// heatのみ2ブロック
-				DCHeatTier heat = ClimateAPI.calculator.getHeatTier(world, pos, 2, false);
-				DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, 1, false);
-				DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, 1, false);
-				c = ClimateAPI.register.getClimateFromParam(heat, hum, air);
+				c = ClimateAPI.calculator.getClimate(world, pos, null);
 			}
 
 			if (c != null) {
