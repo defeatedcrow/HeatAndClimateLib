@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class DCLogger {
-	private static final Logger LOGGER = LogManager.getLogger("defeatedcrow");
+	public static final Logger LOGGER = LogManager.getLogger("defeatedcrow");
 
 	public static Logger logger() {
 		return LOGGER;

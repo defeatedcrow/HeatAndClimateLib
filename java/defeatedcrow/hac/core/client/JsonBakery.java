@@ -105,25 +105,35 @@ public class JsonBakery {
 
 	@SubscribeEvent
 	public void onBakingModelEvent(ModelBakeEvent event) {
+		// 生
 		ResourceLocation rawSided = new ResourceLocation("dcs_climate:block/dcs_cube_sided");
+		// Item用Jsonを同じ要領で拾ってくる
+		ResourceLocation rawSidedItem = new ResourceLocation("dcs_climate:item/dcs_cube_sided");
 		try {
 			IModel modelS = event.modelLoader.getModel(rawSided);
+			IModel modelSI = event.modelLoader.getModel(rawSidedItem);
 			if (modelS instanceof IRetexturableModel) {
+				// パンを焼く
 				IBakedModel bakedSided = new BakedSidedBaguette((IRetexturableModel) modelS);
+				IBakedModel bakedSidedItem = new BakedSidedBaguette((IRetexturableModel) modelSI);
 				event.modelRegistry.putObject(normalSided, bakedSided);
-				event.modelRegistry.putObject(inventorySided, bakedSided);
+				event.modelRegistry.putObject(inventorySided, bakedSidedItem);
 			}
 		} catch (IOException e) {
 			/* モデル指定がミスるとここに飛ぶ */
 			e.printStackTrace();
 		}
+		/* TB */
 		ResourceLocation rawTB = new ResourceLocation("dcs_climate:block/dcs_cube_tb");
+		ResourceLocation rawTBItem = new ResourceLocation("dcs_climate:item/dcs_cube_tb");
 		try {
 			IModel modelT = event.modelLoader.getModel(rawTB);
+			IModel modelTI = event.modelLoader.getModel(rawTBItem);
 			if (modelT instanceof IRetexturableModel) {
 				IBakedModel bakedTB = new BakedTBBaguette((IRetexturableModel) modelT);
+				IBakedModel bakedTBItem = new BakedTBBaguette((IRetexturableModel) modelTI);
 				event.modelRegistry.putObject(normalTB, bakedTB);
-				event.modelRegistry.putObject(inventoryTB, bakedTB);
+				event.modelRegistry.putObject(inventoryTB, bakedTBItem);
 			}
 		} catch (IOException e) {
 			/* モデル指定がミスるとここに飛ぶ */
@@ -174,10 +184,10 @@ public class JsonBakery {
 				ISidedTexture sided = (ISidedTexture) state.getBlock();
 				int meta = state.getBlock().getMetaFromState(state);
 				boolean face = (state.getBlock().getMetaFromState(state) & 8) == 0;
-				String top = sided.getTexture(meta, 1, face);
+				String top = sided.getTexture(meta, 0, face);
 				String down = sided.getTexture(meta, 1, face);
-				String ns = sided.getTexture(meta, 3, face);
-				String we = sided.getTexture(meta, 5, face);
+				String ns = sided.getTexture(meta, 2, face);
+				String we = sided.getTexture(meta, 4, face);
 
 				if (face) {
 					ImmutableMap<String, String> textures = new ImmutableMap.Builder<String, String>().put("down1", clear)
@@ -251,9 +261,9 @@ public class JsonBakery {
 				if (stack.getItem() instanceof ItemBlock && ((ItemBlock) stack.getItem()).block instanceof ISidedTexture) {
 					ISidedTexture sided = (ISidedTexture) ((ItemBlock) stack.getItem()).block;
 					int meta = stack.getItemDamage();
-					String top = sided.getTexture(meta, 1, false);
+					String top = sided.getTexture(meta, 0, false);
 					String down = sided.getTexture(meta, 1, false);
-					String side = sided.getTexture(meta, 3, false);
+					String side = sided.getTexture(meta, 2, false);
 					return retexturableModel.retexture(ImmutableMap.of("down", down, "up", top, "side", side)).bake(
 							retexturableModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 				}
@@ -267,9 +277,9 @@ public class JsonBakery {
 			if (state.getBlock() instanceof ISidedTexture) {
 				ISidedTexture sided = (ISidedTexture) state.getBlock();
 				int meta = state.getBlock().getMetaFromState(state);
-				String top = sided.getTexture(meta, 1, false);
+				String top = sided.getTexture(meta, 0, false);
 				String down = sided.getTexture(meta, 1, false);
-				String side = sided.getTexture(meta, 3, false);
+				String side = sided.getTexture(meta, 2, false);
 				return retexturableModel.retexture(ImmutableMap.of("down", down, "up", top, "side", side)).bake(
 						retexturableModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 			}

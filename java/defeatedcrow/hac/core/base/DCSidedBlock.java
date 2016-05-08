@@ -3,7 +3,6 @@ package defeatedcrow.hac.core.base;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -24,27 +23,27 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import defeatedcrow.hac.api.placeable.ISidedTexture;
-import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.core.ClimateCore;
 
 /*
  * 方向用のメタを一つだけ持つ。
  * 他のメタは7種のタイプに使われる。
  */
-public class DCSidedBlock extends Block implements IClimateObject, ISidedTexture {
+public class DCSidedBlock extends ClimateBlock implements ISidedTexture, INameSuffix {
 
 	protected Random rand = new Random();
 	public static final String CL_TEX = "dcs_climate:blocks/clear";
 
 	// Type上限
 	public final int maxMeta;
+	public final boolean forceUpdate;
 
 	// 同系ブロック共通ﾌﾟﾛﾊﾟﾁｰ
 	public static final PropertyBool FACING = PropertyBool.create("facing");
 	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 7);
 
-	public DCSidedBlock(Material m, String s, int max) {
-		super(m);
+	public DCSidedBlock(Material m, String s, int max, boolean force) {
+		super(m, force);
 		this.setCreativeTab(ClimateCore.climate);
 		this.setUnlocalizedName(s);
 		this.setHardness(0.5F);
@@ -53,6 +52,7 @@ public class DCSidedBlock extends Block implements IClimateObject, ISidedTexture
 		if (max < 0 || max > 7)
 			max = 7;
 		this.maxMeta = max;
+		forceUpdate = force;
 	}
 
 	/*
@@ -64,6 +64,7 @@ public class DCSidedBlock extends Block implements IClimateObject, ISidedTexture
 		return 100;
 	}
 
+	@Override
 	public String[] getNameSuffix() {
 		return null;
 	}
@@ -106,13 +107,6 @@ public class DCSidedBlock extends Block implements IClimateObject, ISidedTexture
 		for (int i = 0; i < maxMeta + 1; i++) {
 			list.add(new ItemStack(this, 1, i));
 		}
-	}
-
-	// update
-	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(worldIn, pos, state, rand);
-		this.onUpdateClimate(worldIn, pos, state);
 	}
 
 	// 設置・破壊処理
@@ -174,10 +168,6 @@ public class DCSidedBlock extends Block implements IClimateObject, ISidedTexture
 		return new BlockState(this, new IProperty[] {
 				FACING,
 				TYPE });
-	}
-
-	@Override
-	public void onUpdateClimate(World world, BlockPos pos, IBlockState state) {
 	}
 
 	/** T, B, N, S, W, E */

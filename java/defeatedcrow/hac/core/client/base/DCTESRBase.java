@@ -1,16 +1,14 @@
 package defeatedcrow.hac.core.client.base;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import defeatedcrow.hac.core.base.DCTileEntity;
-import defeatedcrow.hac.machine.client.ModelFuelStove;
 
 @SideOnly(Side.CLIENT)
-public class DCTESRBase extends TileEntitySpecialRenderer<DCTileEntity> {
+public abstract class DCTESRBase extends TileEntitySpecialRenderer<DCTileEntity> {
 
 	@Override
 	public void renderTileEntityAt(DCTileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
@@ -20,6 +18,7 @@ public class DCTESRBase extends TileEntitySpecialRenderer<DCTileEntity> {
 
 		if (te.hasWorldObj()) {
 			int meta = te.getBlockMetadata();
+
 			type = meta & 3;
 			face = 5 - (meta >> 2);
 			if (face == 2) {
@@ -36,6 +35,8 @@ public class DCTESRBase extends TileEntitySpecialRenderer<DCTileEntity> {
 			}
 		}
 
+		DCModelBase model = this.getModel(type);
+
 		this.bindTexture(new ResourceLocation(getTexPass(type)));
 
 		GlStateManager.pushMatrix();
@@ -45,7 +46,7 @@ public class DCTESRBase extends TileEntitySpecialRenderer<DCTileEntity> {
 		GlStateManager.scale(1.0F, -1.0F, -1.0F);
 
 		GlStateManager.rotate(f, 0.0F, 1.0F, 0.0F);
-		this.render(type, 0.0F);
+		this.render(model, 0.0F);
 		GlStateManager.disableRescaleNormal();
 		GlStateManager.popMatrix();
 	}
@@ -54,11 +55,9 @@ public class DCTESRBase extends TileEntitySpecialRenderer<DCTileEntity> {
 		return "dcs_climate:textures/tiles/stove_fuel.png";
 	}
 
-	protected ModelBase getModel(int i) {
-		return new ModelFuelStove();
-	}
+	protected abstract DCModelBase getModel(int i);
 
-	protected void render(int meta, float f) {
-		((ModelFuelStove) getModel(meta)).render(f);
+	protected void render(DCModelBase model, float f) {
+		model.render(f);
 	}
 }
