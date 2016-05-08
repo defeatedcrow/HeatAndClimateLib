@@ -16,23 +16,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DamageSourceClimate;
+import defeatedcrow.hac.api.damage.DamageAPI;
+import defeatedcrow.hac.api.damage.DamageSourceClimate;
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.util.DCTimeHelper;
-import defeatedcrow.hac.main.util.DCArmorMaterial;
 
 // AMT式Potion追加効果
 public class LivingEventDC {
-	private int count = 20;
 
 	@SubscribeEvent
 	public void onEvent(LivingEvent.LivingUpdateEvent event) {
@@ -104,7 +105,7 @@ public class LivingEventDC {
 					for (ItemStack item : items) {
 						if (item != null && item.getItem() instanceof ItemArmor) {
 							ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
-							prev += DCArmorMaterial.getClimateResistance(mat);
+							prev += DamageAPI.armorRegister.getPreventAmount(mat);
 						}
 					}
 				}
@@ -194,7 +195,7 @@ public class LivingEventDC {
 					for (ItemStack item : equip) {
 						if (item != null && item.getItem() instanceof ItemArmor) {
 							ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
-							float p = DCArmorMaterial.getClimateResistance(mat);
+							float p = DamageAPI.armorRegister.getPreventAmount(mat);
 							prev += p;
 						}
 					}
@@ -216,9 +217,9 @@ public class LivingEventDC {
 						dam = 0.0F;
 					}
 
-					// if (player.getHealth() - dam < 1.0F) {
-					// dam = player.getHealth() - 1.0F;
-					// }
+					if (player.getHealth() - dam < 1.0F) {
+						dam = player.getHealth() - 1.0F;
+					}
 
 					if (dam >= 1.0F) {
 						if (isCold) {
@@ -235,6 +236,36 @@ public class LivingEventDC {
 
 			}
 
+		}
+	}
+
+	@SubscribeEvent
+	public void onHurt(LivingHurtEvent event) {
+		EntityLivingBase living = event.entityLiving;
+		DamageSource source = event.source;
+		if (living != null && living instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) living;
+			boolean hasCharm = false;
+			List<ItemStack> charms = new ArrayList<ItemStack>();
+			for (int i = 9; i < 18; i++) {
+				ItemStack check = player.inventory.getStackInSlot(i);
+				if (check != null && check.getItem() != null && check.getItem() instanceof IJewelCharm) {
+					IJewelCharm charm = (IJewelCharm) check.getItem();
+					int m = check.getItemDamage();
+					if (charm.getType(m) == CharmType.DEFFENCE)
+						charms.add(check);
+				}
+			}
+
+			float red = 0.0F;
+			for (ItemStack charm : charms) {
+				red += ((IJewelCharm) charm.getItem()).reduceDamage(source, charm);
+			}
+
+			event.ammount -= red;
+			if (event.ammount <= 0.0F) {
+				event.setCanceled(true);
+			}
 		}
 	}
 }

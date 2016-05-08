@@ -1,11 +1,14 @@
 package defeatedcrow.hac.core;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.climate.ArmorMaterialRegister;
 import defeatedcrow.hac.core.climate.ClimateCalculator;
 import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
@@ -22,7 +25,15 @@ public class APILoader {
 		RecipeAPI.registerRecipes = new ClimateRecipeRegister();
 		RecipeAPI.registerSmelting = new ClimateSmeltingRegister();
 
+		DamageAPI.armorRegister = new ArmorMaterialRegister();
+
 		registerClimate();
+		registerMaterial();
+	}
+
+	private static void registerMaterial() {
+		DamageAPI.armorRegister.RegisterMaterial(ArmorMaterial.LEATHER, 3.0F);
+		DamageAPI.armorRegister.RegisterMaterial(ArmorMaterial.DIAMOND, 1.0F);
 	}
 
 	public static void registerClimate() {

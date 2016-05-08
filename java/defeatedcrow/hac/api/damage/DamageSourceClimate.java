@@ -1,4 +1,4 @@
-package defeatedcrow.hac.api.climate;
+package defeatedcrow.hac.api.damage;
 
 import net.minecraft.util.DamageSource;
 

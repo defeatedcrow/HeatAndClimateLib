@@ -38,7 +38,7 @@ import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.core.ClimateCore;
 
 // TESR持ちブロックのベース
-public class DCTileBlock extends BlockContainer implements IClimateObject {
+public abstract class DCTileBlock extends BlockContainer implements IClimateObject {
 
 	protected Random rand = new Random();
 
@@ -71,11 +71,6 @@ public class DCTileBlock extends BlockContainer implements IClimateObject {
 
 	@Override
 	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new DCTileEntity();
 	}
 
 	@Override
@@ -124,15 +119,10 @@ public class DCTileBlock extends BlockContainer implements IClimateObject {
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		TileEntity tile = world.getTileEntity(pos);
-		DCTileEntity te = null;
-		if (tile != null && tile instanceof DCTileEntity) {
-			te = (DCTileEntity) tile;
-		}
-
-		if (te != null) {
+		if (tile != null && tile instanceof ITagGetter) {
 			NBTTagCompound tag = stack.getTagCompound();
 			if (tag != null) {
-				te.setNBT(tag);
+				((ITagGetter) tile).setNBT(tag);
 			}
 		}
 	}
@@ -140,25 +130,27 @@ public class DCTileBlock extends BlockContainer implements IClimateObject {
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		TileEntity tile = world.getTileEntity(pos);
-		DCTileEntity te = null;
-		if (tile instanceof DCTileEntity) {
-			te = (DCTileEntity) tile;
-		}
 		int i = this.damageDropped(state);
-		if (te != null) {
-			ItemStack drop = new ItemStack(this, 1, i);
+		ItemStack drop = new ItemStack(this, 1, i);
+
+		if (tile != null && tile instanceof ITagGetter) {
 			NBTTagCompound tag = new NBTTagCompound();
-			tag = te.getNBT(tag);
+			tag = ((ITagGetter) tile).getNBT(tag);
 			if (tag != null)
 				drop.setTagCompound(tag);
+		}
+
+		if (!world.isRemote) {
 			EntityItem entityitem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, drop);
 			float f3 = 0.05F;
 			entityitem.motionX = (float) this.rand.nextGaussian() * f3;
-			entityitem.motionY = (float) this.rand.nextGaussian() * f3 + 0.2F;
+			entityitem.motionY = (float) this.rand.nextGaussian() * f3 + 0.25F;
 			entityitem.motionZ = (float) this.rand.nextGaussian() * f3;
 			world.spawnEntityInWorld(entityitem);
 		}
 		world.updateComparatorOutputLevel(pos, state.getBlock());
+		super.breakBlock(world, pos, state);
+
 	}
 
 	@Override

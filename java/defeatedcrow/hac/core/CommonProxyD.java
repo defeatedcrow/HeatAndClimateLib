@@ -18,9 +18,8 @@ public class CommonProxyD {
 	}
 
 	public void loadInit() {
+		OreRegister.load();
 		MinecraftForge.EVENT_BUS.register(new LivingEventDC());
-		// VanillaRecipeRegister.load();
-		// MinecraftForge.EVENT_BUS.register(new NotifyClimateEvent());
 	}
 
 	public ModelThinBiped getArmorModel(int slot) {
