@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -97,8 +96,8 @@ public class LivingEventDC {
 				int pz = MathHelper.floor_double(living.posZ);
 				DCHeatTier heat = ClimateAPI.calculator.getTemp(living.worldObj, new BlockPos(px, py, pz), 2, false);
 
-				float prev = 0.0F;
-				float dam = heat.getTier() * 1.0F - 1.0F;
+				float prev = 1.0F;
+				float dam = heat.getTier() * 1.0F;
 
 				ItemStack[] items = living.getInventory();
 				if (items != null) {
@@ -113,7 +112,10 @@ public class LivingEventDC {
 				boolean isCold = false;
 				if (dam < 0.0F) {
 					isCold = true;
-					dam *= -2.0F;
+					dam *= -1.0F;
+					if (living.isImmuneToFire()) {
+						prev -= 1.0F;
+					}
 				} else {
 					if (living.isPotionActive(Potion.fireResistance)) {
 						prev += 3.0F;
@@ -124,11 +126,11 @@ public class LivingEventDC {
 					if (living instanceof EntityVillager) {
 						prev += 2.0F;
 					}
-					if (living instanceof EntityMob) {
-						prev += 1.0F;
-					}
 				}
 				dam -= prev;
+				if (dam < 0.0F) {
+					dam = 0.0F;
+				}
 
 				if (living.getHealth() - dam < 1.0F) {
 					dam = living.getHealth() - 1.0F;
@@ -137,10 +139,10 @@ public class LivingEventDC {
 				if (dam >= 1.0F) {
 					if (isCold) {
 						living.attackEntityFrom(DamageSourceClimate.climateColdDamage, dam);
-						// DCLogger.debugLog("cold dam:" + dam);
+						DCLogger.debugLog("cold dam:" + dam);
 					} else {
 						living.attackEntityFrom(DamageSourceClimate.climateHeatDamage, dam);
-						// DCLogger.debugLog("heat dam:" + dam);
+						DCLogger.debugLog("heat dam:" + dam);
 					}
 				}
 			}
@@ -212,6 +214,9 @@ public class LivingEventDC {
 						}
 					}
 					dam -= prev;
+					if (dam < 0.0F) {
+						dam = 0.0F;
+					}
 
 					if (player.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL && !CoreConfigDC.peacefulDam) {
 						dam = 0.0F;
