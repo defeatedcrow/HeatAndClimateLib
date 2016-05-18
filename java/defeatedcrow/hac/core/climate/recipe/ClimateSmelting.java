@@ -18,6 +18,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.placeable.IEntityItem;
+import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 
 public class ClimateSmelting implements IClimateSmelting {
@@ -32,8 +33,7 @@ public class ClimateSmelting implements IClimateSmelting {
 	private List<DCHumidity> hum = new ArrayList<DCHumidity>();
 	private List<DCAirflow> air = new ArrayList<DCAirflow>();
 
-	public ClimateSmelting(ItemStack o, ItemStack s, DCHeatTier t, DCHumidity h, DCAirflow a, float c, boolean cooling,
-			Object i) {
+	public ClimateSmelting(ItemStack o, ItemStack s, DCHeatTier t, DCHumidity h, DCAirflow a, float c, boolean cooling, Object i) {
 		input = i;
 		output = o;
 		secondary = s;
@@ -42,7 +42,14 @@ public class ClimateSmelting implements IClimateSmelting {
 		if (t != null) {
 			heat.add(t);
 			if (t.getID() < 7) {
-				heat.add(t.addTier(1));
+				if (t.getID() == 2) {
+					heat.add(t.addTier(1));
+					heat.add(t.addTier(-1));
+				} else if (t.getID() == 1) {
+					heat.add(t.addTier(-1));
+				} else if (t.getID() > 0) {
+					heat.add(t.addTier(1));
+				}
 			}
 		}
 		if (h != null)
@@ -166,6 +173,23 @@ public class ClimateSmelting implements IClimateSmelting {
 	@Override
 	public boolean isNeedCooling() {
 		return needCooling;
+	}
+
+	@Override
+	public int recipeFrequency() {
+		if (processedInput.isEmpty() || processedInput.get(0) == null)
+			return 2;
+		ItemStack i = processedInput.get(0);
+		if (i.getItem() instanceof IClimateObject) {
+			IClimateObject c = (IClimateObject) i.getItem();
+			return c.isForcedTickUpdate() ? 0 : 1;
+		} else if (i.getItem() instanceof ItemBlock && Block.getBlockFromItem(i.getItem()) instanceof IClimateObject) {
+			IClimateObject c = (IClimateObject) Block.getBlockFromItem(i.getItem());
+			return c.isForcedTickUpdate() ? 0 : 1;
+		} else if (i.getItem() instanceof IEntityItem) {
+			return 0;
+		}
+		return 2;
 	}
 
 }
