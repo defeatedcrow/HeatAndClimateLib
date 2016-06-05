@@ -3,12 +3,10 @@ package defeatedcrow.hac.core.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import mezz.jei.api.IItemRegistry;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
-import mezz.jei.api.IRecipeRegistry;
 import mezz.jei.api.JEIPlugin;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
@@ -20,19 +18,9 @@ public class DCsJEIPlugin implements IModPlugin {
 
 	private IJeiHelpers helper;
 
-	@Deprecated
-	@Override
-	public void onJeiHelpersAvailable(IJeiHelpers jeiHelpers) {
-		helper = jeiHelpers;
-	}
-
-	@Deprecated
-	@Override
-	public void onItemRegistryAvailable(IItemRegistry itemRegistry) {
-	}
-
 	@Override
 	public void register(IModRegistry registry) {
+		helper = registry.getJeiHelpers();
 		registry.addRecipeCategories(new ClimateSmeltingCategory(helper.getGuiHelper()), new ClimateRecipeCategory(helper.getGuiHelper()));
 		registry.addRecipeHandlers(new ClimateSmeltingHandler(), new ClimateRecipeHandler());
 		List<ClimateSmelting> list = new ArrayList<ClimateSmelting>();
@@ -60,12 +48,6 @@ public class DCsJEIPlugin implements IModPlugin {
 		registry.addRecipes(list2);
 	}
 
-	@Deprecated
-	@Override
-	public void onRecipeRegistryAvailable(IRecipeRegistry recipeRegistry) {
-	}
-
-	@Deprecated
 	@Override
 	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
 	}

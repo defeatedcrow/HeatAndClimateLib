@@ -1,5 +1,5 @@
 {
-    "ambientocclusion": false,
+    "ambientocclusion": true,
     "textures": {
         "particle": "dcs_climate:blocks/cont/woodbox_s",
         "down": "dcs_climate:blocks/cont/woodbox_b",

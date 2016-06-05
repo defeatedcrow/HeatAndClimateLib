@@ -4,10 +4,12 @@ import net.minecraftforge.common.MinecraftForge;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
 import defeatedcrow.hac.core.event.BlockUpdateDC;
 import defeatedcrow.hac.core.event.LivingEventDC;
+import defeatedcrow.hac.core.util.DCPotion;
 
 public class CommonProxyD {
 
 	public void loadMaterial() {
+		DCPotion.init();
 		MaterialRegister.load();
 	}
 

@@ -1,8 +1,9 @@
 package defeatedcrow.hac.core.climate;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.BlockPos;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
@@ -51,7 +52,16 @@ public class ClimateCalculator implements IClimateCalculator {
 	@Override
 	public DCHeatTier getHeatTier(World world, BlockPos pos, int r, boolean h) {
 		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
+		// biomeの気温 -> 日陰の場合Tierが下がる
 		DCHeatTier hot = temp;
+		if (hasRoof(world, pos)) {
+			if (temp.getTier() < 0) {
+				hot = temp.addTier(1);
+			} else if (temp.getTier() > 0) {
+				hot = temp.addTier(-1);
+			}
+		}
+
 		if (r < 0) {
 			Block block = world.getBlockState(pos).getBlock();
 			int m = block.getMetaFromState(world.getBlockState(pos));
@@ -93,7 +103,15 @@ public class ClimateCalculator implements IClimateCalculator {
 	@Override
 	public DCHeatTier getColdTier(World world, BlockPos pos, int r, boolean h) {
 		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
+		// biomeの気温 -> 日陰の場合Tierが下がる
 		DCHeatTier hot = temp;
+		if (hasRoof(world, pos)) {
+			if (temp.getTier() < 0) {
+				hot = temp.addTier(1);
+			} else if (temp.getTier() > 0) {
+				hot = temp.addTier(-1);
+			}
+		}
 		if (r < 0) {
 			Block block = world.getBlockState(pos).getBlock();
 			int m = block.getMetaFromState(world.getBlockState(pos));
@@ -156,7 +174,7 @@ public class ClimateCalculator implements IClimateCalculator {
 				DCHumidity cur = ClimateAPI.registerBlock.getHumidity(block, m);
 				if (cur == DCHumidity.UNDERWATER)
 					hasWater = true;
-			} else if (!block.isBlockNormalCube()) {
+			} else if (!world.getBlockState(p1).isNormalCube()) {
 				hasAir = true;
 			}
 		}
@@ -224,7 +242,11 @@ public class ClimateCalculator implements IClimateCalculator {
 		if (r < 0 || r > 15)
 			r = 1;
 		DCAirflow air = ClimateAPI.register.getAirflow(world, pos);
-		int count = 0;
+		// biomeベース通気 -> 屋内ではNORMALになる
+		if (!hasRoof(world, pos)) {
+			air = DCAirflow.FLOW;
+		}
+		int count = 0; // 空気量カウント
 		boolean hasWind = false;
 		boolean hasBlow = false;
 
@@ -243,9 +265,6 @@ public class ClimateCalculator implements IClimateCalculator {
 				DCAirflow cur = ClimateAPI.registerBlock.getAirflow(block, m);
 				if (cur.getID() > 0) {
 					count++;
-					if (world.canBlockSeeSky(pos.up()) && !world.provider.getHasNoSky()) {
-						hasWind = true;
-					}
 					if (cur.getID() > 1) {
 						hasWind = true;
 						if (cur == DCAirflow.WIND)
@@ -275,9 +294,6 @@ public class ClimateCalculator implements IClimateCalculator {
 					DCAirflow cur = ClimateAPI.registerBlock.getAirflow(block, m);
 					if (cur.getID() > 0) {
 						count++;
-						if (world.canBlockSeeSky(p2) && !world.provider.getHasNoSky()) {
-							hasWind = true;
-						}
 						if (cur.getID() > 1) {
 							hasWind = true;
 							if (cur == DCAirflow.WIND)
@@ -302,6 +318,20 @@ public class ClimateCalculator implements IClimateCalculator {
 		} else {
 			return DCAirflow.TIGHT;
 		}
+	}
+
+	static boolean hasRoof(World world, BlockPos pos) {
+		BlockPos pos2 = pos.up();
+		int lim = pos.getY() + 16;
+		while (pos2.getY() < lim && pos2.getY() < world.getActualHeight()) {
+			IBlockState state = world.getBlockState(pos2);
+			Block block = world.getBlockState(pos2).getBlock();
+			if (state.getLightOpacity(world, pos2) > 0) {
+				return true;
+			}
+			pos2 = pos2.up();
+		}
+		return false;
 	}
 
 }

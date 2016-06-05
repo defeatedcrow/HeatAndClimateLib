@@ -3,19 +3,22 @@ package defeatedcrow.hac.core.base;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -69,8 +72,8 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX,
-			float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand,
+			@Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
@@ -80,20 +83,13 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public EnumWorldBlockLayer getBlockLayer() {
-		return EnumWorldBlockLayer.CUTOUT_MIPPED;
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
 	@Override
-	public int getRenderType() {
-		return 3;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean addDestroyEffects(World world, BlockPos pos, net.minecraft.client.particle.EffectRenderer effectRenderer) {
-		effectRenderer.addBlockDestroyEffects(pos, Blocks.stone.getStateFromMeta(0));
-		return true;
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
 	}
 
 	@Override
@@ -147,8 +143,8 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { TYPE });
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { TYPE });
 	}
 
 	/** T, B, N, S, W, E */

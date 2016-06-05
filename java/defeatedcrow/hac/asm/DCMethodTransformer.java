@@ -46,8 +46,8 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 		String targetMethodNameSRG = "func_180650_b";
 
 		// 改変対象メソッドの戻り値型および、引数型をあらわします　※１
-		String targetMethoddesc = "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
-		String targetMethoddescSRG = "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
+		String targetMethoddesc = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
+		String targetMethoddescSRG = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
 
 		// 対象のメソッドを検索取得します。
 		MethodNode mnode = null;
@@ -58,7 +58,8 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 
 			String mName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(className, curMnode.name, curMnode.desc);
 			String mdName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(curMnode.desc);
-			// System.out.println("[ " + mName + " : " + curMnode.name + " ]  [ " + mdName + " : " + curMnode.desc);
+			// System.out.println("[ " + mName + " : " + curMnode.name + " ]  [ " + mdName + " : " +
+			// curMnode.desc);
 			if ((targetMethodName.equals(curMnode.name) && targetMethoddesc.equals(curMnode.desc))
 					|| (targetMethodNameSRG.equals(mName) && targetMethoddescSRG.equals(mdName))) {
 				mnode = curMnode;
@@ -73,7 +74,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 			// System.out.println("try start!");
 			InsnList overrideList = new InsnList();
 			final LabelNode lavel = new LabelNode();
-			String newdesc = "(Lnet/minecraft/world/World;Lnet/minecraft/util/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
+			String newdesc = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
 
 			// メソッドコールを、バイトコードであらわした例です。
 			overrideList.add(new TypeInsnNode(NEW, "defeatedcrow/hac/api/recipe/DCBlockUpdateEvent"));
@@ -82,8 +83,10 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 			overrideList.add(new VarInsnNode(ALOAD, 2));
 			overrideList.add(new VarInsnNode(ALOAD, 3));
 			overrideList.add(new VarInsnNode(ALOAD, 4));
-			overrideList.add(new MethodInsnNode(INVOKESPECIAL, "defeatedcrow/hac/api/recipe/DCBlockUpdateEvent", "<init>", mdesc, false));
-			overrideList.add(new MethodInsnNode(INVOKEVIRTUAL, "defeatedcrow/hac/api/recipe/DCBlockUpdateEvent", "post", "()Z", false));
+			overrideList.add(new MethodInsnNode(INVOKESPECIAL, "defeatedcrow/hac/api/recipe/DCBlockUpdateEvent",
+					"<init>", mdesc, false));
+			overrideList.add(new MethodInsnNode(INVOKEVIRTUAL, "defeatedcrow/hac/api/recipe/DCBlockUpdateEvent",
+					"post", "()Z", false));
 			overrideList.add(new JumpInsnNode(IFEQ, lavel));
 			overrideList.add(new InsnNode(RETURN));
 			overrideList.add(lavel);

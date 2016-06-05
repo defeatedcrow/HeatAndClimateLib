@@ -22,6 +22,7 @@ public class CoreConfigDC {
 	// difficulty
 	public static boolean climateDam = true;
 	public static boolean peacefulDam = false;
+	public static int damageDifficulty = 1; // 0-2
 
 	// ore
 	public static int[] depositGen = new int[] {
@@ -56,6 +57,9 @@ public class CoreConfigDC {
 
 			Property peace_dam = cfg.get("difficulty setting", "Enable Peaceful Damage", peacefulDam,
 					"Enable climate damage at peaceful setting.");
+
+			Property diff_dam = cfg.get("difficulty setting", "Difficulty of Climate Damage", damageDifficulty,
+					"Set difficulty of climate damage. 0:sweet 1:normal 2:bitter");
 
 			Property vanilla_block = cfg.get("world setting", "Enable Vanilla Block Recipe", enableVanilla,
 					"Enable climate change of vanilla blocks.");
@@ -104,12 +108,17 @@ public class CoreConfigDC {
 			int g = sed_ore.getInt();
 			if (g < 0 || g > 100)
 				g = 0;
+			int d = diff_dam.getInt();
+			if (d < 0 || d > 2)
+				d = 2;
 
 			depositGen[0] = s;
 			depositGen[1] = c;
 			depositGen[2] = v;
 			depositGen[3] = l;
 			depositGen[4] = g;
+
+			damageDifficulty = d;
 
 			int h = update_block.getInt();
 			if (h < 0 || h > 20)

@@ -13,9 +13,10 @@ public class DCTileEntity extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setByte("CoolTime", (byte) coolTime);
+		return compound;
 	}
 
 	public NBTTagCompound getNBT(NBTTagCompound tag) {

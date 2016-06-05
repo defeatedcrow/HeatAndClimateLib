@@ -10,6 +10,7 @@ public class DCItemBlock extends ItemBlock implements ITexturePath {
 		super(block);
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
+		this.setRegistryName(block.getRegistryName());
 	}
 
 	@Override
@@ -20,8 +21,8 @@ public class DCItemBlock extends ItemBlock implements ITexturePath {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		int j = Math.min(stack.getItemDamage(), 15);
-		return getNameSuffix() != null && j < getNameSuffix().length ? super.getUnlocalizedName() + "_" + getNameSuffix()[j] : super
-				.getUnlocalizedName() + "_" + j;
+		return getNameSuffix() != null && j < getNameSuffix().length ? super.getUnlocalizedName() + "_"
+				+ getNameSuffix()[j] : super.getUnlocalizedName() + "_" + j;
 	}
 
 	/* Blockから引っ張ってくる */

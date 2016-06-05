@@ -65,7 +65,8 @@ public class ClientProxyD extends CommonProxyD {
 
 	@Override
 	public boolean isWarpKeyDown() {
-		return CoreConfigDC.charmWarpKey == 0 ? false : Keyboard.isCreated() && Keyboard.isKeyDown(CoreConfigDC.charmWarpKey);
+		return CoreConfigDC.charmWarpKey == 0 ? false : Keyboard.isCreated()
+				&& Keyboard.isKeyDown(CoreConfigDC.charmWarpKey);
 	}
 
 	private int getJumpKey() {

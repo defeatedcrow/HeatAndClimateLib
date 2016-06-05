@@ -38,35 +38,35 @@ public class APILoader {
 
 	public static void registerClimate() {
 		// heat
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.lit_pumpkin, 32767, DCHeatTier.HOT);
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.torch, 32767, DCHeatTier.HOT);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LIT_PUMPKIN, 32767, DCHeatTier.HOT);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.TORCH, 32767, DCHeatTier.HOT);
 
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.lit_furnace, 32767, DCHeatTier.OVEN);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LIT_FURNACE, 32767, DCHeatTier.OVEN);
 
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.fire, 32767, DCHeatTier.KILN);
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.flowing_lava, 32767, DCHeatTier.KILN);
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.lava, 32767, DCHeatTier.KILN);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.FIRE, 32767, DCHeatTier.KILN);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.FLOWING_LAVA, 32767, DCHeatTier.KILN);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LAVA, 32767, DCHeatTier.KILN);
 
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.water, 32767, DCHeatTier.NORMAL);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.WATER, 32767, DCHeatTier.NORMAL);
 
 		// cold
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.ice, 32767, DCHeatTier.COLD);
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.snow, 32767, DCHeatTier.COLD);
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.packed_ice, 32767, DCHeatTier.COLD);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.ICE, 32767, DCHeatTier.COLD);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.SNOW, 32767, DCHeatTier.COLD);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.PACKED_ICE, 32767, DCHeatTier.COLD);
 
 		// hum
-		ClimateAPI.registerBlock.registerHumBlock(Blocks.sponge, 0, DCHumidity.DRY);
+		ClimateAPI.registerBlock.registerHumBlock(Blocks.SPONGE, 0, DCHumidity.DRY);
 
-		ClimateAPI.registerBlock.registerHumBlock(Blocks.sponge, 1, DCHumidity.WET);
+		ClimateAPI.registerBlock.registerHumBlock(Blocks.SPONGE, 1, DCHumidity.WET);
 
-		ClimateAPI.registerBlock.registerHumBlock(Blocks.flowing_water, 32767, DCHumidity.UNDERWATER);
-		ClimateAPI.registerBlock.registerHumBlock(Blocks.water, 32767, DCHumidity.UNDERWATER);
+		ClimateAPI.registerBlock.registerHumBlock(Blocks.FLOWING_WATER, 32767, DCHumidity.UNDERWATER);
+		ClimateAPI.registerBlock.registerHumBlock(Blocks.WATER, 32767, DCHumidity.UNDERWATER);
 
 		// air
-		ClimateAPI.registerBlock.registerAirBlock(Blocks.air, 32767, DCAirflow.NORMAL);
+		ClimateAPI.registerBlock.registerAirBlock(Blocks.AIR, 32767, DCAirflow.NORMAL);
 
-		ClimateAPI.registerBlock.registerAirBlock(Blocks.leaves, 32767, DCAirflow.TIGHT);
-		ClimateAPI.registerBlock.registerAirBlock(Blocks.leaves2, 32767, DCAirflow.TIGHT);
+		ClimateAPI.registerBlock.registerAirBlock(Blocks.LEAVES, 32767, DCAirflow.TIGHT);
+		ClimateAPI.registerBlock.registerAirBlock(Blocks.LEAVES2, 32767, DCAirflow.TIGHT);
 
 	}
 

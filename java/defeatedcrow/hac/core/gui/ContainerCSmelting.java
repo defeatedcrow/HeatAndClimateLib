@@ -8,7 +8,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import defeatedcrow.hac.api.climate.IClimate;
 
@@ -61,7 +61,7 @@ public class ContainerCSmelting extends Container {
 				ItemStack itemstack = this.craftMatrix.removeStackFromSlot(i);
 
 				if (itemstack != null) {
-					playerIn.dropPlayerItemWithRandomChoice(itemstack, false);
+					playerIn.dropItem(itemstack, true);
 				}
 			}
 		}
@@ -69,7 +69,7 @@ public class ContainerCSmelting extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.worldObj.getBlockState(this.pos).getBlock() != Blocks.crafting_table ? false : playerIn.getDistanceSq(
+		return this.worldObj.getBlockState(this.pos).getBlock() != Blocks.CRAFTING_TABLE ? false : playerIn.getDistanceSq(
 				this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64.0D;
 	}
 

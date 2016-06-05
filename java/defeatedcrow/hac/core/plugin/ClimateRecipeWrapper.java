@@ -52,11 +52,6 @@ public class ClimateRecipeWrapper implements IRecipeWrapper {
 		return null;
 	}
 
-	@Deprecated
-	@Override
-	public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-	}
-
 	@Override
 	public void drawInfo(Minecraft mc, int wid, int hei, int mouseX, int mouseY) {
 		List<DCHeatTier> heats = rec.requiredHeat();
