@@ -3,11 +3,11 @@ package defeatedcrow.hac.core.base;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.LockCode;
@@ -29,12 +29,13 @@ public abstract class DCLockableTE extends TileEntity implements IInteractionObj
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		if (this.code != null) {
 			this.code.toNBT(compound);
 		}
 		compound.setByte("CoolTime", (byte) coolTime);
+		return compound;
 	}
 
 	@Override
@@ -53,8 +54,8 @@ public abstract class DCLockableTE extends TileEntity implements IInteractionObj
 	}
 
 	@Override
-	public IChatComponent getDisplayName() {
-		return new ChatComponentText(this.getName());
+	public ITextComponent getDisplayName() {
+		return new TextComponentString(this.getName());
 	}
 
 	private IItemHandler itemHandler;

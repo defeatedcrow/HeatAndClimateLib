@@ -17,9 +17,9 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -36,6 +36,7 @@ import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.util.DCPotion;
 import defeatedcrow.hac.core.util.DCTimeHelper;
 
 // AMT式Potion追加効果
@@ -43,7 +44,7 @@ public class LivingEventDC {
 
 	@SubscribeEvent
 	public void onEvent(LivingEvent.LivingUpdateEvent event) {
-		EntityLivingBase living = event.entityLiving;
+		EntityLivingBase living = event.getEntityLiving();
 		if (living instanceof EntityPlayer) {
 			this.onPlayerUpdate(event);
 			if (!living.worldObj.isRemote) {
@@ -55,7 +56,7 @@ public class LivingEventDC {
 	}
 
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-		EntityLivingBase living = event.entityLiving;
+		EntityLivingBase living = event.getEntityLiving();
 
 		ArrayList<PotionEffect> potions = new ArrayList<PotionEffect>();
 
@@ -67,9 +68,9 @@ public class LivingEventDC {
 			} else {
 				if (living instanceof IMob) {
 					f = false;
-				} else if (living.riddenByEntity != null && living.riddenByEntity instanceof IMob) {
+				} else if (living.getLowestRidingEntity() != null && living.getLowestRidingEntity() instanceof IMob) {
 					f = false;
-				} else if (living.ridingEntity != null && living.ridingEntity instanceof IMob) {
+				} else if (living.getRidingEntity() != null && living.getRidingEntity() instanceof IMob) {
 					f = false;
 				}
 			}
@@ -81,16 +82,15 @@ public class LivingEventDC {
 				while (iterator.hasNext()) {
 					PotionEffect effect = (PotionEffect) iterator.next();
 
-					int id = effect.getPotionID();
-					Potion potion = Potion.potionTypes[id];
+					Potion potion = effect.getPotion();
 
-					if (potion != null && potion.id == potion.jump.id) {
+					if (potion != null && potion == DCPotion.jump) {
 						living.fallDistance = 0.0F;
 					}
 
 					// 騎乗関係のMobにポーション効果を分け与える
-					if (living.ridingEntity != null && living.ridingEntity instanceof EntityLivingBase) {
-						EntityLivingBase riding = (EntityLivingBase) event.entity.ridingEntity;
+					if (living.getRidingEntity() != null && living.getRidingEntity() instanceof EntityLivingBase) {
+						EntityLivingBase riding = (EntityLivingBase) event.getEntity().getRidingEntity();
 						if (potion != null) {
 							riding.addPotionEffect(effect);
 						}
@@ -109,7 +109,7 @@ public class LivingEventDC {
 				float prev = 1.0F;
 				float dam = heat.getTier() * 1.0F;
 
-				ItemStack[] items = living.getInventory();
+				Iterable<ItemStack> items = living.getArmorInventoryList();
 				if (items != null) {
 					for (ItemStack item : items) {
 						if (item != null && item.getItem() instanceof ItemArmor) {
@@ -127,7 +127,7 @@ public class LivingEventDC {
 						prev -= 1.0F;
 					}
 				} else {
-					if (living.isPotionActive(Potion.fireResistance)) {
+					if (living.isPotionActive(DCPotion.fire_reg)) {
 						prev += 3.0F;
 					}
 					if (living.isImmuneToFire()) {
@@ -160,10 +160,10 @@ public class LivingEventDC {
 	}
 
 	public void onPlayerUpdate(LivingEvent.LivingUpdateEvent event) {
-		EntityLivingBase entity = event.entityLiving;
+		EntityLivingBase entity = event.getEntityLiving();
 
 		if ((entity instanceof EntityPlayer)) {
-			EntityPlayer player = (EntityPlayer) event.entity;
+			EntityPlayer player = (EntityPlayer) event.getEntity();
 			// 装備
 			ItemStack[] equip = player.inventory.armorInventory;
 			ItemStack[] inside = new ItemStack[9];
@@ -201,7 +201,7 @@ public class LivingEventDC {
 					int pz = MathHelper.floor_double(player.posZ);
 					DCHeatTier heat = ClimateAPI.calculator.getTemp(player.worldObj, new BlockPos(px, py, pz), 2, false);
 
-					float prev = 1.0F;
+					float prev = 1.0F * (1 - CoreConfigDC.damageDifficulty);
 					float dam = heat.getTier() * 1.0F;
 
 					for (ItemStack item : equip) {
@@ -219,7 +219,7 @@ public class LivingEventDC {
 						prev += coldPrv;
 					} else {
 						prev += heatPrv;
-						if (player.isPotionActive(Potion.fireResistance)) {
+						if (player.isPotionActive(DCPotion.fire_reg)) {
 							prev += 3.0F;
 						}
 					}
@@ -232,7 +232,7 @@ public class LivingEventDC {
 						dam = 0.0F;
 					}
 
-					if (player.getHealth() - dam < 1.0F) {
+					if (CoreConfigDC.damageDifficulty < 2 && player.getHealth() - dam < 1.0F) {
 						dam = player.getHealth() - 1.0F;
 					}
 
@@ -258,10 +258,10 @@ public class LivingEventDC {
 
 	// Block Update をプレイヤーに肩代わりさせる
 	public void playerChunkUpload(LivingEvent.LivingUpdateEvent event) {
-		EntityLivingBase entity = event.entityLiving;
+		EntityLivingBase entity = event.getEntityLiving();
 
 		if ((entity instanceof EntityPlayer)) {
-			EntityPlayer player = (EntityPlayer) event.entity;
+			EntityPlayer player = (EntityPlayer) event.getEntity();
 			World world = player.worldObj;
 			int count = DCTimeHelper.getCount2(world);
 
@@ -292,7 +292,7 @@ public class LivingEventDC {
 								}
 								IBlockState state = world.getBlockState(pos);
 								Block block = state.getBlock();
-								int meta = block.getDamageValue(world, pos);
+								int meta = block.getMetaFromState(state);
 								IClimate clm = ClimateAPI.calculator.getClimate(world, pos, new int[] {
 										2,
 										1,
@@ -320,8 +320,9 @@ public class LivingEventDC {
 
 	@SubscribeEvent
 	public void onHurt(LivingHurtEvent event) {
-		EntityLivingBase living = event.entityLiving;
-		DamageSource source = event.source;
+		EntityLivingBase living = event.getEntityLiving();
+		DamageSource source = event.getSource();
+		float newDam = event.getAmount();
 		if (living != null && living instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) living;
 			boolean hasCharm = false;
@@ -341,9 +342,11 @@ public class LivingEventDC {
 				red += ((IJewelCharm) charm.getItem()).reduceDamage(source, charm);
 			}
 
-			event.ammount -= red;
-			if (event.ammount <= 0.0F) {
+			newDam -= red;
+			if (newDam <= 0.0F) {
 				event.setCanceled(true);
+			} else {
+				event.setAmount(newDam);
 			}
 		}
 	}

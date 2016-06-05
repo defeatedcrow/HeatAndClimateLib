@@ -11,7 +11,7 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 public class ClimateSmeltingCategory implements IRecipeCategory {
 
@@ -29,7 +29,7 @@ public class ClimateSmeltingCategory implements IRecipeCategory {
 
 	@Override
 	public String getTitle() {
-		return StatCollector.translateToLocal(getUid());
+		return I18n.translateToLocal(getUid());
 	}
 
 	@Override

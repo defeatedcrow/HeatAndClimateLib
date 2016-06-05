@@ -3,9 +3,11 @@ package defeatedcrow.hac.core.event;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -24,9 +26,9 @@ public class NotifyClimateEvent {
 
 	@SubscribeEvent
 	public void onNotify(BlockEvent.NeighborNotifyEvent event) {
-		IBlockState state = event.state;
-		World world = event.world;
-		BlockPos pos = event.pos;
+		IBlockState state = event.getState();
+		World world = event.getWorld();
+		BlockPos pos = event.getPos();
 
 		if (!world.isRemote && !world.isAirBlock(pos)) {
 			Block block = world.getBlockState(pos).getBlock();
@@ -61,12 +63,9 @@ public class NotifyClimateEvent {
 					Block ret = ((ItemBlock) output.getItem()).block;
 					IBlockState retS = ret.getStateFromMeta(output.getItemDamage());
 					if (world.setBlockState(pos, retS, 3)) {
-						world.markBlockForUpdate(pos);
+						world.markBlockRangeForRenderUpdate(pos, pos.down());
 
-						double d0 = pos.getX();
-						double d1 = pos.getY();
-						double d2 = pos.getZ();
-						world.playSoundEffect(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D, "random.fizz", 0.8F, 2.0F);
+						world.playSound(null, pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.8F, 2.0F);
 						DCLogger.debugLog("Smelting! " + output.getDisplayName());
 						return true;
 					}

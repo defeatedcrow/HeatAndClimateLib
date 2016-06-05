@@ -3,9 +3,9 @@ package defeatedcrow.hac.core.climate;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -22,10 +22,10 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	}
 
 	@Override
-	public void addBiomeClimate(BiomeGenBase biome, DCHeatTier temp, DCHumidity hum, DCAirflow airflow) {
-		if (biome != null && !isAlreadyRegistered(biome.biomeID)) {
+	public void addBiomeClimate(Biome biome, DCHeatTier temp, DCHumidity hum, DCAirflow airflow) {
+		if (biome != null && !isAlreadyRegistered(biome.getIdForBiome(biome))) {
 			DCClimate clm = new DCClimate(temp, hum, airflow);
-			recipes.put(biome.biomeID, clm);
+			recipes.put(biome.getIdForBiome(biome), clm);
 		}
 	}
 
@@ -47,13 +47,13 @@ public class ClimateRegister implements IBiomeClimateRegister {
 
 	@Override
 	public IClimate getClimateFromBiome(World world, BlockPos pos) {
-		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiomeGenForCoords(pos);
 		return getClimateFromBiome(biome);
 	}
 
 	@Override
-	public IClimate getClimateFromBiome(BiomeGenBase biome) {
-		IClimate clm = getClimateFromList(biome.biomeID);
+	public IClimate getClimateFromBiome(Biome biome) {
+		IClimate clm = getClimateFromList(biome.getIdForBiome(biome));
 		if (clm == null) {
 			DCHeatTier t = getHeatTier(biome);
 			DCHumidity h = getHumidity(biome);
@@ -82,25 +82,25 @@ public class ClimateRegister implements IBiomeClimateRegister {
 
 	@Override
 	public DCHeatTier getHeatTier(World world, BlockPos pos) {
-		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiomeGenForCoords(pos);
 		return getHeatTier(biome);
 	}
 
 	@Override
 	public DCAirflow getAirflow(World world, BlockPos pos) {
-		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiomeGenForCoords(pos);
 		return getAirflow(biome);
 	}
 
 	@Override
 	public DCHumidity getHumidity(World world, BlockPos pos) {
-		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiomeGenForCoords(pos);
 		return getHumidity(biome);
 	}
 
 	@Override
-	public DCHeatTier getHeatTier(BiomeGenBase biome) {
-		IClimate clm = getClimateFromList(biome.biomeID);
+	public DCHeatTier getHeatTier(Biome biome) {
+		IClimate clm = getClimateFromList(biome.getIdForBiome(biome));
 		if (clm != null) {
 			return clm.getHeat();
 		} else {
@@ -116,8 +116,8 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	}
 
 	@Override
-	public DCAirflow getAirflow(BiomeGenBase biome) {
-		IClimate clm = getClimateFromList(biome.biomeID);
+	public DCAirflow getAirflow(Biome biome) {
+		IClimate clm = getClimateFromList(biome.getIdForBiome(biome));
 		if (clm != null) {
 			return clm.getAirflow();
 		}
@@ -128,8 +128,8 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	}
 
 	@Override
-	public DCHumidity getHumidity(BiomeGenBase biome) {
-		IClimate clm = getClimateFromList(biome.biomeID);
+	public DCHumidity getHumidity(Biome biome) {
+		IClimate clm = getClimateFromList(biome.getIdForBiome(biome));
 		if (clm != null) {
 			return clm.getHumidity();
 		} else {

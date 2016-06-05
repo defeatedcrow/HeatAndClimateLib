@@ -10,7 +10,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,8 +27,6 @@ public class ModelThinBiped extends ModelBiped {
 	public ModelRenderer rightLeg;
 	public ModelRenderer leftLeg;
 
-	public int heldItemLeft = 0;
-	public int heldItemRight = 0;
 	public boolean isSneak = false;
 	public boolean isBlocking = false;
 	public boolean aimedBow = false;
@@ -41,6 +41,8 @@ public class ModelThinBiped extends ModelBiped {
 	}
 
 	public ModelThinBiped(float f1, float f2, int i3, int i4, int s) {
+		this.leftArmPose = ModelBiped.ArmPose.EMPTY;
+		this.rightArmPose = ModelBiped.ArmPose.EMPTY;
 		slot = s;
 		this.textureWidth = i3;
 		this.textureHeight = i4;
@@ -70,7 +72,6 @@ public class ModelThinBiped extends ModelBiped {
 	@Override
 	public void render(Entity ent, float f2, float f3, float f4, float f5, float f6, float f7) {
 
-		this.heldItemRight = 0;
 		this.isBlocking = false;
 		this.isChild = false;
 		this.isSneak = false;
@@ -88,16 +89,17 @@ public class ModelThinBiped extends ModelBiped {
 				if (liv instanceof EntityPlayer) {
 					if (((EntityPlayer) liv).inventory.getCurrentItem() != null) {
 						ItemStack held = ((EntityPlayer) liv).inventory.getCurrentItem();
-						this.heldItemRight = 1;
-						if (((EntityPlayer) liv).isUsingItem())
-							if (held.getItem().getItemUseAction(held) == EnumAction.BOW)
+						this.rightArmPose = ArmPose.ITEM;
+						if (((EntityPlayer) liv).isHandActive())
+							if (held.getItem().getItemUseAction(held) == EnumAction.BOW) {
 								this.isBlocking = true;
-							else if (held.getItem().getItemUseAction(held) == EnumAction.BLOCK)
-								this.heldItemRight = 3;
+								this.rightArmPose = ArmPose.BOW_AND_ARROW;
+							} else if (held.getItem().getItemUseAction(held) == EnumAction.BLOCK)
+								this.rightArmPose = ArmPose.BLOCK;
 					}
 				} else if (liv instanceof EntityLiving) {
-					if (((EntityLiving) liv).getEquipmentInSlot(0) != null)
-						this.heldItemRight = 1;
+					if (((EntityLiving) liv).getHeldItem(EnumHand.MAIN_HAND) != null)
+						this.rightArmPose = ArmPose.ITEM;
 					if (((EntityLiving) liv).isChild()) {
 						this.isChild = true;
 					}
@@ -171,18 +173,36 @@ public class ModelThinBiped extends ModelBiped {
 			this.leftLeg.rotateAngleY = -((float) Math.PI / 10F);
 		}
 
-		if (this.heldItemLeft != 0) {
-			this.leftArm.rotateAngleX = this.leftArm.rotateAngleX * 0.5F - ((float) Math.PI / 10F) * this.heldItemLeft;
+		switch (this.leftArmPose) {
+		case EMPTY:
+			this.bipedLeftArm.rotateAngleY = 0.0F;
+			break;
+		case BLOCK:
+			this.bipedLeftArm.rotateAngleX = this.bipedLeftArm.rotateAngleX * 0.5F - 0.9424779F;
+			this.bipedLeftArm.rotateAngleY = 0.5235988F;
+			break;
+		case ITEM:
+			this.bipedLeftArm.rotateAngleX = this.bipedLeftArm.rotateAngleX * 0.5F - ((float) Math.PI / 10F);
+			this.bipedLeftArm.rotateAngleY = 0.0F;
+		default:
+			this.bipedLeftArm.rotateAngleY = 0.0F;
+			break;
 		}
 
-		this.rightArm.rotateAngleY = 0.0F;
-		this.rightArm.rotateAngleZ = 0.0F;
-
-		if (this.heldItemRight == 1) {
-			this.rightArm.rotateAngleX = this.rightArm.rotateAngleX * 0.5F - ((float) Math.PI / 10F) * 1;
-		} else if (this.heldItemRight == 3) {
-			this.rightArm.rotateAngleX = this.rightArm.rotateAngleX * 0.5F - ((float) Math.PI / 10F) * 3;
-			this.rightArm.rotateAngleY = -0.5235988F;
+		switch (this.rightArmPose) {
+		case EMPTY:
+			this.bipedRightArm.rotateAngleY = 0.0F;
+			break;
+		case BLOCK:
+			this.bipedRightArm.rotateAngleX = this.bipedRightArm.rotateAngleX * 0.5F - 0.9424779F;
+			this.bipedRightArm.rotateAngleY = -0.5235988F;
+			break;
+		case ITEM:
+			this.bipedRightArm.rotateAngleX = this.bipedRightArm.rotateAngleX * 0.5F - ((float) Math.PI / 10F);
+			this.bipedRightArm.rotateAngleY = 0.0F;
+		default:
+			this.bipedLeftArm.rotateAngleY = 0.0F;
+			break;
 		}
 
 		this.leftArm.rotateAngleY = 0.0F;
@@ -233,21 +253,33 @@ public class ModelThinBiped extends ModelBiped {
 		this.rightArm.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
 		this.leftArm.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
 
-		if (this.isBlocking) {
-			f6 = 0.0F;
-			f7 = 0.0F;
-			this.rightArm.rotateAngleZ = 0.0F;
-			this.leftArm.rotateAngleZ = 0.0F;
-			this.rightArm.rotateAngleY = -(0.1F - f6 * 0.6F) + this.head.rotateAngleY;
-			this.leftArm.rotateAngleY = 0.1F - f6 * 0.6F + this.head.rotateAngleY + 0.4F;
-			this.rightArm.rotateAngleX = -((float) Math.PI / 2F) + this.head.rotateAngleX;
-			this.leftArm.rotateAngleX = -((float) Math.PI / 2F) + this.head.rotateAngleX;
-			this.rightArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
-			this.leftArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
-			this.rightArm.rotateAngleZ += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-			this.leftArm.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-			this.rightArm.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
-			this.leftArm.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
+		// if (this.isBlocking) {
+		// f6 = 0.0F;
+		// f7 = 0.0F;
+		// this.rightArm.rotateAngleZ = 0.0F;
+		// this.leftArm.rotateAngleZ = 0.0F;
+		// this.rightArm.rotateAngleY = -(0.1F - f6 * 0.6F) + this.head.rotateAngleY;
+		// this.leftArm.rotateAngleY = 0.1F - f6 * 0.6F + this.head.rotateAngleY + 0.4F;
+		// this.rightArm.rotateAngleX = -((float) Math.PI / 2F) + this.head.rotateAngleX;
+		// this.leftArm.rotateAngleX = -((float) Math.PI / 2F) + this.head.rotateAngleX;
+		// this.rightArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
+		// this.leftArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
+		// this.rightArm.rotateAngleZ += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+		// this.leftArm.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+		// this.rightArm.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
+		// this.leftArm.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
+		// }
+
+		if (this.rightArmPose == ModelBiped.ArmPose.BOW_AND_ARROW) {
+			this.bipedRightArm.rotateAngleY = -0.1F + this.bipedHead.rotateAngleY;
+			this.bipedLeftArm.rotateAngleY = 0.1F + this.bipedHead.rotateAngleY + 0.4F;
+			this.bipedRightArm.rotateAngleX = -((float) Math.PI / 2F) + this.bipedHead.rotateAngleX;
+			this.bipedLeftArm.rotateAngleX = -((float) Math.PI / 2F) + this.bipedHead.rotateAngleX;
+		} else if (this.leftArmPose == ModelBiped.ArmPose.BOW_AND_ARROW) {
+			this.bipedRightArm.rotateAngleY = -0.1F + this.bipedHead.rotateAngleY - 0.4F;
+			this.bipedLeftArm.rotateAngleY = 0.1F + this.bipedHead.rotateAngleY;
+			this.bipedRightArm.rotateAngleX = -((float) Math.PI / 2F) + this.bipedHead.rotateAngleX;
+			this.bipedLeftArm.rotateAngleX = -((float) Math.PI / 2F) + this.bipedHead.rotateAngleX;
 		}
 	}
 
@@ -257,12 +289,9 @@ public class ModelThinBiped extends ModelBiped {
 
 		if (model instanceof ModelBiped) {
 			ModelBiped modelbiped = (ModelBiped) model;
-			this.heldItemLeft = modelbiped.heldItemLeft;
-			this.heldItemRight = modelbiped.heldItemRight;
+			this.leftArmPose = modelbiped.leftArmPose;
+			this.rightArmPose = modelbiped.rightArmPose;
 			this.isSneak = modelbiped.isSneak;
-			this.aimedBow = modelbiped.aimedBow;
-			this.isRiding = model.isRiding;
-			this.isChild = model.isChild;
 		}
 	}
 
@@ -277,7 +306,17 @@ public class ModelThinBiped extends ModelBiped {
 	}
 
 	@Override
-	public void postRenderArm(float scale) {
-		this.rightArm.postRender(scale);
+	public void postRenderArm(float scale, EnumHandSide side) {
+		this.getArmForSide(side).postRender(scale);
+	}
+
+	@Override
+	protected ModelRenderer getArmForSide(EnumHandSide side) {
+		return side == EnumHandSide.LEFT ? this.bipedLeftArm : this.bipedRightArm;
+	}
+
+	@Override
+	protected EnumHandSide getMainHand(Entity entityIn) {
+		return entityIn instanceof EntityLivingBase ? ((EntityLivingBase) entityIn).getPrimaryHand() : EnumHandSide.RIGHT;
 	}
 }

@@ -6,6 +6,9 @@ package defeatedcrow.hac.core.base;
  */
 public interface ITexturePath {
 
+	/**
+	 * Json用
+	 */
 	String getTexPath(int meta, boolean isFull);
 
 }

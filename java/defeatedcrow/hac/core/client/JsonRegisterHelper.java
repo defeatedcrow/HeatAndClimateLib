@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,7 +41,8 @@ public class JsonRegisterHelper {
 		basePath = s;
 	}
 
-	public static final JsonRegisterHelper INSTANCE = new JsonRegisterHelper("E:\\forge1.8.9\\HandC\\src\\main\\resources");
+	public static final JsonRegisterHelper INSTANCE = new JsonRegisterHelper(
+			"E:\\forge1.9.0\\HaC_Lib\\src\\main\\resources");
 
 	public void load() {
 		regSimpleItem(DCInit.climate_checker, ClimateCore.PACKAGE_ID, "checker", "tool", 0);
@@ -54,8 +55,22 @@ public class JsonRegisterHelper {
 		int m = 0;
 		while (m < max + 1) {
 			INSTANCE.checkAndBuildJson(item, domein, name, dir, m);
-			ModelLoader
-					.setCustomModelResourceLocation(item, m, new ModelResourceLocation(domein + ":" + dir + "/" + name + m, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(item, m, new ModelResourceLocation(domein + ":" + dir + "/"
+					+ name + m, "inventory"));
+			m++;
+		}
+	}
+
+	/**
+	 * 汎用BakedBlock使用メソッド
+	 * Blockのモデルには一切手を付けず、一枚絵アイコンの標準的なItemJsonを生成
+	 */
+	public void regBakedBlock(Block block, String domein, String name, String dir, int max) {
+		int m = 0;
+		while (m < max + 1) {
+			INSTANCE.checkAndBuildJson(block, domein, name, dir, m);
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), m, new ModelResourceLocation(
+					domein + ":" + dir + "/" + name + m, "inventory"));
 			m++;
 		}
 	}
@@ -65,18 +80,19 @@ public class JsonRegisterHelper {
 	 * 外見は仮のJsonファイルに紐付け、TESRで描画する
 	 */
 	public void regTEBlock(Block block, String domein, String name, String dir, int maxMeta) {
-		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(((DCTileBlock) block).FACING, ((DCTileBlock) block).TYPE)
-				.build());
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":" + "basetile"));
+		ModelLoader.setCustomStateMapper(block,
+				(new StateMap.Builder()).ignore(((DCTileBlock) block).FACING, ((DCTileBlock) block).TYPE).build());
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":"
+				+ "basetile"));
 		if (maxMeta == 0) {
 			INSTANCE.checkAndBuildJson(block, domein, name, dir, 0);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(domein + ":" + dir + "/"
-					+ name, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
+					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
 				INSTANCE.checkAndBuildJson(block, domein, name, dir, i);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(domein + ":" + dir
-						+ "/" + name + i, "inventory"));
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
+						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
 		}
 	}
@@ -86,17 +102,19 @@ public class JsonRegisterHelper {
 	 * FACINGがないやつ
 	 */
 	public void regTESimpleBlock(Block block, String domein, String name, String dir, int maxMeta) {
-		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(((DCFacelessTileBlock) block).TYPE).build());
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":" + "basetile"));
+		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(((DCFacelessTileBlock) block).TYPE)
+				.build());
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":"
+				+ "basetile"));
 		if (maxMeta == 0) {
 			INSTANCE.checkAndBuildJson(block, domein, name, dir, 0);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(domein + ":" + dir + "/"
-					+ name, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
+					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
 				INSTANCE.checkAndBuildJson(block, domein, name, dir, i);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(domein + ":" + dir
-						+ "/" + name + i, "inventory"));
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
+						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
 		}
 	}
@@ -107,11 +125,11 @@ public class JsonRegisterHelper {
 	 */
 	public void regSimpleBlock(Block block, String domein, String name, String dir, int maxMeta) {
 		if (maxMeta == 0) {
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":" + dir + "/" + name,
-					"type"));
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":" + dir
+					+ "/" + name, "type"));
 			INSTANCE.checkAndBuildJsonItemBlock(domein, name, dir, 0);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(domein + ":" + dir + "/"
-					+ name, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
+					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			ModelResourceLocation[] models = new ModelResourceLocation[maxMeta + 1];
 			for (int i = 0; i < maxMeta + 1; i++) {
@@ -120,8 +138,8 @@ public class JsonRegisterHelper {
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), models);
 			for (int i = 0; i < maxMeta + 1; i++) {
 				INSTANCE.checkAndBuildJsonItemBlock(domein, name, dir, i);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(domein + ":" + dir
-						+ "/" + name + i, "inventory"));
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
+						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
 		}
 	}

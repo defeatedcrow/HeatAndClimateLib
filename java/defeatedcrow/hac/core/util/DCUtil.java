@@ -3,7 +3,7 @@ package defeatedcrow.hac.core.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import defeatedcrow.hac.core.DCLogger;
 
 // 色々不足しているもの

@@ -6,10 +6,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,8 +31,8 @@ public class ItemClimateChecker extends DCItem {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY,
-			float hitZ) {
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
+			EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote && !world.isAirBlock(pos)) {
 			IBlockState state = world.getBlockState(pos);
 			IClimate c = null;
@@ -48,12 +50,12 @@ public class ItemClimateChecker extends DCItem {
 			}
 
 			if (c != null) {
-				player.addChatMessage(new ChatComponentText("== Current Climate =="));
-				player.addChatMessage(new ChatComponentText("Temperature: " + c.getHeat().name()));
-				player.addChatMessage(new ChatComponentText("Humidity: " + c.getHumidity().name()));
-				player.addChatMessage(new ChatComponentText("Airflow: " + c.getAirflow().name()));
+				player.addChatMessage(new TextComponentString("== Current Climate =="));
+				player.addChatMessage(new TextComponentString("Temperature: " + c.getHeat().name()));
+				player.addChatMessage(new TextComponentString("Humidity: " + c.getHumidity().name()));
+				player.addChatMessage(new TextComponentString("Airflow: " + c.getAirflow().name()));
 				if (ClimateCore.isDebug) {
-					// player.addChatMessage(new ChatComponentText("Climate int: " +
+					// player.addChatMessage(new TextComponentString("Climate int: " +
 					// Integer.toBinaryString(c.getClimateInt())));
 				}
 				// recipe
@@ -62,19 +64,20 @@ public class ItemClimateChecker extends DCItem {
 				String s = block.getRegistryName() + ":" + i;
 				recipe = RecipeAPI.registerSmelting.getRecipe(c, new ItemStack(block, 1, i));
 				if (recipe != null) {
-					player.addChatMessage(new ChatComponentText(s + " ** Climate Smelting Confotable! **"));
+					player.addChatMessage(new TextComponentString(s + " ** Climate Smelting Confotable! **"));
 				} else {
-					player.addChatMessage(new ChatComponentText(s));
+					player.addChatMessage(new TextComponentString(s));
 				}
 			}
+			return EnumActionResult.SUCCESS;
 		}
-		return true;
+		return EnumActionResult.PASS;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-		tooltip.add(StatCollector.translateToLocal("dcs.climate.tip.checker"));
+		tooltip.add(I18n.translateToLocal("dcs.climate.tip.checker"));
 	}
 
 	@Override

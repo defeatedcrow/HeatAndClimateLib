@@ -6,11 +6,14 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -51,19 +54,25 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn) {
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase living) {
 		int meta = stack.getItemDamage();
-		--stack.stackSize;
-		playerIn.getFoodStats().addStats(getFoodAmo(meta), getSaturation(meta));
-		worldIn.playSoundAtEntity(playerIn, "random.burp", 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
-		this.addEffects(stack, worldIn, playerIn);
+
+		if (living instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) living;
+			--stack.stackSize;
+			player.getFoodStats().addStats(getFoodAmo(meta), getSaturation(meta));
+			worldIn.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP,
+					SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+			this.addEffects(stack, worldIn, living);
+		}
+
 		return stack;
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target) {
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
 		this.addEffects(stack, player.worldObj, target);
-		return super.itemInteractionForEntity(stack, player, target);
+		return super.itemInteractionForEntity(stack, player, target, hand);
 	}
 
 	public void addEffects(ItemStack stack, World worldIn, EntityLivingBase living) {
@@ -71,17 +80,17 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 			int meta = stack.getItemDamage();
 			List<PotionEffect> effects = this.getPotionEffect(meta);
 			for (PotionEffect get : effects) {
-				if (get != null && get.getPotionID() > 0) {
-					Potion por = Potion.potionTypes[get.getPotionID()];
+				if (get != null && get.getPotion() != null) {
+					Potion por = get.getPotion();
 					if (por == null)
 						continue;
 					int amp = get.getAmplifier();
 					int dur = get.getDuration();
-					if (living.isPotionActive(get.getPotionID())) {
+					if (living.isPotionActive(get.getPotion())) {
 						PotionEffect check = living.getActivePotionEffect(por);
 						dur += check.getDuration();
 					}
-					living.addPotionEffect(new PotionEffect(get.getPotionID(), dur, amp));
+					living.addPotionEffect(new PotionEffect(get.getPotion(), dur, amp));
 				}
 			}
 		}
