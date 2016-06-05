@@ -102,6 +102,20 @@ public class ClimateSmeltingWrapper implements IRecipeWrapper {
 		IClimate clm = ClimateAPI.register.getClimateFromParam(minT, maxH, maxA);
 		String s = CRecipeType.getType(clm).name();
 		mc.fontRendererObj.drawString(s, 46, 2, 0x0099FF, true);
+
+		String place = "Require the processing device.";
+		if (rec.hasPlaceableOutput() > 0) {
+			place = "Proceeds as placed object.";
+		}
+		mc.fontRendererObj.drawString(place, 32, 69, 0x0099FF, true);
+
+		String flq = "Less Frequency Process";
+		if (rec.recipeFrequency() == 0) {
+			flq = "Rapid Process";
+		} else if (rec.recipeFrequency() == 1) {
+			flq = "Middle Frequency Process";
+		}
+		mc.fontRendererObj.drawString(flq, 32, 79, 0x0099FF, true);
 	}
 
 	@Override

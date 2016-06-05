@@ -7,6 +7,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.LockCode;
@@ -16,7 +17,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public abstract class DCLockableTE extends TileEntity implements IInteractionObject, ILockableContainer, ITagGetter {
+public abstract class DCLockableTE extends TileEntity implements IInteractionObject, ILockableContainer, ITagGetter, ITickable {
 
 	private LockCode code = LockCode.EMPTY_CODE;
 
@@ -92,6 +93,7 @@ public abstract class DCLockableTE extends TileEntity implements IInteractionObj
 		return 10;
 	}
 
+	@Override
 	public void update() {
 		if (coolTime < 0) {
 			coolTime--;

@@ -31,6 +31,10 @@ public class CoreConfigDC {
 			100,
 			30 };
 
+	// recipe
+	public static boolean enableVanilla = true;
+	public static int updateFrequency = 5;
+
 	public void load(Configuration cfg) {
 
 		try {
@@ -52,6 +56,12 @@ public class CoreConfigDC {
 
 			Property peace_dam = cfg.get("difficulty setting", "Enable Peaceful Damage", peacefulDam,
 					"Enable climate damage at peaceful setting.");
+
+			Property vanilla_block = cfg.get("world setting", "Enable Vanilla Block Recipe", enableVanilla,
+					"Enable climate change of vanilla blocks.");
+
+			Property update_block = cfg.get("world setting", "Set Update Frequency", updateFrequency,
+					"Set the number of the update times per sec.");
 
 			Property alt_tips = cfg.get("render setting", "Enable Alt Tooltip", showAltTips,
 					"Enable additional tooltips for harvest level, and climate registance of items with F3+H.");
@@ -77,6 +87,7 @@ public class CoreConfigDC {
 			peacefulDam = peace_dam.getBoolean();
 			showAltTips = alt_tips.getBoolean();
 			charmWarpKey = warp_key.getInt();
+			enableVanilla = vanilla_block.getBoolean();
 
 			int s = sed_ore.getInt();
 			if (s < 0 || s > 100)
@@ -99,6 +110,11 @@ public class CoreConfigDC {
 			depositGen[2] = v;
 			depositGen[3] = l;
 			depositGen[4] = g;
+
+			int h = update_block.getInt();
+			if (h < 0 || h > 20)
+				h = 0;
+			updateFrequency = h;
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -115,14 +115,16 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 		/*
 		 * Tier絶対値が1以上の場合、現在環境の1つ下の温度帯のレシピも条件にあてまはる
 		 */
-		if (ret == null && clm.getHeat().getTier() != 0) {
-			int i = clm.getHeat().getTier() < 0 ? 1 : -1;
-			List<ClimateSmelting> list2 = getRecipeList(clm.getHeat().addTier(i));
-			if (list.isEmpty()) {
-			} else {
-				for (IClimateSmelting recipe : list2) {
-					if (recipe.matcheInput(item) && recipe.matchClimate(clm)) {
-						ret = recipe;
+		if (ret == null) {
+			if (clm.getHeat().getTier() != 0) {
+				int i = clm.getHeat().getTier() < 0 ? 1 : -1;
+				List<ClimateSmelting> list2 = getRecipeList(clm.getHeat().addTier(i));
+				if (list.isEmpty()) {
+				} else {
+					for (IClimateSmelting recipe : list2) {
+						if (recipe.matcheInput(item) && recipe.matchClimate(clm)) {
+							ret = recipe;
+						}
 					}
 				}
 			}

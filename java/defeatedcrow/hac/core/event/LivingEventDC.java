@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -19,15 +21,19 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.damage.DamageSourceClimate;
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
+import defeatedcrow.hac.api.recipe.IClimateSmelting;
+import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.util.DCTimeHelper;
@@ -40,6 +46,9 @@ public class LivingEventDC {
 		EntityLivingBase living = event.entityLiving;
 		if (living instanceof EntityPlayer) {
 			this.onPlayerUpdate(event);
+			if (!living.worldObj.isRemote) {
+				this.playerChunkUpload(event);
+			}
 		} else {
 			this.onLivingUpdate(event);
 		}
@@ -97,8 +106,8 @@ public class LivingEventDC {
 				int pz = MathHelper.floor_double(living.posZ);
 				DCHeatTier heat = ClimateAPI.calculator.getTemp(living.worldObj, new BlockPos(px, py, pz), 2, false);
 
-				float prev = 0.0F;
-				float dam = heat.getTier() * 1.0F - 1.0F;
+				float prev = 1.0F;
+				float dam = heat.getTier() * 1.0F;
 
 				ItemStack[] items = living.getInventory();
 				if (items != null) {
@@ -113,7 +122,10 @@ public class LivingEventDC {
 				boolean isCold = false;
 				if (dam < 0.0F) {
 					isCold = true;
-					dam *= -2.0F;
+					dam *= -1.0F;
+					if (living.isImmuneToFire()) {
+						prev -= 1.0F;
+					}
 				} else {
 					if (living.isPotionActive(Potion.fireResistance)) {
 						prev += 3.0F;
@@ -124,11 +136,11 @@ public class LivingEventDC {
 					if (living instanceof EntityVillager) {
 						prev += 2.0F;
 					}
-					if (living instanceof EntityMob) {
-						prev += 1.0F;
-					}
 				}
 				dam -= prev;
+				if (dam < 0.0F) {
+					dam = 0.0F;
+				}
 
 				if (living.getHealth() - dam < 1.0F) {
 					dam = living.getHealth() - 1.0F;
@@ -212,6 +224,9 @@ public class LivingEventDC {
 						}
 					}
 					dam -= prev;
+					if (dam < 0.0F) {
+						dam = 0.0F;
+					}
 
 					if (player.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL && !CoreConfigDC.peacefulDam) {
 						dam = 0.0F;
@@ -236,6 +251,70 @@ public class LivingEventDC {
 
 			}
 
+		}
+	}
+
+	private int localCount = 0;
+
+	// Block Update をプレイヤーに肩代わりさせる
+	public void playerChunkUpload(LivingEvent.LivingUpdateEvent event) {
+		EntityLivingBase entity = event.entityLiving;
+
+		if ((entity instanceof EntityPlayer)) {
+			EntityPlayer player = (EntityPlayer) event.entity;
+			World world = player.worldObj;
+			int count = DCTimeHelper.getCount2(world);
+
+			int tick = (count >> 4) & 15;
+
+			if (tick != localCount) {
+				localCount = tick;
+				// 3回やる
+				int i = 0;
+				while (i < CoreConfigDC.updateFrequency) {
+					int cx = player.chunkCoordX - 4 + world.rand.nextInt(9);
+					int cz = player.chunkCoordZ - 4 + world.rand.nextInt(9);
+					if (world.getChunkFromChunkCoords(cx, cz).isLoaded()) {
+						int j = 0;
+						while (j < CoreConfigDC.updateFrequency) {
+							int x = (cx << 4) + world.rand.nextInt(16);
+							int z = (cz << 4) + world.rand.nextInt(16);
+							int y = world.provider.getActualHeight();
+
+							BlockPos under = new BlockPos(x, 1, z);
+							BlockPos upper = new BlockPos(x, y, z);
+							Iterable<BlockPos> itr = under.getAllInBox(under, upper);
+							for (BlockPos pos : itr) {
+								if (world.rand.nextBoolean())
+									continue;
+								if (world.isAirBlock(pos)) {
+									continue;
+								}
+								IBlockState state = world.getBlockState(pos);
+								Block block = state.getBlock();
+								int meta = block.getDamageValue(world, pos);
+								IClimate clm = ClimateAPI.calculator.getClimate(world, pos, new int[] {
+										2,
+										1,
+										1 });
+								IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(block, 1, meta));
+								if (recipe == null || !recipe.matchClimate(clm) || recipe.hasPlaceableOutput() != 1)
+									continue;
+
+								if (recipe.getOutput() != null && recipe.getOutput().getItem() instanceof ItemBlock) {
+									Block retB = Block.getBlockFromItem(recipe.getOutput().getItem());
+									int retM = recipe.getOutput().getItemDamage();
+									IBlockState ret = retB.getStateFromMeta(retM);
+									world.setBlockState(pos, ret, 3);
+								}
+							}
+							j++;
+						}
+					}
+					i++;
+				}
+
+			}
 		}
 	}
 

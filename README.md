@@ -26,5 +26,6 @@ the Mod necessary for defeatedcrow's mod in 1.8.9+
  Example: <br>
  - When you place the "raw dough" near the fire as an object, it becomes "bread". <br>  火の近くにEntityとして「生のパン生地」を置いておくと、「焼けたパン」に変わります。  <br>
 <br>
+3. Climate damage and prevent material. <br>Too high or low temp will hurt player and mobs. It can prevent easily by armors or charms.<br> 極度の高温・低温でプレイヤーやMOBがダメージを受けるようになります。ダメージは防具やアクセサリーで簡単に防ぐことができます。(防具を身につける動機付けです。)<br><br>
 
 (c) defeatedcrow 2016

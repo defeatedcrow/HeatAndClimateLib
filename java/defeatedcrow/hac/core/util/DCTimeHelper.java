@@ -62,4 +62,9 @@ public class DCTimeHelper {
 		return (int) i;
 	}
 
+	public static int getCount2(World world) {
+		long i = (totalTime(world) % 256L);
+		return (int) i;
+	}
+
 }
