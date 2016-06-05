@@ -1,12 +1,12 @@
 # HeatAndClimateLib
-the Mod necessary for defeatedcrow's mod in 1.8.9+
+the Mod necessary for defeatedcrow's mod in 1.9.4
 
 ## Introduction
-- This mod is API and core mod necessary for defeatedcrow's mod in 1.8.9+. Of course, you can stand-alone use this mod, or use in your modding. <br>このmodは1.8.9+においてdefeatedcrowが作成するmodの前提MODです。もちろん、このmodを単独で使用したり、あなたのmodの前提modとしても利用することが出来ます。
+- This mod is API and core mod necessary for defeatedcrow's mod in 1.9+. Of course, you can stand-alone use this mod, or use in your modding. <br>このmodは1.9+においてdefeatedcrowが作成するmodの前提MODです。もちろん、このmodを単独で使用したり、あなたのmodの前提modとしても利用することが出来ます。
 
 ## 動作環境 Current operating environment:
-- Minecraft 1.8.9  
-- MinecraftForge 11.15.1.1722+  
+- Minecraft 1.9.4  
+- MinecraftForge 12.17.0.1954++  
    
 ## ライセンス
 - Code：MMPL-1.0  (full text is included as License.txt)
