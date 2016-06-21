@@ -13,7 +13,6 @@ public interface IClimateCalculator {
 
 	/**
 	 * 範囲内のClimateを求める。<br>
-	 * 熱源は真下中心で、温度差計算は無し。
 	 * 
 	 * @param world
 	 *            : 対象のWorld
@@ -28,7 +27,6 @@ public interface IClimateCalculator {
 
 	/**
 	 * 範囲内の最も高いHeatTierを求める。<br>
-	 * このMODの多くの装置では、熱源の場合のみ真下の座標を中心にチェックすることが多い。
 	 * 
 	 * @param world
 	 *            : 対象のWorld
@@ -39,7 +37,7 @@ public interface IClimateCalculator {
 	 * @param horizontal
 	 *            : posと同高度の平面範囲を調べる
 	 */
-	DCHeatTier getHeatTier(World world, BlockPos pos, int range, boolean horizontal);
+	DCHeatTier getHeat(World world, BlockPos pos, int range, boolean horizontal);
 
 	/**
 	 * 範囲内の最も低いHeatTierを求める。
@@ -53,7 +51,7 @@ public interface IClimateCalculator {
 	 * @param horizontal
 	 *            : posと同高度の平面範囲を調べる
 	 */
-	DCHeatTier getColdTier(World world, BlockPos pos, int range, boolean horizontal);
+	DCHeatTier getCold(World world, BlockPos pos, int range, boolean horizontal);
 
 	/**
 	 * 範囲内のHeatTier(Heat・Coldの合成後の値)を求める。
@@ -67,10 +65,10 @@ public interface IClimateCalculator {
 	 * @param horizontal
 	 *            : posと同高度の平面範囲を調べる
 	 */
-	DCHeatTier getTemp(World world, BlockPos pos, int range, boolean horizontal);
+	DCHeatTier getAverageTemp(World world, BlockPos pos, int range, boolean horizontal);
 
 	/**
-	 * 範囲内のしめりを計算する。<br>
+	 * 範囲内の湿りを計算する。<br>
 	 * WET Biome: +1<br>
 	 * Material.water +1<br>
 	 * Raining +1<br>
@@ -92,9 +90,10 @@ public interface IClimateCalculator {
 
 	/**
 	 * 範囲内の通気の有無を求める。<br>
-	 * AirBlockなし: TIGHT<br>
-	 * AirBlockあり: Biome標準<br>
-	 * IAirflowTile(FLOW)あり: FLOW
+	 * AirBlockが2個以下: TIGHT<br>
+	 * AirBlockが3個以上: 屋内ならNORMAL、屋外はBiome標準<br>
+	 * IAirflowTile(WIND)あり: WIND<br>
+	 * 雷雨時の屋外: WIND
 	 * 
 	 * @param world
 	 *            : 対象のWorld

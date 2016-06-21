@@ -4,6 +4,9 @@ import net.minecraftforge.common.MinecraftForge;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
 import defeatedcrow.hac.core.event.BlockUpdateDC;
 import defeatedcrow.hac.core.event.LivingEventDC;
+import defeatedcrow.hac.core.event.LivingHurtDC;
+import defeatedcrow.hac.core.event.MiningEventDC;
+import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.util.DCPotion;
 
 public class CommonProxyD {
@@ -25,6 +28,10 @@ public class CommonProxyD {
 		VanillaRecipeRegister.load();
 		MinecraftForge.EVENT_BUS.register(new LivingEventDC());
 		MinecraftForge.EVENT_BUS.register(new BlockUpdateDC());
+		MinecraftForge.EVENT_BUS.register(new LivingHurtDC());
+		MinecraftForge.EVENT_BUS.register(new MiningEventDC());
+
+		HaCPacket.init();
 	}
 
 	public ModelThinBiped getArmorModel(int slot) {

@@ -204,7 +204,7 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 
 	@Override
 	public IClimate onUpdateClimate(World world, BlockPos pos, IBlockState state) {
-		DCHeatTier heat = ClimateAPI.calculator.getHeatTier(world, pos, checkingRange()[0], false);
+		DCHeatTier heat = ClimateAPI.calculator.getHeat(world, pos, checkingRange()[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, checkingRange()[1], false);
 		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, checkingRange()[2], false);
 		IClimate c = ClimateAPI.register.getClimateFromParam(heat, hum, air);
@@ -224,9 +224,9 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 				ItemStack output = recipe.getOutput();
 				if (output != null && output.getItem() instanceof ItemBlock) {
 					Block ret = ((ItemBlock) output.getItem()).block;
-					IBlockState retS = ret.getStateFromMeta(output.getItemDamage());
+					IBlockState retS = ret.getStateFromMeta(output.getMetadata());
 					if (world.setBlockState(pos, retS, 3)) {
-						world.markBlockRangeForRenderUpdate(pos, pos.down());
+						world.notifyBlockOfStateChange(pos, ret);
 
 						// 効果音
 						if (playSEOnChanging(meta)) {

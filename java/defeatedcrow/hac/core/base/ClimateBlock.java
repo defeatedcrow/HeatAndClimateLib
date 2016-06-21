@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -61,7 +60,7 @@ public class ClimateBlock extends Block implements IClimateObject {
 
 	@Override
 	public IClimate onUpdateClimate(World world, BlockPos pos, IBlockState state) {
-		DCHeatTier heat = ClimateAPI.calculator.getHeatTier(world, pos, checkingRange()[0], false);
+		DCHeatTier heat = ClimateAPI.calculator.getHeat(world, pos, checkingRange()[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, checkingRange()[1], false);
 		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, checkingRange()[2], false);
 		IClimate c = ClimateAPI.register.getClimateFromParam(heat, hum, air);
@@ -81,9 +80,9 @@ public class ClimateBlock extends Block implements IClimateObject {
 				ItemStack output = recipe.getOutput();
 				if (output != null && output.getItem() instanceof ItemBlock) {
 					Block ret = ((ItemBlock) output.getItem()).block;
-					IBlockState retS = ret.getStateFromMeta(output.getItemDamage());
+					IBlockState retS = ret.getStateFromMeta(output.getMetadata());
 					if (world.setBlockState(pos, retS, 3)) {
-						world.markBlockRangeForRenderUpdate(pos, pos.down());
+						world.notifyBlockOfStateChange(pos, ret);
 
 						// 効果音
 						if (playSEOnChanging(meta)) {
@@ -98,6 +97,7 @@ public class ClimateBlock extends Block implements IClimateObject {
 		return false;
 	}
 
+	@Override
 	public SoundEvent getSE(int meta) {
 		return SoundEvents.BLOCK_LAVA_EXTINGUISH;
 	}

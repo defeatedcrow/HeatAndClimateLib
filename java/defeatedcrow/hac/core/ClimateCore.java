@@ -22,8 +22,8 @@ public class ClimateCore {
 	public static final String MOD_ID = "dcs_climate|lib";
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 0;
-	public static final int MOD_MINOR = 5;
-	public static final int MOD_BUILD = 6;
+	public static final int MOD_MINOR = 6;
+	public static final int MOD_BUILD = 1;
 	public static final String MOD_DEPENDENCIES = "required-after:Forge@[12.17.0.1954,)";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.9.4]";
 
@@ -39,7 +39,7 @@ public class ClimateCore {
 	public static final String PACKAGE_ID = "dcs_climate";
 	public static final CreativeTabs climate = new CreativeTabClimate(MOD_ID);
 
-	public static boolean isDebug = true;
+	public static boolean isDebug = false;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

@@ -32,8 +32,8 @@ public class APILoader {
 	}
 
 	private static void registerMaterial() {
-		DamageAPI.armorRegister.RegisterMaterial(ArmorMaterial.LEATHER, 3.0F);
-		DamageAPI.armorRegister.RegisterMaterial(ArmorMaterial.DIAMOND, 1.0F);
+		DamageAPI.armorRegister.RegisterMaterial(ArmorMaterial.LEATHER, 2.0F);
+		DamageAPI.armorRegister.RegisterMaterial(ArmorMaterial.DIAMOND, 0.5F);
 	}
 
 	public static void registerClimate() {

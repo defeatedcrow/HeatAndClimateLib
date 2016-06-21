@@ -10,8 +10,10 @@ public enum CharmType {
 	ATTACK,
 	/* ツール使用時追加効果 */
 	TOOL,
-	/* 任意発動型 */
+	/* 右クリック使用による任意発動型 */
 	INSTANT,
+	/* Xキーによる任意発動型 */
+	KEY,
 	/* どれにも当てはまらず、直接指定で効果を扱うもの */
 	SPECIAL;
 

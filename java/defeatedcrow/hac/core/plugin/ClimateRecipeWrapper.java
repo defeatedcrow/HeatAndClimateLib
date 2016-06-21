@@ -64,31 +64,31 @@ public class ClimateRecipeWrapper implements IRecipeWrapper {
 		ResourceLocation res = new ResourceLocation("dcs_climate", "textures/gui/c_crafting_gui.png");
 		mc.getTextureManager().bindTexture(res);
 		if (heats.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(83, 15, 0, 170, 64, 3);
+			mc.currentScreen.drawTexturedModalRect(72, 15, 0, 170, 64, 3);
 			minT = DCHeatTier.NORMAL;
 		} else {
 			for (DCHeatTier h : heats) {
-				mc.currentScreen.drawTexturedModalRect(83 + h.getID() * 8, 15, h.getID() * 8, 170, 8, 3);
+				mc.currentScreen.drawTexturedModalRect(72 + h.getID() * 8, 15, h.getID() * 8, 170, 8, 3);
 				if (h.getID() < minT.getID())
 					minT = h;
 			}
 		}
 		if (hums.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(83, 25, 0, 174, 64, 3);
+			mc.currentScreen.drawTexturedModalRect(72, 25, 0, 174, 80, 3);
 			maxH = DCHumidity.NORMAL;
 		} else {
 			for (DCHumidity h : hums) {
-				mc.currentScreen.drawTexturedModalRect(83 + h.getID() * 16, 25, h.getID() * 16, 174, 16, 3);
+				mc.currentScreen.drawTexturedModalRect(72 + h.getID() * 20, 25, h.getID() * 20, 174, 20, 3);
 				if (maxH.getID() < h.getID())
 					maxH = h;
 			}
 		}
 		if (airs.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(83, 35, 0, 178, 64, 3);
+			mc.currentScreen.drawTexturedModalRect(72, 35, 0, 178, 80, 3);
 			maxA = DCAirflow.NORMAL;
 		} else {
 			for (DCAirflow a : airs) {
-				mc.currentScreen.drawTexturedModalRect(83 + a.getID() * 16, 35, a.getID() * 16, 178, 16, 3);
+				mc.currentScreen.drawTexturedModalRect(72 + a.getID() * 20, 35, a.getID() * 20, 178, 20, 3);
 				if (maxA.getID() < a.getID())
 					maxA = a;
 			}
@@ -96,7 +96,7 @@ public class ClimateRecipeWrapper implements IRecipeWrapper {
 
 		IClimate clm = ClimateAPI.register.getClimateFromParam(minT, maxH, maxA);
 		String s = CRecipeType.getType(clm).name();
-		mc.fontRendererObj.drawString(s, 82, 0, 0x0099FF, true);
+		mc.fontRendererObj.drawString(s, 72, 0, 0x0099FF, true);
 	}
 
 	@Override
@@ -108,25 +108,25 @@ public class ClimateRecipeWrapper implements IRecipeWrapper {
 	public List<String> getTooltipStrings(int x, int y) {
 		List<String> s = new ArrayList<String>();
 		if (y > 12 && y < 20) {
-			if (x > 83 && x < 145) {
-				int i = (x - 83) / 8;
+			if (x > 72 && x < 152) {
+				int i = (x - 72) / 8;
 				s.add(DCHeatTier.getTypeByID(i).name() + " " + DCHeatTier.getTypeByID(i).getTemp());
 			}
 		}
 		if (y > 22 && y < 30) {
-			if (x > 83 && x < 145) {
-				int i = (x - 83) / 16;
+			if (x > 72 && x < 152) {
+				int i = (x - 72) / 20;
 				s.add(DCHumidity.getTypeByID(i).name());
 			}
 		}
 		if (y > 32 && y < 40) {
-			if (x > 83 && x < 145) {
-				int i = (x - 83) / 16;
+			if (x > 72 && x < 152) {
+				int i = (x - 72) / 20;
 				s.add(DCAirflow.getTypeByID(i).name());
 			}
 		}
 		if (y > 48 && y < 64) {
-			if (x > 127 && x < 143) {
+			if (x > 116 && x < 132) {
 				int i = (int) (rec.getSecondaryChance() * 100);
 				if (rec.getSecondary() == null || i == 0) {
 					s.add("NO SECONDARY OUTPUT");

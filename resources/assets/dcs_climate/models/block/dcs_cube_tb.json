@@ -1,4 +1,5 @@
 {
+    "parent": "block/block",
     "ambientocclusion": true,
     "textures": {
         "particle": "dcs_climate:blocks/cont/woodbox_s",

@@ -98,16 +98,17 @@ public class JsonBakery {
 		// 生
 		ResourceLocation rawSided = new ResourceLocation("dcs_climate:block/dcs_cube_sided");
 		// Item用Jsonを同じ要領で拾ってくる
-		ResourceLocation rawSidedItem = new ResourceLocation("dcs_climate:item/dcs_cube_sided");
+		// ResourceLocation rawSidedItem = new ResourceLocation("dcs_climate:item/dcs_cube_sided");
 		try {
 			IModel modelS = ModelLoaderRegistry.getModel(rawSided);
-			IModel modelSI = ModelLoaderRegistry.getModel(rawSidedItem);
+			// IModel modelSI = ModelLoaderRegistry.getModel(rawSidedItem);
 			if (modelS instanceof IRetexturableModel) {
 				// パンを焼く
 				IBakedModel bakedSided = new BakedSidedBaguette((IRetexturableModel) modelS);
-				IBakedModel bakedSidedItem = new BakedSidedBaguette((IRetexturableModel) modelSI);
+				// IBakedModel bakedSidedItem = new BakedSidedBaguette((IRetexturableModel)
+				// modelSI);
 				event.getModelRegistry().putObject(normalSided, bakedSided);
-				event.getModelRegistry().putObject(inventorySided, bakedSidedItem);
+				// event.getModelRegistry().putObject(inventorySided, bakedSidedItem);
 			}
 		} catch (IOException e) {
 			/* モデル指定がミスるとここに飛ぶ */
@@ -115,15 +116,15 @@ public class JsonBakery {
 		}
 		/* TB */
 		ResourceLocation rawTB = new ResourceLocation("dcs_climate:block/dcs_cube_tb");
-		ResourceLocation rawTBItem = new ResourceLocation("dcs_climate:item/dcs_cube_tb");
+		// ResourceLocation rawTBItem = new ResourceLocation("dcs_climate:item/dcs_cube_tb");
 		try {
 			IModel modelT = ModelLoaderRegistry.getModel(rawTB);
-			IModel modelTI = ModelLoaderRegistry.getModel(rawTBItem);
+			// IModel modelTI = ModelLoaderRegistry.getModel(rawTBItem);
 			if (modelT instanceof IRetexturableModel) {
 				IBakedModel bakedTB = new BakedTBBaguette((IRetexturableModel) modelT);
-				IBakedModel bakedTBItem = new BakedTBBaguette((IRetexturableModel) modelTI);
+				// IBakedModel bakedTBItem = new BakedTBBaguette((IRetexturableModel) modelTI);
 				event.getModelRegistry().putObject(normalTB, bakedTB);
-				event.getModelRegistry().putObject(inventoryTB, bakedTBItem);
+				// event.getModelRegistry().putObject(inventoryTB, bakedTBItem);
 			}
 		} catch (IOException e) {
 			/* モデル指定がミスるとここに飛ぶ */

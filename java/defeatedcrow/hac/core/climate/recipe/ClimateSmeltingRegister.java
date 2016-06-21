@@ -17,6 +17,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 
 	public ClimateSmeltingRegister() {
 		this.absList = new ArrayList<ClimateSmelting>();
+		this.frostList = new ArrayList<ClimateSmelting>();
 		this.coldList = new ArrayList<ClimateSmelting>();
 		this.normalList = new ArrayList<ClimateSmelting>();
 		this.hotList = new ArrayList<ClimateSmelting>();
@@ -24,6 +25,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 		this.kilnList = new ArrayList<ClimateSmelting>();
 		this.smeltList = new ArrayList<ClimateSmelting>();
 		this.uhtList = new ArrayList<ClimateSmelting>();
+		this.infList = new ArrayList<ClimateSmelting>();
 	}
 
 	public IClimateSmeltingRegister instance() {
@@ -34,6 +36,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	 * RecipeListは温度ごとに別になっている。
 	 */
 	private static List<ClimateSmelting> absList;
+	private static List<ClimateSmelting> frostList;
 	private static List<ClimateSmelting> coldList;
 	private static List<ClimateSmelting> normalList;
 	private static List<ClimateSmelting> hotList;
@@ -41,12 +44,15 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	private static List<ClimateSmelting> kilnList;
 	private static List<ClimateSmelting> smeltList;
 	private static List<ClimateSmelting> uhtList;
+	private static List<ClimateSmelting> infList;
 
 	@Override
 	public List<ClimateSmelting> getRecipeList(DCHeatTier tier) {
 		switch (tier) {
 		case ABSOLUTE:
 			return absList;
+		case FROSTBITE:
+			return frostList;
 		case COLD:
 			return coldList;
 		case NORMAL:
@@ -61,14 +67,16 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 			return smeltList;
 		case UHT:
 			return uhtList;
+		case INFERNO:
+			return infList;
 		default:
 			return ovenList;
 		}
 	}
 
 	@Override
-	public void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air, float secondaryChance,
-			boolean cooling, Object input) {
+	public void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air,
+			float secondaryChance, boolean cooling, Object input) {
 		List<ClimateSmelting> list = getRecipeList(heat);
 		if (input != null && output != null && heat != null) {
 			list.add(new ClimateSmelting(output, secondary, heat, hum, air, secondaryChance, cooling, input));
@@ -76,7 +84,8 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	}
 
 	@Override
-	public void addRecipe(ItemStack output, DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling, Object input) {
+	public void addRecipe(ItemStack output, DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling,
+			Object input) {
 		List<ClimateSmelting> list = getRecipeList(heat);
 		if (input != null && output != null && heat != null) {
 			list.add(new ClimateSmelting(output, null, heat, hum, air, 0.0F, false, input));
@@ -85,7 +94,8 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 
 	@Override
 	public void addRecipe(ItemStack output, ItemStack secondary, IClimate clm, float secondaryChance, Object input) {
-		this.addRecipe(output, secondary, clm.getHeat(), clm.getHumidity(), clm.getAirflow(), secondaryChance, false, input);
+		this.addRecipe(output, secondary, clm.getHeat(), clm.getHumidity(), clm.getAirflow(), secondaryChance, false,
+				input);
 	}
 
 	@Override

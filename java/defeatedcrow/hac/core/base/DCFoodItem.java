@@ -34,9 +34,9 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		int j = Math.min(stack.getItemDamage(), getMaxMeta());
-		return getNameSuffix() != null && j < getNameSuffix().length ? super.getUnlocalizedName() + "_" + getNameSuffix()[j] : super
-				.getUnlocalizedName();
+		int j = Math.min(stack.getMetadata(), getMaxMeta());
+		return getNameSuffix() != null && j < getNameSuffix().length ? super.getUnlocalizedName() + "_"
+				+ getNameSuffix()[j] : super.getUnlocalizedName();
 	}
 
 	public int getMaxMeta() {
@@ -55,14 +55,14 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase living) {
-		int meta = stack.getItemDamage();
+		int meta = stack.getMetadata();
 
 		if (living instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) living;
 			--stack.stackSize;
 			player.getFoodStats().addStats(getFoodAmo(meta), getSaturation(meta));
-			worldIn.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP,
-					SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+			worldIn.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ,
+					SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 			this.addEffects(stack, worldIn, living);
 		}
 
@@ -77,7 +77,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 
 	public void addEffects(ItemStack stack, World worldIn, EntityLivingBase living) {
 		if (!worldIn.isRemote && stack != null) {
-			int meta = stack.getItemDamage();
+			int meta = stack.getMetadata();
 			List<PotionEffect> effects = this.getPotionEffect(meta);
 			for (PotionEffect get : effects) {
 				if (get != null && get.getPotion() != null) {

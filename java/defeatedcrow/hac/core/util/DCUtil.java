@@ -2,8 +2,15 @@ package defeatedcrow.hac.core.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import defeatedcrow.hac.api.magic.CharmType;
+import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.DCLogger;
 
 // 色々不足しているもの
@@ -14,6 +21,29 @@ public class DCUtil {
 		double y = Math.abs(p1.getY() - p2.getY());
 		double z = Math.abs(p1.getZ() - p2.getZ());
 		return Math.sqrt(x * x + y * y + z * z);
+	}
+
+	// 防具の登録時の並び
+	public static final EntityEquipmentSlot[] SLOTS = new EntityEquipmentSlot[] {
+			EntityEquipmentSlot.HEAD,
+			EntityEquipmentSlot.CHEST,
+			EntityEquipmentSlot.LEGS,
+			EntityEquipmentSlot.FEET };
+
+	public static Map<Integer, ItemStack> getPlayerCharm(EntityPlayer player, CharmType type) {
+		Map<Integer, ItemStack> ret = new HashMap<Integer, ItemStack>();
+		if (player == null)
+			return ret;
+		for (int i = 9; i < 18; i++) {
+			ItemStack check = player.inventory.getStackInSlot(i);
+			if (check != null && check.getItem() != null && check.getItem() instanceof IJewelCharm) {
+				IJewelCharm charm = (IJewelCharm) check.getItem();
+				int m = check.getItemDamage();
+				if (charm.getType(m) == type)
+					ret.put(i, check);
+			}
+		}
+		return ret;
 	}
 
 	// デバッグモード

@@ -188,16 +188,16 @@ public class JsonRegisterHelper {
 				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
 				if (!tool) {
 					Textures textures = new Textures(tex.getTexPath(meta, false));
-					Disp display = new Disp();
-					jsonMap.put("parent", "builtin/generated");
+					// Disp display = new Disp();
+					jsonMap.put("parent", "item/generated");
 					jsonMap.put("textures", textures);
-					jsonMap.put("display", display);
+					// jsonMap.put("display", display);
 				} else {
 					Textures textures = new Textures(tex.getTexPath(meta, false));
-					Disp2 display = new Disp2();
-					jsonMap.put("parent", "builtin/generated");
+					// Disp2 display = new Disp2();
+					jsonMap.put("parent", "item/handheld");
 					jsonMap.put("textures", textures);
-					jsonMap.put("display", display);
+					// jsonMap.put("display", display);
 				}
 
 				Gson gson = new Gson();
@@ -250,9 +250,9 @@ public class JsonRegisterHelper {
 			try {
 				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
 				Map<String, Object> jsonMap = new HashMap<String, Object>();
-				Disp3 display = new Disp3();
+				// Disp3 display = new Disp3();
 				jsonMap.put("parent", domein + ":block/" + dir + "/" + name + meta);
-				jsonMap.put("display", display);
+				// jsonMap.put("display", display);
 
 				Gson gson = new Gson();
 				String output = gson.toJson(jsonMap);

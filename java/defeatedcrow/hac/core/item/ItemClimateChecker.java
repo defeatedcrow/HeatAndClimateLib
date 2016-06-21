@@ -33,43 +33,45 @@ public class ItemClimateChecker extends DCItem {
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote && !world.isAirBlock(pos)) {
-			IBlockState state = world.getBlockState(pos);
-			IClimate c = null;
-			IClimateSmelting recipe = null;
-			if (state.getBlock() instanceof IClimateObject) {
-				IClimateObject co = (IClimateObject) state.getBlock();
-				if (co.checkingRange() != null) {
-					c = ClimateAPI.calculator.getClimate(world, pos, co.checkingRange());
+		if (!world.isAirBlock(pos)) {
+			if (!world.isRemote) {
+				IBlockState state = world.getBlockState(pos);
+				IClimate c = null;
+				IClimateSmelting recipe = null;
+				if (state.getBlock() instanceof IClimateObject) {
+					IClimateObject co = (IClimateObject) state.getBlock();
+					if (co.checkingRange() != null) {
+						c = ClimateAPI.calculator.getClimate(world, pos, co.checkingRange());
+					}
 				}
-			}
 
-			if (c == null) {
-				// heatのみ2ブロック
-				c = ClimateAPI.calculator.getClimate(world, pos, null);
-			}
+				if (c == null) {
+					// heatのみ2ブロック
+					c = ClimateAPI.calculator.getClimate(world, pos, null);
+				}
 
-			if (c != null) {
-				player.addChatMessage(new TextComponentString("== Current Climate =="));
-				player.addChatMessage(new TextComponentString("Temperature: " + c.getHeat().name()));
-				player.addChatMessage(new TextComponentString("Humidity: " + c.getHumidity().name()));
-				player.addChatMessage(new TextComponentString("Airflow: " + c.getAirflow().name()));
-				if (ClimateCore.isDebug) {
-					// player.addChatMessage(new TextComponentString("Climate int: " +
-					// Integer.toBinaryString(c.getClimateInt())));
-				}
-				// recipe
-				Block block = state.getBlock();
-				int i = block.getMetaFromState(state);
-				String s = block.getRegistryName() + ":" + i;
-				recipe = RecipeAPI.registerSmelting.getRecipe(c, new ItemStack(block, 1, i));
-				if (recipe != null) {
-					player.addChatMessage(new TextComponentString(s + " ** Climate Smelting Confotable! **"));
-				} else {
-					player.addChatMessage(new TextComponentString(s));
+				if (c != null) {
+					player.addChatMessage(new TextComponentString("== Current Climate =="));
+					player.addChatMessage(new TextComponentString("Temperature: " + c.getHeat().name()));
+					player.addChatMessage(new TextComponentString("Humidity: " + c.getHumidity().name()));
+					player.addChatMessage(new TextComponentString("Airflow: " + c.getAirflow().name()));
+					if (ClimateCore.isDebug) {
+						player.addChatMessage(new TextComponentString("Climate int: "
+								+ Integer.toBinaryString(c.getClimateInt())));
+						// recipe
+						Block block = state.getBlock();
+						int i = block.getMetaFromState(state);
+						String s = block.getRegistryName() + ":" + i;
+						recipe = RecipeAPI.registerSmelting.getRecipe(c, new ItemStack(block, 1, i));
+						if (recipe != null) {
+							player.addChatMessage(new TextComponentString(s + " ** Climate Smelting Confotable! **"));
+						} else {
+							player.addChatMessage(new TextComponentString(s));
+						}
+					}
+					return EnumActionResult.SUCCESS;
 				}
 			}
-			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.PASS;
 	}
