@@ -3,11 +3,11 @@ package defeatedcrow.hac.core.client.base;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-public class DCModelBase extends ModelBase {
+public class DCTileModelBase extends ModelBase {
 	// fields
 	ModelRenderer base;
 
-	public DCModelBase() {
+	public DCTileModelBase() {
 		textureWidth = 128;
 		textureHeight = 64;
 

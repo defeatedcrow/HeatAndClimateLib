@@ -6,11 +6,15 @@ the Mod necessary for defeatedcrow's mod in 1.9.4
 
 ## 動作環境 Current operating environment:
 - Minecraft 1.9.4  
-- MinecraftForge 12.17.0.1954++  
+- MinecraftForge 12.17.0.1976+  
    
 ## ライセンス
 - Code：MMPL-1.0  (full text is included as License.txt)
-- Resource：CC-BY-NC  
+- Resource：CC-BY-NC
+- About the secondary users
+-- Paid use of these mods are prohibited.
+-- You can include these mods to your ModPack.
+-- You can distribute these mods for your server user.
 
 ## 注意事項
 1. Now this mod is still WIP. The correct operation cannot be expected. Please be careful! <br> 当modは開発途中です。正常に動作しない場合がありますので、ご了承の上でご利用下さい。<br>

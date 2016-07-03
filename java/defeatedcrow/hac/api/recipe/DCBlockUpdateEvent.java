@@ -27,5 +27,4 @@ public class DCBlockUpdateEvent extends Event {
 	public boolean post() {
 		return MinecraftForge.EVENT_BUS.post(this);
 	}
-
 }

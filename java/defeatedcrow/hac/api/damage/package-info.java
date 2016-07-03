@@ -6,12 +6,10 @@
  */
 
 /**
- * このAPIは、このmodで追加される要素にフックされたEventを扱います。<br>
+ * このAPIは、気候によるモブへのダメージを扱います。<br>
  */
-@API(
-		apiVersion = "0.1",
-		owner = "dcs_climate|lib",
-		provides = "DCsHaCAPI|event")
+@API(apiVersion = "0.7.0", owner = "dcs_climate|lib", provides = "DCsHaCAPI|damage")
 package defeatedcrow.hac.api.damage;
 
 import net.minecraftforge.fml.common.API;
+

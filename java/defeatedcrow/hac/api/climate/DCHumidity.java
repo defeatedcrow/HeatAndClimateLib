@@ -11,19 +11,28 @@ import net.minecraft.util.math.MathHelper;
  * UNDERWATER: 完全に水没しており空気ブロックが存在しない状態。水中でしか生育しない植物などに必要。
  */
 public enum DCHumidity {
-	DRY(0),
-	NORMAL(1),
-	WET(2),
-	UNDERWATER(3);
+	DRY(0, 0x700000), NORMAL(1, 0x00B020), WET(2, 0x00EFCC), UNDERWATER(3, 0x0060FF);
 
 	private final int id;
+	private final int color;
 
-	private DCHumidity(int i) {
+	private DCHumidity(int i, int c) {
 		id = i;
+		color = c;
 	}
 
 	public int getID() {
 		return id;
+	}
+
+	public int[] getColor() {
+		int r = (color >> 8) & 255;
+		int g = (color >> 4) & 255;
+		int b = color & 255;
+		return new int[] {
+				r,
+				g,
+				b };
 	}
 
 	public static DCHumidity getTypeByID(int i) {

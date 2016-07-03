@@ -1,7 +1,8 @@
 {
+    "parent": "block/block",
     "ambientocclusion": true,
     "textures": {
-        "particle": "dcs_climate:blocks/cont/woodbox_s",
+        "particle": "dcs_climate:blocks/clear",
         "down": "dcs_climate:blocks/cont/woodbox_b",
         "up": "dcs_climate:blocks/cont/woodbox_t",
         "side": "dcs_climate:blocks/cont/woodbox_s"

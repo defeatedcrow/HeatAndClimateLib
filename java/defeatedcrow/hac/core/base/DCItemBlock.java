@@ -20,7 +20,7 @@ public class DCItemBlock extends ItemBlock implements ITexturePath {
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		int j = Math.min(stack.getItemDamage(), 15);
+		int j = Math.min(stack.getMetadata(), 15);
 		return getNameSuffix() != null && j < getNameSuffix().length ? super.getUnlocalizedName() + "_"
 				+ getNameSuffix()[j] : super.getUnlocalizedName() + "_" + j;
 	}

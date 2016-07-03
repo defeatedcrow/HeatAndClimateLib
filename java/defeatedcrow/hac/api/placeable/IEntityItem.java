@@ -13,8 +13,8 @@ public interface IEntityItem {
 
 	boolean canSpawnHere(World world, BlockPos pos);
 
-	Entity getPlacementEntity(World world, EntityPlayer player, BlockPos pos, ItemStack item);
-
 	boolean spawnPlacementEntity(World world, Entity entity);
+
+	Entity getPlacementEntity(World world, EntityPlayer player, double x, double y, double z, ItemStack item);
 
 }

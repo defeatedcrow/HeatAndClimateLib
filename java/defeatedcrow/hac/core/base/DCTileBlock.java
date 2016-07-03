@@ -59,7 +59,8 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 		this.setUnlocalizedName(s);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.SOUTH).withProperty(TYPE, 0));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.SOUTH)
+				.withProperty(TYPE, 0));
 		this.maxMeta = max;
 		this.fullBlock = false;
 		this.lightOpacity = 0;
@@ -70,8 +71,8 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand,
-			@Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
@@ -93,8 +94,8 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 
 	// 設置・破壊処理
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta,
-			EntityLivingBase placer) {
+	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
+			int meta, EntityLivingBase placer) {
 		IBlockState state = super.onBlockPlaced(world, pos, facing, hitX, hitY, hitZ, meta, placer);
 		state = state.withProperty(FACING, placer.getHorizontalFacing());
 		return state;
@@ -208,7 +209,7 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 
 	@Override
 	public IClimate onUpdateClimate(World world, BlockPos pos, IBlockState state) {
-		DCHeatTier heat = ClimateAPI.calculator.getHeatTier(world, pos, checkingRange()[0], false);
+		DCHeatTier heat = ClimateAPI.calculator.getHeat(world, pos, checkingRange()[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, checkingRange()[1], false);
 		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, checkingRange()[2], false);
 		IClimate c = ClimateAPI.register.getClimateFromParam(heat, hum, air);
@@ -228,9 +229,9 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 				ItemStack output = recipe.getOutput();
 				if (output != null && output.getItem() instanceof ItemBlock) {
 					Block ret = ((ItemBlock) output.getItem()).block;
-					IBlockState retS = ret.getStateFromMeta(output.getItemDamage());
+					IBlockState retS = ret.getStateFromMeta(output.getMetadata());
 					if (world.setBlockState(pos, retS, 3)) {
-						world.markBlockRangeForRenderUpdate(pos, pos.down());
+						world.notifyBlockOfStateChange(pos, ret);
 
 						// 効果音
 						if (playSEOnChanging(meta)) {

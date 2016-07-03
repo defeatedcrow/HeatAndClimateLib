@@ -1,0 +1,19 @@
+
+## item
+item.dcs_checker_normal.name=Climate Checker
+item.dcs_repair_patty.name=Repair Patty
+
+## massage
+dcs.climate.tip.checker=Can check the climate in the right-click position (range 2)
+dcs_climate.tip.durability=Max Durability
+dcs_climate.tip.harvestlevel=Harvest Level
+dcs_climate.tip.resistance=Climate Resistance
+
+dcs.tip.shift=Lshift Key: expand tooltip
+
+dcs_climate.smelting=Climate Smelting
+dcs_climate.recipe=Climate Crafting
+dcs.gui.device.chamber=Combustion Chamber GUI
+
+death.attack.dcs_heat=%1$s was burnt browned.
+death.attack.dcs_cold=%1$s became a sherbet.

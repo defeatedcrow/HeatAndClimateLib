@@ -1,0 +1,15 @@
+
+## item
+item.dcs_checker_normal.name=気候チェッカー
+item.dcs_repair_patty.name=修繕ペースト
+
+## massage
+dcs.climate.tip.checker=右クリック:対象の座標のClimate値を調べます (range 2)
+dcs_climate.tip.durability=最大耐久値
+dcs_climate.tip.harvestlevel=採掘レベル
+dcs_climate.tip.resistance=気候耐性
+
+dcs.tip.shift=Lshiftキー: 詳細を表示
+
+death.attack.dcs_heat=%1$sはこんがり焼き上がった。
+death.attack.dcs_cold=%1$sはシャーベットになった。

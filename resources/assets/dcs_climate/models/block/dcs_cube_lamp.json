@@ -1,0 +1,31 @@
+{
+    "parent": "block/block",
+    "ambientocclusion": false,
+    "textures": {
+        "particle": "#glass"
+    },
+    "elements": [
+        {   "from": [ 3, 3, 3 ],
+            "to": [ 13, 13, 13 ],
+            "faces": {
+                "down":  { "uv": [ 1, 1, 15, 15 ], "texture": "#inner", "cullface": "down" },
+                "up":    { "uv": [ 1, 1, 15, 15 ], "texture": "#inner", "cullface": "up" },
+                "north": { "uv": [ 1, 1, 15, 15 ], "texture": "#inner", "cullface": "north" },
+                "south": { "uv": [ 1, 1, 15, 15 ], "texture": "#inner", "cullface": "south" },
+                "west":  { "uv": [ 1, 1, 15, 15 ], "texture": "#inner", "cullface": "west" },
+                "east":  { "uv": [ 1, 1, 15, 15 ], "texture": "#inner", "cullface": "east" }
+            }
+        },
+        {   "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#glass", "cullface": "down" },
+                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#glass", "cullface": "up" },
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#glass", "cullface": "north" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#glass", "cullface": "south" },
+                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#glass", "cullface": "west" },
+                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#glass", "cullface": "east" }
+            }
+        }
+    ]
+}

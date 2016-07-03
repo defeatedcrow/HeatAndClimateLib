@@ -18,20 +18,27 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 public class DCMethodTransformer implements IClassTransformer, Opcodes {
 
-	private static final String TARGET_PACKAGE = "net.minecraft.block.";
-	private static final String TARGET_IGNORE = "net.minecraft.block.Block";
+	private static final String TARGET_PACKAGE_1 = "net.minecraft.block.";
+	private static final String TARGET_PACKAGE_2 = "net.minecraft.world.World";
+	private static final String TARGET_IGNORE1 = "net.minecraft.block.Block";
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
 
-		if (!transformedName.contains(TARGET_PACKAGE)) {
-			// 処理対象外なので何もしない
+		if (transformedName.contains(TARGET_PACKAGE_1)) {
+			try {
+				return hookOnUpdateTick(name, basicClass);
+			} catch (Exception e) {
+				throw new RuntimeException("failed : DCMethodTransformer loading: Block#updateTick", e);
+			}
+		} else if (transformedName.contains(TARGET_PACKAGE_2)) {
+			try {
+				return hookOnBlockFreeze(name, basicClass);
+			} catch (Exception e) {
+				throw new RuntimeException("failed : DCMethodTransformer loading: World#canBlockFreezeBody", e);
+			}
+		} else {
 			return basicClass;
-		}
-		try {
-			return hookOnUpdateTick(name, basicClass);
-		} catch (Exception e) {
-			throw new RuntimeException("failed : DCMethodTransformer loading", e);
 		}
 	}
 
@@ -76,7 +83,13 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 			final LabelNode lavel = new LabelNode();
 			String newdesc = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
 
-			// メソッドコールを、バイトコードであらわした例です。
+			/*
+			 * eventをよぶ
+			 * if (DCBlockUpdateEvent.post(new DCBlockUpdateEvent(world, pos, state, rand))){
+			 * return;
+			 * }
+			 * postはキャンセルされた場合のみtrueを返す
+			 */
 			overrideList.add(new TypeInsnNode(NEW, "defeatedcrow/hac/api/recipe/DCBlockUpdateEvent"));
 			overrideList.add(new InsnNode(DUP));
 			overrideList.add(new VarInsnNode(ALOAD, 1));
@@ -91,18 +104,83 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 			overrideList.add(new InsnNode(RETURN));
 			overrideList.add(lavel);
 
-			// mnode.instructions.get(1)で、対象のメソッドの先頭を取得
-			// mnode.instructions.insertで、指定した位置にバイトコードを挿入します。
 			mnode.instructions.insert(overrideList);
 
-			// mnode.maxLocals = 4;
-
-			// 改変したクラスファイルをバイト列に書き出します
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 			cnode.accept(cw);
 			bytes = cw.toByteArray();
+		}
 
-			// System.out.println("bbbb");
+		return bytes;
+	}
+
+	private byte[] hookOnBlockFreeze(String className, byte[] bytes) {
+		// ASMで、bytesに格納されたクラスファイルを解析します。
+		ClassNode cnode = new ClassNode();
+		ClassReader reader = new ClassReader(bytes);
+		reader.accept(cnode, 0);
+
+		// 改変対象のメソッド名です
+		// canBlockFreezeBodyは難読化前後で名前が変わらない模様
+		String targetMethodName = "canBlockFreezeBody";
+		String targetMethodNameSRG = "canBlockFreezeBody";
+
+		// 改変対象メソッドの戻り値型および、引数型をあらわします　※１
+		String targetMethoddesc = "(Lnet/minecraft/util/math/BlockPos;Z)Z";
+		String targetMethoddescSRG = "(Lnet/minecraft/util/math/BlockPos;Z)Z";
+
+		// 対象のメソッドを検索取得します。
+		MethodNode mnode = null;
+		String mdesc = null;
+
+		for (MethodNode curMnode : cnode.methods) {
+
+			String mName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(className, curMnode.name, curMnode.desc);
+			String mdName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(curMnode.desc);
+			// System.out.println("[ " + mName + " : " + curMnode.name + " ]  [ " + mdName + " : " +
+			// curMnode.desc);
+			if ((targetMethodName.equals(curMnode.name) && targetMethoddesc.equals(curMnode.desc))
+					|| (targetMethodNameSRG.equals(mName) && targetMethoddescSRG.equals(mdName))) {
+				mnode = curMnode;
+				mdesc = curMnode.desc;
+				// System.out.println("target found: " + className);
+				break;
+			}
+		}
+
+		if (mnode != null) {
+
+			// System.out.println("try start!");
+			InsnList overrideList = new InsnList();
+			final LabelNode lavel = new LabelNode();
+			final LabelNode lavel2 = new LabelNode();
+
+			/*
+			 * eventをよぶ
+			 * if (new DCBlockFreezeEvent(this, pos).result()){
+			 * return true;
+			 * }
+			 * resultはResult == ARROW時のみtrueを返す。
+			 * 理想はResult == DENY時にreturn　falseを返す処理も入れたかったが断念。
+			 */
+			overrideList.add(new TypeInsnNode(NEW, "defeatedcrow/hac/api/recipe/DCBlockFreezeEvent"));
+			overrideList.add(new InsnNode(DUP));
+			overrideList.add(new VarInsnNode(ALOAD, 0));
+			overrideList.add(new VarInsnNode(ALOAD, 1));
+			overrideList.add(new MethodInsnNode(INVOKESPECIAL, "defeatedcrow/hac/api/recipe/DCBlockFreezeEvent",
+					"<init>", "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)V", false));
+			overrideList.add(new MethodInsnNode(INVOKEVIRTUAL, "defeatedcrow/hac/api/recipe/DCBlockFreezeEvent",
+					"result", "()Z", false));
+			overrideList.add(new JumpInsnNode(IFEQ, lavel));
+			overrideList.add(new InsnNode(ICONST_1));
+			overrideList.add(new InsnNode(IRETURN));
+			overrideList.add(lavel);
+
+			mnode.instructions.insert(overrideList);
+
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+			cnode.accept(cw);
+			bytes = cw.toByteArray();
 		}
 
 		return bytes;

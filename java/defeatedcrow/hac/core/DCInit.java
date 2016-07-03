@@ -7,5 +7,4 @@ public class DCInit {
 	}
 
 	public static Item climate_checker;
-
 }

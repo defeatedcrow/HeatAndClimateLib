@@ -60,15 +60,16 @@ public class ClimateRegister implements IBiomeClimateRegister {
 			DCAirflow a = getAirflow(biome);
 			clm = new DCClimate(t, h, a);
 		}
-		// DCLogger.debugLog("climate", "climate to byte: " + Integer.toBinaryString(clm.getClimateInt()));
+		// DCLogger.debugLog("climate", "climate to byte: " +
+		// Integer.toBinaryString(clm.getClimateInt()));
 		return clm;
 	}
 
 	@Override
 	public IClimate getClimateFromInt(int code) {
-		int t = code & 7;
-		int h = (code >> 3) & 3;
-		int a = (code >> 5) & 3;
+		int t = code & 15;
+		int h = (code >> 4) & 3;
+		int a = (code >> 6) & 3;
 		DCHeatTier temp = DCHeatTier.getTypeByID(t);
 		DCHumidity hum = DCHumidity.getTypeByID(h);
 		DCAirflow air = DCAirflow.getTypeByID(a);
@@ -83,7 +84,11 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	@Override
 	public DCHeatTier getHeatTier(World world, BlockPos pos) {
 		Biome biome = world.getBiomeGenForCoords(pos);
-		return getHeatTier(biome);
+		DCHeatTier tier = getHeatTier(biome);
+		if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.MOUNTAIN) && pos.getY() > 100) {
+			tier = tier.addTier(-1);
+		}
+		return tier;
 	}
 
 	@Override
@@ -147,17 +152,17 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		private final DCHeatTier temp;
 		private final DCHumidity hum;
 		private final DCAirflow flow;
-		private final int code; // 0bAABBCCC;
+		private final int code; // 0bAABBCCCC;
 
 		public DCClimate(DCHeatTier t, DCHumidity h, DCAirflow f) {
 			temp = t;
 			hum = h;
 			flow = f;
-			int i1 = t.getID(); // 0-6
+			int i1 = t.getID(); // 0-15
 			int i2 = h.getID(); // 0-2
 			int i3 = f.getID(); // 0-2
-			i2 = i2 << 3;
-			i3 = i3 << 5;
+			i2 = i2 << 4;
+			i3 = i3 << 6;
 			code = i1 + i2 + i3;
 		}
 

@@ -86,11 +86,11 @@ public class JsonBakery {
 	@SubscribeEvent
 	public void textureStitch(TextureStitchEvent.Pre event) {
 		TextureMap textureMap = event.getMap();
-		// TEX.addAll(MainInit.logCont.getTexList());
 		for (String s : TEX) {
 			ResourceLocation ret = new ResourceLocation(s);
 			textureMap.registerSprite(ret);
 		}
+		textureMap.registerSprite(new ResourceLocation("dcs_climate:blocks/destroy_effect"));
 	}
 
 	@SubscribeEvent
@@ -98,16 +98,12 @@ public class JsonBakery {
 		// 生
 		ResourceLocation rawSided = new ResourceLocation("dcs_climate:block/dcs_cube_sided");
 		// Item用Jsonを同じ要領で拾ってくる
-		ResourceLocation rawSidedItem = new ResourceLocation("dcs_climate:item/dcs_cube_sided");
 		try {
 			IModel modelS = ModelLoaderRegistry.getModel(rawSided);
-			IModel modelSI = ModelLoaderRegistry.getModel(rawSidedItem);
 			if (modelS instanceof IRetexturableModel) {
 				// パンを焼く
 				IBakedModel bakedSided = new BakedSidedBaguette((IRetexturableModel) modelS);
-				IBakedModel bakedSidedItem = new BakedSidedBaguette((IRetexturableModel) modelSI);
 				event.getModelRegistry().putObject(normalSided, bakedSided);
-				event.getModelRegistry().putObject(inventorySided, bakedSidedItem);
 			}
 		} catch (IOException e) {
 			/* モデル指定がミスるとここに飛ぶ */
@@ -115,15 +111,11 @@ public class JsonBakery {
 		}
 		/* TB */
 		ResourceLocation rawTB = new ResourceLocation("dcs_climate:block/dcs_cube_tb");
-		ResourceLocation rawTBItem = new ResourceLocation("dcs_climate:item/dcs_cube_tb");
 		try {
 			IModel modelT = ModelLoaderRegistry.getModel(rawTB);
-			IModel modelTI = ModelLoaderRegistry.getModel(rawTBItem);
 			if (modelT instanceof IRetexturableModel) {
 				IBakedModel bakedTB = new BakedTBBaguette((IRetexturableModel) modelT);
-				IBakedModel bakedTBItem = new BakedTBBaguette((IRetexturableModel) modelTI);
 				event.getModelRegistry().putObject(normalTB, bakedTB);
-				event.getModelRegistry().putObject(inventoryTB, bakedTBItem);
 			}
 		} catch (IOException e) {
 			/* モデル指定がミスるとここに飛ぶ */
@@ -135,6 +127,7 @@ public class JsonBakery {
 
 	private static class BakedSidedBaguette implements IBakedModel {
 		private final IRetexturableModel retexturableModel;
+
 		private Function<ResourceLocation, TextureAtlasSprite> textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
 			@Override
 			public TextureAtlasSprite apply(ResourceLocation location) {
@@ -160,15 +153,15 @@ public class JsonBakery {
 
 				if (face) {
 					ImmutableMap<String, String> textures = new ImmutableMap.Builder<String, String>()
-							.put("down1", clear).put("up1", clear).put("ns1", ns).put("we1", we).put("down2", down)
-							.put("up2", down).build();
+							.put("particle", top).put("down1", clear).put("up1", clear).put("ns1", ns).put("we1", we)
+							.put("down2", down).put("up2", down).build();
 					IBakedModel baked = retexturableModel.retexture(textures).bake(retexturableModel.getDefaultState(),
 							Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 					return baked.getQuads(state, side, rand);
 				} else {
 					ImmutableMap<String, String> textures = new ImmutableMap.Builder<String, String>()
-							.put("down1", down).put("up1", top).put("ns1", ns).put("we1", we).put("down2", clear)
-							.put("up2", clear).build();
+							.put("particle", top).put("down1", down).put("up1", top).put("ns1", ns).put("we1", we)
+							.put("down2", clear).put("up2", clear).build();
 					IBakedModel baked = retexturableModel.retexture(textures).bake(retexturableModel.getDefaultState(),
 							Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 					return baked.getQuads(state, side, rand);
@@ -183,7 +176,7 @@ public class JsonBakery {
 
 		@Override
 		public boolean isAmbientOcclusion() {
-			return false;
+			return true;
 		}
 
 		@Override
@@ -198,7 +191,7 @@ public class JsonBakery {
 
 		@Override
 		public TextureAtlasSprite getParticleTexture() {
-			return null;
+			return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("dcs_climate:blocks/destroy_effect");
 		}
 
 		@Override
@@ -234,8 +227,9 @@ public class JsonBakery {
 				String top = sided.getTexture(meta, 0, false);
 				String down = sided.getTexture(meta, 1, false);
 				String side = sided.getTexture(meta, 2, false);
-				IBakedModel baked = retexturableModel.retexture(ImmutableMap.of("down", down, "up", top, "side", side))
-						.bake(retexturableModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+				IBakedModel baked = retexturableModel.retexture(
+						ImmutableMap.of("particle", top, "down", down, "up", top, "side", side)).bake(
+						retexturableModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 				return baked.getQuads(state, face, rand);
 			}
 			IBakedModel defModel = retexturableModel.bake(retexturableModel.getDefaultState(),
@@ -262,7 +256,7 @@ public class JsonBakery {
 
 		@Override
 		public TextureAtlasSprite getParticleTexture() {
-			return null;
+			return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("dcs_climate:blocks/destroy_effect");
 		}
 
 		@Override

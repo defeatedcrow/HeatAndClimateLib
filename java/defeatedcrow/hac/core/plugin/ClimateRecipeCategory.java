@@ -60,7 +60,7 @@ public class ClimateRecipeCategory implements IRecipeCategory {
 			for (int j = 0; j < 3; j++) {
 				int l = i * 3 + j;
 				if (l < inputs.size()) {
-					recipeLayout.getItemStacks().init(l, true, 20 + j * 18, 12 + i * 18);
+					recipeLayout.getItemStacks().init(l, true, 10 + j * 18, 12 + i * 18);
 					if (inputs.get(l) instanceof ItemStack) {
 						recipeLayout.getItemStacks().set(l, (ItemStack) inputs.get(l));
 					} else if (inputs.get(l) instanceof Collection) {
@@ -70,10 +70,10 @@ public class ClimateRecipeCategory implements IRecipeCategory {
 			}
 		}
 
-		recipeLayout.getItemStacks().init(9, false, 106, 48);
+		recipeLayout.getItemStacks().init(9, false, 96, 48);
 		recipeLayout.getItemStacks().set(9, (ItemStack) outputs.get(0));
 		if (outputs.size() > 1) {
-			recipeLayout.getItemStacks().init(10, false, 127, 48);
+			recipeLayout.getItemStacks().init(10, false, 117, 48);
 			recipeLayout.getItemStacks().set(10, (ItemStack) outputs.get(1));
 		}
 	}

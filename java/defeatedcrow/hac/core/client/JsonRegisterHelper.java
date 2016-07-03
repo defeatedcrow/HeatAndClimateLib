@@ -22,8 +22,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.gson.Gson;
 
-import defeatedcrow.hac.core.ClimateCore;
-import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.base.DCFacelessTileBlock;
 import defeatedcrow.hac.core.base.DCTileBlock;
@@ -44,17 +42,13 @@ public class JsonRegisterHelper {
 	public static final JsonRegisterHelper INSTANCE = new JsonRegisterHelper(
 			"E:\\forge1.9.0\\HaC_Lib\\src\\main\\resources");
 
-	public void load() {
-		regSimpleItem(DCInit.climate_checker, ClimateCore.PACKAGE_ID, "checker", "tool", 0);
-	}
-
 	/**
 	 * 一枚絵アイコンItemのJson生成と登録をまとめて行うメソッド。
 	 */
 	public void regSimpleItem(Item item, String domein, String name, String dir, int max) {
 		int m = 0;
 		while (m < max + 1) {
-			INSTANCE.checkAndBuildJson(item, domein, name, dir, m);
+			this.checkAndBuildJson(item, domein, name, dir, m);
 			ModelLoader.setCustomModelResourceLocation(item, m, new ModelResourceLocation(domein + ":" + dir + "/"
 					+ name + m, "inventory"));
 			m++;
@@ -68,7 +62,7 @@ public class JsonRegisterHelper {
 	public void regBakedBlock(Block block, String domein, String name, String dir, int max) {
 		int m = 0;
 		while (m < max + 1) {
-			INSTANCE.checkAndBuildJson(block, domein, name, dir, m);
+			this.checkAndBuildJson(block, domein, name, dir, m);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), m, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name + m, "inventory"));
 			m++;
@@ -85,12 +79,12 @@ public class JsonRegisterHelper {
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":"
 				+ "basetile"));
 		if (maxMeta == 0) {
-			INSTANCE.checkAndBuildJson(block, domein, name, dir, 0);
+			this.checkAndBuildJson(block, domein, name, dir, 0);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
-				INSTANCE.checkAndBuildJson(block, domein, name, dir, i);
+				this.checkAndBuildJson(block, domein, name, dir, i);
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
 						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
@@ -107,12 +101,12 @@ public class JsonRegisterHelper {
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":"
 				+ "basetile"));
 		if (maxMeta == 0) {
-			INSTANCE.checkAndBuildJson(block, domein, name, dir, 0);
+			this.checkAndBuildJson(block, domein, name, dir, 0);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
-				INSTANCE.checkAndBuildJson(block, domein, name, dir, i);
+				this.checkAndBuildJson(block, domein, name, dir, i);
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
 						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
@@ -127,7 +121,7 @@ public class JsonRegisterHelper {
 		if (maxMeta == 0) {
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":" + dir
 					+ "/" + name, "type"));
-			INSTANCE.checkAndBuildJsonItemBlock(domein, name, dir, 0);
+			this.checkAndBuildJsonItemBlock(domein, name, dir, 0);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
@@ -137,7 +131,7 @@ public class JsonRegisterHelper {
 			}
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), models);
 			for (int i = 0; i < maxMeta + 1; i++) {
-				INSTANCE.checkAndBuildJsonItemBlock(domein, name, dir, i);
+				this.checkAndBuildJsonItemBlock(domein, name, dir, i);
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
 						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
@@ -188,16 +182,16 @@ public class JsonRegisterHelper {
 				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
 				if (!tool) {
 					Textures textures = new Textures(tex.getTexPath(meta, false));
-					Disp display = new Disp();
-					jsonMap.put("parent", "builtin/generated");
+					// Disp display = new Disp();
+					jsonMap.put("parent", "item/generated");
 					jsonMap.put("textures", textures);
-					jsonMap.put("display", display);
+					// jsonMap.put("display", display);
 				} else {
 					Textures textures = new Textures(tex.getTexPath(meta, false));
-					Disp2 display = new Disp2();
-					jsonMap.put("parent", "builtin/generated");
+					// Disp2 display = new Disp2();
+					jsonMap.put("parent", "item/handheld");
 					jsonMap.put("textures", textures);
-					jsonMap.put("display", display);
+					// jsonMap.put("display", display);
 				}
 
 				Gson gson = new Gson();
@@ -250,9 +244,9 @@ public class JsonRegisterHelper {
 			try {
 				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
 				Map<String, Object> jsonMap = new HashMap<String, Object>();
-				Disp3 display = new Disp3();
+				// Disp3 display = new Disp3();
 				jsonMap.put("parent", domein + ":block/" + dir + "/" + name + meta);
-				jsonMap.put("display", display);
+				// jsonMap.put("display", display);
 
 				Gson gson = new Gson();
 				String output = gson.toJson(jsonMap);

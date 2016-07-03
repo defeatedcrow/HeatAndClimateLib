@@ -27,32 +27,42 @@ public class ClimateCalculator implements IClimateCalculator {
 					2,
 					1,
 					1 };
-		DCHeatTier temp = ClimateAPI.calculator.getTemp(world, pos, r[0], false);
+		DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos, r[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, r[1], false);
 		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, r[2], false);
 
-		int code = (air.getID() << 5) + (hum.getID() << 3) + temp.getID();
+		int code = (air.getID() << 6) + (hum.getID() << 4) + temp.getID();
 		IClimate clm = ClimateAPI.register.getClimateFromInt(code);
 		return clm;
 	}
 
 	@Override
-	public DCHeatTier getTemp(World world, BlockPos pos, int r, boolean h) {
+	public DCHeatTier getAverageTemp(World world, BlockPos pos, int r, boolean h) {
 		if (r < 0 || r > 15)
 			r = 1;
-		DCHeatTier temp = ClimateAPI.calculator.getHeatTier(world, pos, r, false);
-		DCHeatTier cold = ClimateAPI.calculator.getColdTier(world, pos, r, false);
+		DCHeatTier temp = ClimateAPI.calculator.getHeat(world, pos, r, h);
+		DCHeatTier cold = ClimateAPI.calculator.getCold(world, pos, r, h);
+		// DCLogger.debugLog("Heat: " + temp.getTier() + " , Cold: " + cold.getTier());
 
 		if (temp.getTier() > cold.getTier() && cold.getTier() < 0) {
-			temp = temp.addTier(cold.getTier());
+			if (temp.getTier() < 0) {
+				temp = cold;
+			} else {
+				temp = temp.addTier(cold.getTier());
+			}
 		}
 		return temp;
 	}
 
 	@Override
-	public DCHeatTier getHeatTier(World world, BlockPos pos, int r, boolean h) {
+	public DCHeatTier getHeat(World world, BlockPos pos, int r, boolean h) {
 		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
-		// biomeの気温 -> 日陰の場合Tierが下がる
+		/*
+		 * biomeの気温
+		 * 屋根あり: Tierが1段階Normalに近づく
+		 * 屋根無し: Biome気温そのまま
+		 * MOUNTAINで標高100以上: Tireが1段階下がる
+		 */
 		DCHeatTier hot = temp;
 		if (hasRoof(world, pos)) {
 			if (temp.getTier() < 0) {
@@ -101,29 +111,46 @@ public class ClimateCalculator implements IClimateCalculator {
 	}
 
 	@Override
-	public DCHeatTier getColdTier(World world, BlockPos pos, int r, boolean h) {
+	public DCHeatTier getCold(World world, BlockPos pos, int r, boolean h) {
 		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
-		// biomeの気温 -> 日陰の場合Tierが下がる
-		DCHeatTier hot = temp;
+		/*
+		 * biomeの気温
+		 * 屋根あり: Tierが1段階Normalに近づく
+		 * 屋根無し: 天候によって変化
+		 * 晴れ: Biome気温のまま
+		 * 夜雨 or 雷雨: Tierが1段階低い物になる
+		 */
+		DCHeatTier cold = temp;
 		if (hasRoof(world, pos)) {
 			if (temp.getTier() < 0) {
-				hot = temp.addTier(1);
+				cold = cold.addTier(1);
 			} else if (temp.getTier() > 0) {
-				hot = temp.addTier(-1);
+				cold = cold.addTier(-1);
+			}
+		} else {
+			if (world.isThundering()) {
+				cold = cold.addTier(-1);
+			} else if (world.isRaining() && !world.isDaytime()) {
+				cold = cold.addTier(-1);
+			}
+			if (cold.getTier() < -2) {
+				// ABSOLUTEは自然発生しない
+				cold = DCHeatTier.FROSTBITE;
 			}
 		}
+
 		if (r < 0) {
 			Block block = world.getBlockState(pos).getBlock();
 			int m = block.getMetaFromState(world.getBlockState(pos));
 			if (block instanceof IHeatTile) {
 				DCHeatTier current = ((IHeatTile) block).getHeatTier(world, pos);
-				if (current.getTier() < hot.getTier()) {
-					hot = current;
+				if (current.getTier() < cold.getTier()) {
+					cold = current;
 				}
 			} else if (ClimateAPI.registerBlock.isRegisteredHeat(block, m)) {
 				DCHeatTier cur = ClimateAPI.registerBlock.getHeatTier(block, m);
-				if (cur.getTier() < hot.getTier()) {
-					hot = cur;
+				if (cur.getTier() < cold.getTier()) {
+					cold = cur;
 				}
 			}
 		} else {
@@ -136,18 +163,18 @@ public class ClimateCalculator implements IClimateCalculator {
 				int m = block.getMetaFromState(world.getBlockState(p2));
 				if (block instanceof IHeatTile) {
 					DCHeatTier current = ((IHeatTile) block).getHeatTier(world, p2);
-					if (current.getTier() < hot.getTier()) {
-						hot = current;
+					if (current.getTier() < cold.getTier()) {
+						cold = current;
 					}
 				} else if (ClimateAPI.registerBlock.isRegisteredHeat(block, m)) {
 					DCHeatTier cur = ClimateAPI.registerBlock.getHeatTier(block, m);
-					if (cur.getTier() < hot.getTier()) {
-						hot = cur;
+					if (cur.getTier() < cold.getTier()) {
+						cold = cur;
 					}
 				}
 			}
 		}
-		return hot;
+		return cold;
 	}
 
 	// 合計値で考える
@@ -162,8 +189,8 @@ public class ClimateCalculator implements IClimateCalculator {
 		boolean hasAir = false;
 		// さきに水没判定をやる
 		for (EnumFacing face : EnumFacing.VALUES) {
-			BlockPos p1 = new BlockPos(pos.getX() + face.getFrontOffsetX(), pos.getY() + face.getFrontOffsetY(), pos.getZ()
-					+ face.getFrontOffsetZ());
+			BlockPos p1 = new BlockPos(pos.getX() + face.getFrontOffsetX(), pos.getY() + face.getFrontOffsetY(),
+					pos.getZ() + face.getFrontOffsetZ());
 			Block block = world.getBlockState(p1).getBlock();
 			int m = block.getMetaFromState(world.getBlockState(p1));
 			if (block instanceof IHumidityTile) {
@@ -320,13 +347,13 @@ public class ClimateCalculator implements IClimateCalculator {
 		}
 	}
 
-	static boolean hasRoof(World world, BlockPos pos) {
+	boolean hasRoof(World world, BlockPos pos) {
 		BlockPos pos2 = pos.up();
 		int lim = pos.getY() + 16;
 		while (pos2.getY() < lim && pos2.getY() < world.getActualHeight()) {
 			IBlockState state = world.getBlockState(pos2);
 			Block block = world.getBlockState(pos2).getBlock();
-			if (state.getLightOpacity(world, pos2) > 0) {
+			if (!world.isAirBlock(pos2)) {
 				return true;
 			}
 			pos2 = pos2.up();

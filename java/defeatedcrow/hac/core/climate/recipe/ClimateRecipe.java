@@ -33,7 +33,8 @@ public class ClimateRecipe implements IClimateRecipe {
 	private List<DCHumidity> hum = new ArrayList<DCHumidity>();
 	private List<DCAirflow> air = new ArrayList<DCAirflow>();
 
-	public ClimateRecipe(ItemStack o, ItemStack s, DCHeatTier t, DCHumidity h, DCAirflow a, float c, boolean cooling, Object... inputs) {
+	public ClimateRecipe(ItemStack o, ItemStack s, DCHeatTier t, DCHumidity h, DCAirflow a, float c, boolean cooling,
+			Object... inputs) {
 		input = inputs;
 		output = o;
 		secondary = s;
@@ -41,8 +42,16 @@ public class ClimateRecipe implements IClimateRecipe {
 		needCooling = cooling;
 		if (t != null) {
 			heat.add(t);
-			if (t.getID() < 7) {
-				heat.add(t.addTier(1));
+			heat.add(t);
+			if (t.getID() < 9) {
+				if (t.getID() == 3) {
+					heat.add(t.addTier(1));
+					heat.add(t.addTier(-1));
+				} else if (t.getID() == 1 || t.getID() == 2) {
+					heat.add(t.addTier(-1));
+				} else if (t.getID() > 0) {
+					heat.add(t.addTier(1));
+				}
 			}
 		}
 		if (h != null)
@@ -178,7 +187,7 @@ public class ClimateRecipe implements IClimateRecipe {
 	@Override
 	public boolean additionalRequire(World world, BlockPos pos) {
 		if (isNeedCooling()) {
-			return ClimateAPI.calculator.getColdTier(world, pos, 1, false).getID() <= 0;
+			return ClimateAPI.calculator.getCold(world, pos, 1, false).getID() <= 0;
 		}
 		return true;
 	}

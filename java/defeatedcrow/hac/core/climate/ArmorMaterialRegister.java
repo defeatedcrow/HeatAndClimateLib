@@ -31,7 +31,7 @@ public class ArmorMaterialRegister implements IArmorMaterialRegister {
 			float ret = map.get(material);
 			return ret;
 		}
-		return 0.5F;
+		return 0.25F;
 	}
 
 }
