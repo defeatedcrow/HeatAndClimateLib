@@ -6,9 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.DCLogger;
@@ -30,6 +35,7 @@ public class DCUtil {
 			EntityEquipmentSlot.LEGS,
 			EntityEquipmentSlot.FEET };
 
+	// チャームを保持しているかのチェック
 	public static Map<Integer, ItemStack> getPlayerCharm(EntityPlayer player, CharmType type) {
 		Map<Integer, ItemStack> ret = new HashMap<Integer, ItemStack>();
 		if (player == null)
@@ -44,6 +50,49 @@ public class DCUtil {
 			}
 		}
 		return ret;
+	}
+
+	// Itemクラスのやつがpretectedだった
+	public static RayTraceResult getRayTrace(World world, EntityPlayer player) {
+		float f = player.rotationPitch;
+		float f1 = player.rotationYaw;
+		double d0 = player.posX;
+		double d1 = player.posY + player.getEyeHeight();
+		double d2 = player.posZ;
+		Vec3d vec3d = new Vec3d(d0, d1, d2);
+		float f2 = MathHelper.cos(-f1 * 0.017453292F - (float) Math.PI);
+		float f3 = MathHelper.sin(-f1 * 0.017453292F - (float) Math.PI);
+		float f4 = -MathHelper.cos(-f * 0.017453292F);
+		float f5 = MathHelper.sin(-f * 0.017453292F);
+		float f6 = f3 * f4;
+		float f7 = f2 * f4;
+		double d3 = 5.0D;
+		if (player instanceof EntityPlayerMP) {
+			d3 = ((EntityPlayerMP) player).interactionManager.getBlockReachDistance();
+		}
+		Vec3d vec3d1 = vec3d.addVector(f6 * d3, f5 * d3, f7 * d3);
+		return world.rayTraceBlocks(vec3d, vec3d1, false, true, false);
+	}
+
+	public static BlockPos getRayTracePos(World world, EntityPlayer player) {
+		float f = player.rotationPitch;
+		float f1 = player.rotationYaw;
+		double d0 = player.posX;
+		double d1 = player.posY + player.getEyeHeight();
+		double d2 = player.posZ;
+		Vec3d vec3d = new Vec3d(d0, d1, d2);
+		float f2 = MathHelper.cos(-f1 * 0.017453292F - (float) Math.PI);
+		float f3 = MathHelper.sin(-f1 * 0.017453292F - (float) Math.PI);
+		float f4 = -MathHelper.cos(-f * 0.017453292F);
+		float f5 = MathHelper.sin(-f * 0.017453292F);
+		float f6 = f3 * f4;
+		float f7 = f2 * f4;
+		double d3 = 5.0D;
+		if (player instanceof EntityPlayerMP) {
+			d3 = ((EntityPlayerMP) player).interactionManager.getBlockReachDistance();
+		}
+		Vec3d vec3d1 = vec3d.addVector(f6 * d3, f5 * d3, f7 * d3);
+		return new BlockPos(vec3d1);
 	}
 
 	// デバッグモード

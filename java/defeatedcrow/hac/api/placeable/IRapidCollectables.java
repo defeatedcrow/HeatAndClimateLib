@@ -9,8 +9,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * 指定したツールをで右クリックすると3x3x3の範囲採掘できるBlockのインターフェイス。<br>
- * 主にコンテナブロックなど、
+ * 指定したツールで右クリックすると3x3x3の範囲採掘できるオブジェクトに実装するインターフェイス。<br>
+ * 主にコンテナブロックなど、回収に時間を掛ける必要がない装飾系ブロックに実装する。<br>
+ * また、右クリック収穫作物やEntityなどにも流用可能。
  */
 public interface IRapidCollectables {
 
@@ -18,6 +19,6 @@ public interface IRapidCollectables {
 
 	int getCollectArea(@Nullable ItemStack item);
 
-	boolean doMining(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack tool);
+	boolean doCollect(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack tool);
 
 }

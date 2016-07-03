@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -18,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/* 設置できない食べ物 */
 public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 
 	public DCFoodItem(boolean isWolfFood) {
@@ -59,11 +61,12 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 
 		if (living instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) living;
-			--stack.stackSize;
 			player.getFoodStats().addStats(getFoodAmo(meta), getSaturation(meta));
 			worldIn.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ,
 					SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 			this.addEffects(stack, worldIn, living);
+			this.dropContainerItem(worldIn, stack, living);
+			--stack.stackSize;
 		}
 
 		return stack;
@@ -71,14 +74,20 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
-		this.addEffects(stack, player.worldObj, target);
+		if (this.addEffects(stack, player.worldObj, target)) {
+			this.dropContainerItem(player.worldObj, stack, player);
+			--stack.stackSize;
+			return true;
+		}
 		return super.itemInteractionForEntity(stack, player, target, hand);
 	}
 
-	public void addEffects(ItemStack stack, World worldIn, EntityLivingBase living) {
+	public boolean addEffects(ItemStack stack, World worldIn, EntityLivingBase living) {
 		if (!worldIn.isRemote && stack != null) {
 			int meta = stack.getMetadata();
 			List<PotionEffect> effects = this.getPotionEffect(meta);
+			if (effects.isEmpty())
+				return false;
 			for (PotionEffect get : effects) {
 				if (get != null && get.getPotion() != null) {
 					Potion por = get.getPotion();
@@ -93,6 +102,18 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 					living.addPotionEffect(new PotionEffect(get.getPotion(), dur, amp));
 				}
 			}
+			return true;
+		}
+		return false;
+	}
+
+	public void dropContainerItem(World world, ItemStack food, EntityLivingBase living) {
+		if (!world.isRemote && living != null) {
+			ItemStack stack = this.getFoodContainerItem(food);
+			if (stack != null) {
+				EntityItem drop = new EntityItem(world, living.posX, living.posY + 0.25D, living.posZ, stack);
+				world.spawnEntityInWorld(drop);
+			}
 		}
 	}
 
@@ -102,6 +123,14 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 
 	public List<PotionEffect> getPotionEffect(int meta) {
 		List<PotionEffect> ret = new ArrayList<PotionEffect>();
+		return ret;
+	}
+
+	/*
+	 * コンテナアイテム。
+	 */
+	public ItemStack getFoodContainerItem(ItemStack item) {
+		ItemStack ret = this.getContainerItem(item);
 		return ret;
 	}
 }

@@ -23,34 +23,36 @@ import net.minecraft.util.math.MathHelper;
  */
 public enum DCHeatTier {
 	// absolute
-	ABSOLUTE(-273, -3, 0),
+	ABSOLUTE(-273, -3, 0, 0x0000FF),
 	// icecream making and cooling
-	FROSTBITE(-70, -2, 1),
+	FROSTBITE(-70, -2, 1, 0x0070FF),
 	// cold climate biome
-	COLD(-10, -1, 2),
+	COLD(-10, -1, 2, 0x00FFFF),
 	// electric or mechanical energy require
-	NORMAL(20, 0, 3),
+	NORMAL(20, 0, 3, 0x00FF30),
 	// drying or brewing
-	HOT(50, 1, 4),
+	HOT(50, 1, 4, 0xFFE000),
 	// cooking
-	OVEN(220, 2, 5),
+	OVEN(220, 2, 5, 0xFFA000),
 	// making charcoal, bronze, burn dust
-	KILN(800, 3, 6),
+	KILN(800, 3, 6, 0xFF5000),
 	// making iron or another metal
-	SMELTING(1500, 4, 7),
+	SMELTING(1500, 4, 7, 0xFF0000),
 	// special alloy
-	UHT(3000, 5, 8),
+	UHT(3000, 5, 8, 0xFF00FF),
 	// only on data
-	INFERNO(8000, 6, 9);
+	INFERNO(8000, 6, 9, 0x600020);
 
 	private final int temp;
 	private final int tier;
 	private final int id;
+	private final int color;
 
-	private DCHeatTier(int t, int i, int n) {
+	private DCHeatTier(int t, int i, int n, int c) {
 		temp = t;
 		tier = i;
 		id = n;
+		color = c;
 	}
 
 	public static DCHeatTier getHeatEnum(int tier) {
@@ -108,4 +110,13 @@ public enum DCHeatTier {
 		return NORMAL;
 	}
 
+	public int[] getColor() {
+		int r = (color >> 16) & 255;
+		int g = (color >> 8) & 255;
+		int b = color & 255;
+		return new int[] {
+				r,
+				g,
+				b };
+	}
 }

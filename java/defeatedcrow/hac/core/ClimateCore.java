@@ -22,9 +22,9 @@ public class ClimateCore {
 	public static final String MOD_ID = "dcs_climate|lib";
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 0;
-	public static final int MOD_MINOR = 6;
-	public static final int MOD_BUILD = 1;
-	public static final String MOD_DEPENDENCIES = "required-after:Forge@[12.17.0.1954,)";
+	public static final int MOD_MINOR = 7;
+	public static final int MOD_BUILD = 2;
+	public static final String MOD_DEPENDENCIES = "required-after:Forge@[12.17.0.1976,)";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.9.4]";
 
 	@SidedProxy(
@@ -47,6 +47,7 @@ public class ClimateCore {
 		isDebug = DCUtil.checkDebugModePass(CoreConfigDC.debugPass);
 		APILoader.loadAPI();
 		proxy.loadMaterial();
+		proxy.loadEntity();
 	}
 
 	@EventHandler

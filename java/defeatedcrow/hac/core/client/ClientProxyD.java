@@ -1,13 +1,23 @@
 package defeatedcrow.hac.core.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 import org.lwjgl.input.Keyboard;
 
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.CommonProxyD;
+import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
+import defeatedcrow.hac.core.client.event.RenderTempHUDEvent;
 
 public class ClientProxyD extends CommonProxyD {
 
@@ -19,12 +29,17 @@ public class ClientProxyD extends CommonProxyD {
 	@Override
 	public void loadMaterial() {
 		super.loadMaterial();
-		JsonRegisterHelper.INSTANCE.load();
+		JsonRegisterHelper.INSTANCE.regSimpleItem(DCInit.climate_checker, ClimateCore.PACKAGE_ID, "checker", "tool", 0);
 	}
 
 	@Override
 	public void loadTE() {
 		super.loadTE();
+	}
+
+	@Override
+	public void loadEntity() {
+		super.loadEntity();
 	}
 
 	@Override
@@ -47,6 +62,7 @@ public class ClientProxyD extends CommonProxyD {
 	public void loadInit() {
 		super.loadInit();
 		MinecraftForge.EVENT_BUS.register(JsonBakery.instance);
+		MinecraftForge.EVENT_BUS.register(RenderTempHUDEvent.INSTANCE);
 	}
 
 	@Override
@@ -71,6 +87,37 @@ public class ClientProxyD extends CommonProxyD {
 
 	private int getSneakKey() {
 		return Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode();
+	}
+
+	@Override
+	public EntityPlayer getPlayer() {
+		return Minecraft.getMinecraft().thePlayer;
+	}
+
+	@Override
+	public World getClientWorld() {
+		return Minecraft.getMinecraft().theWorld;
+	}
+
+	// ruby氏に無限に感謝
+	/**
+	 * @param cls
+	 *            えんちちーのくらす
+	 * @param render
+	 *            Renderの継承クラス
+	 */
+	private void registRender(Class<? extends Entity> cls, final Class<? extends Render> render) {
+		RenderingRegistry.registerEntityRenderingHandler(cls, new IRenderFactory() {
+			@Override
+			public Render createRenderFor(RenderManager manager) {
+				try {
+					return render.getConstructor(manager.getClass()).newInstance(manager);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+		});
 	}
 
 }

@@ -122,7 +122,7 @@ public class LivingEventDC {
 							2, false);
 
 					float prev = 1.0F * (2 - CoreConfigDC.damageDifficulty); // 0F ~ 2.0F
-					float dam = heat.getTier() * 1.0F; // hot 0F ~ 3.0F / cold 0F ~ 3.0F
+					float dam = heat.getTier() * 1.0F; // hot 0F ~ 6.0F / cold 0F ~ 6.0F
 					boolean isCold = heat.getTier() < 0;
 
 					if (isCold) {

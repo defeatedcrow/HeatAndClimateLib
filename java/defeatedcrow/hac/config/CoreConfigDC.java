@@ -18,11 +18,15 @@ public class CoreConfigDC {
 
 	// render
 	public static boolean showAltTips = true;
+	public static boolean showDamageIcon = true;
+	public static int iconX = 0;
+	public static int iconY = 0;
 
 	// difficulty
 	public static boolean climateDam = true;
 	public static boolean peacefulDam = false;
 	public static int damageDifficulty = 1; // 0-2
+	public static boolean burntFood = false;
 
 	// ore
 	public static int[] depositGen = new int[] {
@@ -63,6 +67,9 @@ public class CoreConfigDC {
 			Property diff_dam = cfg.get("difficulty setting", "Difficulty of Climate Damage", damageDifficulty,
 					"Set difficulty of climate damage. 0:sweet 1:normal 2:bitter");
 
+			Property burnt_food = cfg.get("difficulty setting", "Enable Burnt Food", burntFood,
+					"Enable burnt food by high tier heat.");
+
 			Property vanilla_block = cfg.get("world setting", "Enable Vanilla Block Recipe", enableVanilla,
 					"Enable climate change of vanilla blocks.");
 
@@ -71,6 +78,15 @@ public class CoreConfigDC {
 
 			Property alt_tips = cfg.get("render setting", "Enable Alt Tooltip", showAltTips,
 					"Enable additional tooltips for harvest level, and climate registance of items with F3+H.");
+
+			Property hud_icon = cfg.get("render setting", "Enable Thermal Damage Icon on HUD", showDamageIcon,
+					"Enable the heart-shaped icon on HUD for display of thermal damage.");
+
+			Property hud_x = cfg.get("render setting", "Thermal Damage Icon Offset X", iconX,
+					"Set the amount of Xoffset of the thermal damage icon.");
+
+			Property hud_y = cfg.get("render setting", "Thermal Damage Icon Offset Y", iconY,
+					"Set the amount of Yoffset of the thermal damage icon.");
 
 			Property warp_key = cfg.get("key setting", "Charm Use Key", charmWarpKey,
 					"Set key number for using jewel charm effects. Default key is X(45)." + BR
@@ -97,6 +113,8 @@ public class CoreConfigDC {
 			showAltTips = alt_tips.getBoolean();
 			charmWarpKey = warp_key.getInt();
 			enableVanilla = vanilla_block.getBoolean();
+			burntFood = burnt_food.getBoolean();
+			showDamageIcon = hud_icon.getBoolean();
 
 			int s = sed_ore.getInt();
 			if (s < 0 || s > 100)
@@ -129,6 +147,9 @@ public class CoreConfigDC {
 			if (h < 0 || h > 20)
 				h = 0;
 			updateFrequency = h;
+
+			iconX = hud_x.getInt();
+			iconY = hud_y.getInt();
 
 		} catch (Exception e) {
 			e.printStackTrace();

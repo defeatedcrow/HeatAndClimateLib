@@ -28,7 +28,7 @@ public class DCTileEntity extends TileEntity implements ITickable {
 	}
 
 	// update
-	public int coolTime = 0;
+	public int coolTime = 20;
 
 	// 更新間隔
 	protected int getMaxCool() {
@@ -37,7 +37,7 @@ public class DCTileEntity extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (coolTime < 0) {
+		if (coolTime > 0) {
 			coolTime--;
 		} else {
 			updateTile();

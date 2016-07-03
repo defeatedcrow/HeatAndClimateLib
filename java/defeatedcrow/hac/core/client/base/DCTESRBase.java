@@ -35,7 +35,7 @@ public abstract class DCTESRBase extends TileEntitySpecialRenderer<DCTileEntity>
 			}
 		}
 
-		DCModelBase model = this.getModel(type);
+		DCTileModelBase model = this.getModel(type);
 
 		this.bindTexture(new ResourceLocation(getTexPass(type)));
 
@@ -55,9 +55,9 @@ public abstract class DCTESRBase extends TileEntitySpecialRenderer<DCTileEntity>
 		return "dcs_climate:textures/tiles/stove_fuel.png";
 	}
 
-	protected abstract DCModelBase getModel(int i);
+	protected abstract DCTileModelBase getModel(int i);
 
-	protected void render(DCModelBase model, float f) {
+	protected void render(DCTileModelBase model, float f) {
 		model.render(f);
 	}
 }
