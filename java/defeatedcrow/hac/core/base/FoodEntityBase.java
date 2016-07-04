@@ -133,7 +133,8 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 		}
 
-		if (this.getRaw() && this.getAge() > 0 && this.rand.nextInt(4) == 0) {
+		if ((this.getRaw() || CoreConfigDC.burntFood) && !this.getBURNT() && this.getAge() > 0
+				&& this.rand.nextInt(4) == 0) {
 			this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY + 0.5D, this.posZ, 0.0D,
 					0.0D, 0.0D, new int[0]);
 		}
@@ -234,7 +235,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			case 2:
 				return 2;
 			case 3:
-				return 4;
+				return 8;
 			case 4:
 				return 16;
 			}
@@ -256,8 +257,9 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 	protected void dropAndDeath(@Nullable BlockPos pos) {
 		// 焦げているとなにも得られない
-		if (getBURNT())
+		if (!getBURNT()) {
 			dropFoods(pos);
+		}
 		this.setDead();
 	}
 
