@@ -36,17 +36,17 @@ public class RenderTempHUDEvent {
 	public static final RenderTempHUDEvent INSTANCE = new RenderTempHUDEvent();
 
 	private int tier = 0;
-	private int count = 10;
+	private int count = 20;
 
 	public static boolean enable = CoreConfigDC.showDamageIcon;
 
 	@SubscribeEvent
 	public void doRender(RenderGameOverlayEvent.Post event) {
-		if (event.getType() != null && event.getType() == ElementType.HEALTH) {
+		if (event.getType() != null && event.getType() == ElementType.ALL) {
 			EntityPlayer player = ClimateCore.proxy.getPlayer();
 			World world = ClimateCore.proxy.getClientWorld();
 			GuiScreen gui = Minecraft.getMinecraft().currentScreen;
-			if (player != null && world != null && gui == null) {
+			if (player != null && world != null && gui == null && !player.capabilities.isCreativeMode) {
 				if (count == 0) {
 					count = 10;
 

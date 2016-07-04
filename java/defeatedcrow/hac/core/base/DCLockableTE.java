@@ -17,7 +17,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public abstract class DCLockableTE extends TileEntity implements IInteractionObject, ILockableContainer, ITagGetter, ITickable {
+public abstract class DCLockableTE extends TileEntity implements IInteractionObject, ILockableContainer, ITagGetter,
+		ITickable {
 
 	private LockCode code = LockCode.EMPTY_CODE;
 
@@ -96,7 +97,7 @@ public abstract class DCLockableTE extends TileEntity implements IInteractionObj
 
 	@Override
 	public void update() {
-		if (coolTime < 0) {
+		if (coolTime > 0) {
 			coolTime--;
 		} else {
 			updateTile();

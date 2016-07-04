@@ -16,7 +16,7 @@ public class OreRegister {
 		OreDictionary.registerOre("stickWood", new ItemStack(Items.STICK));
 		OreDictionary.registerOre("stickBlaze", new ItemStack(Items.BLAZE_ROD));
 
-		OreDictionary.registerOre("dustBlaxe", new ItemStack(Items.BLAZE_POWDER));
+		OreDictionary.registerOre("dustBlaze", new ItemStack(Items.BLAZE_POWDER));
 		OreDictionary.registerOre("dustGunpowder", new ItemStack(Items.GUNPOWDER));
 		OreDictionary.registerOre("dustSugar", new ItemStack(Items.SUGAR));
 
