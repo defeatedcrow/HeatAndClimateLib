@@ -60,35 +60,36 @@ public class ClimateSmeltingWrapper implements IRecipeWrapper {
 		DCHeatTier minT = DCHeatTier.UHT;
 		DCHumidity maxH = DCHumidity.DRY;
 		DCAirflow maxA = DCAirflow.TIGHT;
+		int baseY = 43;
 
 		ResourceLocation res = new ResourceLocation("dcs_climate", "textures/gui/c_smelting_gui.png");
 		mc.getTextureManager().bindTexture(res);
 		if (heats.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(40, 43, 0, 170, 64, 3);
+			mc.currentScreen.drawTexturedModalRect(40, baseY, 0, 170, 64, 3);
 			minT = DCHeatTier.NORMAL;
 		} else {
 			for (DCHeatTier h : heats) {
-				mc.currentScreen.drawTexturedModalRect(40 + h.getID() * 8, 43, h.getID() * 8, 170, 8, 3);
+				mc.currentScreen.drawTexturedModalRect(40 + h.getID() * 8, baseY, h.getID() * 8, 170, 8, 3);
 				if (h.getID() < minT.getID())
 					minT = h;
 			}
 		}
 		if (hums.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(40, 53, 0, 174, 80, 3);
+			mc.currentScreen.drawTexturedModalRect(40, baseY + 10, 0, 174, 80, 3);
 			maxH = DCHumidity.NORMAL;
 		} else {
 			for (DCHumidity h : hums) {
-				mc.currentScreen.drawTexturedModalRect(40 + h.getID() * 20, 53, h.getID() * 20, 174, 20, 3);
+				mc.currentScreen.drawTexturedModalRect(40 + h.getID() * 20, baseY + 10, h.getID() * 20, 174, 20, 3);
 				if (maxH.getID() < h.getID())
 					maxH = h;
 			}
 		}
 		if (airs.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(40, 63, 0, 178, 80, 3);
+			mc.currentScreen.drawTexturedModalRect(40, baseY + 20, 0, 178, 80, 3);
 			maxA = DCAirflow.NORMAL;
 		} else {
 			for (DCAirflow a : airs) {
-				mc.currentScreen.drawTexturedModalRect(40 + a.getID() * 20, 63, a.getID() * 20, 178, 20, 3);
+				mc.currentScreen.drawTexturedModalRect(40 + a.getID() * 20, baseY + 20, a.getID() * 20, 178, 20, 3);
 				if (maxA.getID() < a.getID())
 					maxA = a;
 			}

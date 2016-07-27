@@ -34,7 +34,6 @@ public class ClientProxyD extends CommonProxyD {
 
 	@Override
 	public void loadTE() {
-		super.loadTE();
 	}
 
 	@Override

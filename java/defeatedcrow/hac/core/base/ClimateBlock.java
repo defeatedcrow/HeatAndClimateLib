@@ -60,7 +60,7 @@ public class ClimateBlock extends Block implements IClimateObject {
 
 	@Override
 	public IClimate onUpdateClimate(World world, BlockPos pos, IBlockState state) {
-		DCHeatTier heat = ClimateAPI.calculator.getHeat(world, pos, checkingRange()[0], false);
+		DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(world, pos, checkingRange()[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, checkingRange()[1], false);
 		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, checkingRange()[2], false);
 		IClimate c = ClimateAPI.register.getClimateFromParam(heat, hum, air);

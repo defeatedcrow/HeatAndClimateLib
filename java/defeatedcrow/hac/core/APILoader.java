@@ -14,6 +14,8 @@ import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
 import defeatedcrow.hac.core.climate.recipe.ClimateRecipeRegister;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmeltingRegister;
+import defeatedcrow.hac.core.climate.recipe.FluidCraftRegister;
+import defeatedcrow.hac.core.climate.recipe.MillRecipeRegister;
 
 public class APILoader {
 
@@ -24,6 +26,8 @@ public class APILoader {
 
 		RecipeAPI.registerRecipes = new ClimateRecipeRegister();
 		RecipeAPI.registerSmelting = new ClimateSmeltingRegister();
+		RecipeAPI.registerFluidRecipes = new FluidCraftRegister();
+		RecipeAPI.registerMills = new MillRecipeRegister();
 
 		DamageAPI.armorRegister = new ArmorMaterialRegister();
 

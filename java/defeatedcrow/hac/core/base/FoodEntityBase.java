@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.base;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -21,6 +22,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tileentity.IHopper;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -221,7 +223,25 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 				this.motionZ = 0.0D;
 			}
 
+			collideWithNearbyEntities();
+
 		}
+	}
+
+	protected void collideWithNearbyEntities() {
+		List<Entity> list = this.worldObj.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox(),
+				EntitySelectors.<Entity> getTeamCollisionPredicate(this));
+
+		if (!list.isEmpty()) {
+			for (int i = 0; i < list.size(); ++i) {
+				Entity entity = list.get(i);
+				this.collideWithEntity(entity);
+			}
+		}
+	}
+
+	protected void collideWithEntity(Entity entityIn) {
+		entityIn.applyEntityCollision(this);
 	}
 
 	/* レシピ */

@@ -9,8 +9,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -31,6 +29,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -49,21 +48,27 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 	// Type上限
 	public final int maxMeta;
 
-	// 同系ブロック共通ﾌﾟﾛﾊﾟﾁｰ
-	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 3);
-
 	public DCTileBlock(Material m, String s, int max) {
 		super(m);
 		this.setCreativeTab(ClimateCore.climate);
 		this.setUnlocalizedName(s);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.SOUTH)
-				.withProperty(TYPE, 0));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.FACING, EnumFacing.SOUTH)
+				.withProperty(DCState.TYPE4, 0));
 		this.maxMeta = max;
 		this.fullBlock = false;
 		this.lightOpacity = 0;
+	}
+
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
 	}
 
 	public int getMaxMeta() {
@@ -97,7 +102,7 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
 			int meta, EntityLivingBase placer) {
 		IBlockState state = super.onBlockPlaced(world, pos, facing, hitX, hitY, hitZ, meta, placer);
-		state = state.withProperty(FACING, placer.getHorizontalFacing());
+		state = state.withProperty(DCState.FACING, placer.getHorizontalFacing());
 		return state;
 	}
 
@@ -140,7 +145,7 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		int i = state.getValue(TYPE);
+		int i = state.getValue(DCState.TYPE4);
 		if (i > maxMeta)
 			i = maxMeta;
 		return i;
@@ -163,8 +168,8 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 		if (i > maxMeta)
 			i = maxMeta;
 		int f = 5 - (meta >> 2);
-		IBlockState state = this.getDefaultState().withProperty(TYPE, i);
-		state = state.withProperty(FACING, EnumFacing.getFront(f));
+		IBlockState state = this.getDefaultState().withProperty(DCState.TYPE4, i);
+		state = state.withProperty(DCState.FACING, EnumFacing.getFront(f));
 		return state;
 	}
 
@@ -174,11 +179,11 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 		int i = 0;
 		int f = 0;
 
-		i = state.getValue(TYPE);
+		i = state.getValue(DCState.TYPE4);
 		if (i > maxMeta)
 			i = maxMeta;
 
-		f = 5 - state.getValue(FACING).getIndex();
+		f = 5 - state.getValue(DCState.FACING).getIndex();
 		f = f << 2;
 		return i + f;
 	}
@@ -191,8 +196,8 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {
-				FACING,
-				TYPE });
+				DCState.FACING,
+				DCState.TYPE4 });
 	}
 
 	/* climate */
@@ -209,7 +214,7 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 
 	@Override
 	public IClimate onUpdateClimate(World world, BlockPos pos, IBlockState state) {
-		DCHeatTier heat = ClimateAPI.calculator.getHeat(world, pos, checkingRange()[0], false);
+		DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(world, pos, checkingRange()[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, checkingRange()[1], false);
 		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, checkingRange()[2], false);
 		IClimate c = ClimateAPI.register.getClimateFromParam(heat, hum, air);

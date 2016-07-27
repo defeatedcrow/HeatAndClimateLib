@@ -3,6 +3,7 @@ package defeatedcrow.hac.core.packet;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
+// チャームのキー押下判定
 public class MessageCharmKey implements IMessage {
 
 	public byte data;

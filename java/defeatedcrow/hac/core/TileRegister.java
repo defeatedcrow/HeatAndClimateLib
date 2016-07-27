@@ -6,6 +6,7 @@ public class TileRegister {
 	}
 
 	public static void load() {
+
 	}
 
 }

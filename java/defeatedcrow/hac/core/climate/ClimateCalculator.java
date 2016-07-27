@@ -76,7 +76,7 @@ public class ClimateCalculator implements IClimateCalculator {
 			Block block = world.getBlockState(pos).getBlock();
 			int m = block.getMetaFromState(world.getBlockState(pos));
 			if (block instanceof IHeatTile) {
-				DCHeatTier current = ((IHeatTile) block).getHeatTier(world, pos);
+				DCHeatTier current = ((IHeatTile) block).getHeatTier(world, pos, pos);
 				if (current.getTier() > hot.getTier()) {
 					hot = current;
 				}
@@ -95,7 +95,7 @@ public class ClimateCalculator implements IClimateCalculator {
 				Block block = world.getBlockState(p2).getBlock();
 				int m = block.getMetaFromState(world.getBlockState(p2));
 				if (block instanceof IHeatTile) {
-					DCHeatTier current = ((IHeatTile) block).getHeatTier(world, p2);
+					DCHeatTier current = ((IHeatTile) block).getHeatTier(world, pos, p2);
 					if (current.getTier() > hot.getTier()) {
 						hot = current;
 					}
@@ -143,7 +143,7 @@ public class ClimateCalculator implements IClimateCalculator {
 			Block block = world.getBlockState(pos).getBlock();
 			int m = block.getMetaFromState(world.getBlockState(pos));
 			if (block instanceof IHeatTile) {
-				DCHeatTier current = ((IHeatTile) block).getHeatTier(world, pos);
+				DCHeatTier current = ((IHeatTile) block).getHeatTier(world, pos, pos);
 				if (current.getTier() < cold.getTier()) {
 					cold = current;
 				}
@@ -162,7 +162,7 @@ public class ClimateCalculator implements IClimateCalculator {
 				Block block = world.getBlockState(p2).getBlock();
 				int m = block.getMetaFromState(world.getBlockState(p2));
 				if (block instanceof IHeatTile) {
-					DCHeatTier current = ((IHeatTile) block).getHeatTier(world, p2);
+					DCHeatTier current = ((IHeatTile) block).getHeatTier(world, pos, p2);
 					if (current.getTier() < cold.getTier()) {
 						cold = current;
 					}
@@ -194,7 +194,7 @@ public class ClimateCalculator implements IClimateCalculator {
 			Block block = world.getBlockState(p1).getBlock();
 			int m = block.getMetaFromState(world.getBlockState(p1));
 			if (block instanceof IHumidityTile) {
-				DCHumidity current = ((IHumidityTile) block).getHumdiity(world, pos);
+				DCHumidity current = ((IHumidityTile) block).getHumdiity(world, pos, pos);
 				if (current == DCHumidity.UNDERWATER)
 					hasWater = true;
 			} else if (ClimateAPI.registerBlock.isRegisteredHum(block, m)) {
@@ -216,7 +216,7 @@ public class ClimateCalculator implements IClimateCalculator {
 			Block block = world.getBlockState(pos).getBlock();
 			int m = block.getMetaFromState(world.getBlockState(pos));
 			if (block instanceof IHumidityTile) {
-				DCHumidity current = ((IHumidityTile) block).getHumdiity(world, pos);
+				DCHumidity current = ((IHumidityTile) block).getHumdiity(world, pos, pos);
 				if (current == DCHumidity.DRY) {
 					ret--;
 				} else if (current.getID() > 1) {
@@ -239,7 +239,7 @@ public class ClimateCalculator implements IClimateCalculator {
 				Block block = world.getBlockState(p2).getBlock();
 				int m = block.getMetaFromState(world.getBlockState(p2));
 				if (block instanceof IHumidityTile) {
-					DCHumidity current = ((IHumidityTile) block).getHumdiity(world, p2);
+					DCHumidity current = ((IHumidityTile) block).getHumdiity(world, pos, p2);
 					if (current == DCHumidity.DRY) {
 						ret--;
 					} else if (current.getID() > 1) {
@@ -269,19 +269,22 @@ public class ClimateCalculator implements IClimateCalculator {
 		if (r < 0 || r > 15)
 			r = 1;
 		DCAirflow air = ClimateAPI.register.getAirflow(world, pos);
-		// biomeベース通気 -> 屋内ではNORMALになる
-		if (!hasRoof(world, pos)) {
-			air = DCAirflow.FLOW;
-		}
+
 		int count = 0; // 空気量カウント
 		boolean hasWind = false;
 		boolean hasBlow = false;
+
+		// biomeベース通気 -> 屋内ではNORMALになる
+		if (!hasRoof(world, pos)) {
+			air = DCAirflow.FLOW;
+			hasWind = true;
+		}
 
 		if (r < 0) {
 			Block block = world.getBlockState(pos).getBlock();
 			int m = block.getMetaFromState(world.getBlockState(pos));
 			if (block instanceof IAirflowTile) {
-				DCAirflow current = ((IAirflowTile) block).getAirflow(world, pos);
+				DCAirflow current = ((IAirflowTile) block).getAirflow(world, pos, pos);
 				if (current.getID() > 1) {
 					count++;
 					hasWind = true;
@@ -308,11 +311,12 @@ public class ClimateCalculator implements IClimateCalculator {
 				Block block = world.getBlockState(p2).getBlock();
 				int m = block.getMetaFromState(world.getBlockState(p2));
 				if (block instanceof IAirflowTile) {
-					DCAirflow current = ((IAirflowTile) block).getAirflow(world, p2);
+					DCAirflow current = ((IAirflowTile) block).getAirflow(world, pos, p2);
 					if (current.getID() > 0) {
 						if (current.getID() > 1) {
-							if (current == DCAirflow.WIND)
+							if (current == DCAirflow.WIND) {
 								hasBlow = true;
+							}
 							hasWind = true;
 						}
 						count++;
@@ -335,7 +339,7 @@ public class ClimateCalculator implements IClimateCalculator {
 		}
 		if (count > 2) {
 			if (hasWind) {
-				if (world.isThundering()) {
+				if (world.getThunderStrength(1.0F) > 0.5F) {
 					return DCAirflow.WIND;
 				}
 				return DCAirflow.FLOW;

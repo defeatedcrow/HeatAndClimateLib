@@ -11,12 +11,12 @@
     "authorList":[
       "defeatedcrow"
     ],
-    "name":"HeatAndClimateMod",
-    "url":"http://defeatedcrow.jp/modwiki/Mainpage",
+    "name":"HeatAndClimateLib",
+    "url":"http://defeatedcrow.jp/modwiki/HeatAndClimate",
     "updateUrl":"",
-    "version":"1.9.4_0.7.2",
+    "version":"1.9.4_0.9.0",
     "requiredMods":[
-      "Minecraft Forge1.8.9-12.17.0.1976+"
+      "Minecraft Forge1.9.4-12.17.0.1976+"
     ]
   }
 ]

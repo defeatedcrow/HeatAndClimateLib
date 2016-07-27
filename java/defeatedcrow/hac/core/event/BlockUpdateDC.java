@@ -16,6 +16,7 @@ import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import defeatedcrow.hac.api.recipe.DCBlockFreezeEvent;
 import defeatedcrow.hac.api.recipe.DCBlockUpdateEvent;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
@@ -56,10 +57,8 @@ public class BlockUpdateDC {
 					event.setCanceled(true);
 					return;
 				}
-			} else if (block instanceof IGrowable) {
-				if (block == Blocks.GRASS) {
-					// なにもしない
-				} else if (block == Blocks.TALLGRASS) {
+			} else if (block instanceof IGrowable && !(block instanceof IClimateCrop)) {
+				if (block == Blocks.TALLGRASS) {
 					// HOTかつWETの場合に成長が促進され、COLD以下の場合は成長が遅くなる
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(4) == 0) {
@@ -67,15 +66,14 @@ public class BlockUpdateDC {
 							grow.grow(world, world.rand, p, st);
 						}
 					}
-				} else {
-					// HOTの場合に成長が促進され、COLD以下の場合は成長が遅くなる
+				} else if (block != Blocks.DOUBLE_PLANT && block != Blocks.GRASS) {
+					// HOTかつWETの場合に成長が促進され、COLD以下の場合は成長が遅くなる
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(4) == 0) {
-						int t = clm.getHeat().getTier();
-						if (t == 1) {
+						if (clm.getHeat() == DCHeatTier.HOT && clm.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
 							DCLogger.debugLog("Grow!");
-						} else if (t < 0) {
+						} else if (clm.getHeat().getTier() < 0) {
 							event.setCanceled(true);
 							DCLogger.debugLog("Grow Canceled");
 						}
