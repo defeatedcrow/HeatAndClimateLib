@@ -2,7 +2,10 @@ package defeatedcrow.hac.core.client.base;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class DCTileModelBase extends ModelBase {
 	// fields
 	ModelRenderer base;
@@ -21,7 +24,10 @@ public class DCTileModelBase extends ModelBase {
 
 	public void render(float f) {
 		setRotationAngles(f);
-		base.render(0.0625F);
+	}
+
+	public void render(float f, float speed, float tick) {
+		setRotationAngles(f, speed, tick);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -31,6 +37,9 @@ public class DCTileModelBase extends ModelBase {
 	}
 
 	public void setRotationAngles(float f) {
+	}
+
+	public void setRotationAngles(float f, float speed, float tick) {
 	}
 
 }

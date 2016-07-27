@@ -1,6 +1,8 @@
 package defeatedcrow.hac.core;
 
+import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import defeatedcrow.hac.core.base.DCItemBlock;
 import defeatedcrow.hac.core.item.ItemClimateChecker;
 
 public class MaterialRegister {
@@ -23,5 +25,11 @@ public class MaterialRegister {
 	}
 
 	private static void registerHarvestLevel() {
+	}
+
+	static void registerBlock(Block block, String name) {
+		Block reg = block.setRegistryName(name);
+		GameRegistry.register(reg);
+		GameRegistry.register(new DCItemBlock(reg));
 	}
 }

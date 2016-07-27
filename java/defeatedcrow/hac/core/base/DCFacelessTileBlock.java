@@ -9,7 +9,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -32,6 +31,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -51,16 +51,13 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 	public final int maxMeta;
 	public final boolean forceUpdate;
 
-	// 同系ブロック共通ﾌﾟﾛﾊﾟﾁｰ
-	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 15);
-
 	public DCFacelessTileBlock(Material m, String s, int max, boolean force) {
 		super(m);
 		this.setCreativeTab(ClimateCore.climate);
 		this.setUnlocalizedName(s);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, 0));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.TYPE16, 0));
 		this.maxMeta = max;
 		forceUpdate = force;
 		this.fullBlock = false;
@@ -142,7 +139,7 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		int i = state.getValue(TYPE);
+		int i = state.getValue(DCState.TYPE16);
 		if (i > maxMeta)
 			i = maxMeta;
 		return i;
@@ -164,7 +161,7 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 		int i = meta & 15;
 		if (i > maxMeta)
 			i = maxMeta;
-		IBlockState state = this.getDefaultState().withProperty(TYPE, i);
+		IBlockState state = this.getDefaultState().withProperty(DCState.TYPE16, i);
 		return state;
 	}
 
@@ -173,7 +170,7 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 	public int getMetaFromState(IBlockState state) {
 		int i = 0;
 
-		i = state.getValue(TYPE);
+		i = state.getValue(DCState.TYPE16);
 		if (i > maxMeta)
 			i = maxMeta;
 
@@ -187,7 +184,7 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { TYPE });
+		return new BlockStateContainer(this, new IProperty[] { DCState.TYPE16 });
 	}
 
 	/* climate */
@@ -204,7 +201,7 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 
 	@Override
 	public IClimate onUpdateClimate(World world, BlockPos pos, IBlockState state) {
-		DCHeatTier heat = ClimateAPI.calculator.getHeat(world, pos, checkingRange()[0], false);
+		DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(world, pos, checkingRange()[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, checkingRange()[1], false);
 		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, checkingRange()[2], false);
 		IClimate c = ClimateAPI.register.getClimateFromParam(heat, hum, air);

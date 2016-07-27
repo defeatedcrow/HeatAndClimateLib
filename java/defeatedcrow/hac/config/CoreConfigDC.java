@@ -40,6 +40,10 @@ public class CoreConfigDC {
 	public static boolean enableVanilla = true;
 	public static int updateFrequency = 5;
 
+	// world
+	public static boolean enableFreezeDrop = true;
+	public static boolean enableDeepWater = true;
+
 	public void load(Configuration cfg) {
 
 		try {
@@ -54,6 +58,7 @@ public class CoreConfigDC {
 					+ "If you set 0, those ore deposits will not be generated.");
 			cfg.addCustomCategoryComment("key setting",
 					"This mod is not using the Forge KeyHandler. Please setting it in here.");
+			cfg.addCustomCategoryComment("entity setting", "This setting is for entities.");
 
 			Property debug = cfg.get("debug setting", "Debug Mode Pass", debugPass,
 					"Input the password for starting in debug mode. This is only for authers.");
@@ -75,6 +80,12 @@ public class CoreConfigDC {
 
 			Property update_block = cfg.get("world setting", "Set Update Frequency", updateFrequency,
 					"Set the number of the update times per sec.");
+
+			Property water_cave = cfg.get("world setting", "Enable Water Caves", enableDeepWater,
+					"Enable generating water blocks instead of lava blocks in the deep caves.");
+
+			Property freeze_drop = cfg.get("world setting", "Enable Freeze EntityItem", enableFreezeDrop,
+					"EntityItems avoids to despawn in cold temp than the FROSTBITE tier.");
 
 			Property alt_tips = cfg.get("render setting", "Enable Alt Tooltip", showAltTips,
 					"Enable additional tooltips for harvest level, and climate registance of items with F3+H.");
@@ -115,6 +126,8 @@ public class CoreConfigDC {
 			enableVanilla = vanilla_block.getBoolean();
 			burntFood = burnt_food.getBoolean();
 			showDamageIcon = hud_icon.getBoolean();
+			enableDeepWater = water_cave.getBoolean();
+			enableFreezeDrop = freeze_drop.getBoolean();
 
 			int s = sed_ore.getInt();
 			if (s < 0 || s > 100)

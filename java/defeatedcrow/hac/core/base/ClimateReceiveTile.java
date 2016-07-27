@@ -16,7 +16,7 @@ import defeatedcrow.hac.api.climate.IClimateTileEntity;
 
 public class ClimateReceiveTile extends DCTileEntity {
 
-	private final List<BlockPos> effectiveTiles = new ArrayList<BlockPos>();
+	protected final List<BlockPos> effectiveTiles = new ArrayList<BlockPos>();
 
 	protected IClimate current = null;
 
@@ -122,6 +122,10 @@ public class ClimateReceiveTile extends DCTileEntity {
 		if (pos != null && !effectiveTiles.contains(pos)) {
 			effectiveTiles.add(pos);
 		}
+	}
+
+	public IClimate getClimate() {
+		return current;
 	}
 
 }

@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,6 +22,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.placeable.ISidedTexture;
 import defeatedcrow.hac.core.ClimateCore;
 
@@ -38,16 +38,13 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 	public final int maxMeta;
 	public final boolean forceUpdate;
 
-	// 同系ブロック共通ﾌﾟﾛﾊﾟﾁｰ
-	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 15);
-
 	public DCSimpleBlock(Material m, String s, int max, boolean force) {
 		super(m, force);
 		this.setCreativeTab(ClimateCore.climate);
 		this.setUnlocalizedName(s);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, 0));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.TYPE16, 0));
 		this.maxMeta = max;
 		forceUpdate = force;
 	}
@@ -72,8 +69,8 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand,
-			@Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
@@ -102,7 +99,7 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 	// 設置・破壊処理
 	@Override
 	public int damageDropped(IBlockState state) {
-		int i = state.getValue(TYPE);
+		int i = state.getValue(DCState.TYPE16);
 		if (i > maxMeta)
 			i = maxMeta;
 		return i;
@@ -122,7 +119,7 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		int i = meta & 15;
-		IBlockState state = this.getDefaultState().withProperty(TYPE, i);
+		IBlockState state = this.getDefaultState().withProperty(DCState.TYPE16, i);
 		return state;
 	}
 
@@ -131,7 +128,7 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 	public int getMetaFromState(IBlockState state) {
 		int i = 0;
 
-		i = state.getValue(TYPE);
+		i = state.getValue(DCState.TYPE16);
 		if (i > maxMeta)
 			i = maxMeta;
 		return i;
@@ -144,7 +141,7 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { TYPE });
+		return new BlockStateContainer(this, new IProperty[] { DCState.TYPE16 });
 	}
 
 	/** T, B, N, S, W, E */

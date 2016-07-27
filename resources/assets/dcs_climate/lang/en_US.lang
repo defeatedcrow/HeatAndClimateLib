@@ -13,7 +13,8 @@ dcs.tip.shift=Lshift Key: expand tooltip
 
 dcs_climate.smelting=Climate Smelting
 dcs_climate.recipe=Climate Crafting
-dcs.gui.device.chamber=Combustion Chamber GUI
+dcs_climate.mill=Mill Recipe
+dcs_climate.fluidcraft=Fluid Processing
 
 death.attack.dcs_heat=%1$s was burnt browned.
 death.attack.dcs_cold=%1$s became a sherbet.

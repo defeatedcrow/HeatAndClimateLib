@@ -22,9 +22,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.google.gson.Gson;
 
+import defeatedcrow.hac.api.blockstate.DCState;
+import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
-import defeatedcrow.hac.core.base.DCFacelessTileBlock;
-import defeatedcrow.hac.core.base.DCTileBlock;
 import defeatedcrow.hac.core.base.ITexturePath;
 
 /**
@@ -34,6 +34,7 @@ import defeatedcrow.hac.core.base.ITexturePath;
 @SideOnly(Side.CLIENT)
 public class JsonRegisterHelper {
 	private final String basePath;
+	private final boolean active = ClimateCore.isDebug;
 
 	public JsonRegisterHelper(String s) {
 		basePath = s;
@@ -48,7 +49,8 @@ public class JsonRegisterHelper {
 	public void regSimpleItem(Item item, String domein, String name, String dir, int max) {
 		int m = 0;
 		while (m < max + 1) {
-			this.checkAndBuildJson(item, domein, name, dir, m);
+			if (active)
+				this.checkAndBuildJson(item, domein, name, dir, m);
 			ModelLoader.setCustomModelResourceLocation(item, m, new ModelResourceLocation(domein + ":" + dir + "/"
 					+ name + m, "inventory"));
 			m++;
@@ -62,7 +64,8 @@ public class JsonRegisterHelper {
 	public void regBakedBlock(Block block, String domein, String name, String dir, int max) {
 		int m = 0;
 		while (m < max + 1) {
-			this.checkAndBuildJson(block, domein, name, dir, m);
+			if (active)
+				this.checkAndBuildJson(block, domein, name, dir, m);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), m, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name + m, "inventory"));
 			m++;
@@ -74,17 +77,18 @@ public class JsonRegisterHelper {
 	 * 外見は仮のJsonファイルに紐付け、TESRで描画する
 	 */
 	public void regTEBlock(Block block, String domein, String name, String dir, int maxMeta) {
-		ModelLoader.setCustomStateMapper(block,
-				(new StateMap.Builder()).ignore(((DCTileBlock) block).FACING, ((DCTileBlock) block).TYPE).build());
+		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.FACING, DCState.TYPE4).build());
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":"
 				+ "basetile"));
 		if (maxMeta == 0) {
-			this.checkAndBuildJson(block, domein, name, dir, 0);
+			if (active)
+				this.checkAndBuildJson(block, domein, name, dir, 0);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
-				this.checkAndBuildJson(block, domein, name, dir, i);
+				if (active)
+					this.checkAndBuildJson(block, domein, name, dir, i);
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
 						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
@@ -96,17 +100,41 @@ public class JsonRegisterHelper {
 	 * FACINGがないやつ
 	 */
 	public void regTESimpleBlock(Block block, String domein, String name, String dir, int maxMeta) {
-		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(((DCFacelessTileBlock) block).TYPE)
-				.build());
+		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.TYPE16).build());
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":"
 				+ "basetile"));
 		if (maxMeta == 0) {
-			this.checkAndBuildJson(block, domein, name, dir, 0);
+			if (active)
+				this.checkAndBuildJson(block, domein, name, dir, 0);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
-				this.checkAndBuildJson(block, domein, name, dir, i);
+				if (active)
+					this.checkAndBuildJson(block, domein, name, dir, i);
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
+						domein + ":" + dir + "/" + name + i, "inventory"));
+			}
+		}
+	}
+
+	/**
+	 * 汎用Tile使用メソッド3
+	 * SIDEをもつ、TorqueTile用
+	 */
+	public void regTETorqueBlock(Block block, String domein, String name, String dir, int maxMeta) {
+		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.SIDE, DCState.POWERED).build());
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":"
+				+ "basetile"));
+		if (maxMeta == 0) {
+			if (active)
+				this.checkAndBuildJson(block, domein, name, dir, 0);
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
+					domein + ":" + dir + "/" + name, "inventory"));
+		} else {
+			for (int i = 0; i < maxMeta + 1; i++) {
+				if (active)
+					this.checkAndBuildJson(block, domein, name, dir, i);
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
 						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
@@ -121,7 +149,8 @@ public class JsonRegisterHelper {
 		if (maxMeta == 0) {
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":" + dir
 					+ "/" + name, "type"));
-			this.checkAndBuildJsonItemBlock(domein, name, dir, 0);
+			if (active)
+				this.checkAndBuildJsonItemBlock(domein, name, dir, 0);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
@@ -131,7 +160,8 @@ public class JsonRegisterHelper {
 			}
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), models);
 			for (int i = 0; i < maxMeta + 1; i++) {
-				this.checkAndBuildJsonItemBlock(domein, name, dir, i);
+				if (active)
+					this.checkAndBuildJsonItemBlock(domein, name, dir, i);
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
 						domein + ":" + dir + "/" + name + i, "inventory"));
 			}

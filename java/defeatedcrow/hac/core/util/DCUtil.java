@@ -9,6 +9,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -20,6 +22,49 @@ import defeatedcrow.hac.core.DCLogger;
 
 // 色々不足しているもの
 public class DCUtil {
+
+	public static boolean isSameItem(ItemStack i1, ItemStack i2) {
+		if (i1 == null || i2 == null) {
+			return false;
+		} else {
+			if (i1.getItem() == i2.getItem() && i1.getItemDamage() == i2.getItemDamage()) {
+				NBTTagCompound t1 = i1.getTagCompound();
+				NBTTagCompound t2 = i2.getTagCompound();
+				if (t1 == null && t2 == null) {
+					return true;
+				} else {
+					return t1.equals(t2);
+				}
+			}
+			return false;
+		}
+	}
+
+	public static boolean isIntegratedItem(ItemStack i1, ItemStack i2) {
+		if (i1 == null || i2 == null) {
+			return false;
+		} else {
+			if (i1.getItem() == i2.getItem()) {
+				if (i1.getItemDamage() == i2.getItemDamage() || i2.getItemDamage() == 32767) {
+					NBTTagCompound t1 = i1.getTagCompound();
+					NBTTagCompound t2 = i2.getTagCompound();
+					if (t1 == null && t2 == null) {
+						return true;
+					} else {
+						return t1.equals(t2);
+					}
+				}
+			}
+			return false;
+		}
+	}
+
+	public static boolean isStackable(ItemStack i1, ItemStack i2) {
+		if (isSameItem(i1, i2)) {
+			return i1.stackSize <= (i2.getMaxStackSize() - i2.stackSize);
+		}
+		return false;
+	}
 
 	public static double getDist(BlockPos p1, BlockPos p2) {
 		double x = Math.abs(p1.getX() - p2.getX());
@@ -93,6 +138,11 @@ public class DCUtil {
 		}
 		Vec3d vec3d1 = vec3d.addVector(f6 * d3, f5 * d3, f7 * d3);
 		return new BlockPos(vec3d1);
+	}
+
+	// cloudの向き。+X方向固定っぽい
+	public static EnumFacing getCloudFace() {
+		return EnumFacing.EAST;
 	}
 
 	// デバッグモード

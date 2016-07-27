@@ -11,4 +11,7 @@ public class RecipeAPI {
 	public static IClimateRecipeRegister registerRecipes;
 	public static IClimateSmeltingRegister registerSmelting;
 
+	public static IMillRecipeRegister registerMills;
+	public static IFluidRecipeRegister registerFluidRecipes;
+
 }

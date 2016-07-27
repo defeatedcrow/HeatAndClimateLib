@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -28,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -75,6 +77,8 @@ public class LivingEventDC {
 		if (living != null) {
 
 			if (!living.worldObj.isRemote) {
+
+				/* Potion */
 				boolean f = true;
 				if (living instanceof EntityLiving && ((EntityLiving) living).hasCustomName()) {
 
@@ -121,15 +125,20 @@ public class LivingEventDC {
 					DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(living.worldObj, new BlockPos(px, py, pz),
 							2, false);
 
-					float prev = 1.0F * (2 - CoreConfigDC.damageDifficulty); // 0F ~ 2.0F
+					float prev = 1.0F; // normal
+					if (living instanceof EntityPlayer) {
+						prev = 1.0F * (2 - CoreConfigDC.damageDifficulty); // 0F ~ 2.0F
+					}
 					float dam = heat.getTier() * 1.0F; // hot 0F ~ 6.0F / cold 0F ~ 6.0F
 					boolean isCold = heat.getTier() < 0;
 
 					if (isCold) {
+						dam += prev;
 						dam *= -2.0F;
+					} else {
+						dam -= prev;
 					}
-
-					dam -= prev;
+					prev = 0.0F;
 
 					// ピースフルではダメージがない
 					if (living.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL && !CoreConfigDC.peacefulDam) {
@@ -160,15 +169,12 @@ public class LivingEventDC {
 						if (living.isEntityUndead()) {
 							prev += 1.0F;
 						}
-
 					} else {
 						if (living.isPotionActive(DCPotion.fire_reg)) {
 							prev += 2.0F;
 						}
 						if (living.isImmuneToFire()) {
 							prev += 2.0F;
-						} else if (living.isEntityUndead()) {
-							prev -= 1.0F;
 						}
 					}
 
@@ -312,6 +318,22 @@ public class LivingEventDC {
 					i++;
 				}
 
+			}
+		}
+	}
+
+	/* dropが消えなくなる */
+	public void livingDropItemEvent(ItemExpireEvent event) {
+		EntityItem item = event.getEntityItem();
+		int life = event.getExtraLife();
+		if (CoreConfigDC.enableFreezeDrop && item != null && !item.worldObj.isRemote) {
+			BlockPos pos = item.getPosition();
+			DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(item.worldObj, pos, 2, false);
+			if (heat.getTier() < -1) {
+				// frostbite以下
+				life += 6000;
+				event.setExtraLife(life);
+				event.setCanceled(true);
 			}
 		}
 	}

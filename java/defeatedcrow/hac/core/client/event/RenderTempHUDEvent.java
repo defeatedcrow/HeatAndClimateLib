@@ -65,7 +65,7 @@ public class RenderTempHUDEvent {
 					int prev = 2 - CoreConfigDC.damageDifficulty;
 					int damage = 0;
 					if (tier < 0) {
-						damage = (tier * 2) + prev;
+						damage = (tier + prev) * 2;
 					} else if (tier > 0) {
 						damage = tier - prev;
 					}
