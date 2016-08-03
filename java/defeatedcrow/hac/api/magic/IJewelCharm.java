@@ -35,7 +35,7 @@ public interface IJewelCharm extends IJewel {
 	 * プレイヤーがダメージを与えたときに呼ばれ、アクションを起こす。<br>
 	 * trueの場合、チャームアイテムのダメージ処理を呼ぶ(消費、耐久値減少など)
 	 */
-	boolean onAttacking(EntityPlayer player, EntityLivingBase target, float damage, ItemStack charm);
+	boolean onAttacking(EntityPlayer player, EntityLivingBase target, DamageSource source, float damage, ItemStack charm);
 
 	// Tool charm
 	/**

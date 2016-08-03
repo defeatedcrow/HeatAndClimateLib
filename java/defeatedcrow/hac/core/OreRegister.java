@@ -29,7 +29,6 @@ public class OreRegister {
 		OreDictionary.registerOre("itemFeather", new ItemStack(Items.FEATHER));
 		OreDictionary.registerOre("itemString", new ItemStack(Items.STRING));
 
-		OreDictionary.registerOre("foodEgg", new ItemStack(Items.EGG));
 		OreDictionary.registerOre("foodFish", new ItemStack(Items.FISH));
 
 		OreDictionary.registerOre("cropApple", new ItemStack(Items.APPLE));
@@ -53,6 +52,7 @@ public class OreRegister {
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.LAVA_BUCKET), "bucketLava");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.SUGAR), "dustSugar");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.WHEAT), "dustFlour");
+		ConvertTargetList.addReplaceTarget(new ItemStack(Blocks.WOOL, 1, 32767), "itemCloth");
 	}
 
 }

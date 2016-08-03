@@ -36,6 +36,8 @@ public class CoreConfigDC {
 			100,
 			30 };
 
+	public static int skarnGen = 5;
+
 	// recipe
 	public static boolean enableVanilla = true;
 	public static int updateFrequency = 5;
@@ -104,19 +106,22 @@ public class CoreConfigDC {
 							+ "If you don't want this effect, set 0.");
 
 			Property sed_ore = cfg.get("ore gen setting", "Sedimentary Gen Probability", depositGen[0],
-					"Generate in High-altitude of mountain.");
+					"Generate in High-altitude of mountain. 1-100%");
 
 			Property char_ore = cfg.get("ore gen setting", "Chalcopyrite Gen Probability", depositGen[1],
-					"Generate in underground of mountain.");
+					"Generate in underground of mountain. 1-100%");
 
 			Property vein_ore = cfg.get("ore gen setting", "Quartz Vein Gen Probability", depositGen[2],
-					"Generate in underground of plane.");
+					"Generate in underground of plane. 1-100%");
 
 			Property lava_ore = cfg.get("ore gen setting", "Magnetite Gen Probability", depositGen[3],
-					"Generate in deep-underground.");
+					"Generate in deep-underground. 1-100%");
 
 			Property geode_ore = cfg.get("ore gen setting", "Geode Gen Probability", depositGen[4],
-					"Generate in deep-underground.");
+					"Generate in deep-underground. 1-100%");
+
+			Property skarn_ore = cfg.get("ore gen setting", "Skarn Gen Probability", skarnGen,
+					"Generate in Forest or Plain. 0.1-100.0% (default: 0.5%)");
 
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
@@ -147,12 +152,16 @@ public class CoreConfigDC {
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)
 				d = 2;
+			int sk = geode_ore.getInt();
+			if (sk < 0 || sk > 1000)
+				sk = 0;
 
 			depositGen[0] = s;
 			depositGen[1] = c;
 			depositGen[2] = v;
 			depositGen[3] = l;
 			depositGen[4] = g;
+			skarnGen = sk;
 
 			damageDifficulty = d;
 

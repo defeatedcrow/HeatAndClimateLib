@@ -55,7 +55,7 @@ public class LivingHurtDC {
 					DCLogger.debugLog("attack charm");
 					IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
 					add *= charm.increaceDamage(living, entry.getValue());
-					if (charm.onAttacking(attacker, living, newDam - prev, entry.getValue())) {
+					if (charm.onAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
 						if (charm.consumeCharmItem(entry.getValue()) == null) {
 							attacker.inventory.setInventorySlotContents(entry.getKey(), entry.getValue());
 							attacker.inventory.markDirty();

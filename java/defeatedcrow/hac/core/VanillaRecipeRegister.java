@@ -122,7 +122,7 @@ public class VanillaRecipeRegister {
 				'Y',
 				"dustSugar",
 				'Z',
-				"foodEgg",
+				"egg",
 				'W',
 				"foodFlour" }));
 
@@ -137,33 +137,6 @@ public class VanillaRecipeRegister {
 				"YYY",
 				'Y',
 				"foodFlour" }));
-
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.BOW, 1, 0), new Object[] {
-				" XY",
-				"X Y",
-				" XY",
-				'X',
-				"stickWood",
-				'Y',
-				"itemString" }));
-
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.LEAD, 1, 0), new Object[] {
-				"XX ",
-				"XY ",
-				"  X",
-				'X',
-				"itemString",
-				'Y',
-				"slimeball" }));
-
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.FISHING_ROD, 1, 0), new Object[] {
-				"  X",
-				" XY",
-				"X Y",
-				'X',
-				"stickWood",
-				'Y',
-				"itemString" }));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.BED, 1, 0), new Object[] {
 				"XXX",
