@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -38,8 +39,9 @@ public class ClickEventDC {
 				IJewelCharm charm = ((IJewelCharm) entry.getValue().getItem());
 				if (charm.onToolUsing(event.getPlayer(), event.getPos(), event.getState(), entry.getValue())) {
 					if (charm.consumeCharmItem(entry.getValue()) == null) {
-						event.getPlayer().inventory.setInventorySlotContents(entry.getKey(), entry.getValue());
+						event.getPlayer().inventory.setInventorySlotContents(entry.getKey(), null);
 						event.getPlayer().inventory.markDirty();
+						event.getPlayer().playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 					}
 				}
 			}

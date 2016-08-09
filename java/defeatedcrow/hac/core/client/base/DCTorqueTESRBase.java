@@ -14,6 +14,9 @@ public abstract class DCTorqueTESRBase extends TileEntitySpecialRenderer<TileTor
 	@Override
 	public void renderTileEntityAt(TileTorqueBase te, double x, double y, double z, float partialTicks, int destroyStage) {
 		DCTileModelBase model = this.getModel(te);
+		if (model == null) {
+			return;
+		}
 		float speed = te.currentSpeed;
 		float rot = te.rotation;
 

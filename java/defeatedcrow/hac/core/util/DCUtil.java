@@ -141,7 +141,12 @@ public class DCUtil {
 	}
 
 	// cloudの向き。+X方向固定っぽい
-	public static EnumFacing getCloudFace() {
+	public static EnumFacing getWorldWind(World world) {
+		if (world != null) {
+			if (world.provider.getHasNoSky()) {
+				return EnumFacing.UP;
+			}
+		}
 		return EnumFacing.EAST;
 	}
 

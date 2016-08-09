@@ -28,7 +28,7 @@ public class MHandlerCharmKey implements IMessageHandler<MessageCharmKey, IMessa
 				IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
 				if (charm.onUsing(player, entry.getValue())) {
 					if (charm.consumeCharmItem(entry.getValue()) == null) {
-						player.inventory.setInventorySlotContents(entry.getKey(), entry.getValue());
+						player.inventory.setInventorySlotContents(entry.getKey(), null);
 						player.inventory.markDirty();
 						break;
 					}

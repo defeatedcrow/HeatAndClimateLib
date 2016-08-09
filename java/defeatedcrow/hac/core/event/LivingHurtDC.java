@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -38,8 +39,9 @@ public class LivingHurtDC {
 					prev += charm.reduceDamage(source, entry.getValue());
 					if (charm.onDiffence(source, player, newDam, entry.getValue())) {
 						if (charm.consumeCharmItem(entry.getValue()) == null) {
-							player.inventory.setInventorySlotContents(entry.getKey(), entry.getValue());
+							player.inventory.setInventorySlotContents(entry.getKey(), null);
 							player.inventory.markDirty();
+							player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 						}
 					}
 				}
@@ -57,8 +59,9 @@ public class LivingHurtDC {
 					add *= charm.increaceDamage(living, entry.getValue());
 					if (charm.onAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
 						if (charm.consumeCharmItem(entry.getValue()) == null) {
-							attacker.inventory.setInventorySlotContents(entry.getKey(), entry.getValue());
+							attacker.inventory.setInventorySlotContents(entry.getKey(), null);
 							attacker.inventory.markDirty();
+							attacker.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 						}
 					}
 				}

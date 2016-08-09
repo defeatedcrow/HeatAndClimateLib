@@ -1,7 +1,10 @@
 package defeatedcrow.hac.core.client.base;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public abstract class DCFoodModelBase extends ModelBase {
 
 	private final boolean isBaked;
