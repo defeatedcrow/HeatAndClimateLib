@@ -41,10 +41,7 @@ public class BlockUpdateDC {
 				return;
 
 			int meta = block.getMetaFromState(st);
-			IClimate clm = ClimateAPI.calculator.getClimate(world, p, new int[] {
-					2,
-					1,
-					1 });
+			IClimate clm = ClimateAPI.calculator.getClimate(world, p);
 			boolean roof = hasRoof(world, p);
 
 			// 直接指定の仕様
@@ -175,7 +172,7 @@ public class BlockUpdateDC {
 		if (!world.isRemote && pos != null && state != null) {
 			Block block = state.getBlock();
 			if ((block == Blocks.WATER || block == Blocks.FLOWING_WATER) && block.getMetaFromState(state) == 0) {
-				DCHeatTier clm = ClimateAPI.calculator.getAverageTemp(world, pos, 2, false);
+				DCHeatTier clm = ClimateAPI.calculator.getAverageTemp(world, pos);
 				return clm.getTier() < -1;
 			}
 		}

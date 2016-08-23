@@ -13,20 +13,23 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.climate.IClimateTileEntity;
+import defeatedcrow.hac.config.CoreConfigDC;
 
 public class ClimateReceiveTile extends DCTileEntity {
 
 	protected final List<BlockPos> effectiveTiles = new ArrayList<BlockPos>();
 
 	protected IClimate current = null;
+	protected DCHeatTier highTemp = DCHeatTier.NORMAL;
+	protected DCHeatTier lowTemp = DCHeatTier.NORMAL;
 
 	@Override
 	public void updateTile() {
 		if (!worldObj.isRemote) {
-			DCHeatTier heat = ClimateAPI.calculator.getHeat(worldObj, pos, 2, false);
-			DCHeatTier cold = ClimateAPI.calculator.getCold(worldObj, pos, 2, false);
-			DCHumidity hum = ClimateAPI.calculator.getHumidity(worldObj, pos, 1, false);
-			DCAirflow air = ClimateAPI.calculator.getAirflow(worldObj, pos, 1, false);
+			DCHeatTier heat = ClimateAPI.calculator.getHeat(worldObj, pos, CoreConfigDC.heatRange, false);
+			DCHeatTier cold = ClimateAPI.calculator.getCold(worldObj, pos, CoreConfigDC.heatRange, false);
+			DCHumidity hum = ClimateAPI.calculator.getHumidity(worldObj, pos, CoreConfigDC.humRange, false);
+			DCAirflow air = ClimateAPI.calculator.getAirflow(worldObj, pos, CoreConfigDC.airRange, false);
 
 			List<BlockPos> remove = new ArrayList<BlockPos>();
 			for (BlockPos p : effectiveTiles) {
@@ -56,6 +59,8 @@ public class ClimateReceiveTile extends DCTileEntity {
 				}
 			}
 
+			highTemp = heat;
+			lowTemp = cold;
 			if (heat.getTier() > cold.getTier() && cold.getTier() < 0) {
 				if (heat.getTier() < 0) {
 					heat = cold;

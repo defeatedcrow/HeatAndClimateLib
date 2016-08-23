@@ -8,6 +8,8 @@ public class ClimateAPI {
 	private ClimateAPI() {
 	}
 
+	public static boolean isLoaded;
+
 	public static IBiomeClimateRegister register;
 	public static IHeatBlockRegister registerBlock;
 	public static IClimateCalculator calculator;

@@ -8,6 +8,8 @@ public class RecipeAPI {
 	private RecipeAPI() {
 	}
 
+	public static boolean isLoaded;
+
 	public static IClimateRecipeRegister registerRecipes;
 	public static IClimateSmeltingRegister registerSmelting;
 

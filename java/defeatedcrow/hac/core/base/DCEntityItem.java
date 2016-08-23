@@ -12,13 +12,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import defeatedcrow.hac.api.placeable.IEntityItem;
-import defeatedcrow.hac.core.DCLogger;
 
-/* 設置できる食べ物 */
-public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
+/* Entity設置Item */
+public abstract class DCEntityItem extends DCItem implements IEntityItem {
 
-	public FoodItemBase(boolean isWolfFood) {
-		super(isWolfFood);
+	public DCEntityItem() {
+		super();
 	}
 
 	/* 設置動作 */
@@ -45,11 +44,10 @@ public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
 					}
 				}
 			}
-		} else {
-			this.onItemRightClick(stack, world, player, hand);
 			return EnumActionResult.SUCCESS;
+		} else {
+			return super.onItemUse(stack, player, world, pos, hand, facing, hitX, hitY, hitZ);
 		}
-		return EnumActionResult.SUCCESS;
 	}
 
 	@Override
@@ -63,11 +61,10 @@ public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
 
 	@Override
 	public boolean spawnPlacementEntity(World world, Entity entity) {
-		if (entity != null && entity instanceof FoodEntityBase) {
-			boolean raw = ((FoodEntityBase) entity).getRaw();
-			DCLogger.debugLog("Spawn " + entity.getName() + ":" + raw);
+		if (entity != null) {
+			return world.spawnEntityInWorld(entity);
 		}
-		return world.spawnEntityInWorld(entity);
+		return false;
 	}
 
 }

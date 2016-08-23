@@ -9,7 +9,7 @@
  * このAPIは、Climateを利用したレシピの登録・管理用APIです。<br>
  * 設置状態での変化と、Inventory内で進行するレシピで共通です。<br>
  */
-@API(apiVersion = "0.9.0", owner = "dcs_climate|lib", provides = "DCsHaCAPI|recipe")
+@API(apiVersion = "0.9.4", owner = "dcs_climate|lib", provides = "DCsHaCAPI|recipe")
 package defeatedcrow.hac.api.recipe;
 
 import net.minecraftforge.fml.common.API;

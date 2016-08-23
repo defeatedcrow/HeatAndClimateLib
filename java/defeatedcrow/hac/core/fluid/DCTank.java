@@ -1,14 +1,13 @@
 package defeatedcrow.hac.core.fluid;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class DCTank implements IFluidTank, IFluidTankProperties, IFluidHandler {
 
@@ -17,6 +16,31 @@ public class DCTank implements IFluidTank, IFluidTankProperties, IFluidHandler {
 
 	public DCTank(int cap) {
 		capacity = cap;
+	}
+
+	public DCTank readFromNBT(NBTTagCompound nbt, String key) {
+		NBTTagList list = nbt.getTagList(key, 10);
+		NBTTagCompound nbt2 = list.getCompoundTagAt(0);
+		if (!nbt2.hasKey("Empty")) {
+			FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt2);
+			setFluid(fluid);
+		} else {
+			setFluid(null);
+		}
+		return this;
+	}
+
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt, String key) {
+		NBTTagList list = new NBTTagList();
+		NBTTagCompound nbt2 = new NBTTagCompound();
+		if (fluid != null) {
+			fluid.writeToNBT(nbt2);
+		} else {
+			nbt2.setString("Empty", "");
+		}
+		list.appendTag(nbt2);
+		nbt.setTag(key, list);
+		return nbt;
 	}
 
 	/* tank */
@@ -42,16 +66,14 @@ public class DCTank implements IFluidTank, IFluidTankProperties, IFluidHandler {
 		return this;
 	}
 
-	@SideOnly(Side.CLIENT)
 	public void setAmount(int par1) {
 		if (fluid != null && fluid.getFluid() != null) {
 			fluid.amount = par1;
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	public void setFluidById(int par1) {
-		Fluid f = FluidRegistry.getFluid(par1);
+		Fluid f = FluidIDRegisterDC.getFluid(par1);
 		if (f != null) {
 			fluid = new FluidStack(f, this.getFluidAmount());
 		} else {
@@ -98,7 +120,7 @@ public class DCTank implements IFluidTank, IFluidTankProperties, IFluidHandler {
 
 	@Override
 	public FluidStack drain(int drain, boolean doDrain) {
-		if (isEmpty()) {
+		if (!isEmpty()) {
 			int ret = Math.min(drain, fluid.amount);
 			if (ret > 0) {
 				FluidStack f = new FluidStack(fluid.getFluid(), ret);

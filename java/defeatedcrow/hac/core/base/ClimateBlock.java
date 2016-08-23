@@ -21,6 +21,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.DCLogger;
 
 /**
@@ -114,10 +115,7 @@ public class ClimateBlock extends Block implements IClimateObject {
 
 	@Override
 	public int[] checkingRange() {
-		return new int[] {
-				2,
-				1,
-				1 };
+		return CoreConfigDC.ranges;
 	}
 
 }

@@ -28,9 +28,9 @@ public class DCState {
 	public static final PropertyEnum<EnumSide> SIDE = PropertyEnum.<EnumSide> create("side", EnumSide.class);
 
 	// crop
-	public static final PropertyInteger STAGE = PropertyInteger.create("stage", 0, 3);
-	public static final PropertyBool GROWN = PropertyBool.create("grown");
-	public static final PropertyBool FLOWER = PropertyBool.create("flower");
+	public static final PropertyInteger STAGE4 = PropertyInteger.create("stage", 0, 3);
+	public static final PropertyInteger STAGE8 = PropertyInteger.create("stage", 0, 7);
+	public static final PropertyBool DOUBLE = PropertyBool.create("double");
 
 	public static int getInt(IBlockState state, PropertyInteger prop) {
 		if (state != null && hasProperty(state, prop)) {

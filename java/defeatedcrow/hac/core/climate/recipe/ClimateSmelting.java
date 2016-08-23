@@ -133,9 +133,10 @@ public class ClimateSmelting implements IClimateSmelting {
 
 	@Override
 	public boolean matchClimate(IClimate climate) {
+		boolean t = requiredHeat().isEmpty() || requiredHeat().contains(climate.getHeat());
 		boolean h = requiredHum().isEmpty() || requiredHum().contains(climate.getHumidity());
 		boolean a = requiredAir().isEmpty() || requiredAir().contains(climate.getAirflow());
-		return h && a;
+		return t && h && a;
 	}
 
 	@Override

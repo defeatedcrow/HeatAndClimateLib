@@ -96,33 +96,52 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 
 	@Override
 	public IFluidRecipe getRecipe(IClimate clm, List<ItemStack> items, FluidStack fluid) {
+		// DCLogger.debugLog("### fluid recipe checking ###");
+		// DCLogger.debugLog("heat: " + clm.getHeat().name());
 		List<FluidCraftRecipe> list = getRecipeList(clm.getHeat());
+		IFluidRecipe ret = null;
 		if (list.isEmpty()) {
-			return null;
 		} else {
+			// DCLogger.debugLog("### searching... ###");
 			for (IFluidRecipe recipe : list) {
 				if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {
-					return recipe;
+					ret = recipe;
 				}
 			}
-			return null;
 		}
+
+		/*
+		 * Tier絶対値が1以上の場合、現在環境の1つ下の温度帯のレシピも条件にあてまはる
+		 */
+		if (ret == null) {
+			if (clm.getHeat().getTier() != 0) {
+				int i = clm.getHeat().getTier() < 0 ? 1 : -1;
+				DCHeatTier next = clm.getHeat().addTier(i);
+				// DCLogger.debugLog("heat2: " + next.name());
+				List<FluidCraftRecipe> list2 = getRecipeList(next);
+				if (list2.isEmpty()) {
+				} else {
+					// DCLogger.debugLog("### searching... ###");
+					for (IFluidRecipe recipe : list2) {
+						if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {
+							ret = recipe;
+						}
+					}
+				}
+			}
+		}
+
+		if (ret != null) {
+			// DCLogger.debugLog("### fluid recipe found! ###");
+			return ret;
+		}
+		return null;
 	}
 
 	@Override
 	public IFluidRecipe getRecipe(int code, List<ItemStack> items, FluidStack fluid) {
 		IClimate clm = ClimateAPI.register.getClimateFromInt(code);
-		List<FluidCraftRecipe> list = getRecipeList(clm.getHeat());
-		if (list.isEmpty()) {
-			return null;
-		} else {
-			for (IFluidRecipe recipe : list) {
-				if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {
-					return recipe;
-				}
-			}
-			return null;
-		}
+		return getRecipe(clm, items, fluid);
 	}
 
 }

@@ -22,7 +22,7 @@ public interface IClimateCrop {
 	ItemStack getSeedItem(IBlockState thisState);
 
 	// 収穫物
-	List<ItemStack> getCropItems(IBlockState thisState);
+	List<ItemStack> getCropItems(IBlockState thisState, int fortune);
 
 	// 成長に使用。育つ環境かどうか
 	boolean isSuitableClimate(IClimate climate, IBlockState thisState);
@@ -32,9 +32,6 @@ public interface IClimateCrop {
 
 	// bonemealや収穫判定はenumでまとめた
 	GrowingStage getCurrentStage(IBlockState thisState);
-
-	// 次のステージのStateを得るときなどに
-	IBlockState getStateFromStage(GrowingStage stage);
 
 	// 成長させる
 	boolean grow(World world, BlockPos pos, IBlockState thisState);

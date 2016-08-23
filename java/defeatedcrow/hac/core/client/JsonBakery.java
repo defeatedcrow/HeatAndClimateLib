@@ -54,6 +54,9 @@ public class JsonBakery {
 	private static ModelResourceLocation normalTB = new ModelResourceLocation("dcs_climate:dcs_cube_tb", "normal");
 	private static ModelResourceLocation inventoryTB = new ModelResourceLocation("dcs_climate:dcs_cube_tb", "inventory");
 
+	private static ModelResourceLocation normalCrop = new ModelResourceLocation("dcs_climate:dcs_cross", "normal");
+	private static ModelResourceLocation inventoryCrop = new ModelResourceLocation("dcs_climate:dcs_cross", "inventory");
+
 	private static final List<String> TEX = new ArrayList<String>();
 
 	public void regDummySidedModel(Block block) {
@@ -76,8 +79,18 @@ public class JsonBakery {
 		});
 	}
 
+	public void regDummyCropModel(Block block) {
+		/* Block用 */
+		ModelLoader.setCustomStateMapper(block, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return normalCrop;
+			}
+		});
+	}
+
 	/* preInitに呼ぶ */
-	public void addTex(List<String> list) {
+	public static void addTex(List<String> list) {
 		if (list != null && !list.isEmpty()) {
 			TEX.addAll(list);
 		}
@@ -121,6 +134,18 @@ public class JsonBakery {
 			/* モデル指定がミスるとここに飛ぶ */
 			e.printStackTrace();
 		}
+		/* CROP */
+		ResourceLocation rawCrop = new ResourceLocation("dcs_climate:block/dcs_cross");
+		try {
+			IModel modelT = ModelLoaderRegistry.getModel(rawCrop);
+			if (modelT instanceof IRetexturableModel) {
+				IBakedModel bakedCrop = new BakedCropBaguette((IRetexturableModel) modelT);
+				event.getModelRegistry().putObject(normalCrop, bakedCrop);
+			}
+		} catch (IOException e) {
+			/* モデル指定がミスるとここに飛ぶ */
+			e.printStackTrace();
+		}
 	}
 
 	private static final String clear = "dcs_climate:blocks/clear";
@@ -154,7 +179,7 @@ public class JsonBakery {
 				if (face) {
 					ImmutableMap<String, String> textures = new ImmutableMap.Builder<String, String>()
 							.put("particle", top).put("down1", clear).put("up1", clear).put("ns1", ns).put("we1", we)
-							.put("down2", down).put("up2", down).build();
+							.put("down2", down).put("up2", top).build();
 					IBakedModel baked = retexturableModel.retexture(textures).bake(retexturableModel.getDefaultState(),
 							Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 					return baked.getQuads(state, side, rand);
@@ -229,6 +254,68 @@ public class JsonBakery {
 				String side = sided.getTexture(meta, 2, false);
 				IBakedModel baked = retexturableModel.retexture(
 						ImmutableMap.of("particle", top, "down", down, "up", top, "side", side)).bake(
+						retexturableModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+				return baked.getQuads(state, face, rand);
+			}
+			IBakedModel defModel = retexturableModel.bake(retexturableModel.getDefaultState(),
+					Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+			return defModel.getQuads(state, face, rand);
+		}
+
+		/* 以下、IBakedModelのメソッドだけど、handle～メソッドで違うモデルを返しているので、以下の状態で問題ない。 */
+
+		@Override
+		public boolean isAmbientOcclusion() {
+			return false;
+		}
+
+		@Override
+		public boolean isGui3d() {
+			return false;
+		}
+
+		@Override
+		public boolean isBuiltInRenderer() {
+			return false;
+		}
+
+		@Override
+		public TextureAtlasSprite getParticleTexture() {
+			return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("dcs_climate:blocks/destroy_effect");
+		}
+
+		@Override
+		public ItemCameraTransforms getItemCameraTransforms() {
+			return null;
+		}
+
+		@Override
+		public ItemOverrideList getOverrides() {
+			return null;
+		}
+	}
+
+	private static class BakedCropBaguette implements IBakedModel {
+		private final IRetexturableModel retexturableModel;
+		private Function<ResourceLocation, TextureAtlasSprite> textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
+			@Override
+			public TextureAtlasSprite apply(ResourceLocation location) {
+				return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+			}
+		};
+
+		public BakedCropBaguette(IRetexturableModel model) {
+			retexturableModel = model;
+		}
+
+		@Override
+		public List<BakedQuad> getQuads(IBlockState state, EnumFacing face, long rand) {
+			/* 6面それぞれの貼り替え */
+			if (state.getBlock() instanceof ISidedTexture) {
+				ISidedTexture sided = (ISidedTexture) state.getBlock();
+				int meta = state.getBlock().getMetaFromState(state);
+				String side = sided.getTexture(meta, 0, false);
+				IBakedModel baked = retexturableModel.retexture(ImmutableMap.of("particle", side, "crop", side)).bake(
 						retexturableModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 				return baked.getQuads(state, face, rand);
 			}

@@ -48,10 +48,6 @@ public class VanillaRecipeRegister {
 		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.HARDENED_CLAY, 1, 0), DCHeatTier.KILN,
 				DCHumidity.DRY, null, false, new ItemStack(Blocks.CLAY, 1, 0));
 
-		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.GLASS, 1, 0), DCHeatTier.KILN,
-		// null, null, false,
-		// new ItemStack(Blocks.SAND, 1, 0));
-
 		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONEBRICK, 1, 2), DCHeatTier.KILN, null, null,
 				false, new ItemStack(Blocks.STONEBRICK, 1, 0));
 
@@ -63,6 +59,20 @@ public class VanillaRecipeRegister {
 				Blocks.GRAVEL));
 
 		/* Fluid */
+
+		/*
+		 * RecipeAPI.registerFluidRecipes.addRecipe(new ItemStack(Blocks.TALLGRASS), null, 0.0F,
+		 * null, DCHeatTier.NORMAL,
+		 * DCHumidity.WET, null, false, new FluidStack(FluidRegistry.WATER, 100), new Object[] { new
+		 * ItemStack(
+		 * Items.WHEAT_SEEDS) });
+		 * IClimate clm = ClimateAPI.register.getClimateFromParam(DCHeatTier.HOT, DCHumidity.WET,
+		 * DCAirflow.FLOW);
+		 * List<ItemStack> list = new ArrayList<ItemStack>();
+		 * list.add(new ItemStack(Items.WHEAT_SEEDS, 5, 0));
+		 * RecipeAPI.registerFluidRecipes.getRecipe(clm, list, new FluidStack(FluidRegistry.WATER,
+		 * 1000));
+		 */
 
 		// Add Alt Recipe
 		addAltRecipes();

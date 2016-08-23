@@ -129,7 +129,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 			if (clm.getHeat().getTier() != 0) {
 				int i = clm.getHeat().getTier() < 0 ? 1 : -1;
 				List<ClimateSmelting> list2 = getRecipeList(clm.getHeat().addTier(i));
-				if (list.isEmpty()) {
+				if (list2.isEmpty()) {
 				} else {
 					for (IClimateSmelting recipe : list2) {
 						if (recipe.matcheInput(item) && recipe.matchClimate(clm)) {
@@ -140,7 +140,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 			}
 		}
 
-		if (ret != null && ret.matchClimate(clm)) {
+		if (ret != null) {
 			return ret;
 		}
 		return null;

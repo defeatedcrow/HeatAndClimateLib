@@ -23,7 +23,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.core.DCLogger;
 
 /**
  * 加工機能とSidedInventory持ちTorqueTileのベースクラス
@@ -44,10 +43,8 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 			// 完了処理
 			if (this.maxBurnTime > 0) {
 				if (this.currentBurnTime >= this.maxBurnTime) {
-					DCLogger.debugLog("b");
 					// レシピ進行の再チェック
 					if (this.isRecipeMaterial(this.getStackInSlot(0))) {
-						DCLogger.debugLog("c");
 						if (this.onProcess()) {
 							this.currentBurnTime = 0;
 							this.maxBurnTime = 0;
@@ -62,7 +59,6 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 				} else {
 					// レシピ進行の再チェック
 					if (this.isRecipeMaterial(this.getStackInSlot(0))) {
-						DCLogger.debugLog("a, " + this.prevTorque);
 						this.currentBurnTime += this.prevTorque;
 					} else {
 						// 一致しないためリセット
@@ -71,7 +67,6 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 					}
 				}
 			} else if (this.canStartProcess()) {
-				DCLogger.debugLog("s");
 				// レシピ開始可能かどうか
 				this.maxBurnTime = this.getProcessTime(this.getStackInSlot(0));
 			}

@@ -14,7 +14,15 @@ public class CoreConfigDC {
 	private final String BR = System.getProperty("line.separator");
 
 	// key
-	public static int charmWarpKey = 0x2D;
+	public static int charmWarpKey = 0x2D; // X
+	public static int sitKey = 0x0F; // Tab
+
+	// climate checking range
+	public static int heatRange = 2;
+	public static int humRange = 1;
+	public static int airRange = 1;
+
+	public static int[] ranges = new int[3];
 
 	// render
 	public static boolean showAltTips = true;
@@ -92,6 +100,19 @@ public class CoreConfigDC {
 					"Set key number for using jewel charm effects. Default key is X(45)." + BR
 							+ "If you don't want this effect, set 0.");
 
+			Property sit_key = cfg.get("key setting", "Sit Cushion Key", sitKey,
+					"Set key number for sitting on cushion. Default key is TAB(15)." + BR
+							+ "If you don't want this effect, set 0.");
+
+			Property range_t = cfg.get("setting", "HeatTier Cheking Rnage", heatRange,
+					"Set the range of cheking the climate. 1-16");
+
+			Property range_h = cfg.get("setting", "Humidity Cheking Rnage", humRange,
+					"Set the range of cheking the climate. 1-16");
+
+			Property range_a = cfg.get("setting", "Airflow Cheking Rnage", airRange,
+					"Set the range of cheking the climate. 1-16");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
@@ -106,16 +127,35 @@ public class CoreConfigDC {
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)
 				d = 2;
-
 			damageDifficulty = d;
 
 			int h = update_block.getInt();
 			if (h < 0 || h > 20)
-				h = 0;
+				h = 20;
 			updateFrequency = h;
 
 			iconX = hud_x.getInt();
 			iconY = hud_y.getInt();
+
+			charmWarpKey = warp_key.getInt();
+			sitKey = sit_key.getInt();
+
+			int tr = range_t.getInt();
+			if (tr < 0 || tr > 16)
+				tr = 16;
+			heatRange = tr;
+			int th = range_t.getInt();
+			if (th < 0 || th > 16)
+				th = 16;
+			humRange = th;
+			int ta = range_t.getInt();
+			if (ta < 0 || ta > 16)
+				ta = 16;
+			airRange = ta;
+
+			ranges[0] = tr;
+			ranges[1] = th;
+			ranges[2] = ta;
 
 		} catch (Exception e) {
 			e.printStackTrace();

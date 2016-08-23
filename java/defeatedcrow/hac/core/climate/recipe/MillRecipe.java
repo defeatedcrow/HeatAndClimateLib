@@ -99,9 +99,9 @@ public class MillRecipe implements IMillRecipe {
 			boolean b2 = false;
 			boolean b3 = false;
 			for (ItemStack get : items) {
-				if (DCUtil.isSameItem(getOutput(), get)) {
+				if (getOutput() == null || DCUtil.isSameItem(getOutput(), get)) {
 					b2 = true;
-				} else if (DCUtil.isSameItem(getSecondary(), get)) {
+				} else if (getSecondary() == null || DCUtil.isSameItem(getSecondary(), get)) {
 					b3 = true;
 				}
 			}

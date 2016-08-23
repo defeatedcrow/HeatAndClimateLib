@@ -23,13 +23,16 @@ public class APILoader {
 		ClimateAPI.register = new ClimateRegister();
 		ClimateAPI.calculator = new ClimateCalculator();
 		ClimateAPI.registerBlock = new HeatBlockRegister();
+		ClimateAPI.isLoaded = true;
 
 		RecipeAPI.registerRecipes = new ClimateRecipeRegister();
 		RecipeAPI.registerSmelting = new ClimateSmeltingRegister();
 		RecipeAPI.registerFluidRecipes = new FluidCraftRegister();
 		RecipeAPI.registerMills = new MillRecipeRegister();
+		RecipeAPI.isLoaded = true;
 
 		DamageAPI.armorRegister = new ArmorMaterialRegister();
+		DamageAPI.isLoaded = true;
 
 		registerClimate();
 		registerMaterial();

@@ -8,9 +8,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
 
 public class FluidRecipeWrapper implements IRecipeWrapper {
@@ -21,10 +23,11 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 	private final List<FluidStack> inF;
 	private final List<FluidStack> outF;
 	private final String type;
+	private final boolean cooling;
 
 	@SuppressWarnings("unchecked")
 	public FluidRecipeWrapper(FluidCraftRecipe recipe) {
-		type = recipe.recipeType();
+		type = recipe.additionalString();
 		rec = recipe;
 		input = recipe.getProcessedInput();
 		output = new ArrayList<ItemStack>();
@@ -41,6 +44,7 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 		if (recipe.getOutputFluid() != null) {
 			outF.add(recipe.getOutputFluid());
 		}
+		cooling = recipe.isNeedCooling();
 	}
 
 	@Override
@@ -106,7 +110,10 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 			}
 		}
 
-		mc.fontRendererObj.drawString(type, 30, 0, 0x0099FF, true);
+		IClimate clm = ClimateAPI.register.getClimateFromParam(minT, maxH, maxA);
+		FluidStack fluid = inF.isEmpty() ? null : inF.get(0);
+		String message = FRecipeType.getType(clm, cooling, fluid).name();
+		mc.fontRendererObj.drawString(message + " " + type, 30, 0, 0x0099FF, true);
 	}
 
 	@Override
@@ -148,6 +155,7 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 		}
 		// if (s.isEmpty())
 		// s.add(x + ", " + y);
+
 		return s.isEmpty() ? null : s;
 	}
 

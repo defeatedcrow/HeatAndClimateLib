@@ -15,6 +15,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -48,21 +49,22 @@ import defeatedcrow.hac.config.CoreConfigDC;
 /**
  * Climate利用作物のベース。
  * IGrowableによる骨粉イベント対応、右クリック収穫機能を持つ。
- * 4段階版
+ * 8段階、2ブロック作物版
  */
-public abstract class ClimateCropBase extends Block implements ISidedTexture, INameSuffix, IClimateCrop,
+public abstract class ClimateDoubleCropBase extends Block implements ISidedTexture, INameSuffix, IClimateCrop,
 		IRapidCollectables, IGrowable {
 
-	protected static final AxisAlignedBB CROP_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.875D, 0.875D);
+	protected static final AxisAlignedBB CROP_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
 
-	protected Random cropRand = new Random();
+	protected Random rand = new Random();
 	public static final String CL_TEX = "dcs_climate:blocks/clear";
 
-	public ClimateCropBase(Material material, String s, int max) {
+	public ClimateDoubleCropBase(Material material, String s, int max) {
 		super(material);
 		this.setUnlocalizedName(s);
 		this.setTickRandomly(true);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.STAGE4, 0));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.STAGE8, 0)
+				.withProperty(DCState.DOUBLE, false));
 	}
 
 	@Override
@@ -97,7 +99,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 	}
 
 	public int getGrownMetadata() {
-		return 3;
+		return 7;
 	}
 
 	/* Block動作 */
@@ -110,7 +112,17 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 			GrowingStage stage = this.getCurrentStage(crop);
 			if (stage == GrowingStage.GROWN) {
 				player.playSound(SoundEvents.BLOCK_GRASS_PLACE, 1.0F, 1.0F);
-				return this.harvest(world, pos, crop, player);
+				boolean a = this.harvest(world, pos, crop, player);
+				boolean b = false;
+				IBlockState under = world.getBlockState(pos.down());
+				if (under.getBlock() instanceof IClimateCrop && this.getCurrentStage(under) == GrowingStage.GROWN) {
+					b = this.harvest(world, pos.down(), under, player);
+				}
+				IBlockState upper = world.getBlockState(pos.up());
+				if (upper.getBlock() instanceof IClimateCrop && this.getCurrentStage(upper) == GrowingStage.GROWN) {
+					b = this.harvest(world, pos.up(), upper, player);
+				}
+				return a || b;
 			}
 		}
 		return false;
@@ -124,7 +136,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(world, pos, state, rand);
-		if (!world.isRemote && state != null && state.getBlock() instanceof ClimateCropBase) {
+		if (!world.isRemote && state != null && state.getBlock() instanceof ClimateDoubleCropBase) {
 			IClimate clm = this.getClimate(world, pos, state);
 			GrowingStage stage = this.getCurrentStage(state);
 			int chance = this.isSuitableClimate(clm, state) ? 6 : 40;
@@ -148,9 +160,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		List<ItemStack> ret = new ArrayList<ItemStack>();
 		GrowingStage stage = this.getCurrentStage(state);
-		if (cropRand.nextFloat() <= this.getSeedDropChance()) {
-			ret.add(this.getSeedItem(state));
-		}
+		ret.add(this.getSeedItem(state));
 		if (stage == GrowingStage.GROWN) {
 			ret.addAll(this.getCropItems(state, fortune));
 		}
@@ -161,6 +171,10 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 		if (!this.canBlockStay(worldIn, pos, state)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+		} else {
+			boolean db = this.isDouble(state, worldIn, pos);
+			if (state.getValue(DCState.DOUBLE) != db)
+				worldIn.setBlockState(pos, state.withProperty(DCState.DOUBLE, db), 3);
 		}
 	}
 
@@ -172,11 +186,20 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
 		if (!this.canBlockStay(world, pos, state)) {
 			world.destroyBlock(pos, true);
+		} else {
+			boolean db = this.isDouble(state, world, pos);
+			if (state.getValue(DCState.DOUBLE) != db)
+				world.setBlockState(pos, state.withProperty(DCState.DOUBLE, db), 3);
 		}
 	}
 
-	protected float getSeedDropChance() {
-		return 1.0F;
+	@Override
+	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
+			int meta, EntityLivingBase placer) {
+		IBlockState state = super.onBlockPlaced(world, pos, facing, hitX, hitY, hitZ, meta, placer);
+		boolean db = this.isDouble(state, world, pos);
+		state = state.withProperty(DCState.DOUBLE, db);
+		return state;
 	}
 
 	/* Json登録用 */
@@ -199,7 +222,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 
 	@Override
 	public boolean isSuitableClimate(IClimate climate, IBlockState thisState) {
-		if (climate == null || thisState == null || !(thisState.getBlock() instanceof ClimateCropBase))
+		if (climate == null || thisState == null || thisState.getBlock() != this)
 			return false;
 		boolean temp = this.getSuitableTemp(thisState).contains(climate.getHeat());
 		boolean hum = this.getSuitableHum(thisState).contains(climate.getHumidity());
@@ -211,8 +234,9 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 	public boolean isSuitablePlace(World world, BlockPos pos, IBlockState targetState) {
 		if (targetState == null)
 			return false;
+		boolean same = targetState.getBlock() == this;
 		boolean farm = targetState.getBlock() instanceof BlockFarmland;
-		return farm;
+		return same || farm;
 	}
 
 	@Override
@@ -220,10 +244,10 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 		if (thisState == null)
 			return GrowingStage.DEAD;
 		else {
-			int i = DCState.getInt(thisState, DCState.STAGE4);
-			if (i == 3) {
+			int i = DCState.getInt(thisState, DCState.STAGE8);
+			if (i == 7) {
 				return GrowingStage.GROWN;
-			} else if (i == 2) {
+			} else if (i > 4) {
 				return GrowingStage.FLOWER;
 			} else {
 				return GrowingStage.YOUNG;
@@ -233,7 +257,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 
 	@Override
 	public boolean grow(World world, BlockPos pos, IBlockState thisState) {
-		if (thisState != null && thisState.getBlock() instanceof ClimateCropBase) {
+		if (thisState != null && thisState.getBlock() instanceof ClimateDoubleCropBase) {
 			GrowingStage stage = this.getCurrentStage(thisState);
 			if (stage == GrowingStage.DEAD) {
 				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
@@ -241,10 +265,17 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 			} else if (stage == GrowingStage.GROWN) {
 				return false;
 			} else {
-				int age = DCState.getInt(thisState, DCState.STAGE4);
-				if (age >= 0 && age < 3) {
+				int age = DCState.getInt(thisState, DCState.STAGE8);
+				if (age >= 0 && age < 7) {
 					age++;
-					IBlockState next = thisState.withProperty(DCState.STAGE4, age);
+					if (age > 3 && world.getBlockState(pos.down()).getBlock() != this && world.isAirBlock(pos.up())) {
+						// 4段階目で2段になる
+						world.setBlockState(pos.up(),
+								thisState.withProperty(DCState.STAGE8, 4).withProperty(DCState.DOUBLE, false), 3);
+					}
+					IBlockState next = thisState.withProperty(DCState.STAGE8, age);
+					boolean db = this.isDouble(next, world, pos);
+					next.withProperty(DCState.DOUBLE, db);
 					return world.setBlockState(pos, next, 3);
 				}
 			}
@@ -254,7 +285,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 
 	@Override
 	public boolean harvest(World world, BlockPos pos, IBlockState thisState, EntityPlayer player) {
-		if (thisState != null && thisState.getBlock() instanceof ClimateCropBase) {
+		if (thisState != null && thisState.getBlock() instanceof ClimateDoubleCropBase) {
 			GrowingStage stage = this.getCurrentStage(thisState);
 			if (stage == GrowingStage.GROWN) {
 				int f = 0;
@@ -276,20 +307,12 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 					ret = true;
 				}
 				if (ret) {
-					if (canStayOnHarvest()) {
-						IBlockState next = thisState.withProperty(DCState.STAGE4, 0);
-						world.setBlockState(pos, next, 3);
-					} else {
-						world.setBlockToAir(pos);
-					}
+					IBlockState next = thisState.withProperty(DCState.STAGE8, 4);
+					world.setBlockState(pos, next, 3);
 				}
 				return ret;
 			}
 		}
-		return false;
-	}
-
-	public boolean canStayOnHarvest() {
 		return false;
 	}
 
@@ -324,6 +347,14 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 		return ret;
 	}
 
+	public boolean isDouble(IBlockState state, IBlockAccess world, BlockPos pos) {
+		IBlockState upper = world.getBlockState(pos.up());
+		if (state.getBlock() == this && upper.getBlock() == this) {
+			return true;
+		}
+		return false;
+	}
+
 	/* IRapidCollectables */
 
 	@Override
@@ -348,8 +379,9 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		int i = meta & 3;
-		IBlockState state = this.getDefaultState().withProperty(DCState.STAGE4, i);
+		int i = meta & 7;
+		boolean db = meta > 7;
+		IBlockState state = this.getDefaultState().withProperty(DCState.STAGE8, i).withProperty(DCState.DOUBLE, db);
 		return state;
 	}
 
@@ -358,18 +390,21 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 	public int getMetaFromState(IBlockState state) {
 		int i = 0;
 
-		i = state.getValue(DCState.STAGE4);
-		return i;
+		i = state.getValue(DCState.STAGE8);
+		boolean b = state.getValue(DCState.DOUBLE);
+		return b ? i | 8 : i;
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return state;
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { DCState.STAGE4 });
+		return new BlockStateContainer(this, new IProperty[] {
+				DCState.STAGE8,
+				DCState.DOUBLE });
 	}
 
 	// drop
@@ -396,7 +431,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 
 	@Override
 	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
-		if (state != null && state.getBlock() instanceof ClimateCropBase) {
+		if (state != null && state.getBlock() instanceof ClimateDoubleCropBase) {
 			GrowingStage stage = this.getCurrentStage(state);
 			IClimate clm = this.getClimate(world, pos, state);
 			return this.isSuitableClimate(clm, state) && stage.canUseBonemeal();
@@ -406,7 +441,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 
 	@Override
 	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
-		if (state != null && state.getBlock() instanceof ClimateCropBase) {
+		if (state != null && state.getBlock() instanceof ClimateDoubleCropBase) {
 			GrowingStage stage = this.getCurrentStage(state);
 			return stage.canUseBonemeal();
 		}
