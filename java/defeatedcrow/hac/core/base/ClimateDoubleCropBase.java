@@ -79,7 +79,7 @@ public abstract class ClimateDoubleCropBase extends Block implements ISidedTextu
 
 	@Override
 	public int tickRate(World world) {
-		return 40;
+		return 80;
 	}
 
 	@Override
@@ -219,6 +219,11 @@ public abstract class ClimateDoubleCropBase extends Block implements ISidedTextu
 
 	@Override
 	public abstract List<ItemStack> getCropItems(IBlockState thisState, int fortune);
+
+	@Override
+	public IBlockState getGrownState() {
+		return this.getDefaultState().withProperty(DCState.STAGE8, 7);
+	}
 
 	@Override
 	public boolean isSuitableClimate(IClimate climate, IBlockState thisState) {

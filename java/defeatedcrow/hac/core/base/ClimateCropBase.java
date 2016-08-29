@@ -77,7 +77,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 
 	@Override
 	public int tickRate(World world) {
-		return 40;
+		return 80;
 	}
 
 	@Override
@@ -196,6 +196,11 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 
 	@Override
 	public abstract List<ItemStack> getCropItems(IBlockState thisState, int fortune);
+
+	@Override
+	public IBlockState getGrownState() {
+		return this.getDefaultState().withProperty(DCState.STAGE4, 3);
+	}
 
 	@Override
 	public boolean isSuitableClimate(IClimate climate, IBlockState thisState) {

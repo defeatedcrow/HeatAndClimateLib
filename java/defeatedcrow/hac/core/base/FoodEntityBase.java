@@ -163,9 +163,9 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 			// 水中
 			if (this.inWater && this.isFloatOnWater() && this.checkInWater()) {
-				this.motionY += 0.045D;
-				if (this.motionY > 0.05D) {
-					this.motionY = 0.05D;
+				this.motionY += 0.08D;
+				if (this.motionY > 0.1D) {
+					this.motionY = 0.1D;
 				}
 				this.motionX *= 0.93D;
 				this.motionZ *= 0.93D;

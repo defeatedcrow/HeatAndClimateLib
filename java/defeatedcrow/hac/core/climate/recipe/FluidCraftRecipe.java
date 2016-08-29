@@ -88,16 +88,12 @@ public class FluidCraftRecipe implements IFluidRecipe {
 
 	@Override
 	public ItemStack getOutput() {
-		return output.copy();
+		return output == null ? null : output.copy();
 	}
 
 	@Override
 	public ItemStack getSecondary() {
-		if (this.secondary != null) {
-			return this.secondary.copy();
-		} else {
-			return null;
-		}
+		return secondary == null ? null : secondary.copy();
 	}
 
 	@Override

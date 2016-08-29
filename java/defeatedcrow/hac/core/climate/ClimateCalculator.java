@@ -1,6 +1,7 @@
 package defeatedcrow.hac.core.climate;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -226,6 +227,8 @@ public class ClimateCalculator implements IClimateCalculator {
 				DCHumidity cur = ClimateAPI.registerBlock.getHumidity(block, m);
 				if (cur == DCHumidity.UNDERWATER)
 					hasWater = true;
+			} else if (world.getBlockState(p1).getMaterial() == Material.WATER) {
+				hasWater = true;
 			} else if (!world.getBlockState(p1).isNormalCube()) {
 				hasAir = true;
 			}
@@ -277,6 +280,8 @@ public class ClimateCalculator implements IClimateCalculator {
 					} else if (cur.getID() > 1) {
 						ret++;
 					}
+				} else if (world.getBlockState(p2).getMaterial() == Material.WATER) {
+					ret++;
 				}
 			}
 		}

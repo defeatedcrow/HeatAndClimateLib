@@ -71,7 +71,7 @@ public class ClickEventDC {
 						IBlockState block = event.getWorld().getBlockState(p);
 						if (block.getBlock() == state.getBlock()) {
 							IRapidCollectables target = (IRapidCollectables) block.getBlock();
-							if (target.doCollect(event.getWorld(), p, state, player, held))
+							if (target.doCollect(event.getWorld(), p, block, player, held))
 								flag = true;
 						}
 					}

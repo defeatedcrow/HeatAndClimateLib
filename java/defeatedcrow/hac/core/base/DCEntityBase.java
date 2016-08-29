@@ -5,18 +5,21 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.tileentity.IHopper;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
@@ -24,6 +27,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import defeatedcrow.hac.api.placeable.IItemDropEntity;
@@ -92,9 +96,84 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity {
 			this.noClip = this.pushOutOfBlocks(this.posX,
 					(this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
-		this.motionX *= 0.5D;
-		this.motionY *= 0.5D;
-		this.motionZ *= 0.5D;
+
+		if (this.isFallable()) {
+
+			this.motionY -= 0.04D;
+			this.handleWaterMovement();
+			float f = 0.98F;
+
+			IBlockState in = worldObj.getBlockState(pos);
+			IBlockState under = worldObj.getBlockState(pos.down());
+
+			if (in.getBlock() == Blocks.HOPPER || under.getBlock() == Blocks.HOPPER) {
+				this.dropAndDeath(null);
+			} else if (worldObj.getTileEntity(pos.down()) != null
+					&& worldObj.getTileEntity(pos.down()) instanceof IHopper) {
+				this.dropAndDeath(null);
+			}
+
+			// 水中
+			if (this.inWater && this.isFloatOnWater() && this.checkInWater()) {
+				this.motionY += 0.08D;
+				if (this.motionY > 0.1D) {
+					this.motionY = 0.1D;
+				}
+				this.motionX *= 0.93D;
+				this.motionZ *= 0.93D;
+			} else {
+				if (this.onGround) {
+					f = under.getBlock().slipperiness;
+					this.motionX *= f * 0.5D;
+					this.motionY *= 0.5D;
+					this.motionZ *= f * 0.5D;
+				} else {
+					this.motionX *= 0.5D;
+					this.motionY *= 0.95D;
+					this.motionZ *= 0.5D;
+				}
+			}
+
+			this.doBlockCollisions();
+
+			// 進路方向の接触チェック
+			Vec3d checkX = new Vec3d(MathHelper.floor_double(this.posX + this.motionX),
+					MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+			BlockPos posX = new BlockPos(checkX);
+			IBlockState stateX = worldObj.getBlockState(posX);
+			if (stateX.getMaterial() != Material.AIR) {
+				AxisAlignedBB aabbX = stateX.getCollisionBoundingBox(this.worldObj, posX);
+
+				if (aabbX != Block.NULL_AABB && aabbX.offset(posX).isVecInside(checkX)) {
+					this.motionX *= -0.5D;
+				}
+			}
+
+			Vec3d checkZ = new Vec3d(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY),
+					MathHelper.floor_double(this.posZ + this.motionZ));
+			BlockPos posZ = new BlockPos(checkZ);
+			IBlockState stateZ = worldObj.getBlockState(posZ);
+			if (stateX.getMaterial() != Material.AIR) {
+				AxisAlignedBB aabbZ = stateZ.getCollisionBoundingBox(this.worldObj, posZ);
+
+				if (aabbZ != Block.NULL_AABB && aabbZ.offset(posZ).isVecInside(checkZ)) {
+					this.motionZ *= -0.5D;
+				}
+			}
+
+			if (this.motionX * this.motionX < 0.0005D) {
+				this.motionX = 0.0D;
+			}
+			if (this.motionY * this.motionY < 0.0005D) {
+				this.motionY = 0.0D;
+			}
+			if (this.motionZ * this.motionZ < 0.0005D) {
+				this.motionZ = 0.0D;
+			}
+
+			collideWithNearbyEntities();
+
+		}
 	}
 
 	protected void collideWithNearbyEntities() {
@@ -317,6 +396,14 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity {
 	@Override
 	protected boolean canTriggerWalking() {
 		return false;
+	}
+
+	protected boolean isFallable() {
+		return true;
+	}
+
+	protected boolean isFloatOnWater() {
+		return true;
 	}
 
 	@Override

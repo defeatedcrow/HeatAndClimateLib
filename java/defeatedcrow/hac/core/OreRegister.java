@@ -41,6 +41,8 @@ public class OreRegister {
 		OreDictionary.registerOre("bucketLava", new ItemStack(Items.LAVA_BUCKET));
 		OreDictionary.registerOre("bucketMilk", new ItemStack(Items.MILK_BUCKET));
 		OreDictionary.registerOre("bucketEmpty", new ItemStack(Items.BUCKET));
+
+		OreDictionary.registerOre("blockWool", new ItemStack(Blocks.WOOL, 1, 32767));
 	}
 
 	static void addConversion() {

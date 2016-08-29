@@ -33,6 +33,9 @@ public interface IClimateCrop {
 	// bonemealや収穫判定はenumでまとめた
 	GrowingStage getCurrentStage(IBlockState thisState);
 
+	// 成長後のステート
+	IBlockState getGrownState();
+
 	// 成長させる
 	boolean grow(World world, BlockPos pos, IBlockState thisState);
 

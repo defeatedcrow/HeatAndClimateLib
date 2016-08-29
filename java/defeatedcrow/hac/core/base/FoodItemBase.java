@@ -12,7 +12,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import defeatedcrow.hac.api.placeable.IEntityItem;
-import defeatedcrow.hac.core.DCLogger;
 
 /* 設置できる食べ物 */
 public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
@@ -63,10 +62,6 @@ public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
 
 	@Override
 	public boolean spawnPlacementEntity(World world, Entity entity) {
-		if (entity != null && entity instanceof FoodEntityBase) {
-			boolean raw = ((FoodEntityBase) entity).getRaw();
-			DCLogger.debugLog("Spawn " + entity.getName() + ":" + raw);
-		}
 		return world.spawnEntityInWorld(entity);
 	}
 
