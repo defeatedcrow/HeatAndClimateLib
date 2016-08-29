@@ -9,6 +9,8 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.cultivate.CropAPI;
+import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.core.climate.recipe.ClimateRecipe;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
@@ -24,11 +26,11 @@ public class DCsJEIPlugin implements IModPlugin {
 		helper = registry.getJeiHelpers();
 		registry.addRecipeCategories(new ClimateSmeltingCategory(helper.getGuiHelper()), new ClimateRecipeCategory(
 				helper.getGuiHelper()), new MillRecipeCategory(helper.getGuiHelper()),
-				new FluidRecipeCategory(helper.getGuiHelper()));
+				new FluidRecipeCategory(helper.getGuiHelper()), new ClimateCropCategory(helper.getGuiHelper()));
 		registry.addRecipeHandlers(new ClimateSmeltingHandler(), new ClimateRecipeHandler(), new MillRecipeHandler(),
-				new FluidRecipeHandler());
-		List<ClimateSmelting> list = new ArrayList<ClimateSmelting>();
+				new FluidRecipeHandler(), new ClimateCropHandler());
 
+		List<ClimateSmelting> list = new ArrayList<ClimateSmelting>();
 		list.addAll((List<ClimateSmelting>) RecipeAPI.registerSmelting.getRecipeList(DCHeatTier.ABSOLUTE));
 		list.addAll((List<ClimateSmelting>) RecipeAPI.registerSmelting.getRecipeList(DCHeatTier.FROSTBITE));
 		list.addAll((List<ClimateSmelting>) RecipeAPI.registerSmelting.getRecipeList(DCHeatTier.COLD));
@@ -64,10 +66,14 @@ public class DCsJEIPlugin implements IModPlugin {
 		list3.addAll((List<FluidCraftRecipe>) RecipeAPI.registerFluidRecipes.getRecipeList(DCHeatTier.UHT));
 		list3.addAll((List<FluidCraftRecipe>) RecipeAPI.registerFluidRecipes.getRecipeList(DCHeatTier.FROSTBITE));
 
+		List<IClimateCrop> list4 = new ArrayList<IClimateCrop>();
+		list4.addAll(CropAPI.register.getList().values());
+
 		registry.addRecipes(list);
 		registry.addRecipes(list2);
 		registry.addRecipes(RecipeAPI.registerMills.getRecipeList());
 		registry.addRecipes(list3);
+		registry.addRecipes(list4);
 	}
 
 	@Override

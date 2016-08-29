@@ -13,6 +13,66 @@ public interface IClimateCalculator {
 
 	/**
 	 * 範囲内のClimateを求める。<br>
+	 * 範囲指定が不要(configで指定したレンジで計算する)のメソッド。
+	 * 
+	 * @param world
+	 *            : 対象のWorld
+	 * @param pos
+	 *            : 対象のBlockPos
+	 * @param range
+	 *            : 走査半径
+	 * @param horizontal
+	 *            : posと同高度の平面範囲を調べる
+	 */
+	IClimate getClimate(World world, BlockPos pos);
+
+	/**
+	 * 範囲内のHeatTierを求める。<br>
+	 * 範囲指定が不要(configで指定したレンジで計算する)のメソッド。
+	 * 
+	 * @param world
+	 *            : 対象のWorld
+	 * @param pos
+	 *            : 対象のBlockPos
+	 * @param range
+	 *            : 走査半径
+	 * @param horizontal
+	 *            : posと同高度の平面範囲を調べる
+	 */
+	DCHeatTier getAverageTemp(World world, BlockPos pos);
+
+	/**
+	 * 範囲内のHeatTierを求める。<br>
+	 * 範囲指定が不要(configで指定したレンジで計算する)のメソッド。
+	 * 
+	 * @param world
+	 *            : 対象のWorld
+	 * @param pos
+	 *            : 対象のBlockPos
+	 * @param range
+	 *            : 走査半径
+	 * @param horizontal
+	 *            : posと同高度の平面範囲を調べる
+	 */
+	DCHumidity getHumidity(World world, BlockPos pos);
+
+	/**
+	 * 範囲内のHeatTierを求める。<br>
+	 * 範囲指定が不要(configで指定したレンジで計算する)のメソッド。
+	 * 
+	 * @param world
+	 *            : 対象のWorld
+	 * @param pos
+	 *            : 対象のBlockPos
+	 * @param range
+	 *            : 走査半径
+	 * @param horizontal
+	 *            : posと同高度の平面範囲を調べる
+	 */
+	DCAirflow getAirflow(World world, BlockPos pos);
+
+	/**
+	 * 範囲内のClimateを求める。<br>
 	 * 
 	 * @param world
 	 *            : 対象のWorld

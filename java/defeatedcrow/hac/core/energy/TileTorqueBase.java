@@ -15,7 +15,6 @@ import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.blockstate.EnumSide;
 import defeatedcrow.hac.api.energy.ITorqueDC;
 import defeatedcrow.hac.core.base.DCTileEntity;
-import defeatedcrow.hac.core.client.base.DCTileModelBase;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.packet.MessageTorqueTile;
 
@@ -39,6 +38,14 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 	public float rotation = 0;
 	public int age = 0;
+
+	public TileTorqueBase() {
+		super();
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected void createModel() {
+	}
 
 	public float maxTorque() {
 		return 32.0F;
@@ -85,6 +92,11 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 	@Override
 	public void onTickUpdate() {
+		if (worldObj.isRemote) {
+			// model生成
+			createModel();
+		}
+
 		age++;
 		if (age > 72000) {
 			// 1h程度でリセット
@@ -116,7 +128,7 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public DCTileModelBase getModel() {
+	public defeatedcrow.hac.core.client.base.DCTileModelBase getModel() {
 		return null;
 	}
 

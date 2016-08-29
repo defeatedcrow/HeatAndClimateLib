@@ -73,6 +73,13 @@ public class DCUtil {
 		return Math.sqrt(x * x + y * y + z * z);
 	}
 
+	public static int getDistInt(BlockPos p1, BlockPos p2) {
+		int x = Math.abs(p1.getX() - p2.getX());
+		int y = Math.abs(p1.getY() - p2.getY());
+		int z = Math.abs(p1.getZ() - p2.getZ());
+		return x + y + z;
+	}
+
 	// 防具の登録時の並び
 	public static final EntityEquipmentSlot[] SLOTS = new EntityEquipmentSlot[] {
 			EntityEquipmentSlot.HEAD,
@@ -90,7 +97,7 @@ public class DCUtil {
 			if (check != null && check.getItem() != null && check.getItem() instanceof IJewelCharm) {
 				IJewelCharm charm = (IJewelCharm) check.getItem();
 				int m = check.getItemDamage();
-				if (charm.getType(m) == type)
+				if (type == null || charm.getType(m) == type)
 					ret.put(i, check);
 			}
 		}
@@ -141,7 +148,12 @@ public class DCUtil {
 	}
 
 	// cloudの向き。+X方向固定っぽい
-	public static EnumFacing getCloudFace() {
+	public static EnumFacing getWorldWind(World world) {
+		if (world != null) {
+			if (world.provider.getHasNoSky()) {
+				return EnumFacing.UP;
+			}
+		}
 		return EnumFacing.EAST;
 	}
 

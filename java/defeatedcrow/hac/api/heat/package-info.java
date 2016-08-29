@@ -12,7 +12,7 @@
  * <br>
  * 実際の処理は、利用側(IHeatReceiver)のupdate処理内で熱源(IHeatSource)を走査、管理する。<br>
  */
-@API(apiVersion = "0.9.0", owner = "dcs_climate|lib", provides = "DCsHaCAPI|heat")
+@API(apiVersion = "0.9.4", owner = "dcs_climate|lib", provides = "DCsHaCAPI|heat")
 package defeatedcrow.hac.api.heat;
 
 import net.minecraftforge.fml.common.API;

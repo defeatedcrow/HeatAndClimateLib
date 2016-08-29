@@ -3,8 +3,11 @@ package defeatedcrow.hac.core.client.base;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import defeatedcrow.hac.core.base.DCLockableTE;
 
+@SideOnly(Side.CLIENT)
 public abstract class DCLockableTESRBase extends TileEntitySpecialRenderer<DCLockableTE> {
 
 	@Override

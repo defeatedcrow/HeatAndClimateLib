@@ -189,8 +189,10 @@ public class CustomizeVanillaRecipe {
 		int y = recipe.recipeHeight;
 		ItemStack[] items = recipe.recipeItems;
 
-		if (x * y > 9)
+		if (x * y == 0 || x * y > 9) {
+			DCLogger.debugLog("Failed ShapedRecipe : " + output.toString());
 			return;
+		}
 
 		ArrayList<Object> inputArray = new ArrayList<Object>();
 
@@ -308,11 +310,14 @@ public class CustomizeVanillaRecipe {
 			fieldH.setAccessible(true);
 			y = fieldH.getInt(recipe);
 		} catch (Exception e) {
+			DCLogger.debugLog("Failed ShapedOreRecipe : " + objects.toString());
 			return;
 		}
 
-		if (x * y == 0 || x * y > 9)
+		if (x * y == 0 || x * y > 9) {
+			DCLogger.debugLog("Failed ShapedOreRecipe : " + output.toString());
 			return;
+		}
 
 		// 3x3より大きなレシピには全く対応していない
 		String[] s = {
@@ -356,8 +361,9 @@ public class CustomizeVanillaRecipe {
 			boolean b = false;
 			ItemStack item = null;
 			Object obj = objects[i];
-			if (obj == null)
+			if (obj == null) {
 				continue;
+			}
 
 			if (obj instanceof ItemStack) {
 				item = (ItemStack) obj;
@@ -372,13 +378,15 @@ public class CustomizeVanillaRecipe {
 						if (oreItem == null || OreDictionary.getOreIDs(oreItem).length == 0)
 							continue;
 						int[] id = OreDictionary.getOreIDs(oreItem);
-						for (int j = 0; j < id.length; j++) {
-							String str = OreDictionary.getOreName(OreDictionary.getOreIDs(oreItem)[j]);
-							if (str != null) {
-								inputs.add(c[i]);
-								inputs.add(str);
-								b = true;
-								break;
+						if (id != null) {
+							for (int j = 0; j < id.length; j++) {
+								String str = OreDictionary.getOreName(id[j]);
+								if (str != null) {
+									inputs.add(c[i]);
+									inputs.add(str);
+									b = true;
+									break;
+								}
 							}
 						}
 						if (b)
@@ -392,6 +400,7 @@ public class CustomizeVanillaRecipe {
 					b = true;
 				}
 			} else if (obj instanceof String) {
+				inputs.add(c[i]);
 				inputs.add(obj);
 			}
 
@@ -441,12 +450,14 @@ public class CustomizeVanillaRecipe {
 						if (oreItem == null || OreDictionary.getOreIDs(oreItem).length == 0)
 							continue;
 						int[] id = OreDictionary.getOreIDs(oreItem);
-						for (int j = 0; j < id.length; j++) {
-							String str = OreDictionary.getOreName(OreDictionary.getOreIDs(oreItem)[j]);
-							if (str != null) {
-								inputs.add(str);
-								b = true;
-								break;
+						if (id != null) {
+							for (int j = 0; j < id.length; j++) {
+								String str = OreDictionary.getOreName(id[j]);
+								if (str != null) {
+									inputs.add(str);
+									b = true;
+									break;
+								}
 							}
 						}
 						if (b)
@@ -460,6 +471,8 @@ public class CustomizeVanillaRecipe {
 				}
 			} else if (obj instanceof String) {
 				inputs.add(obj);
+			} else {
+				inputs.add("Unknown");
 			}
 
 			if (item != null) {
@@ -498,7 +511,10 @@ public class CustomizeVanillaRecipe {
 		if (input == null && target != null || input != null && target == null) {
 			return false;
 		}
-		return (target.getItem() == input.getItem() && ((input.getItemDamage() == OreDictionary.WILDCARD_VALUE && !strict) || target
+		if (input == null && target == null) {
+			return true;
+		}
+		return (target.getItem() == input.getItem() && ((target.getItemDamage() == OreDictionary.WILDCARD_VALUE && !strict) || target
 				.getItemDamage() == input.getItemDamage()));
 	}
 

@@ -12,7 +12,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import defeatedcrow.hac.api.placeable.IEntityItem;
-import defeatedcrow.hac.core.DCLogger;
 
 /* 設置できる食べ物 */
 public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
@@ -31,8 +30,11 @@ public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
 				Block block = state.getBlock();
 				if (block != Blocks.TALLGRASS && block != Blocks.VINE && block != Blocks.DEADBUSH) {
 					if (canSpawnHere(world, pos)) {
-						Entity entity = this.getPlacementEntity(world, player, pos.getX() + hitX, pos.getY() + hitY,
-								pos.getZ() + hitZ, stack);
+						double fX = facing.getFrontOffsetX() * 0.25D;
+						double fY = facing.getFrontOffsetY() * 0.25D;
+						double fZ = facing.getFrontOffsetZ() * 0.25D;
+						Entity entity = this.getPlacementEntity(world, player, pos.getX() + hitX + fX, pos.getY()
+								+ hitY + fY, pos.getZ() + hitZ + fZ, stack);
 						if (entity != null) {
 							if (this.spawnPlacementEntity(world, entity)) {
 								--stack.stackSize;
@@ -60,10 +62,6 @@ public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
 
 	@Override
 	public boolean spawnPlacementEntity(World world, Entity entity) {
-		if (entity != null && entity instanceof FoodEntityBase) {
-			boolean raw = ((FoodEntityBase) entity).getRaw();
-			DCLogger.debugLog("Spawn " + entity.getName() + ":" + raw);
-		}
 		return world.spawnEntityInWorld(entity);
 	}
 

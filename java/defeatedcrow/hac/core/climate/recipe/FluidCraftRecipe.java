@@ -64,17 +64,19 @@ public class FluidCraftRecipe implements IFluidRecipe {
 		if (a != null)
 			air.add(a);
 		processedInput = new ArrayList<Object>();
-		for (int i = 0; i < inputs.length; i++) {
-			if (inputs[i] instanceof String) {
-				processedInput.add(OreDictionary.getOres((String) inputs[i]));
-			} else if (inputs[i] instanceof ItemStack) {
-				processedInput.add(((ItemStack) inputs[i]).copy());
-			} else if (inputs[i] instanceof Item) {
-				processedInput.add(new ItemStack((Item) inputs[i], 1, 0));
-			} else if (inputs[i] instanceof Block) {
-				processedInput.add(new ItemStack((Block) inputs[i], 1, 0));
-			} else {
-				throw new IllegalArgumentException("Unknown Object passed to recipe!");
+		if (inputs != null) {
+			for (int i = 0; i < inputs.length; i++) {
+				if (inputs[i] instanceof String) {
+					processedInput.add(OreDictionary.getOres((String) inputs[i]));
+				} else if (inputs[i] instanceof ItemStack) {
+					processedInput.add(((ItemStack) inputs[i]).copy());
+				} else if (inputs[i] instanceof Item) {
+					processedInput.add(new ItemStack((Item) inputs[i], 1, 0));
+				} else if (inputs[i] instanceof Block) {
+					processedInput.add(new ItemStack((Block) inputs[i], 1, 0));
+				} else {
+					throw new IllegalArgumentException("Unknown Object passed to recipe!");
+				}
 			}
 		}
 	}
@@ -86,16 +88,12 @@ public class FluidCraftRecipe implements IFluidRecipe {
 
 	@Override
 	public ItemStack getOutput() {
-		return output.copy();
+		return output == null ? null : output.copy();
 	}
 
 	@Override
 	public ItemStack getSecondary() {
-		if (this.secondary != null) {
-			return this.secondary.copy();
-		} else {
-			return null;
-		}
+		return secondary == null ? null : secondary.copy();
 	}
 
 	@Override
@@ -157,7 +155,10 @@ public class FluidCraftRecipe implements IFluidRecipe {
 		}
 
 		if (b1) {
+			// DCLogger.debugLog("1: fluid match");
 			ArrayList<Object> required = new ArrayList<Object>(this.processedInput);
+			if (required.isEmpty())
+				return true;
 
 			for (int x = 0; x < items.size(); x++) {
 				ItemStack slot = items.get(x);
@@ -177,11 +178,11 @@ public class FluidCraftRecipe implements IFluidRecipe {
 						Object next = req.next();
 
 						if (next instanceof ItemStack) {
-							match = OreDictionary.itemMatches((ItemStack) next, slot, false);
+							match = DCUtil.isSameItem((ItemStack) next, slot);
 						} else if (next instanceof ArrayList) {
 							Iterator<ItemStack> itr = ((ArrayList<ItemStack>) next).iterator();
 							while (itr.hasNext() && !match) {
-								match = OreDictionary.itemMatches(itr.next(), slot, false);
+								match = DCUtil.isSameItem(itr.next(), slot);
 							}
 						}
 
@@ -197,6 +198,8 @@ public class FluidCraftRecipe implements IFluidRecipe {
 					}
 				}
 			}
+			// if (required.isEmpty())
+			// DCLogger.debugLog("2: item match");
 			return required.isEmpty();
 		} else {
 			return false;
@@ -217,9 +220,9 @@ public class FluidCraftRecipe implements IFluidRecipe {
 				boolean b2 = false;
 				boolean b3 = false;
 				for (ItemStack get : items) {
-					if (DCUtil.isSameItem(getOutput(), get)) {
+					if (getOutput() == null || DCUtil.isSameItem(getOutput(), get)) {
 						b2 = true;
-					} else if (DCUtil.isSameItem(getSecondary(), get)) {
+					} else if (getSecondary() == null || DCUtil.isSameItem(getSecondary(), get)) {
 						b3 = true;
 					}
 				}
@@ -253,6 +256,8 @@ public class FluidCraftRecipe implements IFluidRecipe {
 		boolean t = requiredHeat().isEmpty() || requiredHeat().contains(climate.getHeat());
 		boolean h = requiredHum().isEmpty() || requiredHum().contains(climate.getHumidity());
 		boolean a = requiredAir().isEmpty() || requiredAir().contains(climate.getAirflow());
+		// if (t && h && a)
+		// DCLogger.debugLog("3: clm match");
 		return t && h && a;
 	}
 
@@ -285,8 +290,7 @@ public class FluidCraftRecipe implements IFluidRecipe {
 	}
 
 	@Override
-	public String recipeType() {
+	public String additionalString() {
 		return type;
 	}
-
 }

@@ -6,12 +6,14 @@ import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.cultivate.CropAPI;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.core.climate.ArmorMaterialRegister;
 import defeatedcrow.hac.core.climate.ClimateCalculator;
 import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
+import defeatedcrow.hac.core.climate.recipe.ClimateCropRegister;
 import defeatedcrow.hac.core.climate.recipe.ClimateRecipeRegister;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmeltingRegister;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRegister;
@@ -23,13 +25,19 @@ public class APILoader {
 		ClimateAPI.register = new ClimateRegister();
 		ClimateAPI.calculator = new ClimateCalculator();
 		ClimateAPI.registerBlock = new HeatBlockRegister();
+		ClimateAPI.isLoaded = true;
 
 		RecipeAPI.registerRecipes = new ClimateRecipeRegister();
 		RecipeAPI.registerSmelting = new ClimateSmeltingRegister();
 		RecipeAPI.registerFluidRecipes = new FluidCraftRegister();
 		RecipeAPI.registerMills = new MillRecipeRegister();
+		RecipeAPI.isLoaded = true;
 
 		DamageAPI.armorRegister = new ArmorMaterialRegister();
+		DamageAPI.isLoaded = true;
+
+		CropAPI.register = new ClimateCropRegister();
+		CropAPI.isLoaded = true;
 
 		registerClimate();
 		registerMaterial();

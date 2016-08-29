@@ -39,6 +39,7 @@ import defeatedcrow.hac.api.placeable.IItemDropEntity;
 import defeatedcrow.hac.api.placeable.IRapidCollectables;
 import defeatedcrow.hac.config.CoreConfigDC;
 
+// Food
 public abstract class FoodEntityBase extends Entity implements IItemDropEntity, IRapidCollectables {
 
 	private int totalAge = 0;
@@ -100,10 +101,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			}
 
 			if (getRaw()) {
-				IClimate clm = ClimateAPI.calculator.getClimate(worldObj, pos, new int[] {
-						2,
-						1,
-						1 });
+				IClimate clm = ClimateAPI.calculator.getClimate(worldObj, pos);
 				if (this.canCookingClimate(clm) > 0) {
 					int age = this.getAge() + 1;
 					int add = this.canCookingClimate(clm);
@@ -116,10 +114,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 					}
 				}
 			} else if (CoreConfigDC.burntFood && !getBURNT()) {
-				IClimate clm = ClimateAPI.calculator.getClimate(worldObj, pos, new int[] {
-						2,
-						1,
-						1 });
+				IClimate clm = ClimateAPI.calculator.getClimate(worldObj, pos);
 				if (this.canCookingClimate(clm) > 2) {
 					int age = this.getAge() + 1;
 					int add = this.canCookingClimate(clm);
@@ -145,6 +140,9 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
+		if (collideable())
+			this.noClip = this.pushOutOfBlocks(this.posX,
+					(this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 
 		if (this.isFallable()) {
@@ -163,27 +161,25 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 				this.dropAndDeath(null);
 			}
 
-			// 真下チェック
-			if (this.onGround) {
-				f = under.getBlock().slipperiness * 0.98F;
-			}
-
-			this.motionX *= f;
-			this.motionY *= 0.95D;
-			this.motionZ *= f;
-
-			if (this.onGround) {
-				this.motionY *= -0.25D;
-			}
-
 			// 水中
 			if (this.inWater && this.isFloatOnWater() && this.checkInWater()) {
-				this.motionY += 0.035D;
-				if (this.motionY > 0.05D) {
-					this.motionY = 0.05D;
+				this.motionY += 0.08D;
+				if (this.motionY > 0.1D) {
+					this.motionY = 0.1D;
 				}
 				this.motionX *= 0.93D;
 				this.motionZ *= 0.93D;
+			} else {
+				if (this.onGround) {
+					f = under.getBlock().slipperiness;
+					this.motionX *= f * 0.5D;
+					this.motionY *= 0.5D;
+					this.motionZ *= f * 0.5D;
+				} else {
+					this.motionX *= 0.5D;
+					this.motionY *= 0.95D;
+					this.motionZ *= 0.5D;
+				}
 			}
 
 			this.doBlockCollisions();
@@ -240,8 +236,66 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		}
 	}
 
+	@Override
+	protected boolean pushOutOfBlocks(double x, double y, double z) {
+		BlockPos blockpos = new BlockPos(x, y, z);
+		double d0 = x - blockpos.getX();
+		double d1 = y - blockpos.getY();
+		double d2 = z - blockpos.getZ();
+		List<AxisAlignedBB> list = this.worldObj.getCollisionBoxes(this.getEntityBoundingBox());
+
+		if (list.isEmpty()) {
+			return false;
+		} else {
+			EnumFacing enumfacing = EnumFacing.UP;
+			double d3 = Double.MAX_VALUE;
+
+			if (!this.worldObj.isBlockFullCube(blockpos.west()) && d0 < d3) {
+				d3 = d0;
+				enumfacing = EnumFacing.WEST;
+			}
+
+			if (!this.worldObj.isBlockFullCube(blockpos.east()) && 1.0D - d0 < d3) {
+				d3 = 1.0D - d0;
+				enumfacing = EnumFacing.EAST;
+			}
+
+			if (!this.worldObj.isBlockFullCube(blockpos.north()) && d2 < d3) {
+				d3 = d2;
+				enumfacing = EnumFacing.NORTH;
+			}
+
+			if (!this.worldObj.isBlockFullCube(blockpos.south()) && 1.0D - d2 < d3) {
+				d3 = 1.0D - d2;
+				enumfacing = EnumFacing.SOUTH;
+			}
+
+			if (!this.worldObj.isBlockFullCube(blockpos.up()) && 1.0D - d1 < d3) {
+				d3 = 1.0D - d1;
+				enumfacing = EnumFacing.UP;
+			}
+
+			float f = 0.1F;
+			float f1 = enumfacing.getAxisDirection().getOffset();
+
+			if (enumfacing.getAxis() == EnumFacing.Axis.X) {
+				this.motionX += f1 * f;
+			} else if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
+				this.motionY += f1 * f;
+			} else if (enumfacing.getAxis() == EnumFacing.Axis.Z) {
+				this.motionZ += f1 * f;
+			}
+
+			return true;
+		}
+	}
+
 	protected void collideWithEntity(Entity entityIn) {
 		entityIn.applyEntityCollision(this);
+	}
+
+	public boolean collideable() {
+		return true;
 	}
 
 	/* レシピ */
@@ -346,7 +400,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		int i = MathHelper.floor_double(foodAABB.minX);
 		int j = MathHelper.ceiling_double_int(foodAABB.maxX);
 		int k = MathHelper.floor_double(foodAABB.minY);
-		int l = MathHelper.ceiling_double_int(foodAABB.minY + 0.001D);
+		int l = MathHelper.ceiling_double_int(foodAABB.maxY);
 		int i1 = MathHelper.floor_double(foodAABB.minZ);
 		int j1 = MathHelper.ceiling_double_int(foodAABB.maxZ);
 		boolean flag = false;

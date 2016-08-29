@@ -102,6 +102,6 @@ public interface IFluidRecipe {
 	/**
 	 * レシピ表示機能用
 	 */
-	String recipeType();
+	String additionalString();
 
 }

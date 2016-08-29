@@ -47,7 +47,7 @@ public class ItemClimateChecker extends DCItem {
 
 				if (c == null) {
 					// heatのみ2ブロック
-					c = ClimateAPI.calculator.getClimate(world, pos, null);
+					c = ClimateAPI.calculator.getClimate(world, pos);
 				}
 
 				if (c != null) {
@@ -73,7 +73,7 @@ public class ItemClimateChecker extends DCItem {
 				}
 			}
 		}
-		return EnumActionResult.PASS;
+		return EnumActionResult.SUCCESS;
 	}
 
 	@Override

@@ -39,7 +39,6 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.damage.DamageSourceClimate;
-import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
@@ -122,8 +121,7 @@ public class LivingEventDC {
 					int px = MathHelper.floor_double(living.posX);
 					int py = MathHelper.floor_double(living.posY) + 1;
 					int pz = MathHelper.floor_double(living.posZ);
-					DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(living.worldObj, new BlockPos(px, py, pz),
-							2, false);
+					DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(living.worldObj, new BlockPos(px, py, pz));
 
 					float prev = 1.0F; // normal
 					if (living instanceof EntityPlayer) {
@@ -225,7 +223,7 @@ public class LivingEventDC {
 
 			// charm
 			if (!player.worldObj.isRemote) {
-				Map<Integer, ItemStack> charms = DCUtil.getPlayerCharm(player, CharmType.CONSTANT);
+				Map<Integer, ItemStack> charms = DCUtil.getPlayerCharm(player, null);
 				for (ItemStack item2 : charms.values()) {
 					int m = item2.getMetadata();
 					IJewelCharm jew = (IJewelCharm) item2.getItem();
@@ -295,10 +293,7 @@ public class LivingEventDC {
 								IBlockState state = world.getBlockState(pos);
 								Block block = state.getBlock();
 								int meta = block.getMetaFromState(state);
-								IClimate clm = ClimateAPI.calculator.getClimate(world, pos, new int[] {
-										2,
-										1,
-										1 });
+								IClimate clm = ClimateAPI.calculator.getClimate(world, pos);
 								IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(
 										block, 1, meta));
 								if (recipe == null || !recipe.matchClimate(clm) || recipe.hasPlaceableOutput() != 1)
@@ -328,7 +323,7 @@ public class LivingEventDC {
 		int life = event.getExtraLife();
 		if (CoreConfigDC.enableFreezeDrop && item != null && !item.worldObj.isRemote) {
 			BlockPos pos = item.getPosition();
-			DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(item.worldObj, pos, 2, false);
+			DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(item.worldObj, pos);
 			if (heat.getTier() < -1) {
 				// frostbite以下
 				life += 6000;

@@ -1,6 +1,7 @@
 package defeatedcrow.hac.core.climate;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -14,6 +15,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.climate.IClimateCalculator;
 import defeatedcrow.hac.api.climate.IHeatTile;
 import defeatedcrow.hac.api.climate.IHumidityTile;
+import defeatedcrow.hac.config.CoreConfigDC;
 
 /**
  * BiomeとBlockの環境要因の合成
@@ -21,12 +23,36 @@ import defeatedcrow.hac.api.climate.IHumidityTile;
 public class ClimateCalculator implements IClimateCalculator {
 
 	@Override
+	public IClimate getClimate(World world, BlockPos pos) {
+		int[] r = new int[] {
+				CoreConfigDC.heatRange,
+				CoreConfigDC.humRange,
+				CoreConfigDC.airRange };
+		return getClimate(world, pos, r);
+	}
+
+	@Override
+	public DCHeatTier getAverageTemp(World world, BlockPos pos) {
+		return getAverageTemp(world, pos, CoreConfigDC.heatRange, false);
+	}
+
+	@Override
+	public DCHumidity getHumidity(World world, BlockPos pos) {
+		return getHumidity(world, pos, CoreConfigDC.humRange, false);
+	}
+
+	@Override
+	public DCAirflow getAirflow(World world, BlockPos pos) {
+		return getAirflow(world, pos, CoreConfigDC.airRange, false);
+	}
+
+	@Override
 	public IClimate getClimate(World world, BlockPos pos, int[] r) {
 		if (r == null || r.length < 3)
 			r = new int[] {
-					2,
-					1,
-					1 };
+					CoreConfigDC.heatRange,
+					CoreConfigDC.humRange,
+					CoreConfigDC.airRange };
 		DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos, r[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, r[1], false);
 		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, r[2], false);
@@ -201,6 +227,8 @@ public class ClimateCalculator implements IClimateCalculator {
 				DCHumidity cur = ClimateAPI.registerBlock.getHumidity(block, m);
 				if (cur == DCHumidity.UNDERWATER)
 					hasWater = true;
+			} else if (world.getBlockState(p1).getMaterial() == Material.WATER) {
+				hasWater = true;
 			} else if (!world.getBlockState(p1).isNormalCube()) {
 				hasAir = true;
 			}
@@ -252,6 +280,8 @@ public class ClimateCalculator implements IClimateCalculator {
 					} else if (cur.getID() > 1) {
 						ret++;
 					}
+				} else if (world.getBlockState(p2).getMaterial() == Material.WATER) {
+					ret++;
 				}
 			}
 		}
@@ -364,5 +394,4 @@ public class ClimateCalculator implements IClimateCalculator {
 		}
 		return false;
 	}
-
 }

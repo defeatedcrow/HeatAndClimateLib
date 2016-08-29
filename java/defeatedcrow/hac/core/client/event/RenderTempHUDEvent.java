@@ -52,7 +52,7 @@ public class RenderTempHUDEvent {
 
 					BlockPos pos = player.getPosition();
 					if (pos != null && world.isAreaLoaded(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
-						DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos, 2, false);
+						DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos);
 						if (temp != null) {
 							tier = temp.getTier();
 						}
@@ -135,10 +135,7 @@ public class RenderTempHUDEvent {
 							for (int j = 0; j < 3; j++) {
 								for (int k = 0; k < 3; k++) {
 									BlockPos p = base.add(i, j, k);
-									IClimate clm = ClimateAPI.calculator.getClimate(world, p, new int[] {
-											2,
-											1,
-											1 });
+									IClimate clm = ClimateAPI.calculator.getClimate(world, p);
 									climates[i][j][k] = clm;
 								}
 							}

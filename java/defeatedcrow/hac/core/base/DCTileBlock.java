@@ -38,6 +38,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
 
 // TESR持ちブロックのベース
@@ -267,10 +268,7 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 
 	@Override
 	public int[] checkingRange() {
-		return new int[] {
-				2,
-				1,
-				1 };
+		return CoreConfigDC.ranges;
 	}
 
 }
