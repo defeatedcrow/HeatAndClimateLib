@@ -21,6 +21,7 @@ import defeatedcrow.hac.api.recipe.DCBlockFreezeEvent;
 import defeatedcrow.hac.api.recipe.DCBlockUpdateEvent;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.DCLogger;
 
 public class BlockUpdateDC {
@@ -119,16 +120,18 @@ public class BlockUpdateDC {
 			}
 
 			// レシピ判定
-			IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(block, 1, meta));
-			if (recipe != null && recipe.matchClimate(clm) && recipe.hasPlaceableOutput() == 1) {
-				if (recipe.getOutput() != null && recipe.getOutput().getItem() instanceof ItemBlock) {
-					Block retB = Block.getBlockFromItem(recipe.getOutput().getItem());
-					int retM = recipe.getOutput().getMetadata();
-					IBlockState ret = retB.getStateFromMeta(retM);
-					world.setBlockState(p, ret, 3);
-					world.notifyBlockOfStateChange(p, ret.getBlock());
-					event.setCanceled(true);
-					DCLogger.debugLog("Update climate change!");
+			if (CoreConfigDC.enableVanilla) {
+				IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(block, 1, meta));
+				if (recipe != null && recipe.matchClimate(clm) && recipe.hasPlaceableOutput() == 1) {
+					if (recipe.getOutput() != null && recipe.getOutput().getItem() instanceof ItemBlock) {
+						Block retB = Block.getBlockFromItem(recipe.getOutput().getItem());
+						int retM = recipe.getOutput().getMetadata();
+						IBlockState ret = retB.getStateFromMeta(retM);
+						world.setBlockState(p, ret, 3);
+						world.notifyBlockOfStateChange(p, ret.getBlock());
+						event.setCanceled(true);
+						DCLogger.debugLog("Update climate change!");
+					}
 				}
 			}
 		}

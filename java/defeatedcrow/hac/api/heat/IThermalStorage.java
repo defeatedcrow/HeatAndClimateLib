@@ -5,6 +5,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 /**
  * 熱量をタンクのように貯められる蓄熱機能の概念
  */
+@Deprecated
 public interface IThermalStorage {
 
 	/**

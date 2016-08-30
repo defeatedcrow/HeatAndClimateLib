@@ -9,6 +9,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 /**
  * 熱利用BlockやTileEntity、Entityに持たせる伝熱機能。
  */
+@Deprecated
 public interface IHeatReceiver {
 
 	/**

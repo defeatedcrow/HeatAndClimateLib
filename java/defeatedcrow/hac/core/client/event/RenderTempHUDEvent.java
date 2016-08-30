@@ -105,7 +105,7 @@ public class RenderTempHUDEvent {
 	private IClimate[][][] climates = new IClimate[3][3][3];
 	private int count2 = 0;
 
-	// @SubscribeEvent
+	// @SubscribeEvent 完全に失敗
 	public void renderClimateViewer(DrawBlockHighlightEvent event) {
 		EntityPlayer player = event.getPlayer();
 		RayTraceResult target = event.getTarget();

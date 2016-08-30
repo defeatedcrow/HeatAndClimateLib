@@ -23,6 +23,9 @@ import defeatedcrow.hac.core.DCLogger;
 // 色々不足しているもの
 public class DCUtil {
 
+	/*
+	 * stacksize以外の比較
+	 */
 	public static boolean isSameItem(ItemStack i1, ItemStack i2) {
 		if (i1 == null || i2 == null) {
 			return false;
@@ -40,6 +43,9 @@ public class DCUtil {
 		}
 	}
 
+	/*
+	 * stacksize以外の比較、ワイルドカード付き
+	 */
 	public static boolean isIntegratedItem(ItemStack i1, ItemStack i2) {
 		if (i1 == null || i2 == null) {
 			return false;
@@ -59,6 +65,9 @@ public class DCUtil {
 		}
 	}
 
+	/*
+	 * stackが重ねられるかどうか
+	 */
 	public static boolean isStackable(ItemStack i1, ItemStack i2) {
 		if (isSameItem(i1, i2)) {
 			return i1.stackSize <= (i2.getMaxStackSize() - i2.stackSize);
@@ -66,6 +75,9 @@ public class DCUtil {
 		return false;
 	}
 
+	/*
+	 * 直線距離
+	 */
 	public static double getDist(BlockPos p1, BlockPos p2) {
 		double x = Math.abs(p1.getX() - p2.getX());
 		double y = Math.abs(p1.getY() - p2.getY());
@@ -73,6 +85,9 @@ public class DCUtil {
 		return Math.sqrt(x * x + y * y + z * z);
 	}
 
+	/*
+	 * Block数での距離
+	 */
 	public static int getDistInt(BlockPos p1, BlockPos p2) {
 		int x = Math.abs(p1.getX() - p2.getX());
 		int y = Math.abs(p1.getY() - p2.getY());
