@@ -209,9 +209,9 @@ public class FluidCraftRecipe implements IFluidRecipe {
 	@Override
 	public boolean matchOutput(List<ItemStack> items, FluidStack fluid, int slotsize) {
 		boolean b1 = false;
-		if (this.outputF == null) {
+		if (this.outputF == null || fluid == null) {
 			b1 = true;
-		} else if (fluid != null) {
+		} else {
 			b1 = outputF.getFluid() == fluid.getFluid();
 		}
 

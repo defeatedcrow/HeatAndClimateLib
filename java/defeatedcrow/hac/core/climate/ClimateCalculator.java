@@ -1,6 +1,7 @@
 package defeatedcrow.hac.core.climate;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -293,7 +294,7 @@ public class ClimateCalculator implements IClimateCalculator {
 		}
 	}
 
-	// ひとつでもAirがあれば窒息はしない
+	// Airの数をカウントして決定
 	@Override
 	public DCAirflow getAirflow(World world, BlockPos pos, int r, boolean h) {
 		if (r < 0 || r > 15)
@@ -387,7 +388,8 @@ public class ClimateCalculator implements IClimateCalculator {
 		while (pos2.getY() < lim && pos2.getY() < world.getActualHeight()) {
 			IBlockState state = world.getBlockState(pos2);
 			Block block = world.getBlockState(pos2).getBlock();
-			if (!world.isAirBlock(pos2)) {
+			if (!world.isAirBlock(pos2)
+					&& (block.getLightOpacity(state, world, pos2) > 0.0F || state.getMobilityFlag() == EnumPushReaction.NORMAL)) {
 				return true;
 			}
 			pos2 = pos2.up();
