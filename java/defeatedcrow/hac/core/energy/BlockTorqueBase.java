@@ -25,6 +25,7 @@ import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.blockstate.EnumSide;
 import defeatedcrow.hac.api.energy.IWrenchDC;
 import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.DCLogger;
 
 /* 
  * トルク系装置のBlockクラス。
@@ -53,6 +54,10 @@ public abstract class BlockTorqueBase extends BlockContainer {
 				((TileTorqueBase) tile).rotateFace();
 			}
 			return true;
+		}
+		if (ClimateCore.isDebug && state.getBlock() instanceof BlockTorqueBase && world.isRemote
+				&& hand == EnumHand.MAIN_HAND) {
+			DCLogger.debugLog("current side: " + DCState.getSide(state, DCState.SIDE));
 		}
 		return false;
 	}

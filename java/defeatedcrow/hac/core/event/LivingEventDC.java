@@ -12,12 +12,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -164,8 +165,9 @@ public class LivingEventDC {
 						if (living.isImmuneToFire()) {
 							prev -= 2.0F;
 						}
-						if (living.isEntityUndead()) {
-							prev += 1.0F;
+						if (living.isEntityUndead() || living instanceof EntityEnderman
+								|| living instanceof EntitySheep) {
+							prev += 2.0F;
 						}
 					} else {
 						if (living.isPotionActive(DCPotion.fire_reg)) {
@@ -245,7 +247,6 @@ public class LivingEventDC {
 			if (ClimateCore.proxy.isWarpKeyDown()) {
 				if (!x_key) {
 					x_key = true;
-					player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 					HaCPacket.INSTANCE.sendToServer(new MessageCharmKey((byte) 1));
 				}
 			} else {

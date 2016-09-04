@@ -94,23 +94,24 @@ public class MillRecipe implements IMillRecipe {
 	}
 
 	@Override
-	public boolean matchOutput(List<ItemStack> items, int slotsize) {
+	public boolean matchOutput(List<ItemStack> items, ItemStack in, int slotsize) {
 		if (items != null && !items.isEmpty()) {
-			boolean b2 = false;
-			boolean b3 = false;
+			int req = 3;
 			for (ItemStack get : items) {
-				if (getOutput() == null || DCUtil.isSameItem(getOutput(), get)) {
-					b2 = true;
-				} else if (getSecondary() == null || DCUtil.isSameItem(getSecondary(), get)) {
-					b3 = true;
+				if (getOutput() == null || DCUtil.isStackable(getOutput(), get)) {
+					req--;
+				}
+				if (getSecondary() == null || DCUtil.isStackable(getSecondary(), get)) {
+					req--;
+				}
+				if (getContainerItem(in) == null || DCUtil.isStackable(getContainerItem(in), get)) {
+					req--;
 				}
 			}
-			if (items.size() < slotsize - 1) {
+			if (items.size() <= slotsize - req) {
 				return true;
-			} else if (items.size() == slotsize - 1) {
-				return b2 || b3;
 			} else {
-				return b2 && b3;
+				return false;
 			}
 		} else {
 			return true;

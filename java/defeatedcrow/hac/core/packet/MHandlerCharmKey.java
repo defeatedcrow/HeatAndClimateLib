@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -28,6 +29,7 @@ public class MHandlerCharmKey implements IMessageHandler<MessageCharmKey, IMessa
 				IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
 				if (charm.onUsing(player, entry.getValue())) {
 					if (charm.consumeCharmItem(entry.getValue()) == null) {
+						player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 						player.inventory.setInventorySlotContents(entry.getKey(), null);
 						player.inventory.markDirty();
 						break;

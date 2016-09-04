@@ -5,7 +5,6 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -29,7 +28,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import defeatedcrow.hac.api.climate.ClimateAPI;
@@ -162,7 +160,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			}
 
 			// 水中
-			if (this.inWater && this.isFloatOnWater() && this.checkInWater()) {
+			if (this.inWater && this.isFloatOnWater() /* && this.checkInWater() */) {
 				this.motionY += 0.08D;
 				if (this.motionY > 0.1D) {
 					this.motionY = 0.1D;
@@ -185,29 +183,32 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			this.doBlockCollisions();
 
 			// 進路方向の接触チェック
-			Vec3d checkX = new Vec3d(MathHelper.floor_double(this.posX + this.motionX),
-					MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
-			BlockPos posX = new BlockPos(checkX);
-			IBlockState stateX = worldObj.getBlockState(posX);
-			if (stateX.getMaterial() != Material.AIR) {
-				AxisAlignedBB aabbX = stateX.getCollisionBoundingBox(this.worldObj, posX);
+			// Vec3d checkX = new Vec3d(MathHelper.floor_double(this.posX + this.motionX),
+			// MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+			// BlockPos posX = new BlockPos(checkX);
+			// IBlockState stateX = worldObj.getBlockState(posX);
+			// if (stateX.getMaterial() != Material.AIR) {
+			// AxisAlignedBB aabbX = stateX.getCollisionBoundingBox(this.worldObj, posX);
+			//
+			// if (aabbX != null && aabbX != Block.NULL_AABB &&
+			// aabbX.offset(posX).isVecInside(checkX)) {
+			// this.motionX *= -0.5D;
+			// }
+			// }
 
-				if (aabbX != Block.NULL_AABB && aabbX.offset(posX).isVecInside(checkX)) {
-					this.motionX *= -0.5D;
-				}
-			}
-
-			Vec3d checkZ = new Vec3d(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY),
-					MathHelper.floor_double(this.posZ + this.motionZ));
-			BlockPos posZ = new BlockPos(checkZ);
-			IBlockState stateZ = worldObj.getBlockState(posZ);
-			if (stateX.getMaterial() != Material.AIR) {
-				AxisAlignedBB aabbZ = stateZ.getCollisionBoundingBox(this.worldObj, posZ);
-
-				if (aabbZ != Block.NULL_AABB && aabbZ.offset(posZ).isVecInside(checkZ)) {
-					this.motionZ *= -0.5D;
-				}
-			}
+			// Vec3d checkZ = new Vec3d(MathHelper.floor_double(this.posX),
+			// MathHelper.floor_double(this.posY),
+			// MathHelper.floor_double(this.posZ + this.motionZ));
+			// BlockPos posZ = new BlockPos(checkZ);
+			// IBlockState stateZ = worldObj.getBlockState(posZ);
+			// if (stateZ.getMaterial() != Material.AIR) {
+			// AxisAlignedBB aabbZ = stateZ.getCollisionBoundingBox(this.worldObj, posZ);
+			//
+			// if (aabbZ != null && aabbZ != Block.NULL_AABB &&
+			// aabbZ.offset(posZ).isVecInside(checkZ)) {
+			// this.motionZ *= -0.5D;
+			// }
+			// }
 
 			if (this.motionX * this.motionX < 0.0005D) {
 				this.motionX = 0.0D;
