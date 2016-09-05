@@ -385,11 +385,15 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
-		if (!this.worldObj.isRemote) {
+		if (worldObj.isRemote) {
+			return true;
+		}
+		if (player != null && !player.isSneaking()) {
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
 			this.dropAndDeath(player.getPosition());
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	/* IRapidCollectable */
