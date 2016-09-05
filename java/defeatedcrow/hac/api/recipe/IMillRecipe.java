@@ -39,5 +39,5 @@ public interface IMillRecipe {
 	/**
 	 * Input条件判定
 	 */
-	boolean matchOutput(List<ItemStack> items, int slotsize);
+	boolean matchOutput(List<ItemStack> target, ItemStack input, int slotsize);
 }

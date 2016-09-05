@@ -30,6 +30,13 @@ public class OreRegister {
 		OreDictionary.registerOre("itemString", new ItemStack(Items.STRING));
 
 		OreDictionary.registerOre("foodFish", new ItemStack(Items.FISH));
+		OreDictionary.registerOre("foodSalmon", new ItemStack(Items.FISH, 1, 1));
+
+		OreDictionary.registerOre("foodAnyMeat", new ItemStack(Items.BEEF));
+		OreDictionary.registerOre("foodAnyMeat", new ItemStack(Items.PORKCHOP));
+		OreDictionary.registerOre("foodAnyMeat", new ItemStack(Items.CHICKEN));
+		OreDictionary.registerOre("foodAnyMeat", new ItemStack(Items.MUTTON));
+		OreDictionary.registerOre("foodAnyMeat", new ItemStack(Items.RABBIT));
 
 		OreDictionary.registerOre("cropApple", new ItemStack(Items.APPLE));
 		OreDictionary.registerOre("cropCocoa", new ItemStack(Items.DYE, 1, 3));

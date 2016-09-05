@@ -47,7 +47,7 @@ public interface IFluidRecipe {
 	/**
 	 * macth条件判定用、鉱石辞書変換後のInputリスト
 	 */
-	List<Object> getProcessedInput();
+	List<ItemStack> getProcessedInput();
 
 	/**
 	 * inputの大きさ
@@ -62,7 +62,7 @@ public interface IFluidRecipe {
 	/**
 	 * Output条件判定
 	 */
-	boolean matchOutput(List<ItemStack> items, FluidStack fluid, int slotsize);
+	boolean matchOutput(List<ItemStack> target, FluidStack fluid, int slotsize);
 
 	boolean matchClimate(int code);
 

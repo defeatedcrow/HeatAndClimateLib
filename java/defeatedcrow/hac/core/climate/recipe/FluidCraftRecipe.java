@@ -25,7 +25,7 @@ public class FluidCraftRecipe implements IFluidRecipe {
 
 	private final Object[] input;
 	private final FluidStack inputF;
-	private ArrayList<Object> processedInput;
+	private ArrayList<ItemStack> processedInput;
 	private final ItemStack output;
 	private final FluidStack outputF;
 	private final ItemStack secondary;
@@ -63,11 +63,11 @@ public class FluidCraftRecipe implements IFluidRecipe {
 			hum.add(h);
 		if (a != null)
 			air.add(a);
-		processedInput = new ArrayList<Object>();
+		processedInput = new ArrayList<ItemStack>();
 		if (inputs != null) {
 			for (int i = 0; i < inputs.length; i++) {
 				if (inputs[i] instanceof String) {
-					processedInput.add(OreDictionary.getOres((String) inputs[i]));
+					processedInput.addAll(OreDictionary.getOres((String) inputs[i]));
 				} else if (inputs[i] instanceof ItemStack) {
 					processedInput.add(((ItemStack) inputs[i]).copy());
 				} else if (inputs[i] instanceof Item) {
@@ -93,7 +93,15 @@ public class FluidCraftRecipe implements IFluidRecipe {
 
 	@Override
 	public ItemStack getSecondary() {
-		return secondary == null ? null : secondary.copy();
+		if (this.secondary != null) {
+			return this.secondary.copy();
+		} else {
+			List<ItemStack> ret = getContainerItems(processedInput);
+			if (ret != null && !ret.isEmpty()) {
+				return ret.get(0);
+			}
+			return null;
+		}
 	}
 
 	@Override
@@ -134,7 +142,7 @@ public class FluidCraftRecipe implements IFluidRecipe {
 	}
 
 	@Override
-	public List<Object> getProcessedInput() {
+	public List<ItemStack> getProcessedInput() {
 		return processedInput;
 	}
 
@@ -220,9 +228,10 @@ public class FluidCraftRecipe implements IFluidRecipe {
 				boolean b2 = false;
 				boolean b3 = false;
 				for (ItemStack get : items) {
-					if (getOutput() == null || DCUtil.isSameItem(getOutput(), get)) {
+					if (getOutput() == null || DCUtil.isStackable(getOutput(), get)) {
 						b2 = true;
-					} else if (getSecondary() == null || DCUtil.isSameItem(getSecondary(), get)) {
+					}
+					if (getSecondary() == null || DCUtil.isStackable(getSecondary(), get)) {
 						b3 = true;
 					}
 				}

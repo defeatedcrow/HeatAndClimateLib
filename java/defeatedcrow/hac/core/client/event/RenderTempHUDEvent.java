@@ -1,5 +1,8 @@
 package defeatedcrow.hac.core.client.event;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -8,8 +11,13 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -26,9 +34,14 @@ import org.lwjgl.opengl.GL11;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.damage.DamageAPI;
+import defeatedcrow.hac.api.damage.DamageSourceClimate;
+import defeatedcrow.hac.api.magic.CharmType;
+import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.client.DCTextures;
+import defeatedcrow.hac.core.util.DCUtil;
 
 @SideOnly(Side.CLIENT)
 public class RenderTempHUDEvent {
@@ -36,6 +49,9 @@ public class RenderTempHUDEvent {
 	public static final RenderTempHUDEvent INSTANCE = new RenderTempHUDEvent();
 
 	private int tier = 0;
+	private float conf_prev = 0.0F;
+	private float prev2 = 0.0F;
+	private float damage = 0.0F;
 	private int count = 20;
 
 	public static boolean enable = CoreConfigDC.showDamageIcon;
@@ -47,38 +63,81 @@ public class RenderTempHUDEvent {
 			World world = ClimateCore.proxy.getClientWorld();
 			GuiScreen gui = Minecraft.getMinecraft().currentScreen;
 			if (player != null && world != null && gui == null && !player.capabilities.isCreativeMode) {
-				if (count == 0) {
-					count = 10;
-
-					BlockPos pos = player.getPosition();
-					if (pos != null && world.isAreaLoaded(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
-						DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos);
-						if (temp != null) {
-							tier = temp.getTier();
-						}
-					}
-				} else {
-					count--;
-				}
-
 				if (enable) {
-					int prev = 2 - CoreConfigDC.damageDifficulty;
-					int damage = 0;
+					if (count == 0) {
+						count = 10;
+
+						/* 10Fごとに使用データを更新 */
+
+						BlockPos pos = player.getPosition();
+						if (pos != null && world.isAreaLoaded(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
+							DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos);
+							if (temp != null) {
+								tier = temp.getTier();
+							}
+						}
+
+						conf_prev = 2F - CoreConfigDC.damageDifficulty;
+						damage = 0;
+						prev2 = 0F;
+
+						// 防具の計算
+						Iterable<ItemStack> items = player.getArmorInventoryList();
+						if (items != null) {
+							for (ItemStack item : items) {
+								if (item != null && item.getItem() instanceof ItemArmor) {
+									ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
+									prev2 += DamageAPI.armorRegister.getPreventAmount(mat);
+									if (tier > 0
+											&& EnchantmentHelper
+													.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, item) > 0) {
+										prev2 += EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
+												item) * 1.0F;
+									}
+								}
+							}
+						}
+
+						// charm
+						Map<Integer, ItemStack> charms = DCUtil.getPlayerCharm(player, CharmType.DEFFENCE);
+						DamageSource source = tier > 0 ? DamageSourceClimate.climateHeatDamage
+								: DamageSourceClimate.climateColdDamage;
+						for (Entry<Integer, ItemStack> entry : charms.entrySet()) {
+							IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
+							prev2 += charm.reduceDamage(source, entry.getValue());
+						}
+
+					} else {
+						count--;
+					}
+
 					if (tier < 0) {
-						damage = (tier + prev) * 2;
+						damage = (tier + conf_prev) * 2;
+						damage += prev2;
+						if (damage > 0F) {
+							damage = 0F;
+						}
 					} else if (tier > 0) {
-						damage = tier - prev;
+						damage = tier - conf_prev;
+						damage -= prev2;
+						if (damage < 0F) {
+							damage = 0F;
+						}
 					}
 
 					int tX = 2;
-					if (damage >= 2) {
-						tX = 4;
-					} else if (damage == 1) {
-						tX = 3;
-					} else if (damage == -1) {
-						tX = 1;
-					} else if (damage <= -2) {
-						tX = 0;
+					if (damage > 0F) {
+						if (damage >= 2F) {
+							tX = 4;
+						} else if (damage >= 1F) {
+							tX = 3;
+						}
+					} else {
+						if (damage <= -2F) {
+							tX = 0;
+						} else if (damage <= -1F) {
+							tX = 1;
+						}
 					}
 					tX *= 16;
 
@@ -96,9 +155,7 @@ public class RenderTempHUDEvent {
 
 					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				}
-
 			}
-
 		}
 	}
 

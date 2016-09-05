@@ -17,7 +17,7 @@ import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
 
 public class FluidRecipeWrapper implements IRecipeWrapper {
 
-	private final List<Object> input;
+	private final List<ItemStack> input;
 	private final List<ItemStack> output;
 	private final FluidCraftRecipe rec;
 	private final List<FluidStack> inF;

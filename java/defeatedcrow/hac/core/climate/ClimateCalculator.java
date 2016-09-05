@@ -307,8 +307,14 @@ public class ClimateCalculator implements IClimateCalculator {
 
 		// biomeベース通気 -> 屋内ではNORMALになる
 		if (!hasRoof(world, pos)) {
-			air = DCAirflow.FLOW;
-			hasWind = true;
+			if (pos.getY() > 170) {
+				air = DCAirflow.WIND;
+				hasWind = true;
+				hasBlow = true;
+			} else {
+				air = DCAirflow.FLOW;
+				hasWind = true;
+			}
 		}
 
 		if (r < 0) {

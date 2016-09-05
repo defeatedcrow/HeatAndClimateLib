@@ -19,6 +19,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import defeatedcrow.hac.api.recipe.DCBlockFreezeEvent;
 import defeatedcrow.hac.api.recipe.DCBlockUpdateEvent;
+import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
@@ -120,7 +121,7 @@ public class BlockUpdateDC {
 			}
 
 			// レシピ判定
-			if (CoreConfigDC.enableVanilla) {
+			if (CoreConfigDC.enableVanilla && !(block instanceof IClimateObject)) {
 				IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(block, 1, meta));
 				if (recipe != null && recipe.matchClimate(clm) && recipe.hasPlaceableOutput() == 1) {
 					if (recipe.getOutput() != null && recipe.getOutput().getItem() instanceof ItemBlock) {
