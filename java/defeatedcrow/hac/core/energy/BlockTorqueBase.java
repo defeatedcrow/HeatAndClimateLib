@@ -35,7 +35,6 @@ public abstract class BlockTorqueBase extends BlockContainer {
 
 	public BlockTorqueBase(Material m, String s, int max) {
 		super(m);
-		this.setCreativeTab(ClimateCore.climate);
 		this.setUnlocalizedName(s);
 		this.setHardness(0.5F);
 		this.setResistance(15.0F);

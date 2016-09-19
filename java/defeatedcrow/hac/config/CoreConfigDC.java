@@ -56,6 +56,7 @@ public class CoreConfigDC {
 			cfg.addCustomCategoryComment("key setting",
 					"This mod is not using the Forge KeyHandler. Please setting it in here.");
 			cfg.addCustomCategoryComment("entity setting", "This setting is for entities.");
+			cfg.addCustomCategoryComment("setting", "This setting is for game play.");
 
 			Property debug = cfg.get("debug setting", "Debug Mode Pass", debugPass,
 					"Input the password for starting in debug mode. This is only for authers.");

@@ -24,7 +24,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.placeable.ISidedTexture;
-import defeatedcrow.hac.core.ClimateCore;
 
 /*
  * TEなし16種のブロック
@@ -40,7 +39,6 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 
 	public DCSimpleBlock(Material m, String s, int max, boolean force) {
 		super(m, force);
-		this.setCreativeTab(ClimateCore.climate);
 		this.setUnlocalizedName(s);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);

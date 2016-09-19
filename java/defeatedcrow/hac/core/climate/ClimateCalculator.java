@@ -391,6 +391,9 @@ public class ClimateCalculator implements IClimateCalculator {
 	boolean hasRoof(World world, BlockPos pos) {
 		BlockPos pos2 = pos.up();
 		int lim = pos.getY() + 16;
+		if (world.provider.getHasNoSky()) {
+			lim = pos.getY() + 5;
+		}
 		while (pos2.getY() < lim && pos2.getY() < world.getActualHeight()) {
 			IBlockState state = world.getBlockState(pos2);
 			Block block = world.getBlockState(pos2).getBlock();
