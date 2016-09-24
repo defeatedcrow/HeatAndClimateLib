@@ -7,6 +7,7 @@
     "elements": [
         {   "from": [ 3, 3, 3 ],
             "to": [ 13, 13, 13 ],
+            "shade": false,
             "faces": {
                 "down":  { "uv": [ 1, 1, 15, 15 ], "texture": "#inner", "cullface": "down" },
                 "up":    { "uv": [ 1, 1, 15, 15 ], "texture": "#inner", "cullface": "up" },
@@ -18,6 +19,7 @@
         },
         {   "from": [ 0, 0, 0 ],
             "to": [ 16, 16, 16 ],
+            "shade": false,
             "faces": {
                 "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#glass", "cullface": "down" },
                 "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#glass", "cullface": "up" },

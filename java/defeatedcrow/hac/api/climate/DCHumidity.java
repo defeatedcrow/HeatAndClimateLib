@@ -16,7 +16,7 @@ public enum DCHumidity {
 			0x700000),
 	NORMAL(
 			1,
-			0x0070FF),
+			0x00FF30),
 	WET(
 			2,
 			0x00EFCC),
