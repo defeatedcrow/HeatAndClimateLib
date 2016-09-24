@@ -145,7 +145,7 @@ public class ClimateCalculator implements IClimateCalculator {
 		 * 屋根あり: Tierが1段階Normalに近づく
 		 * 屋根無し: 天候によって変化
 		 * 晴れ: Biome気温のまま
-		 * 夜雨 or 雷雨: Tierが1段階低い物になる
+		 * 雷雨: Tierが1段階低い物になる (夜雨はクライアント側でうまく検知できないため廃止)
 		 */
 		DCHeatTier cold = temp;
 		if (hasRoof(world, pos)) {
@@ -155,9 +155,7 @@ public class ClimateCalculator implements IClimateCalculator {
 				cold = cold.addTier(-1);
 			}
 		} else {
-			if (world.isThundering()) {
-				cold = cold.addTier(-1);
-			} else if (world.isRaining() && !world.isDaytime()) {
+			if (world.getThunderStrength(1.0F) > 0.5F) {
 				cold = cold.addTier(-1);
 			}
 			if (cold.getTier() < -2) {
