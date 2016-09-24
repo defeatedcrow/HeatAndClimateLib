@@ -3,10 +3,6 @@ package defeatedcrow.hac.core.base;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -14,6 +10,10 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.climate.IClimateTileEntity;
 import defeatedcrow.hac.config.CoreConfigDC;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 public abstract class ClimateReceiverLockable extends DCLockableTE {
 
@@ -70,6 +70,11 @@ public abstract class ClimateReceiverLockable extends DCLockableTE {
 			}
 			int code = (air.getID() << 6) + (hum.getID() << 4) + heat.getID();
 			current = ClimateAPI.register.getClimateFromInt(code);
+
+			if (!remove.isEmpty()) {
+				effectiveTiles.removeAll(remove);
+				remove.clear();
+			}
 		}
 	}
 

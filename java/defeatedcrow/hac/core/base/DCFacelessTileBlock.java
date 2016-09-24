@@ -40,7 +40,6 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
-import defeatedcrow.hac.core.ClimateCore;
 
 //TESR持ちブロックのベース
 public class DCFacelessTileBlock extends BlockContainer implements IClimateObject, INameSuffix {
@@ -53,7 +52,6 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 
 	public DCFacelessTileBlock(Material m, String s, int max, boolean force) {
 		super(m);
-		this.setCreativeTab(ClimateCore.climate);
 		this.setUnlocalizedName(s);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);

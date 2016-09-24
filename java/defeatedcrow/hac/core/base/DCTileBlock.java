@@ -39,7 +39,6 @@ import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
-import defeatedcrow.hac.core.ClimateCore;
 
 // TESR持ちブロックのベース
 public abstract class DCTileBlock extends BlockContainer implements IClimateObject {
@@ -51,7 +50,6 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 
 	public DCTileBlock(Material m, String s, int max) {
 		super(m);
-		this.setCreativeTab(ClimateCore.climate);
 		this.setUnlocalizedName(s);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);

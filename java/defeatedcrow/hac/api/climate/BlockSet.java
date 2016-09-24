@@ -18,6 +18,9 @@ public class BlockSet {
 		return block.getStateFromMeta(meta);
 	}
 
+	/**
+	 * metaにはwildcard指定可能
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj != null && obj instanceof BlockSet) {

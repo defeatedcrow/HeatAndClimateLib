@@ -74,7 +74,7 @@ public class ClimateBlock extends Block implements IClimateObject {
 			DCHeatTier heat = clm.getHeat();
 			DCHumidity hum = clm.getHumidity();
 			DCAirflow air = clm.getAirflow();
-			int meta = this.getMetaFromState(state);
+			int meta = this.damageDropped(state);
 			ItemStack check = new ItemStack(this, 1, meta);
 			IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, check);
 			if (recipe != null) {

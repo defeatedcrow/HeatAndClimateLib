@@ -243,7 +243,13 @@ public class FluidCraftRecipe implements IFluidRecipe {
 					return b2 && b3;
 				}
 			} else {
-				return true;
+				if (slotsize > 1) {
+					return true;
+				} else if (slotsize > 0) {
+					return getOutput() == null || getSecondary() == null;
+				} else {
+					return getOutput() == null && getSecondary() == null;
+				}
 			}
 		}
 		return false;
