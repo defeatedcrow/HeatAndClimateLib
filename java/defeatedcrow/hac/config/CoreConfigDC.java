@@ -29,6 +29,7 @@ public class CoreConfigDC {
 	public static boolean showDamageIcon = true;
 	public static int iconX = 0;
 	public static int iconY = 0;
+	public static boolean waterFix = true;
 
 	// difficulty
 	public static boolean climateDam = true;
@@ -97,6 +98,9 @@ public class CoreConfigDC {
 			Property hud_y = cfg.get("render setting", "Thermal Damage Icon Offset Y", iconY,
 					"Set the amount of Yoffset of the thermal damage icon.");
 
+			Property water = cfg.get("render setting", "Enable Water Fix", waterFix,
+					"Enable fix the vanilla light-opacity and fog density in water");
+
 			Property warp_key = cfg.get("key setting", "Charm Use Key", charmWarpKey,
 					"Set key number for using jewel charm effects. Default key is X(45)." + BR
 							+ "If you don't want this effect, set 0.");
@@ -124,6 +128,7 @@ public class CoreConfigDC {
 			showDamageIcon = hud_icon.getBoolean();
 			enableDeepWater = water_cave.getBoolean();
 			enableFreezeDrop = freeze_drop.getBoolean();
+			waterFix = water.getBoolean();
 
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)
