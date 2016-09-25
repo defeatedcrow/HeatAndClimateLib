@@ -7,6 +7,12 @@
 
 package defeatedcrow.hac.core;
 
+import defeatedcrow.hac.config.ClimateConfig;
+import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.fluid.FluidIDRegisterDC;
+import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
+import defeatedcrow.hac.core.util.DCUtil;
+import defeatedcrow.hac.core.util.DCWaterOpaque;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -15,11 +21,6 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import defeatedcrow.hac.config.ClimateConfig;
-import defeatedcrow.hac.config.CoreConfigDC;
-import defeatedcrow.hac.core.fluid.FluidIDRegisterDC;
-import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
-import defeatedcrow.hac.core.util.DCUtil;
 
 @Mod(
 		modid = ClimateCore.MOD_ID,
@@ -58,6 +59,9 @@ public class ClimateCore {
 		APILoader.loadAPI();
 		proxy.loadMaterial();
 		proxy.loadEntity();
+
+		// water opaque
+		DCWaterOpaque.load();
 	}
 
 	@EventHandler

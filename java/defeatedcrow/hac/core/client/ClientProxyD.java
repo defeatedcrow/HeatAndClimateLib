@@ -1,5 +1,14 @@
 package defeatedcrow.hac.core.client;
 
+import org.lwjgl.input.Keyboard;
+
+import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.CommonProxyD;
+import defeatedcrow.hac.core.DCInit;
+import defeatedcrow.hac.core.client.base.ModelThinBiped;
+import defeatedcrow.hac.core.client.event.RenderTempHUDEvent;
+import defeatedcrow.hac.core.client.event.WaterFogEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -9,15 +18,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-
-import org.lwjgl.input.Keyboard;
-
-import defeatedcrow.hac.config.CoreConfigDC;
-import defeatedcrow.hac.core.ClimateCore;
-import defeatedcrow.hac.core.CommonProxyD;
-import defeatedcrow.hac.core.DCInit;
-import defeatedcrow.hac.core.client.base.ModelThinBiped;
-import defeatedcrow.hac.core.client.event.RenderTempHUDEvent;
 
 public class ClientProxyD extends CommonProxyD {
 
@@ -62,6 +62,7 @@ public class ClientProxyD extends CommonProxyD {
 		super.loadInit();
 		MinecraftForge.EVENT_BUS.register(JsonBakery.instance);
 		MinecraftForge.EVENT_BUS.register(RenderTempHUDEvent.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(new WaterFogEvent());
 	}
 
 	@Override
@@ -76,8 +77,8 @@ public class ClientProxyD extends CommonProxyD {
 
 	@Override
 	public boolean isWarpKeyDown() {
-		return CoreConfigDC.charmWarpKey == 0 ? false : Keyboard.isCreated()
-				&& Keyboard.isKeyDown(CoreConfigDC.charmWarpKey);
+		return CoreConfigDC.charmWarpKey == 0 ? false
+				: Keyboard.isCreated() && Keyboard.isKeyDown(CoreConfigDC.charmWarpKey);
 	}
 
 	private int getJumpKey() {
