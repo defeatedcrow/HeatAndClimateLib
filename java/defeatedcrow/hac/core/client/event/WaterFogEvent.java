@@ -10,7 +10,7 @@ public class WaterFogEvent {
 	@SubscribeEvent
 	public void onFogDencity(EntityViewRenderEvent.FogDensity event) {
 		if (CoreConfigDC.waterFix && event.getState() != null && event.getState().getMaterial() == Material.WATER) {
-			// water fog の場合
+			// water fog fix
 			event.setDensity(0.025F);
 			event.setCanceled(true);
 		}

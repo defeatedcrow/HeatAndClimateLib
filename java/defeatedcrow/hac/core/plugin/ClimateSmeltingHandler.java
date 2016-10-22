@@ -1,8 +1,8 @@
 package defeatedcrow.hac.core.plugin;
 
+import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
 
 public class ClimateSmeltingHandler implements IRecipeHandler<ClimateSmelting> {
 
@@ -24,6 +24,11 @@ public class ClimateSmeltingHandler implements IRecipeHandler<ClimateSmelting> {
 	@Override
 	public boolean isRecipeValid(ClimateSmelting recipe) {
 		return recipe.getProcessedInput() != null;
+	}
+
+	@Override
+	public String getRecipeCategoryUid(ClimateSmelting recipe) {
+		return getRecipeCategoryUid();
 	}
 
 }

@@ -24,6 +24,8 @@ public class CoreConfigDC {
 
 	public static int[] ranges = new int[3];
 
+	public static boolean wall = true;
+
 	// render
 	public static boolean showAltTips = true;
 	public static boolean showDamageIcon = true;
@@ -118,6 +120,9 @@ public class CoreConfigDC {
 			Property range_a = cfg.get("setting", "Airflow Cheking Rnage", airRange,
 					"Set the range of cheking the climate. 1-16");
 
+			Property enableWall = cfg.get("setting", "Thermal Insulation Wall", wall,
+					"Some of stone blocks enable to have a thermal insulation property.");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
@@ -129,6 +134,7 @@ public class CoreConfigDC {
 			enableDeepWater = water_cave.getBoolean();
 			enableFreezeDrop = freeze_drop.getBoolean();
 			waterFix = water.getBoolean();
+			wall = enableWall.getBoolean();
 
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)

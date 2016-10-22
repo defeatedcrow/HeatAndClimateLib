@@ -11,6 +11,12 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.Gson;
+
+import defeatedcrow.hac.api.blockstate.DCState;
+import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.base.ITexturePath;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -20,21 +26,13 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.google.gson.Gson;
-
-import defeatedcrow.hac.api.blockstate.DCState;
-import defeatedcrow.hac.core.ClimateCore;
-import defeatedcrow.hac.core.DCLogger;
-import defeatedcrow.hac.core.base.ITexturePath;
-
 /**
- * Jsonの登録と生成を行うクラス。<br>
- * 他MODから使用する場合は、現在の開発環境ディレクトリパスを用いてインスタンスを生成して下さい。
+ * Jsonの登録と生成を行うクラス。
  */
 @SideOnly(Side.CLIENT)
 public class JsonRegisterHelper {
 	private final String basePath;
-	private final boolean active = ClimateCore.isDebug;
+	public final boolean active = ClimateCore.isDebug;
 
 	public JsonRegisterHelper(String s) {
 		basePath = s;
@@ -50,9 +48,9 @@ public class JsonRegisterHelper {
 		int m = 0;
 		while (m < max + 1) {
 			if (active)
-				this.checkAndBuildJson(item, domein, name, dir, m);
-			ModelLoader.setCustomModelResourceLocation(item, m, new ModelResourceLocation(domein + ":" + dir + "/"
-					+ name + m, "inventory"));
+				this.checkAndBuildJson(item, domein, name, dir, m, true);
+			ModelLoader.setCustomModelResourceLocation(item, m,
+					new ModelResourceLocation(domein + ":" + dir + "/" + name + m, "inventory"));
 			m++;
 		}
 	}
@@ -65,9 +63,9 @@ public class JsonRegisterHelper {
 		int m = 0;
 		while (m < max + 1) {
 			if (active)
-				this.checkAndBuildJson(block, domein, name, dir, m);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), m, new ModelResourceLocation(
-					domein + ":" + dir + "/" + name + m, "inventory"));
+				this.checkAndBuildJson(block, domein, name, dir, m, true);
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), m,
+					new ModelResourceLocation(domein + ":" + dir + "/" + name + m, "inventory"));
 			m++;
 		}
 	}
@@ -78,19 +76,19 @@ public class JsonRegisterHelper {
 	 */
 	public void regTEBlock(Block block, String domein, String name, String dir, int maxMeta) {
 		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.FACING, DCState.TYPE4).build());
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":"
-				+ "basetile"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(block),
+				new ModelResourceLocation(domein + ":" + "basetile"));
 		if (maxMeta == 0) {
 			if (active)
-				this.checkAndBuildJson(block, domein, name, dir, 0);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
-					domein + ":" + dir + "/" + name, "inventory"));
+				this.checkAndBuildJson(block, domein, name, dir, 0, false);
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
+					new ModelResourceLocation(domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
 				if (active)
-					this.checkAndBuildJson(block, domein, name, dir, i);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
-						domein + ":" + dir + "/" + name + i, "inventory"));
+					this.checkAndBuildJson(block, domein, name, dir, i, true);
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i,
+						new ModelResourceLocation(domein + ":" + dir + "/" + name + i, "inventory"));
 			}
 		}
 	}
@@ -101,19 +99,19 @@ public class JsonRegisterHelper {
 	 */
 	public void regTESimpleBlock(Block block, String domein, String name, String dir, int maxMeta) {
 		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.TYPE16).build());
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":"
-				+ "basetile"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(block),
+				new ModelResourceLocation(domein + ":" + "basetile"));
 		if (maxMeta == 0) {
 			if (active)
-				this.checkAndBuildJson(block, domein, name, dir, 0);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
-					domein + ":" + dir + "/" + name, "inventory"));
+				this.checkAndBuildJson(block, domein, name, dir, 0, false);
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
+					new ModelResourceLocation(domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
 				if (active)
-					this.checkAndBuildJson(block, domein, name, dir, i);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
-						domein + ":" + dir + "/" + name + i, "inventory"));
+					this.checkAndBuildJson(block, domein, name, dir, i, true);
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i,
+						new ModelResourceLocation(domein + ":" + dir + "/" + name + i, "inventory"));
 			}
 		}
 	}
@@ -124,19 +122,19 @@ public class JsonRegisterHelper {
 	 */
 	public void regTETorqueBlock(Block block, String domein, String name, String dir, int maxMeta) {
 		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.SIDE, DCState.POWERED).build());
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":"
-				+ "basetile"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(block),
+				new ModelResourceLocation(domein + ":" + "basetile"));
 		if (maxMeta == 0) {
 			if (active)
-				this.checkAndBuildJson(block, domein, name, dir, 0);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
-					domein + ":" + dir + "/" + name, "inventory"));
+				this.checkAndBuildJson(block, domein, name, dir, 0, false);
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
+					new ModelResourceLocation(domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
 				if (active)
-					this.checkAndBuildJson(block, domein, name, dir, i);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
-						domein + ":" + dir + "/" + name + i, "inventory"));
+					this.checkAndBuildJson(block, domein, name, dir, i, true);
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i,
+						new ModelResourceLocation(domein + ":" + dir + "/" + name + i, "inventory"));
 			}
 		}
 	}
@@ -147,12 +145,12 @@ public class JsonRegisterHelper {
 	 */
 	public void regSimpleBlock(Block block, String domein, String name, String dir, int maxMeta) {
 		if (maxMeta == 0) {
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(domein + ":" + dir
-					+ "/" + name, "type"));
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(block),
+					new ModelResourceLocation(domein + ":" + dir + "/" + name, "type"));
 			if (active)
-				this.checkAndBuildJsonItemBlock(domein, name, dir, 0);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
-					domein + ":" + dir + "/" + name, "inventory"));
+				this.checkAndBuildJsonItemBlock(domein, name, dir, 0, false);
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
+					new ModelResourceLocation(domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			ModelResourceLocation[] models = new ModelResourceLocation[maxMeta + 1];
 			for (int i = 0; i < maxMeta + 1; i++) {
@@ -161,9 +159,9 @@ public class JsonRegisterHelper {
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), models);
 			for (int i = 0; i < maxMeta + 1; i++) {
 				if (active)
-					this.checkAndBuildJsonItemBlock(domein, name, dir, i);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
-						domein + ":" + dir + "/" + name + i, "inventory"));
+					this.checkAndBuildJsonItemBlock(domein, name, dir, i, true);
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i,
+						new ModelResourceLocation(domein + ":" + dir + "/" + name + i, "inventory"));
 			}
 		}
 	}
@@ -173,7 +171,7 @@ public class JsonRegisterHelper {
 	 * デバッグモード時に限り、標準的な一枚絵アイコン用のJsonを生成する。既に生成済みの場合は生成処理を行わない。<br>
 	 * テクスチャの取得にITexturePathを使用するため、登録するItemに実装する。
 	 */
-	public void checkAndBuildJson(Object item, String domein, String name, String dir, int meta) {
+	public void checkAndBuildJson(Object item, String domein, String name, String dir, int meta, boolean useMeta) {
 		if (!(item instanceof ITexturePath))
 			return;
 
@@ -193,7 +191,11 @@ public class JsonRegisterHelper {
 			}
 			// DCLogger.debugLog("dcs_climate", "current pass " + filePath.toString());
 			if (filePath != null) {
-				gj = new File(filePath + name + meta + ".json");
+				if (useMeta) {
+					gj = new File(filePath + name + meta + ".json");
+				} else {
+					gj = new File(filePath + name + ".json");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -244,7 +246,7 @@ public class JsonRegisterHelper {
 	 * parentに同名のblockmodelを要求するItemBlock用Jsonを生成する。<br>
 	 * blockstate用Jsonは生成しないため、ぬくもりある手作りを用いて下さい。
 	 */
-	public void checkAndBuildJsonItemBlock(String domein, String name, String dir, int meta) {
+	public void checkAndBuildJsonItemBlock(String domein, String name, String dir, int meta, boolean useMeta) {
 
 		String filePath = null;
 		File gj = null;
@@ -258,7 +260,11 @@ public class JsonRegisterHelper {
 			}
 			// DCLogger.debugLog("dcs_climate", "current pass " + filePath.toString());
 			if (filePath != null) {
-				gj = new File(filePath + name + meta + ".json");
+				if (useMeta) {
+					gj = new File(filePath + name + meta + ".json");
+				} else {
+					gj = new File(filePath + name + ".json");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -298,7 +304,8 @@ public class JsonRegisterHelper {
 	 * 全面同テクスチャのCubeモデルのJsonを生成する。既に生成済みの場合は生成処理を行わない。<br>
 	 * テクスチャの取得にITexturePathを使用するため、登録するblockに実装する。
 	 */
-	public void checkAndBuildJsonCube(ITexturePath block, String domein, String name, String dir, int meta) {
+	public void checkAndBuildJsonCube(ITexturePath block, String domein, String name, String dir, int meta,
+			boolean useMeta) {
 		if (block == null)
 			return;
 
@@ -314,7 +321,11 @@ public class JsonRegisterHelper {
 			}
 			// DCLogger.debugLog("dcs_climate", "current pass " + filePath.toString());
 			if (filePath != null) {
-				gj = new File(filePath + name + meta + ".json");
+				if (useMeta) {
+					gj = new File(filePath + name + meta + ".json");
+				} else {
+					gj = new File(filePath + name + ".json");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -369,13 +380,15 @@ public class JsonRegisterHelper {
 		Third thirdperson = new Third(new int[] {
 				-90,
 				0,
-				0 }, new double[] {
-				0,
-				1,
-				-3 }, new double[] {
-				0.55D,
-				0.55D,
-				0.55D });
+				0 },
+				new double[] {
+						0,
+						1,
+						-3 },
+				new double[] {
+						0.55D,
+						0.55D,
+						0.55D });
 		First firstperson = new First();
 	}
 
@@ -383,13 +396,15 @@ public class JsonRegisterHelper {
 		Third thirdperson = new Third(new int[] {
 				0,
 				90,
-				-35 }, new double[] {
-				0,
-				1.25D,
-				-3.5D }, new double[] {
-				0.85D,
-				0.85D,
-				0.85D });
+				-35 },
+				new double[] {
+						0,
+						1.25D,
+						-3.5D },
+				new double[] {
+						0.85D,
+						0.85D,
+						0.85D });
 		First firstperson = new First();
 	}
 
@@ -397,13 +412,15 @@ public class JsonRegisterHelper {
 		Third thirdperson = new Third(new int[] {
 				10,
 				45,
-				170 }, new double[] {
-				0,
-				1.5D,
-				-2.75D }, new double[] {
-				0.35D,
-				0.35D,
-				0.35D });
+				170 },
+				new double[] {
+						0,
+						1.5D,
+						-2.75D },
+				new double[] {
+						0.35D,
+						0.35D,
+						0.35D });
 	}
 
 	private class Third {

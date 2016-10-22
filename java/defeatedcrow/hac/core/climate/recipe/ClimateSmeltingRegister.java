@@ -3,7 +3,6 @@ package defeatedcrow.hac.core.climate.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -12,6 +11,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.IClimateSmeltingRegister;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import net.minecraft.item.ItemStack;
 
 public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 
@@ -19,7 +19,9 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 		this.absList = new ArrayList<ClimateSmelting>();
 		this.frostList = new ArrayList<ClimateSmelting>();
 		this.coldList = new ArrayList<ClimateSmelting>();
+		this.coolList = new ArrayList<ClimateSmelting>();
 		this.normalList = new ArrayList<ClimateSmelting>();
+		this.warmList = new ArrayList<ClimateSmelting>();
 		this.hotList = new ArrayList<ClimateSmelting>();
 		this.ovenList = new ArrayList<ClimateSmelting>();
 		this.kilnList = new ArrayList<ClimateSmelting>();
@@ -38,7 +40,9 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	private static List<ClimateSmelting> absList;
 	private static List<ClimateSmelting> frostList;
 	private static List<ClimateSmelting> coldList;
+	private static List<ClimateSmelting> coolList;
 	private static List<ClimateSmelting> normalList;
+	private static List<ClimateSmelting> warmList;
 	private static List<ClimateSmelting> hotList;
 	private static List<ClimateSmelting> ovenList;
 	private static List<ClimateSmelting> kilnList;
@@ -55,8 +59,12 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 			return frostList;
 		case COLD:
 			return coldList;
+		case COOL:
+			return coolList;
 		case NORMAL:
 			return normalList;
+		case WARM:
+			return warmList;
 		case HOT:
 			return hotList;
 		case OVEN:

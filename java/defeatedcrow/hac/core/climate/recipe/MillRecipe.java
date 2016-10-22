@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import defeatedcrow.hac.api.recipe.IMillRecipe;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import defeatedcrow.hac.api.recipe.IMillRecipe;
-import defeatedcrow.hac.core.util.DCUtil;
 
 public class MillRecipe implements IMillRecipe {
 
@@ -88,6 +88,7 @@ public class MillRecipe implements IMillRecipe {
 			while (itr.hasNext() && !match) {
 				match = OreDictionary.itemMatches(itr.next(), item, false);
 			}
+			itr = null;
 			return match;
 		}
 		return false;

@@ -3,15 +3,15 @@ package defeatedcrow.hac.core.climate;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IBiomeClimateRegister;
 import defeatedcrow.hac.api.climate.IClimate;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 
 public class ClimateRegister implements IBiomeClimateRegister {
 
@@ -85,9 +85,6 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	public DCHeatTier getHeatTier(World world, BlockPos pos) {
 		Biome biome = world.getBiomeGenForCoords(pos);
 		DCHeatTier tier = getHeatTier(biome);
-		if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.MOUNTAIN) && pos.getY() > 100) {
-			tier = tier.addTier(-1);
-		}
 		return tier;
 	}
 
@@ -111,10 +108,17 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		} else {
 			if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.NETHER)) {
 				return DCHeatTier.OVEN;
-			} else if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.HOT)) {
-				return DCHeatTier.HOT;
-			} else if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.COLD)) {
-				return DCHeatTier.COLD;
+			} else {
+				float temp = biome.getTemperature();
+				if (temp > 1.1F) {
+					return DCHeatTier.HOT;
+				} else if (temp > 0.8F) {
+					return DCHeatTier.WARM;
+				} else if (temp <= 0.4F) {
+					return DCHeatTier.COOL;
+				} else if (temp <= 0.1F) {
+					return DCHeatTier.COLD;
+				}
 			}
 		}
 		return DCHeatTier.NORMAL;

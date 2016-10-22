@@ -3,8 +3,6 @@ package defeatedcrow.hac.core.climate.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -13,6 +11,8 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IFluidRecipe;
 import defeatedcrow.hac.api.recipe.IFluidRecipeRegister;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 public class FluidCraftRegister implements IFluidRecipeRegister {
 
@@ -20,7 +20,9 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 		this.absList = new ArrayList<FluidCraftRecipe>();
 		this.frostList = new ArrayList<FluidCraftRecipe>();
 		this.coldList = new ArrayList<FluidCraftRecipe>();
+		this.coolList = new ArrayList<FluidCraftRecipe>();
 		this.normalList = new ArrayList<FluidCraftRecipe>();
+		this.warmList = new ArrayList<FluidCraftRecipe>();
 		this.hotList = new ArrayList<FluidCraftRecipe>();
 		this.ovenList = new ArrayList<FluidCraftRecipe>();
 		this.kilnList = new ArrayList<FluidCraftRecipe>();
@@ -39,7 +41,9 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 	private static List<FluidCraftRecipe> absList;
 	private static List<FluidCraftRecipe> frostList;
 	private static List<FluidCraftRecipe> coldList;
+	private static List<FluidCraftRecipe> coolList;
 	private static List<FluidCraftRecipe> normalList;
+	private static List<FluidCraftRecipe> warmList;
 	private static List<FluidCraftRecipe> hotList;
 	private static List<FluidCraftRecipe> ovenList;
 	private static List<FluidCraftRecipe> kilnList;
@@ -56,8 +60,12 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 			return frostList;
 		case COLD:
 			return coldList;
+		case COOL:
+			return coolList;
 		case NORMAL:
 			return normalList;
+		case WARM:
+			return warmList;
 		case HOT:
 			return hotList;
 		case OVEN:

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import defeatedcrow.hac.core.DCLogger;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -19,7 +20,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import defeatedcrow.hac.core.DCLogger;
 
 /**
  * This code was referenced to OreDictionary.class.
@@ -33,7 +33,8 @@ public class CustomizeVanillaRecipe {
 
 	private static ArrayList<ItemStack> exclusions = new ArrayList<ItemStack>();
 
-	private static ItemStack[] shapelessOnly = new ItemStack[] { new ItemStack(Items.WHEAT) };
+	private static ItemStack[] shapelessOnly = new ItemStack[] {
+			new ItemStack(Items.WHEAT) };
 
 	static void initializeMap() {
 
@@ -86,7 +87,8 @@ public class CustomizeVanillaRecipe {
 					continue;
 				}
 
-				if (containsMatch(true, recipe.recipeItems.toArray(new ItemStack[recipe.recipeItems.size()]), replaces)) {
+				if (containsMatch(true, recipe.recipeItems.toArray(new ItemStack[recipe.recipeItems.size()]),
+						replaces)) {
 					addShapelessRecipes.add(recipe);
 				}
 			}
@@ -514,8 +516,9 @@ public class CustomizeVanillaRecipe {
 		if (input == null && target == null) {
 			return true;
 		}
-		return (target.getItem() == input.getItem() && ((target.getItemDamage() == OreDictionary.WILDCARD_VALUE && !strict) || target
-				.getItemDamage() == input.getItemDamage()));
+		return (target.getItem() == input.getItem()
+				&& ((target.getItemDamage() == OreDictionary.WILDCARD_VALUE && !strict)
+						|| target.getItemDamage() == input.getItemDamage()));
 	}
 
 }

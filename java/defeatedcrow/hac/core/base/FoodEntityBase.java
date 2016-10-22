@@ -5,6 +5,12 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.placeable.IItemDropEntity;
+import defeatedcrow.hac.api.placeable.IRapidCollectables;
+import defeatedcrow.hac.config.CoreConfigDC;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -30,12 +36,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.placeable.IItemDropEntity;
-import defeatedcrow.hac.api.placeable.IRapidCollectables;
-import defeatedcrow.hac.config.CoreConfigDC;
 
 // Food
 public abstract class FoodEntityBase extends Entity implements IItemDropEntity, IRapidCollectables {
@@ -53,8 +53,8 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> AGE = EntityDataManager.<Integer> createKey(FoodEntityBase.class,
 			DataSerializers.VARINT);
-	private static final DataParameter<EnumFacing> SIDE = EntityDataManager.<EnumFacing> createKey(
-			FoodEntityBase.class, DataSerializers.FACING);
+	private static final DataParameter<EnumFacing> SIDE = EntityDataManager.<EnumFacing> createKey(FoodEntityBase.class,
+			DataSerializers.FACING);
 
 	private final Random rand = new Random();
 
@@ -87,8 +87,8 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			this.setDead();
 		}
 
-		BlockPos pos = new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this
-				.getEntityBoundingBox().minY), MathHelper.floor_double(this.posZ));
+		BlockPos pos = new BlockPos(MathHelper.floor_double(this.posX),
+				MathHelper.floor_double(this.getEntityBoundingBox().minY), MathHelper.floor_double(this.posZ));
 
 		if (!this.worldObj.isRemote && this.count++ == 20) {
 			this.count = 0;
@@ -306,13 +306,15 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	 */
 	public int canCookingClimate(IClimate climate) {
 		if (climate != null && climate.getHumidity() != DCHumidity.UNDERWATER) {
-			switch (climate.getHeat().getTier()) {
-			case 2:
+			switch (climate.getHeat()) {
+			case OVEN:
 				return 2;
-			case 3:
+			case KILN:
 				return 8;
-			case 4:
+			case SMELTING:
 				return 16;
+			default:
+				return 0;
 			}
 		}
 		return 0;
@@ -396,37 +398,37 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	}
 
 	// 水没判定
-	protected boolean checkInWater() {
-		AxisAlignedBB foodAABB = this.getEntityBoundingBox();
-		int i = MathHelper.floor_double(foodAABB.minX);
-		int j = MathHelper.ceiling_double_int(foodAABB.maxX);
-		int k = MathHelper.floor_double(foodAABB.minY);
-		int l = MathHelper.ceiling_double_int(foodAABB.maxY);
-		int i1 = MathHelper.floor_double(foodAABB.minZ);
-		int j1 = MathHelper.ceiling_double_int(foodAABB.maxZ);
-		boolean flag = false;
-		BlockPos.PooledMutableBlockPos pool = BlockPos.PooledMutableBlockPos.retain();
-
-		try {
-			for (int k1 = i; k1 < j; ++k1) {
-				for (int l1 = k; l1 < l; ++l1) {
-					for (int i2 = i1; i2 < j1; ++i2) {
-						pool.set(k1, l1, i2);
-						IBlockState iblockstate = this.worldObj.getBlockState(pool);
-
-						if (iblockstate.getMaterial() == Material.WATER) {
-							float f = getLiquidHeight(iblockstate, this.worldObj, pool);
-							flag |= foodAABB.minY < f;
-						}
-					}
-				}
-			}
-		} finally {
-			pool.release();
-		}
-
-		return flag;
-	}
+	// protected boolean checkInWater() {
+	// AxisAlignedBB foodAABB = this.getEntityBoundingBox();
+	// int i = MathHelper.floor_double(foodAABB.minX);
+	// int j = MathHelper.ceiling_double_int(foodAABB.maxX);
+	// int k = MathHelper.floor_double(foodAABB.minY);
+	// int l = MathHelper.ceiling_double_int(foodAABB.maxY);
+	// int i1 = MathHelper.floor_double(foodAABB.minZ);
+	// int j1 = MathHelper.ceiling_double_int(foodAABB.maxZ);
+	// boolean flag = false;
+	// BlockPos.PooledMutableBlockPos pool = BlockPos.PooledMutableBlockPos.retain();
+	//
+	// try {
+	// for (int k1 = i; k1 < j; ++k1) {
+	// for (int l1 = k; l1 < l; ++l1) {
+	// for (int i2 = i1; i2 < j1; ++i2) {
+	// pool.set(k1, l1, i2);
+	// IBlockState iblockstate = this.worldObj.getBlockState(pool);
+	//
+	// if (iblockstate.getMaterial() == Material.WATER) {
+	// float f = getLiquidHeight(iblockstate, this.worldObj, pool);
+	// flag |= foodAABB.minY < f;
+	// }
+	// }
+	// }
+	// }
+	// } finally {
+	// pool.release();
+	// }
+	//
+	// return flag;
+	// }
 
 	public static float getBlockLiquidHeight(IBlockState state, IBlockAccess world, BlockPos pos) {
 		int i = state.getValue(BlockLiquid.LEVEL).intValue();

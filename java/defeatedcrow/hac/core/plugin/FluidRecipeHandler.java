@@ -2,9 +2,9 @@ package defeatedcrow.hac.core.plugin;
 
 import java.util.List;
 
+import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
 
 public class FluidRecipeHandler implements IRecipeHandler<FluidCraftRecipe> {
 
@@ -43,6 +43,11 @@ public class FluidRecipeHandler implements IRecipeHandler<FluidCraftRecipe> {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String getRecipeCategoryUid(FluidCraftRecipe recipe) {
+		return getRecipeCategoryUid();
 	}
 
 }

@@ -3,17 +3,17 @@ package defeatedcrow.hac.core.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.core.climate.recipe.ClimateRecipe;
+import mezz.jei.api.recipe.IRecipeWrapper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 
 public class ClimateRecipeWrapper implements IRecipeWrapper {
 
@@ -57,38 +57,38 @@ public class ClimateRecipeWrapper implements IRecipeWrapper {
 		List<DCHeatTier> heats = rec.requiredHeat();
 		List<DCHumidity> hums = rec.requiredHum();
 		List<DCAirflow> airs = rec.requiredAir();
-		DCHeatTier minT = DCHeatTier.UHT;
+		DCHeatTier minT = DCHeatTier.INFERNO;
 		DCHumidity maxH = DCHumidity.DRY;
 		DCAirflow maxA = DCAirflow.TIGHT;
 
-		ResourceLocation res = new ResourceLocation("dcs_climate", "textures/gui/c_crafting_gui.png");
+		ResourceLocation res = new ResourceLocation("dcs_climate", "textures/gui/c_crafting_gui_jei.png");
 		mc.getTextureManager().bindTexture(res);
 		if (heats.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(72, 15, 0, 170, 64, 3);
+			mc.currentScreen.drawTexturedModalRect(76, 15, 0, 170, 72, 3);
 			minT = DCHeatTier.NORMAL;
 		} else {
 			for (DCHeatTier h : heats) {
-				mc.currentScreen.drawTexturedModalRect(72 + h.getID() * 8, 15, h.getID() * 8, 170, 8, 3);
+				mc.currentScreen.drawTexturedModalRect(76 + h.getID() * 6, 15, h.getID() * 6, 170, 6, 3);
 				if (h.getID() < minT.getID())
 					minT = h;
 			}
 		}
 		if (hums.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(72, 25, 0, 174, 80, 3);
+			mc.currentScreen.drawTexturedModalRect(76, 25, 0, 174, 72, 3);
 			maxH = DCHumidity.NORMAL;
 		} else {
 			for (DCHumidity h : hums) {
-				mc.currentScreen.drawTexturedModalRect(72 + h.getID() * 20, 25, h.getID() * 20, 174, 20, 3);
+				mc.currentScreen.drawTexturedModalRect(76 + h.getID() * 18, 25, h.getID() * 18, 174, 18, 3);
 				if (maxH.getID() < h.getID())
 					maxH = h;
 			}
 		}
 		if (airs.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(72, 35, 0, 178, 80, 3);
+			mc.currentScreen.drawTexturedModalRect(76, 35, 0, 178, 72, 3);
 			maxA = DCAirflow.NORMAL;
 		} else {
 			for (DCAirflow a : airs) {
-				mc.currentScreen.drawTexturedModalRect(72 + a.getID() * 20, 35, a.getID() * 20, 178, 20, 3);
+				mc.currentScreen.drawTexturedModalRect(76 + a.getID() * 18, 35, a.getID() * 18, 178, 18, 3);
 				if (maxA.getID() < a.getID())
 					maxA = a;
 			}
@@ -108,20 +108,20 @@ public class ClimateRecipeWrapper implements IRecipeWrapper {
 	public List<String> getTooltipStrings(int x, int y) {
 		List<String> s = new ArrayList<String>();
 		if (y > 12 && y < 20) {
-			if (x > 72 && x < 152) {
-				int i = (x - 72) / 8;
+			if (x > 76 && x < 146) {
+				int i = (x - 76) / 6;
 				s.add(DCHeatTier.getTypeByID(i).name() + " " + DCHeatTier.getTypeByID(i).getTemp());
 			}
 		}
 		if (y > 22 && y < 30) {
-			if (x > 72 && x < 152) {
-				int i = (x - 72) / 20;
+			if (x > 76 && x < 146) {
+				int i = (x - 76) / 18;
 				s.add(DCHumidity.getTypeByID(i).name());
 			}
 		}
 		if (y > 32 && y < 40) {
-			if (x > 72 && x < 152) {
-				int i = (x - 72) / 20;
+			if (x > 76 && x < 146) {
+				int i = (x - 76) / 18;
 				s.add(DCAirflow.getTypeByID(i).name());
 			}
 		}

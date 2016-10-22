@@ -8,10 +8,12 @@ import net.minecraft.util.math.MathHelper;
  * (温度がマイナスのブロックがあると、上記によって算出したHeatTierを相殺したり、冷媒が必要なレシピに要求される。)<br>
  * <br>
  * ABSOLUTE: 絶対零度。自然には発生しない。<br>
- * FROSTBITE: 凍傷。凍結レシピに向いた温度。氷が自然発生する。スティーブがダメージを受ける。<br>
- * COLD: 寒冷バイオームの温度。氷や雪が溶けなくなる。<br>
+ * FROSTBITE: 凍傷。氷が硬い氷になる。スティーブがダメージを受ける。<br>
+ * COLD: 寒冷バイオームの温度。氷が自然発生する。<br>
+ * COOL: 冷涼バイオームの温度。氷や雪が溶けなくなる。<br>
  * NORMAL: 常温。熱源として利用は出来ないが、力学的エネルギーは"常温の熱量"として他MOD装置と互換性を持つ。<br>
- * HOT: 温暖バイオームの温度。植物の成長が促進される。乾燥、発酵のレシピで使われる。<br>
+ * WARM: 温暖バイオームの温度。植物の成長が促進される。発酵のレシピで使われる。<br>
+ * HOT: 高温バイオームの温度。乾燥のレシピで使われる。<br>
  * OVEN: 調理に適した温度帯。この温度帯から、防具なしではスティーブがダメージを受ける。<br>
  * KILN: 火ブロックや溶岩から得られる温度。草木の焼却、低い温度で出来る精錬のレシピに要求される。<br>
  * SMELT: 多くの金属精錬に要求される。得るためにはMOD装置が必要。<br>
@@ -25,62 +27,74 @@ public enum DCHeatTier {
 	// absolute
 	ABSOLUTE(
 			-273,
-			-3,
+			-4,
 			0,
 			0x0000FF),
 	// icecream making and cooling
 	FROSTBITE(
 			-70,
-			-2,
+			-3,
 			1,
 			0x0070FF),
 	// cold climate biome
 	COLD(
-			-10,
-			-1,
+			-20,
+			-2,
 			2,
 			0x00FFFF),
+	// cool climate biome
+	COOL(
+			0,
+			-1,
+			3,
+			0x70FFFF),
 	// electric or mechanical energy require
 	NORMAL(
 			20,
 			0,
-			3,
+			4,
 			0x00FF30),
+	// warm climate biome
+	WARM(
+			35,
+			1,
+			5,
+			0xA0FF00),
 	// drying or brewing
 	HOT(
 			50,
-			1,
-			4,
+			2,
+			6,
 			0xFFE000),
 	// cooking
 	OVEN(
 			220,
-			2,
-			5,
+			3,
+			7,
 			0xFFA000),
 	// making charcoal, bronze, burn dust
 	KILN(
 			800,
-			3,
-			6,
+			4,
+			8,
 			0xFF5000),
 	// making iron or another metal
 	SMELTING(
 			1500,
-			4,
-			7,
+			5,
+			9,
 			0xFF0000),
 	// special alloy
 	UHT(
 			3000,
-			5,
-			8,
+			6,
+			10,
 			0xFF00FF),
 	// only on data
 	INFERNO(
 			8000,
-			6,
-			9,
+			7,
+			11,
 			0x600020);
 
 	private final int temp;
@@ -96,28 +110,32 @@ public enum DCHeatTier {
 	}
 
 	public static DCHeatTier getHeatEnum(int tier) {
-		if (tier < -3)
-			tier = -3;
-		if (tier > 6)
-			tier = 6;
+		if (tier < -4)
+			tier = -4;
+		if (tier > 7)
+			tier = 7;
 		switch (tier) {
-		case -3:
+		case -4:
 			return ABSOLUTE;
-		case -2:
+		case -3:
 			return FROSTBITE;
-		case -1:
+		case -2:
 			return COLD;
+		case -1:
+			return COOL;
 		case 1:
-			return HOT;
+			return WARM;
 		case 2:
-			return OVEN;
+			return HOT;
 		case 3:
-			return KILN;
+			return OVEN;
 		case 4:
-			return SMELTING;
+			return KILN;
 		case 5:
-			return UHT;
+			return SMELTING;
 		case 6:
+			return UHT;
+		case 7:
 			return INFERNO;
 		default:
 			return NORMAL;
@@ -142,7 +160,7 @@ public enum DCHeatTier {
 	}
 
 	public static DCHeatTier getTypeByID(int id) {
-		MathHelper.clamp_int(id, 0, 9);
+		MathHelper.clamp_int(id, 0, 11);
 		for (DCHeatTier e : values()) {
 			if (id == e.id)
 				return e;

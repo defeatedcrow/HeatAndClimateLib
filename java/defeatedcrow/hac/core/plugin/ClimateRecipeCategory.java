@@ -19,7 +19,7 @@ public class ClimateRecipeCategory implements IRecipeCategory {
 	private final IDrawableStatic background;
 
 	public ClimateRecipeCategory(IGuiHelper guiHelper) {
-		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_crafting_gui.png");
+		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_crafting_gui_jei.png");
 		background = guiHelper.createDrawable(location, 8, 5, 160, 66, 3, 0, 0, 0);
 	}
 

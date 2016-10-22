@@ -2,6 +2,12 @@ package defeatedcrow.hac.core.energy;
 
 import javax.annotation.Nullable;
 
+import defeatedcrow.hac.api.blockstate.DCState;
+import defeatedcrow.hac.api.blockstate.EnumSide;
+import defeatedcrow.hac.api.energy.ITorqueDC;
+import defeatedcrow.hac.core.base.DCTileEntity;
+import defeatedcrow.hac.core.packet.HaCPacket;
+import defeatedcrow.hac.core.packet.MessageTorqueTile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -11,12 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import defeatedcrow.hac.api.blockstate.DCState;
-import defeatedcrow.hac.api.blockstate.EnumSide;
-import defeatedcrow.hac.api.energy.ITorqueDC;
-import defeatedcrow.hac.core.base.DCTileEntity;
-import defeatedcrow.hac.core.packet.HaCPacket;
-import defeatedcrow.hac.core.packet.MessageTorqueTile;
 
 public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
@@ -78,7 +78,7 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 				if (Math.abs(acc) < 0.005F) {
 					acc = 0.0F;
 				}
-				effectiveAccel = acc;
+				effectiveAccel = acc * 0.5F;
 
 				if (prevEffective != effectiveAccel) {
 					HaCPacket.INSTANCE.sendToAll(new MessageTorqueTile(pos, prevAccel, effectiveAccel, prevSpeed));
@@ -105,7 +105,7 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 		// Speed
 		float frict = getFrictionalForce();
-		if (prevAccel > 0.0F) {
+		if (prevAccel != 0.0F) {
 			// 動いていれば摩擦が小さくなる
 			frict = 1.0F;
 		}

@@ -5,6 +5,16 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import defeatedcrow.hac.api.blockstate.DCState;
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.recipe.IClimateObject;
+import defeatedcrow.hac.api.recipe.IClimateSmelting;
+import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.config.CoreConfigDC;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -31,15 +41,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import defeatedcrow.hac.api.blockstate.DCState;
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCAirflow;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.recipe.IClimateObject;
-import defeatedcrow.hac.api.recipe.IClimateSmelting;
-import defeatedcrow.hac.api.recipe.RecipeAPI;
 
 //TESR持ちブロックのベース
 public class DCFacelessTileBlock extends BlockContainer implements IClimateObject, INameSuffix {
@@ -96,7 +97,8 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 
 	// 設置・破壊処理
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer,
+			ItemStack stack) {
 		TileEntity tile = world.getTileEntity(pos);
 		DCTileEntity te = null;
 		if (tile != null && tile instanceof DCTileEntity) {
@@ -125,7 +127,8 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 			tag = te.getNBT(tag);
 			if (tag != null)
 				drop.setTagCompound(tag);
-			EntityItem entityitem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, drop);
+			EntityItem entityitem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
+					drop);
 			float f3 = 0.05F;
 			entityitem.motionX = (float) this.rand.nextGaussian() * f3;
 			entityitem.motionY = (float) this.rand.nextGaussian() * f3 + 0.2F;
@@ -182,7 +185,8 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { DCState.TYPE16 });
+		return new BlockStateContainer(this, new IProperty[] {
+				DCState.TYPE16 });
 	}
 
 	/* climate */
@@ -220,7 +224,7 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 				if (output != null && output.getItem() instanceof ItemBlock) {
 					Block ret = ((ItemBlock) output.getItem()).block;
 					IBlockState retS = ret.getStateFromMeta(output.getMetadata());
-					if (world.setBlockState(pos, retS, 3)) {
+					if (world.setBlockState(pos, retS, 2)) {
 						world.notifyBlockOfStateChange(pos, ret);
 
 						// 効果音
@@ -257,10 +261,7 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 
 	@Override
 	public int[] checkingRange() {
-		return new int[] {
-				2,
-				1,
-				1 };
+		return CoreConfigDC.ranges;
 	}
 
 }

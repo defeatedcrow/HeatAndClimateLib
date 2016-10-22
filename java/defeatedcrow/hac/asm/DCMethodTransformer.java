@@ -1,8 +1,5 @@
 package defeatedcrow.hac.asm;
 
-import net.minecraft.launchwrapper.IClassTransformer;
-import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
-
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -15,6 +12,9 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
+
+import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 
 public class DCMethodTransformer implements IClassTransformer, Opcodes {
 
@@ -52,7 +52,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 		String targetMethodName = "updateTick";
 		String targetMethodNameSRG = "func_180650_b";
 
-		// 改変対象メソッドの戻り値型および、引数型をあらわします　※１
+		// 改変対象メソッドの戻り値型および、引数型をあらわします ※１
 		String targetMethoddesc = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
 		String targetMethoddescSRG = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
 
@@ -65,7 +65,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 
 			String mName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(className, curMnode.name, curMnode.desc);
 			String mdName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(curMnode.desc);
-			// System.out.println("[ " + mName + " : " + curMnode.name + " ]  [ " + mdName + " : " +
+			// System.out.println("[ " + mName + " : " + curMnode.name + " ] [ " + mdName + " : " +
 			// curMnode.desc);
 			if ((targetMethodName.equals(curMnode.name) && targetMethoddesc.equals(curMnode.desc))
 					|| (targetMethodNameSRG.equals(mName) && targetMethoddescSRG.equals(mdName))) {
@@ -98,8 +98,8 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 			overrideList.add(new VarInsnNode(ALOAD, 4));
 			overrideList.add(new MethodInsnNode(INVOKESPECIAL, "defeatedcrow/hac/api/recipe/DCBlockUpdateEvent",
 					"<init>", mdesc, false));
-			overrideList.add(new MethodInsnNode(INVOKEVIRTUAL, "defeatedcrow/hac/api/recipe/DCBlockUpdateEvent",
-					"post", "()Z", false));
+			overrideList.add(new MethodInsnNode(INVOKEVIRTUAL, "defeatedcrow/hac/api/recipe/DCBlockUpdateEvent", "post",
+					"()Z", false));
 			overrideList.add(new JumpInsnNode(IFEQ, lavel));
 			overrideList.add(new InsnNode(RETURN));
 			overrideList.add(lavel);
@@ -125,7 +125,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 		String targetMethodName = "canBlockFreezeBody";
 		String targetMethodNameSRG = "canBlockFreezeBody";
 
-		// 改変対象メソッドの戻り値型および、引数型をあらわします　※１
+		// 改変対象メソッドの戻り値型および、引数型をあらわします ※１
 		String targetMethoddesc = "(Lnet/minecraft/util/math/BlockPos;Z)Z";
 		String targetMethoddescSRG = "(Lnet/minecraft/util/math/BlockPos;Z)Z";
 
@@ -137,7 +137,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 
 			String mName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(className, curMnode.name, curMnode.desc);
 			String mdName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(curMnode.desc);
-			// System.out.println("[ " + mName + " : " + curMnode.name + " ]  [ " + mdName + " : " +
+			// System.out.println("[ " + mName + " : " + curMnode.name + " ] [ " + mdName + " : " +
 			// curMnode.desc);
 			if ((targetMethodName.equals(curMnode.name) && targetMethoddesc.equals(curMnode.desc))
 					|| (targetMethodNameSRG.equals(mName) && targetMethoddescSRG.equals(mdName))) {
@@ -161,7 +161,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 			 * return true;
 			 * }
 			 * resultはResult == ARROW時のみtrueを返す。
-			 * 理想はResult == DENY時にreturn　falseを返す処理も入れたかったが断念。
+			 * 理想はResult == DENY時にreturn falseを返す処理も入れたかったが断念。
 			 */
 			overrideList.add(new TypeInsnNode(NEW, "defeatedcrow/hac/api/recipe/DCBlockFreezeEvent"));
 			overrideList.add(new InsnNode(DUP));

@@ -4,6 +4,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.damage.DamageAPI;
+import defeatedcrow.hac.api.damage.DamageSourceClimate;
+import defeatedcrow.hac.api.magic.IJewelCharm;
+import defeatedcrow.hac.api.recipe.IClimateSmelting;
+import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.packet.HaCPacket;
+import defeatedcrow.hac.core.packet.MessageCharmKey;
+import defeatedcrow.hac.core.util.DCPotion;
+import defeatedcrow.hac.core.util.DCTimeHelper;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -35,21 +50,6 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.damage.DamageAPI;
-import defeatedcrow.hac.api.damage.DamageSourceClimate;
-import defeatedcrow.hac.api.magic.IJewelCharm;
-import defeatedcrow.hac.api.recipe.IClimateSmelting;
-import defeatedcrow.hac.api.recipe.RecipeAPI;
-import defeatedcrow.hac.config.CoreConfigDC;
-import defeatedcrow.hac.core.ClimateCore;
-import defeatedcrow.hac.core.packet.HaCPacket;
-import defeatedcrow.hac.core.packet.MessageCharmKey;
-import defeatedcrow.hac.core.util.DCPotion;
-import defeatedcrow.hac.core.util.DCTimeHelper;
-import defeatedcrow.hac.core.util.DCUtil;
 
 // 常時監視系
 public class LivingEventDC {
@@ -85,7 +85,8 @@ public class LivingEventDC {
 				} else {
 					if (living instanceof IMob) {
 						f = false;
-					} else if (living.getLowestRidingEntity() != null && living.getLowestRidingEntity() instanceof IMob) {
+					} else if (living.getLowestRidingEntity() != null
+							&& living.getLowestRidingEntity() instanceof IMob) {
 						f = false;
 					} else if (living.getRidingEntity() != null && living.getRidingEntity() instanceof IMob) {
 						f = false;
@@ -112,31 +113,35 @@ public class LivingEventDC {
 								riding.addPotionEffect(effect);
 							}
 						}
-
 					}
+					iterator = null;
 				}
 
 				/* climate damage */
 
-				if (!living.worldObj.isRemote && DCTimeHelper.getCount(living.worldObj) == 0 && CoreConfigDC.climateDam) {
+				if (!living.worldObj.isRemote && DCTimeHelper.getCount(living.worldObj) == 0
+						&& CoreConfigDC.climateDam) {
 					int px = MathHelper.floor_double(living.posX);
 					int py = MathHelper.floor_double(living.posY) + 1;
 					int pz = MathHelper.floor_double(living.posZ);
 					DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(living.worldObj, new BlockPos(px, py, pz));
 
-					float prev = 1.0F; // normal
+					float prev = 2.0F; // normal
 					if (living instanceof EntityPlayer) {
-						prev = 1.0F * (2 - CoreConfigDC.damageDifficulty); // 0F ~ 2.0F
+						prev = 1.0F * (3 - CoreConfigDC.damageDifficulty); // 1.0F ~ 3.0F
 					}
-					float dam = heat.getTier() * 1.0F; // hot 0F ~ 6.0F / cold 0F ~ 6.0F
+					float dam = Math.abs(heat.getTier()) * 1.0F; // hot 0F ~ 7.0F / cold 0F ~ 4.0F
 					boolean isCold = heat.getTier() < 0;
 
+					// 基礎ダメージ
 					if (isCold) {
-						dam += prev;
-						dam *= -2.0F;
+						dam -= prev;
+						dam *= 2.0F;
 					} else {
 						dam -= prev;
 					}
+
+					// 次に装備と耐性計算
 					prev = 0.0F;
 
 					// ピースフルではダメージがない
@@ -152,13 +157,15 @@ public class LivingEventDC {
 							if (item != null && item.getItem() instanceof ItemArmor) {
 								ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
 								prev += DamageAPI.armorRegister.getPreventAmount(mat);
-								if (!isCold
-										&& EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, item) > 0) {
-									prev += EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, item) * 1.0F;
+								if (!isCold && EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
+										item) > 0) {
+									prev += EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, item)
+											* 1.0F;
 								}
 							}
 						}
 					}
+					items = null;
 
 					// mobごとの特性
 					if (isCold) {
@@ -175,6 +182,9 @@ public class LivingEventDC {
 						}
 						if (living.isImmuneToFire()) {
 							prev += 2.0F;
+						}
+						if (heat.getTier() > DCHeatTier.OVEN.getTier() && living.isEntityUndead()) {
+							prev -= 2.0F;
 						}
 					}
 
@@ -231,8 +241,8 @@ public class LivingEventDC {
 					IJewelCharm jew = (IJewelCharm) item2.getItem();
 					jew.constantEffect(player, item2);
 				}
+				charms.clear();
 			}
-
 		}
 	}
 
@@ -261,7 +271,7 @@ public class LivingEventDC {
 	public void playerChunkUpdate(LivingEvent.LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 
-		if ((entity instanceof EntityPlayer)) {
+		if (CoreConfigDC.enableVanilla && (entity instanceof EntityPlayer)) {
 			EntityPlayer player = (EntityPlayer) event.getEntity();
 			World world = player.worldObj;
 			int count = DCTimeHelper.getCount2(world);
@@ -270,22 +280,19 @@ public class LivingEventDC {
 
 			if (tick != localCount) {
 				localCount = tick;
-				// 3回やる
+				// 3x3回やる
 				int i = 0;
-				while (i < CoreConfigDC.updateFrequency) {
+				while (i < 3) {
 					int cx = player.chunkCoordX - 4 + world.rand.nextInt(9);
 					int cz = player.chunkCoordZ - 4 + world.rand.nextInt(9);
 					if (world.getChunkFromChunkCoords(cx, cz).isLoaded()) {
 						int j = 0;
-						while (j < CoreConfigDC.updateFrequency) {
+						while (j < 3) {
 							int x = (cx << 4) + world.rand.nextInt(16);
 							int z = (cz << 4) + world.rand.nextInt(16);
 							int y = world.provider.getActualHeight();
-
-							BlockPos under = new BlockPos(x, 1, z);
-							BlockPos upper = new BlockPos(x, y, z);
-							Iterable<BlockPos> itr = under.getAllInBox(under, upper);
-							for (BlockPos pos : itr) {
+							for (int y1 = 1; y1 <= y; y1++) {
+								BlockPos pos = new BlockPos(x, y1, z);
 								if (world.rand.nextBoolean())
 									continue;
 								if (world.isAirBlock(pos)) {
@@ -295,8 +302,8 @@ public class LivingEventDC {
 								Block block = state.getBlock();
 								int meta = block.getMetaFromState(state);
 								IClimate clm = ClimateAPI.calculator.getClimate(world, pos);
-								IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(
-										block, 1, meta));
+								IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm,
+										new ItemStack(block, 1, meta));
 								if (recipe == null || !recipe.matchClimate(clm) || recipe.hasPlaceableOutput() != 1)
 									continue;
 
@@ -304,7 +311,7 @@ public class LivingEventDC {
 									Block retB = Block.getBlockFromItem(recipe.getOutput().getItem());
 									int retM = recipe.getOutput().getMetadata();
 									IBlockState ret = retB.getStateFromMeta(retM);
-									world.setBlockState(pos, ret, 3);
+									world.setBlockState(pos, ret, 2);
 									world.notifyBlockOfStateChange(pos, ret.getBlock());
 								}
 							}
@@ -325,7 +332,7 @@ public class LivingEventDC {
 		if (CoreConfigDC.enableFreezeDrop && item != null && !item.worldObj.isRemote) {
 			BlockPos pos = item.getPosition();
 			DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(item.worldObj, pos);
-			if (heat.getTier() < -1) {
+			if (heat.getTier() < DCHeatTier.COLD.getTier()) {
 				// frostbite以下
 				life += 6000;
 				event.setExtraLife(life);

@@ -23,7 +23,7 @@ public class MapGenCaveDC extends MapGenCaves {
 
 		if (this.canReplaceBlock(state, up) || state.getBlock() == top.getBlock()
 				|| state.getBlock() == filler.getBlock()) {
-			if (y - 1 < 10 && biome.getRainfall() >= 0.9F) {
+			if (y - 1 < 10 && biome.getRainfall() >= 0.85F) {
 				data.setBlockState(x, y, z, BLK_WATER);
 				flag = true;
 			}

@@ -6,6 +6,17 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import defeatedcrow.hac.api.blockstate.DCState;
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.cultivate.GrowingStage;
+import defeatedcrow.hac.api.cultivate.IClimateCrop;
+import defeatedcrow.hac.api.placeable.IRapidCollectables;
+import defeatedcrow.hac.api.placeable.ISidedTexture;
+import defeatedcrow.hac.config.CoreConfigDC;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
@@ -34,25 +45,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import defeatedcrow.hac.api.blockstate.DCState;
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCAirflow;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.cultivate.GrowingStage;
-import defeatedcrow.hac.api.cultivate.IClimateCrop;
-import defeatedcrow.hac.api.placeable.IRapidCollectables;
-import defeatedcrow.hac.api.placeable.ISidedTexture;
-import defeatedcrow.hac.config.CoreConfigDC;
 
 /**
  * Climate利用作物のベース。
  * IGrowableによる骨粉イベント対応、右クリック収穫機能を持つ。
  * 8段階、2ブロック作物版
  */
-public abstract class ClimateDoubleCropBase extends Block implements ISidedTexture, INameSuffix, IClimateCrop,
-		IRapidCollectables, IGrowable {
+public abstract class ClimateDoubleCropBase extends Block
+		implements ISidedTexture, INameSuffix, IClimateCrop, IRapidCollectables, IGrowable {
 
 	protected static final AxisAlignedBB CROP_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
 
@@ -63,8 +63,8 @@ public abstract class ClimateDoubleCropBase extends Block implements ISidedTextu
 		super(material);
 		this.setUnlocalizedName(s);
 		this.setTickRandomly(true);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.STAGE8, 0)
-				.withProperty(DCState.DOUBLE, false));
+		this.setDefaultState(
+				this.blockState.getBaseState().withProperty(DCState.STAGE8, 0).withProperty(DCState.DOUBLE, false));
 	}
 
 	@Override
@@ -139,7 +139,7 @@ public abstract class ClimateDoubleCropBase extends Block implements ISidedTextu
 		if (!world.isRemote && state != null && state.getBlock() instanceof ClimateDoubleCropBase) {
 			IClimate clm = this.getClimate(world, pos, state);
 			GrowingStage stage = this.getCurrentStage(state);
-			int chance = this.isSuitableClimate(clm, state) ? 6 : 40;
+			int chance = this.isSuitableClimate(clm, state) ? 6 : 30;
 			if (stage != GrowingStage.GROWN && rand.nextInt(chance) == 0) {
 				this.grow(world, pos, state);
 			} else {
@@ -170,11 +170,11 @@ public abstract class ClimateDoubleCropBase extends Block implements ISidedTextu
 	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if (!this.canBlockStay(worldIn, pos, state)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 		} else {
 			boolean db = this.isDouble(state, worldIn, pos);
 			if (state.getValue(DCState.DOUBLE) != db)
-				worldIn.setBlockState(pos, state.withProperty(DCState.DOUBLE, db), 3);
+				worldIn.setBlockState(pos, state.withProperty(DCState.DOUBLE, db), 2);
 		}
 	}
 
@@ -189,7 +189,7 @@ public abstract class ClimateDoubleCropBase extends Block implements ISidedTextu
 		} else {
 			boolean db = this.isDouble(state, world, pos);
 			if (state.getValue(DCState.DOUBLE) != db)
-				world.setBlockState(pos, state.withProperty(DCState.DOUBLE, db), 3);
+				world.setBlockState(pos, state.withProperty(DCState.DOUBLE, db), 2);
 		}
 	}
 
@@ -265,7 +265,7 @@ public abstract class ClimateDoubleCropBase extends Block implements ISidedTextu
 		if (thisState != null && thisState.getBlock() instanceof ClimateDoubleCropBase) {
 			GrowingStage stage = this.getCurrentStage(thisState);
 			if (stage == GrowingStage.DEAD) {
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 				return false;
 			} else if (stage == GrowingStage.GROWN) {
 				return false;
@@ -276,12 +276,12 @@ public abstract class ClimateDoubleCropBase extends Block implements ISidedTextu
 					if (age > 3 && world.getBlockState(pos.down()).getBlock() != this && world.isAirBlock(pos.up())) {
 						// 4段階目で2段になる
 						world.setBlockState(pos.up(),
-								thisState.withProperty(DCState.STAGE8, 4).withProperty(DCState.DOUBLE, false), 3);
+								thisState.withProperty(DCState.STAGE8, 4).withProperty(DCState.DOUBLE, false), 2);
 					}
 					IBlockState next = thisState.withProperty(DCState.STAGE8, age);
 					boolean db = this.isDouble(next, world, pos);
 					next.withProperty(DCState.DOUBLE, db);
-					return world.setBlockState(pos, next, 3);
+					return world.setBlockState(pos, next, 2);
 				}
 			}
 		}
@@ -313,7 +313,7 @@ public abstract class ClimateDoubleCropBase extends Block implements ISidedTextu
 				}
 				if (ret) {
 					IBlockState next = thisState.withProperty(DCState.STAGE8, 4);
-					world.setBlockState(pos, next, 3);
+					world.setBlockState(pos, next, 2);
 				}
 				return ret;
 			}

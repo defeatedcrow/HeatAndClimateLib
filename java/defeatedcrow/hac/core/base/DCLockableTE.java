@@ -17,8 +17,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public abstract class DCLockableTE extends TileEntity implements IInteractionObject, ILockableContainer, ITagGetter,
-		ITickable {
+public abstract class DCLockableTE extends TileEntity
+		implements IInteractionObject, ILockableContainer, ITagGetter, ITickable {
 
 	private LockCode code = LockCode.EMPTY_CODE;
 
@@ -88,11 +88,11 @@ public abstract class DCLockableTE extends TileEntity implements IInteractionObj
 	}
 
 	// update
-	public int coolTime = 0;
+	public int coolTime = 20;
 
 	// 更新間隔
 	protected int getMaxCool() {
-		return 10;
+		return 20;
 	}
 
 	@Override

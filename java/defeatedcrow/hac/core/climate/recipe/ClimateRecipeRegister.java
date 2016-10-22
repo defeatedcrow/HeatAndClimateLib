@@ -3,7 +3,6 @@ package defeatedcrow.hac.core.climate.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -12,6 +11,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateRecipe;
 import defeatedcrow.hac.api.recipe.IClimateRecipeRegister;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import net.minecraft.item.ItemStack;
 
 public class ClimateRecipeRegister implements IClimateRecipeRegister {
 
@@ -19,7 +19,9 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 		this.absList = new ArrayList<ClimateRecipe>();
 		this.frostList = new ArrayList<ClimateRecipe>();
 		this.coldList = new ArrayList<ClimateRecipe>();
+		this.coolList = new ArrayList<ClimateRecipe>();
 		this.normalList = new ArrayList<ClimateRecipe>();
+		this.warmList = new ArrayList<ClimateRecipe>();
 		this.hotList = new ArrayList<ClimateRecipe>();
 		this.ovenList = new ArrayList<ClimateRecipe>();
 		this.kilnList = new ArrayList<ClimateRecipe>();
@@ -38,7 +40,9 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 	private static List<ClimateRecipe> absList;
 	private static List<ClimateRecipe> frostList;
 	private static List<ClimateRecipe> coldList;
+	private static List<ClimateRecipe> coolList;
 	private static List<ClimateRecipe> normalList;
+	private static List<ClimateRecipe> warmList;
 	private static List<ClimateRecipe> hotList;
 	private static List<ClimateRecipe> ovenList;
 	private static List<ClimateRecipe> kilnList;
@@ -55,8 +59,12 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 			return frostList;
 		case COLD:
 			return coldList;
+		case COOL:
+			return coolList;
 		case NORMAL:
 			return normalList;
+		case WARM:
+			return warmList;
 		case HOT:
 			return hotList;
 		case OVEN:
@@ -75,8 +83,8 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 	}
 
 	@Override
-	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat,
-			DCHumidity hum, DCAirflow air, boolean cooling, Object... input) {
+	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat, DCHumidity hum,
+			DCAirflow air, boolean cooling, Object... input) {
 		List<ClimateRecipe> list = getRecipeList(heat);
 		if (input != null && output != null && heat != null) {
 			list.add(new ClimateRecipe(output, secondary, heat, hum, air, secondaryChance, cooling, input));
