@@ -4,14 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -20,6 +12,14 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.placeable.IEntityItem;
 import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ClimateSmelting implements IClimateSmelting {
 
@@ -42,11 +42,11 @@ public class ClimateSmelting implements IClimateSmelting {
 		needCooling = cooling;
 		if (t != null) {
 			heat.add(t);
-			if (t.getID() < 9) {
-				if (t.getID() == 3) {
+			if (t.getID() < 11) {
+				if (t.getID() == 4 || t.getID() == 5) {
 					heat.add(t.addTier(1));
 					heat.add(t.addTier(-1));
-				} else if (t.getID() == 1 || t.getID() == 2) {
+				} else if (t.getID() > 0 && t.getID() < 4) {
 					heat.add(t.addTier(-1));
 				} else if (t.getID() > 0) {
 					heat.add(t.addTier(1));
@@ -120,6 +120,7 @@ public class ClimateSmelting implements IClimateSmelting {
 			while (itr.hasNext() && !match) {
 				match = OreDictionary.itemMatches(itr.next(), item, false);
 			}
+			itr = null;
 			return match;
 		}
 		return false;

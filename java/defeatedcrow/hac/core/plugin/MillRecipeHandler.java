@@ -1,8 +1,8 @@
 package defeatedcrow.hac.core.plugin;
 
+import defeatedcrow.hac.core.climate.recipe.MillRecipe;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import defeatedcrow.hac.core.climate.recipe.MillRecipe;
 
 public class MillRecipeHandler implements IRecipeHandler<MillRecipe> {
 
@@ -24,5 +24,10 @@ public class MillRecipeHandler implements IRecipeHandler<MillRecipe> {
 	@Override
 	public boolean isRecipeValid(MillRecipe recipe) {
 		return recipe.getProcessedInput() != null;
+	}
+
+	@Override
+	public String getRecipeCategoryUid(MillRecipe recipe) {
+		return getRecipeCategoryUid();
 	}
 }

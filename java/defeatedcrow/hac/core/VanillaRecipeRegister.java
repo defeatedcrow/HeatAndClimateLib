@@ -1,22 +1,22 @@
 package defeatedcrow.hac.core;
 
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.recipe.RecipeAPI;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import defeatedcrow.hac.api.climate.DCAirflow;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.recipe.RecipeAPI;
 
 public class VanillaRecipeRegister {
 
 	public static void load() {
 		/* Smelting */
-		// FROST
-		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.PACKED_ICE, 1, 0), DCHeatTier.FROSTBITE, null,
+		// ABS
+		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.PACKED_ICE, 1, 0), DCHeatTier.ABSOLUTE, null,
 				DCAirflow.FLOW, false, new ItemStack(Blocks.ICE, 1, 0));
 
 		// COLD
@@ -33,30 +33,36 @@ public class VanillaRecipeRegister {
 		// OVEN
 
 		// KILN
-		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONE, 1, 2), DCHeatTier.KILN, null, null, false,
-				new ItemStack(Blocks.STONE, 1, 1));
-
-		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONE, 1, 4), DCHeatTier.KILN, null, null, false,
-				new ItemStack(Blocks.STONE, 1, 3));
-
-		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONE, 1, 6), DCHeatTier.KILN, null, null, false,
-				new ItemStack(Blocks.STONE, 1, 5));
-
-		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONE, 1, 0), DCHeatTier.KILN, null, null, false,
-				new ItemStack(Blocks.COBBLESTONE, 1, 0));
-
-		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.HARDENED_CLAY, 1, 0), DCHeatTier.KILN,
-				DCHumidity.DRY, null, false, new ItemStack(Blocks.CLAY, 1, 0));
-
-		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONEBRICK, 1, 2), DCHeatTier.KILN, null, null,
-				false, new ItemStack(Blocks.STONEBRICK, 1, 0));
+		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONE, 1, 2), DCHeatTier.KILN,
+		// null, null, false,
+		// new ItemStack(Blocks.STONE, 1, 1));
+		//
+		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONE, 1, 4), DCHeatTier.KILN,
+		// null, null, false,
+		// new ItemStack(Blocks.STONE, 1, 3));
+		//
+		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONE, 1, 6), DCHeatTier.KILN,
+		// null, null, false,
+		// new ItemStack(Blocks.STONE, 1, 5));
+		//
+		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONE, 1, 0), DCHeatTier.KILN,
+		// null, null, false,
+		// new ItemStack(Blocks.COBBLESTONE, 1, 0));
+		//
+		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.HARDENED_CLAY, 1, 0),
+		// DCHeatTier.KILN,
+		// DCHumidity.DRY, null, false, new ItemStack(Blocks.CLAY, 1, 0));
+		//
+		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONEBRICK, 1, 2),
+		// DCHeatTier.KILN, null, null,
+		// false, new ItemStack(Blocks.STONEBRICK, 1, 0));
 
 		// SMELT
 
 		/* Mill */
 
-		RecipeAPI.registerMills.addRecipe(new ItemStack(Blocks.SAND), new ItemStack(Items.FLINT), new ItemStack(
-				Blocks.GRAVEL));
+		RecipeAPI.registerMills.addRecipe(new ItemStack(Blocks.SAND), new ItemStack(Items.FLINT),
+				new ItemStack(Blocks.GRAVEL));
 
 		/* Fluid */
 
@@ -65,17 +71,6 @@ public class VanillaRecipeRegister {
 	}
 
 	static void addAltRecipes() {
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.ARROW, 8, 0), new Object[] {
-				"X",
-				"Y",
-				"Z",
-				'X',
-				"gemChalcedony",
-				'Y',
-				new ItemStack(Items.STICK),
-				'Z',
-				new ItemStack(Items.FEATHER) }));
-
 		// コンパス
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.COMPASS, 1, 0), new Object[] {
 				" X ",

@@ -15,7 +15,7 @@ public interface IBiomeClimateRegister {
 	/**
 	 * Biomeの環境の登録。<br>
 	 * そのPosの基礎値として加算される。<br>
-	 * 
+	 *
 	 * @param biome
 	 *            : 登録対象Biome
 	 * @param temp
@@ -27,6 +27,23 @@ public interface IBiomeClimateRegister {
 	 */
 	void addBiomeClimate(Biome biome, DCHeatTier temp, DCHumidity hum, DCAirflow airflow);
 
+	/**
+	 * Biomeの環境の登録。<br>
+	 * 特定のdimension内のみで適用される。<br>
+	 *
+	 * @param biome
+	 *            : 登録対象Biome
+	 * @param dim
+	 *            : 登録対象dimension
+	 * @param temp
+	 *            : 気温
+	 * @param hum
+	 *            : 湿度
+	 * @param airflow
+	 *            : 通気
+	 */
+	void addBiomeClimate(Biome biome, int dim, DCHeatTier temp, DCHumidity hum, DCAirflow airflow);
+
 	Map<Integer, ? extends IClimate> getClimateList();
 
 	/**
@@ -35,7 +52,7 @@ public interface IBiomeClimateRegister {
 	 */
 	IClimate getClimateFromBiome(World world, BlockPos pos);
 
-	IClimate getClimateFromBiome(Biome biome);
+	IClimate getClimateFromBiome(int biomeID);
 
 	DCHeatTier getHeatTier(World world, BlockPos pos);
 
@@ -43,11 +60,11 @@ public interface IBiomeClimateRegister {
 
 	DCHumidity getHumidity(World world, BlockPos pos);
 
-	DCHeatTier getHeatTier(Biome biome);
+	DCHeatTier getHeatTier(int biomeID);
 
-	DCAirflow getAirflow(Biome biome);
+	DCAirflow getAirflow(int biomeID);
 
-	DCHumidity getHumidity(Biome biome);
+	DCHumidity getHumidity(int biomeID);
 
 	/**
 	 * climateを0bAABBCCCのintとして表現したものと互換性を持たせる。

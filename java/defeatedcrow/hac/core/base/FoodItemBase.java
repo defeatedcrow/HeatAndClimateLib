@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.base;
 
+import defeatedcrow.hac.api.placeable.IEntityItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -11,7 +12,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import defeatedcrow.hac.api.placeable.IEntityItem;
 
 /* 設置できる食べ物 */
 public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
@@ -33,8 +33,8 @@ public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
 						double fX = facing.getFrontOffsetX() * 0.25D;
 						double fY = facing.getFrontOffsetY() * 0.25D;
 						double fZ = facing.getFrontOffsetZ() * 0.25D;
-						Entity entity = this.getPlacementEntity(world, player, pos.getX() + hitX + fX, pos.getY()
-								+ hitY + fY, pos.getZ() + hitZ + fZ, stack);
+						Entity entity = this.getPlacementEntity(world, player, pos.getX() + hitX + fX,
+								pos.getY() + hitY + fY, pos.getZ() + hitZ + fZ, stack);
 						if (entity != null) {
 							if (this.spawnPlacementEntity(world, entity)) {
 								--stack.stackSize;

@@ -5,6 +5,16 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import defeatedcrow.hac.api.blockstate.DCState;
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.recipe.IClimateObject;
+import defeatedcrow.hac.api.recipe.IClimateSmelting;
+import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.config.CoreConfigDC;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -29,16 +39,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import defeatedcrow.hac.api.blockstate.DCState;
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCAirflow;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.recipe.IClimateObject;
-import defeatedcrow.hac.api.recipe.IClimateSmelting;
-import defeatedcrow.hac.api.recipe.RecipeAPI;
-import defeatedcrow.hac.config.CoreConfigDC;
 
 // TESR持ちブロックのベース
 public abstract class DCTileBlock extends BlockContainer implements IClimateObject {
@@ -106,7 +106,8 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer,
+			ItemStack stack) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile != null && tile instanceof ITagGetter) {
 			NBTTagCompound tag = stack.getTagCompound();
@@ -130,7 +131,8 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 		}
 
 		if (!world.isRemote) {
-			EntityItem entityitem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, drop);
+			EntityItem entityitem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
+					drop);
 			float f3 = 0.05F;
 			entityitem.motionX = (float) this.rand.nextGaussian() * f3;
 			entityitem.motionY = (float) this.rand.nextGaussian() * f3 + 0.25F;
@@ -234,7 +236,7 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 				if (output != null && output.getItem() instanceof ItemBlock) {
 					Block ret = ((ItemBlock) output.getItem()).block;
 					IBlockState retS = ret.getStateFromMeta(output.getMetadata());
-					if (world.setBlockState(pos, retS, 3)) {
+					if (world.setBlockState(pos, retS, 2)) {
 						world.notifyBlockOfStateChange(pos, ret);
 
 						// 効果音

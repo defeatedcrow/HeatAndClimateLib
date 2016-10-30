@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.client.base;
 
+import defeatedcrow.hac.core.base.FoodEntityBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -7,7 +8,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import defeatedcrow.hac.core.base.FoodEntityBase;
 
 /* FoodEntityBase用のRender */
 @SideOnly(Side.CLIENT)
@@ -34,12 +34,12 @@ public abstract class DCRenderFoodBase<T extends FoodEntityBase> extends Render<
 			GlStateManager.color(0.2F, 0.2F, 0.2F);
 		}
 
-		float rotX = 0F;
+		float rotX = -entity.rotationPitch;
 		float rotY = entity.rotationYaw;
 		float rotZ = 0F;
 
-		GlStateManager.rotate(rotX, 1.0F, 0.0F, 0.0F);
 		GlStateManager.rotate(rotY, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(rotX, 1.0F, 0.0F, 0.0F);
 		GlStateManager.rotate(rotZ, 0.0F, 0.0F, 1.0F);
 
 		model.render(0.0625F);

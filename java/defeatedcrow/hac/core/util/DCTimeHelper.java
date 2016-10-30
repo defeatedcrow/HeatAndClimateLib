@@ -12,7 +12,7 @@ public class DCTimeHelper {
 	}
 
 	public static long totalTime(World world) {
-		return world.getWorldInfo().getWorldTime();
+		return world.getWorldInfo().getWorldTotalTime();
 	}
 
 	public static boolean isDayTime(World world) {

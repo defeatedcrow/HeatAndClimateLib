@@ -2,9 +2,9 @@ package defeatedcrow.hac.core.plugin;
 
 import java.util.List;
 
+import defeatedcrow.hac.core.climate.recipe.ClimateRecipe;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import defeatedcrow.hac.core.climate.recipe.ClimateRecipe;
 
 public class ClimateRecipeHandler implements IRecipeHandler<ClimateRecipe> {
 
@@ -38,6 +38,11 @@ public class ClimateRecipeHandler implements IRecipeHandler<ClimateRecipe> {
 			return ret;
 		}
 		return false;
+	}
+
+	@Override
+	public String getRecipeCategoryUid(ClimateRecipe recipe) {
+		return getRecipeCategoryUid();
 	}
 
 }

@@ -1,10 +1,10 @@
 package defeatedcrow.hac.core.plugin;
 
+import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import defeatedcrow.hac.api.cultivate.IClimateCrop;
 
 public class ClimateCropHandler implements IRecipeHandler<IClimateCrop> {
 
@@ -35,6 +35,11 @@ public class ClimateCropHandler implements IRecipeHandler<IClimateCrop> {
 			return false;
 		}
 		return false;
+	}
+
+	@Override
+	public String getRecipeCategoryUid(IClimateCrop recipe) {
+		return getRecipeCategoryUid();
 	}
 
 }

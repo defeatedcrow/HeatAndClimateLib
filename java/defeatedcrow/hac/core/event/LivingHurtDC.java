@@ -3,6 +3,10 @@ package defeatedcrow.hac.core.event;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import defeatedcrow.hac.api.magic.CharmType;
+import defeatedcrow.hac.api.magic.IJewelCharm;
+import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -11,10 +15,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import defeatedcrow.hac.api.magic.CharmType;
-import defeatedcrow.hac.api.magic.IJewelCharm;
-import defeatedcrow.hac.core.DCLogger;
-import defeatedcrow.hac.core.util.DCUtil;
 
 public class LivingHurtDC {
 
@@ -45,6 +45,7 @@ public class LivingHurtDC {
 						}
 					}
 				}
+				charms.clear();
 			}
 
 			// ATTACK側のチャーム判定
@@ -65,6 +66,7 @@ public class LivingHurtDC {
 						}
 					}
 				}
+				charms2.clear();
 			}
 
 			// 最終的なダメージ

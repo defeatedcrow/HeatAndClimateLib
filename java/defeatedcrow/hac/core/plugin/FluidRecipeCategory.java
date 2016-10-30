@@ -20,7 +20,7 @@ public class FluidRecipeCategory implements IRecipeCategory {
 	private final IDrawableStatic background;
 
 	public FluidRecipeCategory(IGuiHelper guiHelper) {
-		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_fluidcraft_gui.png");
+		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_fluidcraft_gui_jei.png");
 		background = guiHelper.createDrawable(location, 8, 6, 160, 105, 3, 0, 0, 0);
 	}
 

@@ -1,7 +1,5 @@
 package defeatedcrow.hac.core;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -10,20 +8,23 @@ import defeatedcrow.hac.api.cultivate.CropAPI;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.core.climate.ArmorMaterialRegister;
-import defeatedcrow.hac.core.climate.ClimateCalculator;
+import defeatedcrow.hac.core.climate.ClimateAltCalculator;
 import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
+import defeatedcrow.hac.core.climate.ThermalInsulationUtil;
 import defeatedcrow.hac.core.climate.recipe.ClimateCropRegister;
 import defeatedcrow.hac.core.climate.recipe.ClimateRecipeRegister;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmeltingRegister;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRegister;
 import defeatedcrow.hac.core.climate.recipe.MillRecipeRegister;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
 
 public class APILoader {
 
 	public static void loadAPI() {
 		ClimateAPI.register = new ClimateRegister();
-		ClimateAPI.calculator = new ClimateCalculator();
+		ClimateAPI.calculator = new ClimateAltCalculator();
 		ClimateAPI.registerBlock = new HeatBlockRegister();
 		ClimateAPI.isLoaded = true;
 
@@ -41,6 +42,7 @@ public class APILoader {
 
 		registerClimate();
 		registerMaterial();
+		ThermalInsulationUtil.load();
 	}
 
 	private static void registerMaterial() {
@@ -50,7 +52,7 @@ public class APILoader {
 
 	public static void registerClimate() {
 		// heat
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LIT_PUMPKIN, 32767, DCHeatTier.HOT);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LIT_PUMPKIN, 32767, DCHeatTier.WARM);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.TORCH, 32767, DCHeatTier.HOT);
 
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LIT_FURNACE, 32767, DCHeatTier.OVEN);
@@ -58,12 +60,13 @@ public class APILoader {
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.FIRE, 32767, DCHeatTier.KILN);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.FLOWING_LAVA, 32767, DCHeatTier.KILN);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LAVA, 32767, DCHeatTier.KILN);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.field_189877_df, 0, DCHeatTier.KILN);
 
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.WATER, 32767, DCHeatTier.NORMAL);
 
 		// cold
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.ICE, 32767, DCHeatTier.COLD);
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.SNOW, 32767, DCHeatTier.COLD);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.SNOW, 32767, DCHeatTier.COOL);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.PACKED_ICE, 32767, DCHeatTier.COLD);
 
 		// hum

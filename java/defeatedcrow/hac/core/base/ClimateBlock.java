@@ -2,6 +2,16 @@ package defeatedcrow.hac.core.base;
 
 import java.util.Random;
 
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.recipe.IClimateObject;
+import defeatedcrow.hac.api.recipe.IClimateSmelting;
+import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.DCLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -13,16 +23,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCAirflow;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.recipe.IClimateObject;
-import defeatedcrow.hac.api.recipe.IClimateSmelting;
-import defeatedcrow.hac.api.recipe.RecipeAPI;
-import defeatedcrow.hac.config.CoreConfigDC;
-import defeatedcrow.hac.core.DCLogger;
 
 /**
  * ClimateSmeltingレシピを持つBlockのテンプレート
@@ -42,7 +42,8 @@ public class ClimateBlock extends Block implements IClimateObject {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer,
+			ItemStack stack) {
 		if (this.isForcedTickUpdate()) {
 			world.scheduleUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(21));
 		}
@@ -82,7 +83,7 @@ public class ClimateBlock extends Block implements IClimateObject {
 				if (output != null && output.getItem() instanceof ItemBlock) {
 					Block ret = ((ItemBlock) output.getItem()).block;
 					IBlockState retS = ret.getStateFromMeta(output.getMetadata());
-					if (world.setBlockState(pos, retS, 3)) {
+					if (world.setBlockState(pos, retS, 2)) {
 						world.notifyBlockOfStateChange(pos, ret);
 
 						// 効果音

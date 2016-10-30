@@ -6,6 +6,17 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import defeatedcrow.hac.api.blockstate.DCState;
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.cultivate.GrowingStage;
+import defeatedcrow.hac.api.cultivate.IClimateCrop;
+import defeatedcrow.hac.api.placeable.IRapidCollectables;
+import defeatedcrow.hac.api.placeable.ISidedTexture;
+import defeatedcrow.hac.config.CoreConfigDC;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
@@ -33,25 +44,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import defeatedcrow.hac.api.blockstate.DCState;
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCAirflow;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.cultivate.GrowingStage;
-import defeatedcrow.hac.api.cultivate.IClimateCrop;
-import defeatedcrow.hac.api.placeable.IRapidCollectables;
-import defeatedcrow.hac.api.placeable.ISidedTexture;
-import defeatedcrow.hac.config.CoreConfigDC;
 
 /**
  * Climate利用作物のベース。
  * IGrowableによる骨粉イベント対応、右クリック収穫機能を持つ。
  * 4段階版
  */
-public abstract class ClimateCropBase extends Block implements ISidedTexture, INameSuffix, IClimateCrop,
-		IRapidCollectables, IGrowable {
+public abstract class ClimateCropBase extends Block
+		implements ISidedTexture, INameSuffix, IClimateCrop, IRapidCollectables, IGrowable {
 
 	protected static final AxisAlignedBB CROP_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.875D, 0.875D);
 
@@ -127,7 +127,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 		if (!world.isRemote && state != null && state.getBlock() instanceof ClimateCropBase) {
 			IClimate clm = this.getClimate(world, pos, state);
 			GrowingStage stage = this.getCurrentStage(state);
-			int chance = this.isSuitableClimate(clm, state) ? 6 : 40;
+			int chance = this.isSuitableClimate(clm, state) ? 6 : 30;
 			if (stage != GrowingStage.GROWN && rand.nextInt(chance) == 0) {
 				this.grow(world, pos, state);
 			} else {
@@ -160,7 +160,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if (!this.canBlockStay(worldIn, pos, state)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 		}
 	}
 
@@ -241,7 +241,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 		if (thisState != null && thisState.getBlock() instanceof ClimateCropBase) {
 			GrowingStage stage = this.getCurrentStage(thisState);
 			if (stage == GrowingStage.DEAD) {
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 				return false;
 			} else if (stage == GrowingStage.GROWN) {
 				return false;
@@ -250,7 +250,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 				if (age >= 0 && age < 3) {
 					age++;
 					IBlockState next = thisState.withProperty(DCState.STAGE4, age);
-					return world.setBlockState(pos, next, 3);
+					return world.setBlockState(pos, next, 2);
 				}
 			}
 		}
@@ -283,7 +283,7 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 				if (ret) {
 					if (canStayOnHarvest()) {
 						IBlockState next = thisState.withProperty(DCState.STAGE4, 0);
-						world.setBlockState(pos, next, 3);
+						world.setBlockState(pos, next, 2);
 					} else {
 						world.setBlockToAir(pos);
 					}
@@ -374,7 +374,8 @@ public abstract class ClimateCropBase extends Block implements ISidedTexture, IN
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { DCState.STAGE4 });
+		return new BlockStateContainer(this, new IProperty[] {
+				DCState.STAGE4 });
 	}
 
 	// drop

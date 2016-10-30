@@ -3,13 +3,23 @@ package defeatedcrow.hac.core.client.event;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.lwjgl.opengl.GL11;
+
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.damage.DamageAPI;
+import defeatedcrow.hac.api.damage.DamageSourceClimate;
+import defeatedcrow.hac.api.magic.CharmType;
+import defeatedcrow.hac.api.magic.IJewelCharm;
+import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.client.DCTextures;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,28 +30,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.lwjgl.opengl.GL11;
-
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.damage.DamageAPI;
-import defeatedcrow.hac.api.damage.DamageSourceClimate;
-import defeatedcrow.hac.api.magic.CharmType;
-import defeatedcrow.hac.api.magic.IJewelCharm;
-import defeatedcrow.hac.config.CoreConfigDC;
-import defeatedcrow.hac.core.ClimateCore;
-import defeatedcrow.hac.core.client.DCTextures;
-import defeatedcrow.hac.core.util.DCUtil;
 
 @SideOnly(Side.CLIENT)
 public class RenderTempHUDEvent {
@@ -77,7 +71,7 @@ public class RenderTempHUDEvent {
 							}
 						}
 
-						conf_prev = 2F - CoreConfigDC.damageDifficulty;
+						conf_prev = 3F - CoreConfigDC.damageDifficulty;
 						damage = 0;
 						prev2 = 0F;
 
@@ -88,9 +82,8 @@ public class RenderTempHUDEvent {
 								if (item != null && item.getItem() instanceof ItemArmor) {
 									ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
 									prev2 += DamageAPI.armorRegister.getPreventAmount(mat);
-									if (tier > 0
-											&& EnchantmentHelper
-													.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, item) > 0) {
+									if (tier > 0 && EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
+											item) > 0) {
 										prev2 += EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
 												item) * 1.0F;
 									}
@@ -106,6 +99,9 @@ public class RenderTempHUDEvent {
 							IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
 							prev2 += charm.reduceDamage(source, entry.getValue());
 						}
+
+						items = null;
+						charms = null;
 
 					} else {
 						count--;
@@ -157,111 +153,6 @@ public class RenderTempHUDEvent {
 				}
 			}
 		}
-	}
-
-	private IClimate[][][] climates = new IClimate[3][3][3];
-	private int count2 = 0;
-
-	// @SubscribeEvent 完全に失敗
-	public void renderClimateViewer(DrawBlockHighlightEvent event) {
-		EntityPlayer player = event.getPlayer();
-		RayTraceResult target = event.getTarget();
-		if (player != null && target != null) {
-			World world = player.worldObj;
-			BlockPos pos = target.getBlockPos();
-			IClimateViewer viewer = null;
-
-			ItemStack held = player.getHeldItemMainhand();
-			if (held != null && held.getItem() instanceof IClimateViewer) {
-				viewer = (IClimateViewer) held.getItem();
-			} else {
-				held = player.getHeldItemOffhand();
-				if (held != null && held.getItem() instanceof IClimateViewer) {
-					viewer = (IClimateViewer) held.getItem();
-				}
-			}
-
-			if (viewer != null && player.isSneaking()) {
-				// climate情報の更新
-				if (count2 == 0) {
-					count2 = 10;
-					// DCLogger.debugLog("viewer");
-					if (pos != null && world.isAreaLoaded(pos.add(-1, -1, -1), pos.add(1, 1, 1))) {
-						BlockPos base = pos.add(-1, -1, -1);
-						for (int i = 0; i < 3; i++) {
-							for (int j = 0; j < 3; j++) {
-								for (int k = 0; k < 3; k++) {
-									BlockPos p = base.add(i, j, k);
-									IClimate clm = ClimateAPI.calculator.getClimate(world, p);
-									climates[i][j][k] = clm;
-								}
-							}
-						}
-					}
-				} else {
-					count2--;
-				}
-				ViewerMode mode = viewer.getMode(held);
-				if (mode != ViewerMode.NONE) {
-					for (int i = 0; i < 3; i++) {
-						for (int j = 0; j < 3; j++) {
-							for (int k = 0; k < 3; k++) {
-								IClimate clm = climates[i][j][k];
-								BlockPos base = pos.add(-1, -1, -1);
-								BlockPos p = base.add(i, j, k);
-								if (clm != null) {
-									// DCLogger.debugLog("view " + i + ", " + j + ", " + k);
-									float r = 1.0F;
-									float g = 1.0F;
-									float b = 1.0F;
-									if (mode == ViewerMode.TEMP) {
-										r = clm.getHeat().getColor()[0] / 256.0F;
-										g = clm.getHeat().getColor()[1] / 256.0F;
-										b = clm.getHeat().getColor()[2] / 256.0F;
-									} else if (mode == ViewerMode.HUM) {
-										r = clm.getHumidity().getColor()[0] / 256.0F;
-										g = clm.getHumidity().getColor()[1] / 256.0F;
-										b = clm.getHumidity().getColor()[2] / 256.0F;
-									} else if (mode == ViewerMode.WIND) {
-										r = clm.getAirflow().getColor()[0] / 256.0F;
-										g = clm.getAirflow().getColor()[1] / 256.0F;
-										b = clm.getAirflow().getColor()[2] / 256.0F;
-									}
-									double mx = p.getX() + 0.25D;
-									double my = p.getY() + 0.25D;
-									double mz = p.getZ() + 0.25D;
-									double xx = p.getX() + 0.75D;
-									double xy = p.getY() + 0.75D;
-									double xz = p.getZ() + 0.75D;
-									AxisAlignedBB aabb = new AxisAlignedBB(mx, my, mz, xx, xy, xz);
-
-									Minecraft.getMinecraft().getTextureManager()
-											.bindTexture(DCTextures.GRAY.getRocation());
-									GL11.glPushMatrix();
-									GL11.glEnable(GL11.GL_BLEND);
-									GL11.glDisable(GL11.GL_LIGHTING);
-									GL11.glDepthMask(true);
-									OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-									GL11.glColor4f(r, g, b, 0.85F);
-
-									this.drawOutlinedBoundingBox(aabb);
-
-									Minecraft.getMinecraft().renderEngine
-											.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-									// GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-									OpenGlHelper.glBlendFunc(770, 1, 1, 0);
-									GL11.glDisable(GL11.GL_BLEND);
-									GL11.glEnable(GL11.GL_LIGHTING);
-									GL11.glDepthMask(true);
-									GL11.glPopMatrix();
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
 	}
 
 	public void drawTexturedModalRect(int x, int y, int tX, int tY, int width, int height) {
