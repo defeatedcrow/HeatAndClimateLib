@@ -71,17 +71,6 @@ public class VanillaRecipeRegister {
 	}
 
 	static void addAltRecipes() {
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.ARROW, 8, 0), new Object[] {
-				"X",
-				"Y",
-				"Z",
-				'X',
-				"gemChalcedony",
-				'Y',
-				new ItemStack(Items.STICK),
-				'Z',
-				new ItemStack(Items.FEATHER) }));
-
 		// コンパス
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.COMPASS, 1, 0), new Object[] {
 				" X ",

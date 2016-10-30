@@ -29,6 +29,7 @@ import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntitySheep;
@@ -172,8 +173,8 @@ public class LivingEventDC {
 						if (living.isImmuneToFire()) {
 							prev -= 2.0F;
 						}
-						if (living.isEntityUndead() || living instanceof EntityEnderman
-								|| living instanceof EntitySheep) {
+						if (living.isEntityUndead() || living instanceof EntityEnderman || living instanceof EntitySheep
+								|| living instanceof EntityPolarBear) {
 							prev += 2.0F;
 						}
 					} else {

@@ -5,6 +5,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
+import defeatedcrow.hac.api.magic.CharmType;
+import defeatedcrow.hac.api.magic.IJewelCharm;
+import defeatedcrow.hac.core.DCLogger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -16,9 +19,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import defeatedcrow.hac.api.magic.CharmType;
-import defeatedcrow.hac.api.magic.IJewelCharm;
-import defeatedcrow.hac.core.DCLogger;
 
 // 色々不足しているもの
 public class DCUtil {
@@ -119,7 +119,7 @@ public class DCUtil {
 		return ret;
 	}
 
-	// Itemクラスのやつがpretectedだった
+	// Itemクラスのやつがprotectedだった
 	public static RayTraceResult getRayTrace(World world, EntityPlayer player) {
 		float f = player.rotationPitch;
 		float f1 = player.rotationYaw;

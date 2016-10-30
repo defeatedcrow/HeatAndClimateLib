@@ -83,6 +83,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 
 	@Override
 	public DCHeatTier getHeat(World world, BlockPos pos, int r, boolean h) {
+		if (world == null || pos == null) {
+			return DCHeatTier.NORMAL;
+		}
 		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
 		/*
 		 * biomeの気温
@@ -120,6 +123,10 @@ public class ClimateAltCalculator implements IClimateCalculator {
 						current = ((IHeatTile) block).getHeatTier(world, pos, p2);
 					} else if (ClimateAPI.registerBlock.isRegisteredHeat(block, m)) {
 						current = ClimateAPI.registerBlock.getHeatTier(block, m);
+					}
+
+					if (current == null) {
+						current = hot;
 					}
 
 					if (CoreConfigDC.wall) {
@@ -191,6 +198,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 
 	@Override
 	public DCHeatTier getCold(World world, BlockPos pos, int r, boolean h) {
+		if (world == null || pos == null) {
+			return DCHeatTier.NORMAL;
+		}
 		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
 		/*
 		 * biomeの気温
@@ -236,6 +246,10 @@ public class ClimateAltCalculator implements IClimateCalculator {
 						current = ((IHeatTile) block).getHeatTier(world, pos, p2);
 					} else if (ClimateAPI.registerBlock.isRegisteredHeat(block, m)) {
 						current = ClimateAPI.registerBlock.getHeatTier(block, m);
+					}
+
+					if (current == null) {
+						current = cold;
 					}
 
 					if (CoreConfigDC.wall) {
@@ -305,6 +319,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	// 合計値で考える
 	@Override
 	public DCHumidity getHumidity(World world, BlockPos pos, int r, boolean h) {
+		if (world == null || pos == null) {
+			return DCHumidity.NORMAL;
+		}
 		if (r < 0 || r > 15)
 			r = 1;
 
@@ -384,6 +401,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	// Airの数をカウントして決定
 	@Override
 	public DCAirflow getAirflow(World world, BlockPos pos, int r, boolean h) {
+		if (world == null || pos == null) {
+			return DCAirflow.NORMAL;
+		}
 		if (r < 0 || r > 15)
 			r = 1;
 

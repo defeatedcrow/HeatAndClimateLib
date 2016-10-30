@@ -122,7 +122,17 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 		 * Tier絶対値が1以上の場合、現在環境の1つ下の温度帯のレシピも条件にあてまはる
 		 */
 		if (ret == null) {
-			if (clm.getHeat().getTier() != 0) {
+			if (clm.getHeat() == DCHeatTier.NORMAL) {
+				List<FluidCraftRecipe> list2 = getRecipeList(DCHeatTier.WARM);
+				if (list2.isEmpty()) {
+				} else {
+					for (IFluidRecipe recipe : list2) {
+						if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {
+							ret = recipe;
+						}
+					}
+				}
+			} else {
 				int i = clm.getHeat().getTier() < 0 ? 1 : -1;
 				DCHeatTier next = clm.getHeat().addTier(i);
 				// DCLogger.debugLog("heat2: " + next.name());
