@@ -87,6 +87,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			return DCHeatTier.NORMAL;
 		}
 		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
+		if (temp == null) {
+			temp = DCHeatTier.NORMAL;
+		}
 		/*
 		 * biomeの気温
 		 * 屋根あり: Tierが1段階Normalに近づく
@@ -202,6 +205,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			return DCHeatTier.NORMAL;
 		}
 		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
+		if (temp == null) {
+			temp = DCHeatTier.NORMAL;
+		}
 		/*
 		 * biomeの気温
 		 * 屋根あり: Tierが1段階Normalに近づく
@@ -374,14 +380,14 @@ public class ClimateAltCalculator implements IClimateCalculator {
 						DCHumidity current = ((IHumidityTile) block).getHumdiity(world, pos, p2);
 						if (current == DCHumidity.DRY) {
 							ret--;
-						} else if (current.getID() > 1) {
+						} else if (current != null && current.getID() > 1) {
 							ret++;
 						}
 					} else if (ClimateAPI.registerBlock.isRegisteredHum(block, m)) {
 						DCHumidity cur = ClimateAPI.registerBlock.getHumidity(block, m);
 						if (cur == DCHumidity.DRY) {
 							ret--;
-						} else if (cur.getID() > 1) {
+						} else if (cur != null && cur.getID() > 1) {
 							ret++;
 						}
 					} else if (world.getBlockState(p2).getMaterial() == Material.WATER) {
@@ -438,7 +444,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 					int m = block.getMetaFromState(world.getBlockState(p2));
 					if (block instanceof IAirflowTile) {
 						DCAirflow current = ((IAirflowTile) block).getAirflow(world, pos, p2);
-						if (current.getID() > 0) {
+						if (current != null && current.getID() > 0) {
 							if (current.getID() > 1) {
 								if (current == DCAirflow.WIND) {
 									hasBlow = true;
@@ -449,7 +455,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 						}
 					} else if (ClimateAPI.registerBlock.isRegisteredAir(block, m)) {
 						DCAirflow cur = ClimateAPI.registerBlock.getAirflow(block, m);
-						if (cur.getID() > 0) {
+						if (cur != null && cur.getID() > 0) {
 							count++;
 							if (cur.getID() > 1) {
 								hasWind = true;

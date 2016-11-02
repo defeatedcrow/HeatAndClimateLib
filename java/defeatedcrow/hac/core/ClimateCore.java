@@ -22,6 +22,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+// @SortingIndex(1102)
 @Mod(
 		modid = ClimateCore.MOD_ID,
 		name = ClimateCore.MOD_NAME,
@@ -34,7 +35,7 @@ public class ClimateCore {
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 1;
 	public static final int MOD_MINOR = 1;
-	public static final int MOD_BUILD = 3;
+	public static final int MOD_BUILD = 5;
 	public static final String MOD_DEPENDENCIES = "required-after:Forge@[12.18.2.2099,)";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.10]";
 

@@ -5,9 +5,8 @@ import java.util.Map;
 
 import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
-import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
 
-@SortingIndex(3000)
+// @SortingIndex(1101)
 public class DCASMPlugin implements IFMLLoadingPlugin, IFMLCallHook {
 
 	static File file;

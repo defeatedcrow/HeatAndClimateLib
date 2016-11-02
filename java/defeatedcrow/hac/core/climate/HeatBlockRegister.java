@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.block.Block;
 import defeatedcrow.hac.api.climate.BlockSet;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IHeatBlockRegister;
+import net.minecraft.block.Block;
 
 public class HeatBlockRegister implements IHeatBlockRegister {
 
@@ -53,31 +53,47 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 	@Override
 	public DCHeatTier getHeatTier(Block block, int meta) {
 		Set<BlockSet> s = heats.keySet();
+		DCHeatTier heat = null;
 		BlockSet b = this.include(s, new BlockSet(block, meta));
-		if (b != null)
-			return heats.get(b);
-		else
+		if (b != null) {
+			heat = heats.get(b);
+		}
+		if (heat != null) {
+			return heat;
+		} else {
 			return DCHeatTier.NORMAL;
+		}
+
 	}
 
 	@Override
 	public DCHumidity getHumidity(Block block, int meta) {
 		Set<BlockSet> s = hums.keySet();
+		DCHumidity hum = null;
 		BlockSet b = this.include(s, new BlockSet(block, meta));
-		if (b != null)
-			return hums.get(b);
-		else
+		if (b != null) {
+			hum = hums.get(b);
+		}
+		if (hum != null) {
+			return hum;
+		} else {
 			return DCHumidity.NORMAL;
+		}
 	}
 
 	@Override
 	public DCAirflow getAirflow(Block block, int meta) {
 		Set<BlockSet> s = airs.keySet();
+		DCAirflow air = null;
 		BlockSet b = this.include(s, new BlockSet(block, meta));
-		if (b != null)
-			return airs.get(b);
-		else
+		if (b != null) {
+			air = airs.get(b);
+		}
+		if (air != null) {
+			return air;
+		} else {
 			return DCAirflow.NORMAL;
+		}
 	}
 
 	@Override

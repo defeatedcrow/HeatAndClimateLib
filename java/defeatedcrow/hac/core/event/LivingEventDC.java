@@ -55,18 +55,27 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 // 常時監視系
 public class LivingEventDC {
 
+	// ログイン直後は動かない
+	private static int count = 5;
+
 	@SubscribeEvent
 	public void onEvent(LivingEvent.LivingUpdateEvent event) {
 		EntityLivingBase living = event.getEntityLiving();
-		if (living instanceof EntityPlayer) {
-			this.onPlayerUpdate(event);
-			if (!living.worldObj.isRemote) {
-				this.playerChunkUpdate(event);
+		if (living != null) {
+			if (count == 0) {
+				if (living instanceof EntityPlayer) {
+					this.onPlayerUpdate(event);
+					if (!living.worldObj.isRemote) {
+						this.playerChunkUpdate(event);
+					} else {
+						this.onPlayerKeyUpdate(event);
+					}
+				}
+				this.onLivingUpdate(event);
 			} else {
-				this.onPlayerKeyUpdate(event);
+				count--;
 			}
 		}
-		this.onLivingUpdate(event);
 	}
 
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
