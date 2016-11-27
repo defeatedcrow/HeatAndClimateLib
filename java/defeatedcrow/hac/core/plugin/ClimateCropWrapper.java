@@ -125,13 +125,13 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 			}
 		}
 		if (y > baseY + 10 && y < baseY + 18) {
-			if (x > 44 && x < 16) {
+			if (x > 44 && x < 116) {
 				int i = (x - 44) / 18;
 				s.add(DCHumidity.getTypeByID(i).name());
 			}
 		}
 		if (y > baseY + 20 && y < baseY + 28) {
-			if (x > 44 && x < 16) {
+			if (x > 44 && x < 116) {
 				int i = (x - 44) / 18;
 				s.add(DCAirflow.getTypeByID(i).name());
 			}

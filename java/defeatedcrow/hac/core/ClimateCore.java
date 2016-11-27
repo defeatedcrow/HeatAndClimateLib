@@ -35,9 +35,9 @@ public class ClimateCore {
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 1;
 	public static final int MOD_MINOR = 1;
-	public static final int MOD_BUILD = 5;
+	public static final int MOD_BUILD = 7;
 	public static final String MOD_DEPENDENCIES = "required-after:Forge@[12.18.2.2099,)";
-	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.10]";
+	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.10,1.11]";
 
 	@SidedProxy(
 			clientSide = "defeatedcrow.hac.core.client.ClientProxyD",
