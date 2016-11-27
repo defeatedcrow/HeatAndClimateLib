@@ -401,9 +401,6 @@ public class CustomizeVanillaRecipe {
 					inputs.add("Unknown");
 					b = true;
 				}
-			} else if (obj instanceof String) {
-				inputs.add(c[i]);
-				inputs.add(obj);
 			}
 
 			if (item != null) {
@@ -471,8 +468,6 @@ public class CustomizeVanillaRecipe {
 					inputs.add("Unknown");
 					b = true;
 				}
-			} else if (obj instanceof String) {
-				inputs.add(obj);
 			} else {
 				inputs.add("Unknown");
 			}

@@ -7,6 +7,7 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IAirflowTile;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.climate.IClimateCalculator;
+import defeatedcrow.hac.api.climate.IHeatCanceler;
 import defeatedcrow.hac.api.climate.IHeatTile;
 import defeatedcrow.hac.api.climate.IHumidityTile;
 import defeatedcrow.hac.config.CoreConfigDC;
@@ -17,6 +18,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 /**
  * BlockPosの走査方法を変更したバージョン
@@ -87,6 +89,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			return DCHeatTier.NORMAL;
 		}
 		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
+		if (temp == null) {
+			temp = DCHeatTier.NORMAL;
+		}
 		/*
 		 * biomeの気温
 		 * 屋根あり: Tierが1段階Normalに近づく
@@ -115,6 +120,14 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		for (int x = pos.getX() - r; x <= pos.getX() + r; x++) {
 			for (int z = pos.getZ() - r; z <= pos.getZ() + r; z++) {
 				for (int y = pos.getY() - h1; y <= pos.getY() + h1; y++) {
+					BlockPos up = new BlockPos(x, y + 1, z);
+					IBlockState upb = world.getBlockState(up);
+					if (upb != null && upb.getBlock() instanceof IHeatCanceler) {
+						if (((IHeatCanceler) upb.getBlock()).isActive(upb)) {
+							continue;
+						}
+					}
+
 					BlockPos p2 = new BlockPos(x, y, z);
 					Block block = world.getBlockState(p2).getBlock();
 					int m = block.getMetaFromState(world.getBlockState(p2));
@@ -202,6 +215,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			return DCHeatTier.NORMAL;
 		}
 		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
+		if (temp == null) {
+			temp = DCHeatTier.NORMAL;
+		}
 		/*
 		 * biomeの気温
 		 * 屋根あり: Tierが1段階Normalに近づく
@@ -238,6 +254,14 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		for (int x = pos.getX() - r; x <= pos.getX() + r; x++) {
 			for (int z = pos.getZ() - r; z <= pos.getZ() + r; z++) {
 				for (int y = pos.getY() - h1; y <= pos.getY() + h1; y++) {
+					BlockPos up = new BlockPos(x, y + 1, z);
+					IBlockState upb = world.getBlockState(up);
+					if (upb != null && upb.getBlock() instanceof IHeatCanceler) {
+						if (((IHeatCanceler) upb.getBlock()).isActive(upb)) {
+							continue;
+						}
+					}
+
 					BlockPos p2 = new BlockPos(x, y, z);
 					Block block = world.getBlockState(p2).getBlock();
 					int m = block.getMetaFromState(world.getBlockState(p2));
@@ -327,6 +351,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 
 		// biomeの基礎湿度
 		DCHumidity hum = ClimateAPI.register.getHumidity(world, pos);
+		Biome biome = world.getBiomeForCoordsBody(pos);
 		int ret = hum.getID() - 1;
 		boolean isUnderwater = false;
 		boolean hasWater = false;
@@ -357,7 +382,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		}
 
 		// 雨が降っている
-		if (world.isRaining() && hum != DCHumidity.DRY && world.canBlockSeeSky(pos.up())) {
+		if (world.isRaining() && (biome != null && biome.canRain()) && world.canBlockSeeSky(pos.up())) {
 			ret++;
 		}
 		/*
@@ -374,14 +399,14 @@ public class ClimateAltCalculator implements IClimateCalculator {
 						DCHumidity current = ((IHumidityTile) block).getHumdiity(world, pos, p2);
 						if (current == DCHumidity.DRY) {
 							ret--;
-						} else if (current.getID() > 1) {
+						} else if (current != null && current.getID() > 1) {
 							ret++;
 						}
 					} else if (ClimateAPI.registerBlock.isRegisteredHum(block, m)) {
 						DCHumidity cur = ClimateAPI.registerBlock.getHumidity(block, m);
 						if (cur == DCHumidity.DRY) {
 							ret--;
-						} else if (cur.getID() > 1) {
+						} else if (cur != null && cur.getID() > 1) {
 							ret++;
 						}
 					} else if (world.getBlockState(p2).getMaterial() == Material.WATER) {
@@ -438,7 +463,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 					int m = block.getMetaFromState(world.getBlockState(p2));
 					if (block instanceof IAirflowTile) {
 						DCAirflow current = ((IAirflowTile) block).getAirflow(world, pos, p2);
-						if (current.getID() > 0) {
+						if (current != null && current.getID() > 0) {
 							if (current.getID() > 1) {
 								if (current == DCAirflow.WIND) {
 									hasBlow = true;
@@ -449,7 +474,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 						}
 					} else if (ClimateAPI.registerBlock.isRegisteredAir(block, m)) {
 						DCAirflow cur = ClimateAPI.registerBlock.getAirflow(block, m);
-						if (cur.getID() > 0) {
+						if (cur != null && cur.getID() > 0) {
 							count++;
 							if (cur.getID() > 1) {
 								hasWind = true;

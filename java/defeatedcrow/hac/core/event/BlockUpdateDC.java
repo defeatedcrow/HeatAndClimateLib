@@ -28,7 +28,7 @@ public class BlockUpdateDC {
 
 	@SubscribeEvent
 	public void onUpdate(DCBlockUpdateEvent event) {
-		if (!event.world.isRemote && event.state != null) {
+		if (event.world != null && !event.world.isRemote && event.state != null) {
 			World world = event.world;
 			BlockPos p = event.pos;
 			IBlockState st = event.state;

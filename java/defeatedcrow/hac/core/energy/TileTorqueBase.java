@@ -36,7 +36,8 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 	public float prevSpeed = 0;
 	public float currentSpeed = 0;
 
-	public float rotation = 0;
+	public float prevRotation;
+	public float currentRotation = 0;
 	public int age = 0;
 
 	public TileTorqueBase() {
@@ -81,7 +82,8 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 				effectiveAccel = acc * 0.5F;
 
 				if (prevEffective != effectiveAccel) {
-					HaCPacket.INSTANCE.sendToAll(new MessageTorqueTile(pos, prevAccel, effectiveAccel, prevSpeed));
+					HaCPacket.INSTANCE
+							.sendToAll(new MessageTorqueTile(pos, prevAccel, effectiveAccel, prevSpeed, prevTorque));
 				}
 				prevAccel += acc;
 				prevEffective = acc;
@@ -116,9 +118,10 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 			currentSpeed = 0;
 		prevSpeed = currentSpeed;
 
-		rotation += currentSpeed * 0.1F;
-		if (rotation > 360.0F) {
-			rotation -= 360.0F;
+		prevRotation = currentRotation;
+		currentRotation += currentSpeed * 0.1F;
+		if (currentRotation > 360.0F) {
+			currentRotation -= 360.0F;
 		}
 	}
 
@@ -260,7 +263,7 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 		this.prevTorque = tag.getFloat("dcs.pretoq");
 		this.currentTorque = tag.getFloat("dcs.curtoq");
-		this.rotation = tag.getFloat("dcs.rot");
+		this.currentRotation = tag.getFloat("dcs.rot");
 	}
 
 	@Override
@@ -271,7 +274,7 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 		tag.setFloat("dcs.pretoq", prevTorque);
 		tag.setFloat("dcs.curtoq", currentTorque);
-		tag.setFloat("dcs.rot", rotation);
+		tag.setFloat("dcs.rot", currentRotation);
 		return tag;
 	}
 
@@ -283,7 +286,7 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 		tag.setFloat("dcs.pretoq", prevTorque);
 		tag.setFloat("dcs.curtoq", currentTorque);
-		tag.setFloat("dcs.rot", rotation);
+		tag.setFloat("dcs.rot", currentRotation);
 		return tag;
 	}
 
@@ -295,7 +298,7 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 		this.prevTorque = tag.getFloat("dcs.pretoq");
 		this.currentTorque = tag.getFloat("dcs.curtoq");
-		this.rotation = tag.getFloat("dcs.rot");
+		this.currentRotation = tag.getFloat("dcs.rot");
 	}
 
 	/* Packet */
