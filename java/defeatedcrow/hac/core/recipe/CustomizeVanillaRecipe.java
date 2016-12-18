@@ -105,7 +105,7 @@ public class CustomizeVanillaRecipe {
 					ItemStack item = null;
 
 					if (object instanceof ItemStack) {
-						item = (ItemStack) object;
+						item = new ItemStack(((ItemStack) object).getItem(), 1, ((ItemStack) object).getItemDamage());
 					} else if (object instanceof Item) {
 						item = new ItemStack((Item) object);
 					} else if (object instanceof Block) {
@@ -135,7 +135,7 @@ public class CustomizeVanillaRecipe {
 					ItemStack item = null;
 
 					if (object instanceof ItemStack) {
-						item = (ItemStack) object;
+						item = new ItemStack(((ItemStack) object).getItem(), 1, ((ItemStack) object).getItemDamage());
 					} else if (object instanceof Item) {
 						item = new ItemStack((Item) object);
 					} else if (object instanceof Block) {
@@ -240,7 +240,7 @@ public class CustomizeVanillaRecipe {
 		for (int i = 0; i < x * y; i++) {
 			if (items[i] != null) {
 				String sign = s[i];
-				ItemStack item = items[i];
+				ItemStack item = items[i].copy();
 				boolean b = false;
 
 				for (Entry<ItemStack, String> entry : replaceTable.entrySet()) {
@@ -283,7 +283,7 @@ public class CustomizeVanillaRecipe {
 				}
 
 				if (!b) {
-					inputs.add(item);
+					inputs.add(item.copy());
 				}
 			}
 		}
@@ -368,7 +368,7 @@ public class CustomizeVanillaRecipe {
 			}
 
 			if (obj instanceof ItemStack) {
-				item = (ItemStack) obj;
+				item = new ItemStack(((ItemStack) obj).getItem(), 1, ((ItemStack) obj).getItemDamage());
 			} else if (obj instanceof Item) {
 				item = new ItemStack((Item) obj);
 			} else if (obj instanceof Block) {
@@ -437,7 +437,7 @@ public class CustomizeVanillaRecipe {
 			ItemStack item = null;
 
 			if (obj instanceof ItemStack) {
-				item = (ItemStack) obj;
+				item = new ItemStack(((ItemStack) obj).getItem(), 1, ((ItemStack) obj).getItemDamage());
 			} else if (obj instanceof Item) {
 				item = new ItemStack((Item) obj);
 			} else if (obj instanceof Block) {

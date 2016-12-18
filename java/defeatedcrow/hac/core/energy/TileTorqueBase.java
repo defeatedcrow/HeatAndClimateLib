@@ -44,10 +44,6 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 		super();
 	}
 
-	@SideOnly(Side.CLIENT)
-	protected void createModel() {
-	}
-
 	public float maxTorque() {
 		return 32.0F;
 	}
@@ -57,61 +53,51 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 	}
 
 	public float maxSpeed() {
-		return 90.0F;
+		return 360.0F;
 	}
 
 	@Override
 	public void updateTile() {
 		// torqueの処理
-		// 生成直後は20Tickのインターバルがある
-		if (!worldObj.isRemote) {
-
-			prevTorque = currentTorque;
-			currentAccel = prevTorque / getGearTier();
-			currentTorque = 0.0F;
-
-			if (age > 20) {
-				if (currentAccel > maxAccel())
-					currentAccel = maxAccel();
-
-				// Acceleration
-				float acc = (currentAccel - prevAccel) / 2.0F;
-				if (Math.abs(acc) < 0.005F) {
-					acc = 0.0F;
-				}
-				effectiveAccel = acc * 0.5F;
-
-				if (prevEffective != effectiveAccel) {
-					HaCPacket.INSTANCE
-							.sendToAll(new MessageTorqueTile(pos, prevAccel, effectiveAccel, prevSpeed, prevTorque));
-				}
-				prevAccel += acc;
-				prevEffective = acc;
+		// 生成直後は10Tickのインターバルがある
+		if (age > 10) {
+			if (!worldObj.isRemote) {
+				HaCPacket.INSTANCE.sendToAll(new MessageTorqueTile(pos, currentTorque));
 			}
+			prevTorque = currentTorque;
+			currentTorque = 0.0F;
+			currentAccel = prevTorque / getGearTier();
+			if (currentAccel > maxAccel())
+				currentAccel = maxAccel();
+
+			// Acceleration
+			float acc = (currentAccel - prevAccel) / 2.0F;
+			if (Math.abs(acc) < 0.005F) {
+				acc = 0.0F;
+			}
+
+			prevEffective = effectiveAccel;
+			effectiveAccel = acc;
+			prevAccel += acc;
 
 		}
 	}
 
 	@Override
 	public void onTickUpdate() {
-		if (worldObj.isRemote) {
-			// model生成
-			createModel();
-		}
-
 		age++;
 		if (age > 72000) {
 			// 1h程度でリセット
-			age -= 72000;
+			age = 21;
 		}
 
 		// Speed
-		float frict = getFrictionalForce();
+		float frict = 0.95F;
 		if (prevAccel != 0.0F) {
 			// 動いていれば摩擦が小さくなる
 			frict = 1.0F;
 		}
-		currentSpeed = (prevSpeed * frict) + effectiveAccel;
+		currentSpeed = (prevSpeed * frict) + effectiveAccel * 0.1F;
 		if (currentSpeed > maxSpeed())
 			currentSpeed = maxSpeed();
 		if (currentSpeed < 0.005F)
@@ -119,10 +105,16 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 		prevSpeed = currentSpeed;
 
 		prevRotation = currentRotation;
-		currentRotation += currentSpeed * 0.1F;
-		if (currentRotation > 360.0F) {
-			currentRotation -= 360.0F;
+		currentRotation += currentSpeed;
+		if (currentRotation > 720.0F) {
+			prevRotation -= 720.0F;
+			currentRotation -= 720.0F;
 		}
+		if (currentRotation < -720.0F) {
+			prevRotation += 720.0F;
+			currentRotation += 720.0F;
+		}
+
 	}
 
 	@Override
@@ -235,7 +227,7 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 	@Override
 	public float getFrictionalForce() {
-		return 0.98F;
+		return 0.995F;
 	}
 
 	@Override
@@ -263,7 +255,6 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 		this.prevTorque = tag.getFloat("dcs.pretoq");
 		this.currentTorque = tag.getFloat("dcs.curtoq");
-		this.currentRotation = tag.getFloat("dcs.rot");
 	}
 
 	@Override
@@ -274,7 +265,6 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 		tag.setFloat("dcs.pretoq", prevTorque);
 		tag.setFloat("dcs.curtoq", currentTorque);
-		tag.setFloat("dcs.rot", currentRotation);
 		return tag;
 	}
 
@@ -286,7 +276,6 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 		tag.setFloat("dcs.pretoq", prevTorque);
 		tag.setFloat("dcs.curtoq", currentTorque);
-		tag.setFloat("dcs.rot", currentRotation);
 		return tag;
 	}
 
@@ -298,7 +287,6 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 		this.prevTorque = tag.getFloat("dcs.pretoq");
 		this.currentTorque = tag.getFloat("dcs.curtoq");
-		this.currentRotation = tag.getFloat("dcs.rot");
 	}
 
 	/* Packet */

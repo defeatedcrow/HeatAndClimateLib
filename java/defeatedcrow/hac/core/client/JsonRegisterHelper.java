@@ -39,7 +39,7 @@ public class JsonRegisterHelper {
 	}
 
 	public static final JsonRegisterHelper INSTANCE = new JsonRegisterHelper(
-			"E:\\forge1.9.0\\HaC_Lib\\src\\main\\resources");
+			"E:\\forge1.10.2\\HaC_Lib\\src\\main\\resources");
 
 	/**
 	 * 一枚絵アイコンItemのJson生成と登録をまとめて行うメソッド。

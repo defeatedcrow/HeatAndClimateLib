@@ -17,6 +17,9 @@ public class CoreConfigDC {
 	public static int charmWarpKey = 0x2D; // X
 	public static int sitKey = 0x0F; // Tab
 
+	public static int altJumpKey = -1;
+	public static int altSneakKey = -1;
+
 	// climate checking range
 	public static int heatRange = 2;
 	public static int humRange = 1;
@@ -111,6 +114,14 @@ public class CoreConfigDC {
 					"Set key number for sitting on cushion. Default key is TAB(15)." + BR
 							+ "If you don't want this effect, set 0.");
 
+			Property jump_key = cfg.get("key setting", "Jump Key", altJumpKey,
+					"Set key number for jumping. Default key is same as the vanilla setting." + BR
+							+ "If you want to use the default setting, set -1.");
+
+			Property sneak_key = cfg.get("key setting", "Sneak Key", altSneakKey,
+					"Set key number for sneaking. Default key is same as the vanilla setting." + BR
+							+ "If you want to use the default setting, set -1.");
+
 			Property range_t = cfg.get("setting", "HeatTier Cheking Rnage", heatRange,
 					"Set the range of cheking the climate. 1-16");
 
@@ -151,6 +162,9 @@ public class CoreConfigDC {
 
 			charmWarpKey = warp_key.getInt();
 			sitKey = sit_key.getInt();
+
+			altJumpKey = jump_key.getInt();
+			altSneakKey = sneak_key.getInt();
 
 			int tr = range_t.getInt();
 			if (tr < 0 || tr > 16)

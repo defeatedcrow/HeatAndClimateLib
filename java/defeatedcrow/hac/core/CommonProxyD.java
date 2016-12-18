@@ -1,8 +1,5 @@
 package defeatedcrow.hac.core;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
 import defeatedcrow.hac.core.event.BlockUpdateDC;
@@ -12,6 +9,9 @@ import defeatedcrow.hac.core.event.LivingEventDC;
 import defeatedcrow.hac.core.event.LivingHurtDC;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.util.DCPotion;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public class CommonProxyD {
 
@@ -49,6 +49,10 @@ public class CommonProxyD {
 	}
 
 	public boolean isJumpKeyDown() {
+		return false;
+	}
+
+	public boolean isSneakKeyDown() {
 		return false;
 	}
 

@@ -72,21 +72,38 @@ public class ClientProxyD extends CommonProxyD {
 
 	@Override
 	public boolean isJumpKeyDown() {
+		if (getJumpKey() <= 0) {
+			return false;
+		} else if (getJumpKey() > Keyboard.KEYBOARD_SIZE) {
+			return false;
+		}
 		return Keyboard.isCreated() && Keyboard.isKeyDown(getJumpKey());
 	}
 
 	@Override
+	public boolean isSneakKeyDown() {
+		if (getSneakKey() <= 0) {
+			return false;
+		} else if (getSneakKey() >= Keyboard.KEYBOARD_SIZE) {
+			return false;
+		}
+		return Keyboard.isCreated() && Keyboard.isKeyDown(getSneakKey());
+	}
+
+	@Override
 	public boolean isWarpKeyDown() {
-		return CoreConfigDC.charmWarpKey == 0 ? false
+		return CoreConfigDC.charmWarpKey <= 0 || CoreConfigDC.charmWarpKey >= Keyboard.KEYBOARD_SIZE ? false
 				: Keyboard.isCreated() && Keyboard.isKeyDown(CoreConfigDC.charmWarpKey);
 	}
 
 	private int getJumpKey() {
-		return Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
+		return CoreConfigDC.altJumpKey >= 0 ? CoreConfigDC.altJumpKey
+				: Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
 	}
 
 	private int getSneakKey() {
-		return Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode();
+		return CoreConfigDC.altSneakKey >= 0 ? CoreConfigDC.altSneakKey
+				: Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode();
 	}
 
 	@Override
