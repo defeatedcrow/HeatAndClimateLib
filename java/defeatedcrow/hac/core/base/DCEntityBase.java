@@ -50,7 +50,7 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 
 	public DCEntityBase(World worldIn) {
 		super(worldIn);
-		this.setSize(0.4F, 0.4F);
+		this.setSize(0.4F, 0.25F);
 		this.setSide(EnumFacing.DOWN);
 	}
 

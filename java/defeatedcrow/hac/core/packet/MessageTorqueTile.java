@@ -10,22 +10,16 @@ public class MessageTorqueTile implements IMessage {
 	public int x;
 	public int y;
 	public int z;
-	public float prev;
-	public float accel;
-	public float speed;
 	public float torque;
 
 	public MessageTorqueTile() {
 	}
 
-	public MessageTorqueTile(BlockPos pos, float par1, float par2, float par3, float par4) {
+	public MessageTorqueTile(BlockPos pos, float par1) {
 		this.x = pos.getX();
 		this.y = pos.getY();
 		this.z = pos.getZ();
-		this.prev = par1;
-		this.accel = par2;
-		this.speed = par3;
-		this.torque = par4;
+		this.torque = par1;
 	}
 
 	// read
@@ -34,9 +28,6 @@ public class MessageTorqueTile implements IMessage {
 		this.x = buf.readInt();
 		this.y = buf.readInt();
 		this.z = buf.readInt();
-		this.prev = buf.readFloat();
-		this.accel = buf.readFloat();
-		this.speed = buf.readFloat();
 		this.torque = buf.readFloat();
 	}
 
@@ -46,9 +37,6 @@ public class MessageTorqueTile implements IMessage {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);
-		buf.writeFloat(this.prev);
-		buf.writeFloat(this.accel);
-		buf.writeFloat(this.speed);
 		buf.writeFloat(this.torque);
 	}
 }

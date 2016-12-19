@@ -15,6 +15,7 @@ import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
+import net.minecraft.item.ItemStack;
 
 @JEIPlugin
 public class DCsJEIPlugin implements IModPlugin {
@@ -24,6 +25,7 @@ public class DCsJEIPlugin implements IModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
 		helper = registry.getJeiHelpers();
+
 		registry.addRecipeCategories(new ClimateSmeltingCategory(helper.getGuiHelper()),
 				new ClimateRecipeCategory(helper.getGuiHelper()), new MillRecipeCategory(helper.getGuiHelper()),
 				new FluidRecipeCategory(helper.getGuiHelper()), new ClimateCropCategory(helper.getGuiHelper()));
@@ -80,10 +82,36 @@ public class DCsJEIPlugin implements IModPlugin {
 		registry.addRecipes(RecipeAPI.registerMills.getRecipeList());
 		registry.addRecipes(list3);
 		registry.addRecipes(list4);
+
+		if (!fluidcrafters.isEmpty()) {
+			for (ItemStack item : fluidcrafters) {
+				registry.addRecipeCategoryCraftingItem(item, new String[] {
+						"dcs_climate.fluidcraft" });
+			}
+		}
+
+		if (!millstones.isEmpty()) {
+			for (ItemStack item : millstones) {
+				registry.addRecipeCategoryCraftingItem(item, new String[] {
+						"dcs_climate.mill" });
+			}
+		}
+
+		if (!excluder.isEmpty()) {
+			for (ItemStack item : excluder) {
+				helper.getItemBlacklist().addItemToBlacklist(item);
+			}
+		}
+
 	}
 
 	@Override
 	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
 	}
+
+	public static final List<ItemStack> millstones = new ArrayList<ItemStack>();
+	public static final List<ItemStack> fluidcrafters = new ArrayList<ItemStack>();
+
+	public static final List<ItemStack> excluder = new ArrayList<ItemStack>();
 
 }
