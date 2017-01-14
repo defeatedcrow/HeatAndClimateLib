@@ -3,11 +3,12 @@ package defeatedcrow.hac.core.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
+import defeatedcrow.hac.core.climate.recipe.MillRecipe;
+import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import defeatedcrow.hac.core.climate.recipe.MillRecipe;
 
 public class MillRecipeWrapper implements IRecipeWrapper {
 
@@ -24,6 +25,12 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 		if (recipe.getSecondary() != null) {
 			output.add(recipe.getSecondary());
 		}
+	}
+
+	@Override
+	public void getIngredients(IIngredients ing) {
+		ing.setInputs(ItemStack.class, input);
+		ing.setOutputs(ItemStack.class, output);
 	}
 
 	@Override

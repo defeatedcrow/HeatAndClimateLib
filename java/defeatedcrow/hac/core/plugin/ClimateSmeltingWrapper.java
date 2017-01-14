@@ -9,6 +9,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
+import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -30,6 +31,12 @@ public class ClimateSmeltingWrapper implements IRecipeWrapper {
 		if (recipe.getSecondary() != null) {
 			output.add(recipe.getSecondary());
 		}
+	}
+
+	@Override
+	public void getIngredients(IIngredients ing) {
+		ing.setInputs(ItemStack.class, input);
+		ing.setOutputs(ItemStack.class, output);
 	}
 
 	@Override

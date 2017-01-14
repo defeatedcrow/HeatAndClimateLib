@@ -5,8 +5,7 @@ import net.minecraftforge.common.config.Property;
 
 public class CoreConfigDC {
 
-	private CoreConfigDC() {
-	}
+	private CoreConfigDC() {}
 
 	public static final CoreConfigDC INSTANCE = new CoreConfigDC();
 
@@ -49,6 +48,7 @@ public class CoreConfigDC {
 	// world
 	public static boolean enableFreezeDrop = true;
 	public static boolean enableDeepWater = true;
+	public static boolean enableUnderLake = true;
 
 	public void load(Configuration cfg) {
 
@@ -87,6 +87,9 @@ public class CoreConfigDC {
 
 			Property water_cave = cfg.get("world setting", "Enable Water Caves", enableDeepWater,
 					"Enable generating water blocks instead of lava blocks in the deep caves.");
+
+			Property under_lake = cfg.get("world setting", "Enable Modificated Lake", enableUnderLake,
+					"Enable modification the underground lakes.");
 
 			Property freeze_drop = cfg.get("world setting", "Enable Freeze EntityItem", enableFreezeDrop,
 					"EntityItems avoids to despawn in cold temp than the FROSTBITE tier.");
@@ -143,6 +146,7 @@ public class CoreConfigDC {
 			burntFood = burnt_food.getBoolean();
 			showDamageIcon = hud_icon.getBoolean();
 			enableDeepWater = water_cave.getBoolean();
+			enableUnderLake = under_lake.getBoolean();
 			enableFreezeDrop = freeze_drop.getBoolean();
 			waterFix = water.getBoolean();
 			wall = enableWall.getBoolean();

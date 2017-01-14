@@ -39,7 +39,7 @@ public class JsonRegisterHelper {
 	}
 
 	public static final JsonRegisterHelper INSTANCE = new JsonRegisterHelper(
-			"E:\\forge1.10.2\\HaC_Lib\\src\\main\\resources");
+			"E:\\modding\\1.10.2\\hac_lib\\src\\main\\resources");
 
 	/**
 	 * 一枚絵アイコンItemのJson生成と登録をまとめて行うメソッド。
@@ -210,6 +210,9 @@ public class JsonRegisterHelper {
 			ITexturePath tex = (ITexturePath) item;
 
 			try {
+				if (gj.getParentFile() != null) {
+					gj.getParentFile().mkdirs();
+				}
 				Map<String, Object> jsonMap = new HashMap<String, Object>();
 				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
 				if (!tool) {
@@ -237,6 +240,8 @@ public class JsonRegisterHelper {
 				DCLogger.debugLog("File not found! " + gj.getPath());
 			} catch (IOException e) {
 				DCLogger.debugLog("fail");
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -251,6 +256,7 @@ public class JsonRegisterHelper {
 		String filePath = null;
 		File gj = null;
 		boolean find = false;
+
 		try {
 			Path path = Paths.get(basePath);
 			path.normalize();
@@ -278,6 +284,9 @@ public class JsonRegisterHelper {
 		if (!find) {
 
 			try {
+				if (gj.getParentFile() != null) {
+					gj.getParentFile().mkdirs();
+				}
 				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
 				Map<String, Object> jsonMap = new HashMap<String, Object>();
 				// Disp3 display = new Disp3();
@@ -295,6 +304,8 @@ public class JsonRegisterHelper {
 				DCLogger.debugLog("File not found! " + gj.getPath());
 			} catch (IOException e) {
 				DCLogger.debugLog("fail");
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -339,6 +350,9 @@ public class JsonRegisterHelper {
 		if (!find) {
 
 			try {
+				if (gj.getParentFile() != null) {
+					gj.getParentFile().mkdirs();
+				}
 				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
 				Map<String, Object> jsonMap = new HashMap<String, Object>();
 				BlockTex textures = new BlockTex(block.getTexPath(meta, false));
@@ -356,6 +370,8 @@ public class JsonRegisterHelper {
 				DCLogger.debugLog("File not found! " + gj.getPath());
 			} catch (IOException e) {
 				DCLogger.debugLog("fail");
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -378,49 +394,34 @@ public class JsonRegisterHelper {
 
 	private class Disp {
 		Third thirdperson = new Third(new int[] {
-				-90,
-				0,
-				0 },
-				new double[] {
-						0,
-						1,
-						-3 },
-				new double[] {
-						0.55D,
-						0.55D,
-						0.55D });
+				-90, 0, 0
+		}, new double[] {
+				0, 1, -3
+		}, new double[] {
+				0.55D, 0.55D, 0.55D
+		});
 		First firstperson = new First();
 	}
 
 	private class Disp2 {
 		Third thirdperson = new Third(new int[] {
-				0,
-				90,
-				-35 },
-				new double[] {
-						0,
-						1.25D,
-						-3.5D },
-				new double[] {
-						0.85D,
-						0.85D,
-						0.85D });
+				0, 90, -35
+		}, new double[] {
+				0, 1.25D, -3.5D
+		}, new double[] {
+				0.85D, 0.85D, 0.85D
+		});
 		First firstperson = new First();
 	}
 
 	private class Disp3 {
 		Third thirdperson = new Third(new int[] {
-				10,
-				45,
-				170 },
-				new double[] {
-						0,
-						1.5D,
-						-2.75D },
-				new double[] {
-						0.35D,
-						0.35D,
-						0.35D });
+				10, 45, 170
+		}, new double[] {
+				0, 1.5D, -2.75D
+		}, new double[] {
+				0.35D, 0.35D, 0.35D
+		});
 	}
 
 	private class Third {
@@ -437,17 +438,14 @@ public class JsonRegisterHelper {
 
 	private class First {
 		int[] rotation = new int[] {
-				0,
-				-135,
-				25 };
+				0, -135, 25
+		};
 		int[] translation = new int[] {
-				0,
-				4,
-				2 };
+				0, 4, 2
+		};
 		double[] scale = new double[] {
-				1.7D,
-				1.7D,
-				1.7D };
+				1.7D, 1.7D, 1.7D
+		};
 	}
 
 }

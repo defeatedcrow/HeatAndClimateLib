@@ -2,8 +2,16 @@ package defeatedcrow.hac.core.item;
 
 import java.util.List;
 
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.recipe.IClimateObject;
+import defeatedcrow.hac.api.recipe.IClimateSmelting;
+import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.base.DCItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -15,13 +23,6 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.recipe.IClimateObject;
-import defeatedcrow.hac.api.recipe.IClimateSmelting;
-import defeatedcrow.hac.api.recipe.RecipeAPI;
-import defeatedcrow.hac.core.ClimateCore;
-import defeatedcrow.hac.core.base.DCItem;
 
 public class ItemClimateChecker extends DCItem {
 
@@ -56,8 +57,8 @@ public class ItemClimateChecker extends DCItem {
 					player.addChatMessage(new TextComponentString("Humidity: " + c.getHumidity().name()));
 					player.addChatMessage(new TextComponentString("Airflow: " + c.getAirflow().name()));
 					if (ClimateCore.isDebug) {
-						player.addChatMessage(new TextComponentString("Climate int: "
-								+ Integer.toBinaryString(c.getClimateInt())));
+						player.addChatMessage(
+								new TextComponentString("Climate int: " + Integer.toBinaryString(c.getClimateInt())));
 						// recipe
 						Block block = state.getBlock();
 						int i = block.getMetaFromState(state);
@@ -93,8 +94,15 @@ public class ItemClimateChecker extends DCItem {
 
 	@Override
 	public String[] getNameSuffix() {
-		String[] s = { "normal" };
+		String[] s = {
+				"normal"
+		};
 		return s;
+	}
+
+	@Override
+	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+		return true;
 	}
 
 }

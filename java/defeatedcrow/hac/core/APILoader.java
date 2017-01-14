@@ -60,7 +60,7 @@ public class APILoader {
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.FIRE, 32767, DCHeatTier.KILN);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.FLOWING_LAVA, 32767, DCHeatTier.KILN);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LAVA, 32767, DCHeatTier.KILN);
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.field_189877_df, 0, DCHeatTier.KILN);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.MAGMA, 0, DCHeatTier.KILN);
 
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.WATER, 32767, DCHeatTier.NORMAL);
 
