@@ -7,6 +7,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.cultivate.CropAPI;
 import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.climate.recipe.ClimateRecipe;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
@@ -14,7 +15,9 @@ import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
+import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
+import mezz.jei.api.ingredients.IModIngredientRegistration;
 import net.minecraft.item.ItemStack;
 
 @JEIPlugin
@@ -83,22 +86,36 @@ public class DCsJEIPlugin implements IModPlugin {
 		registry.addRecipes(list3);
 		registry.addRecipes(list4);
 
-		if (!fluidcrafters.isEmpty()) {
-			for (ItemStack item : fluidcrafters) {
+		registry.addRecipeCategoryCraftingItem(new ItemStack(DCInit.climate_checker), new String[] {
+				"dcs_climate.smelting"
+		});
+
+		if (!DCsJEIPluginLists.fluidcrafters.isEmpty()) {
+			for (ItemStack item : DCsJEIPluginLists.fluidcrafters) {
 				registry.addRecipeCategoryCraftingItem(item, new String[] {
-						"dcs_climate.fluidcraft" });
+						"dcs_climate.fluidcraft"
+				});
 			}
 		}
 
-		if (!millstones.isEmpty()) {
-			for (ItemStack item : millstones) {
+		if (!DCsJEIPluginLists.millstones.isEmpty()) {
+			for (ItemStack item : DCsJEIPluginLists.millstones) {
 				registry.addRecipeCategoryCraftingItem(item, new String[] {
-						"dcs_climate.mill" });
+						"dcs_climate.mill"
+				});
 			}
 		}
 
-		if (!excluder.isEmpty()) {
-			for (ItemStack item : excluder) {
+		if (!DCsJEIPluginLists.crops.isEmpty()) {
+			for (ItemStack item : DCsJEIPluginLists.crops) {
+				registry.addRecipeCategoryCraftingItem(item, new String[] {
+						"dcs_climate.crop"
+				});
+			}
+		}
+
+		if (!DCsJEIPluginLists.excluder.isEmpty()) {
+			for (ItemStack item : DCsJEIPluginLists.excluder) {
 				helper.getItemBlacklist().addItemToBlacklist(item);
 			}
 		}
@@ -106,12 +123,16 @@ public class DCsJEIPlugin implements IModPlugin {
 	}
 
 	@Override
-	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {}
+
+	@Override
+	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+		// TODO 自動生成されたメソッド・スタブ
 	}
 
-	public static final List<ItemStack> millstones = new ArrayList<ItemStack>();
-	public static final List<ItemStack> fluidcrafters = new ArrayList<ItemStack>();
-
-	public static final List<ItemStack> excluder = new ArrayList<ItemStack>();
+	@Override
+	public void registerIngredients(IModIngredientRegistration registry) {
+		// TODO 自動生成されたメソッド・スタブ
+	}
 
 }

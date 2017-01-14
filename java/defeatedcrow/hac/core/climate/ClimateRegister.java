@@ -77,7 +77,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 
 	@Override
 	public IClimate getClimateFromBiome(World world, BlockPos pos) {
-		Biome biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiomeForCoordsBody(pos);
 		int dim = world.provider.getDimension();
 		int i = getKey(biome, dim);
 		return getClimateFromBiome(i);
@@ -113,7 +113,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 
 	@Override
 	public DCHeatTier getHeatTier(World world, BlockPos pos) {
-		Biome biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiomeForCoordsBody(pos);
 		int dim = world.provider.getDimension();
 		int i = getKey(biome, dim);
 		DCHeatTier tier = getHeatTier(i);
@@ -122,7 +122,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 
 	@Override
 	public DCAirflow getAirflow(World world, BlockPos pos) {
-		Biome biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiomeForCoordsBody(pos);
 		int dim = world.provider.getDimension();
 		int i = getKey(biome, dim);
 		return getAirflow(i);
@@ -130,7 +130,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 
 	@Override
 	public DCHumidity getHumidity(World world, BlockPos pos) {
-		Biome biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiomeForCoordsBody(pos);
 		int dim = world.provider.getDimension();
 		int i = getKey(biome, dim);
 		return getHumidity(i);

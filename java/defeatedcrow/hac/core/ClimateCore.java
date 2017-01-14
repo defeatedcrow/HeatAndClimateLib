@@ -23,25 +23,19 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 // @SortingIndex(1102)
-@Mod(
-		modid = ClimateCore.MOD_ID,
-		name = ClimateCore.MOD_NAME,
-		version = ClimateCore.MOD_MEJOR + "." + ClimateCore.MOD_MINOR + "." + ClimateCore.MOD_BUILD,
-		dependencies = ClimateCore.MOD_DEPENDENCIES,
-		acceptedMinecraftVersions = ClimateCore.MOD_ACCEPTED_MC_VERSIONS,
-		useMetadata = true)
+@Mod(modid = ClimateCore.MOD_ID, name = ClimateCore.MOD_NAME, version = ClimateCore.MOD_MEJOR + "."
+		+ ClimateCore.MOD_MINOR + "."
+		+ ClimateCore.MOD_BUILD, dependencies = ClimateCore.MOD_DEPENDENCIES, acceptedMinecraftVersions = ClimateCore.MOD_ACCEPTED_MC_VERSIONS, useMetadata = true)
 public class ClimateCore {
 	public static final String MOD_ID = "dcs_climate|lib";
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 1;
-	public static final int MOD_MINOR = 2;
+	public static final int MOD_MINOR = 3;
 	public static final int MOD_BUILD = 0;
-	public static final String MOD_DEPENDENCIES = "required-after:Forge@[12.18.2.2099,)";
+	public static final String MOD_DEPENDENCIES = "required-after:Forge@[12.18.3.2185,)";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.10,1.11]";
 
-	@SidedProxy(
-			clientSide = "defeatedcrow.hac.core.client.ClientProxyD",
-			serverSide = "defeatedcrow.hac.core.CommonProxyD")
+	@SidedProxy(clientSide = "defeatedcrow.hac.core.client.ClientProxyD", serverSide = "defeatedcrow.hac.core.CommonProxyD")
 	public static CommonProxyD proxy;
 
 	@Instance("dcs_climate|lib")

@@ -61,9 +61,6 @@ public class VanillaRecipeRegister {
 
 		/* Mill */
 
-		RecipeAPI.registerMills.addRecipe(new ItemStack(Blocks.SAND), new ItemStack(Items.FLINT),
-				new ItemStack(Blocks.GRAVEL));
-
 		/* Fluid */
 
 		// Add Alt Recipe
@@ -73,78 +70,43 @@ public class VanillaRecipeRegister {
 	static void addAltRecipes() {
 		// コンパス
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.COMPASS, 1, 0), new Object[] {
-				" X ",
-				"XYX",
-				" X ",
-				'X',
-				"ingotIron",
-				'Y',
-				"dustMagnetite" }));
+				" X ", "XYX", " X ", 'X', "ingotIron", 'Y', "dustMagnetite"
+		}));
 
 		// 火打ち石のアナザー
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.FLINT_AND_STEEL, 1, 0), new Object[] {
-				new ItemStack(Items.IRON_INGOT, 1, 0),
-				"gemChalcedony" }));
+				new ItemStack(Items.IRON_INGOT, 1, 0), "gemChalcedony"
+		}));
 
 		// 火薬
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 4, 0), new Object[] {
-				"dustGraphite",
-				"dustGraphite",
-				"dustGraphite",
-				"gemNiter",
-				"gemNiter",
-				"gemSulfur" }));
+				"dustGraphite", "dustGraphite", "dustGraphite", "gemNiter", "gemNiter", "gemSulfur"
+		}));
 
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 4, 0), new Object[] {
-				"dustGraphite",
-				"dustGraphite",
-				"dustGraphite",
-				"dustNiter",
-				"dustNiter",
-				"dustSulfur" }));
+				"dustGraphite", "dustGraphite", "dustGraphite", "dustNiter", "dustNiter", "dustSulfur"
+		}));
 
 		// 代替系
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.CAKE, 1, 0), new Object[] {
-				"XXX",
-				"YZY",
-				"WWW",
-				'X',
-				"bucketMilk",
-				'Y',
-				"dustSugar",
-				'Z',
-				"egg",
-				'W',
-				"foodFlour" }));
+				"XXX", "YZY", "WWW", 'X', "bucketMilk", 'Y', "dustSugar", 'Z', "egg", 'W', "foodFlour"
+		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.COOKIE, 8, 0), new Object[] {
-				"YZY",
-				'Y',
-				"foodFlour",
-				'Z',
-				"cropCocoa" }));
+				"YZY", 'Y', "foodFlour", 'Z', "cropCocoa"
+		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.BREAD, 1, 0), new Object[] {
-				"YYY",
-				'Y',
-				"foodFlour" }));
+				"YYY", 'Y', "foodFlour"
+		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.BED, 1, 0), new Object[] {
-				"XXX",
-				"YYY",
-				'X',
-				"itemCloth",
-				'Y',
-				"plankWood" }));
+				"XXX", "YYY", 'X', "itemCloth", 'Y', "plankWood"
+		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.PAINTING, 1, 0), new Object[] {
-				"XXX",
-				"XYX",
-				"XXX",
-				'X',
-				"stickWood",
-				'Y',
-				"itemCloth" }));
+				"XXX", "XYX", "XXX", 'X', "stickWood", 'Y', "itemCloth"
+		}));
 	}
 
 }

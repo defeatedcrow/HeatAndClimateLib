@@ -6,6 +6,7 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
@@ -38,8 +39,7 @@ public class ClimateCropCategory implements IRecipeCategory {
 	}
 
 	@Override
-	public void drawExtras(Minecraft mc) {
-	}
+	public void drawExtras(Minecraft mc) {}
 
 	@Override
 	public void drawAnimations(Minecraft minecraft) {
@@ -48,9 +48,20 @@ public class ClimateCropCategory implements IRecipeCategory {
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
+		setRecipe(recipeLayout, recipeWrapper, null);
+	}
+
+	@Override
+	public IDrawable getIcon() {
+		return null;
+	}
+
+	@Override
+	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		if (!(recipeWrapper instanceof ClimateCropWrapper))
 			return;
 		ClimateCropWrapper wrapper = ((ClimateCropWrapper) recipeWrapper);
+		wrapper.getIngredients(ingredients);
 
 		List inputs = wrapper.getInputs();
 		List outputs = wrapper.getOutputs();
