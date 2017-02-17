@@ -59,7 +59,9 @@ public class ClimateSmelting implements IClimateSmelting {
 			air.add(a);
 		processedInput = new ArrayList<ItemStack>();
 		if (input instanceof String) {
-			processedInput.addAll(OreDictionary.getOres((String) input));
+			List<ItemStack> ret = new ArrayList<ItemStack>();
+			ret.addAll(OreDictionary.getOres((String) input));
+			processedInput.addAll(ret);
 		} else if (input instanceof ItemStack) {
 			processedInput.add(((ItemStack) input).copy());
 		} else if (input instanceof Item) {

@@ -18,7 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class FluidRecipeWrapper implements IRecipeWrapper {
 
-	private final List<ItemStack> input;
+	private final List<List<ItemStack>> input;
 	private final List<ItemStack> output;
 	private final FluidCraftRecipe rec;
 	private final List<FluidStack> inF;
@@ -30,7 +30,18 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 	public FluidRecipeWrapper(FluidCraftRecipe recipe) {
 		type = recipe.additionalString();
 		rec = recipe;
-		input = recipe.getProcessedInput();
+		input = new ArrayList<List<ItemStack>>();
+		if (!recipe.getProcessedInput().isEmpty()) {
+			for (Object obj : recipe.getProcessedInput()) {
+				if (obj instanceof ItemStack) {
+					List<ItemStack> ret = new ArrayList<ItemStack>();
+					ret.add((ItemStack) obj);
+					input.add(ret);
+				} else if (obj instanceof List) {
+					input.add((List<ItemStack>) obj);
+				}
+			}
+		}
 		output = new ArrayList<ItemStack>();
 		output.add(recipe.getOutput());
 		if (recipe.getSecondary() != null) {
@@ -50,7 +61,7 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ing) {
-		ing.setInputs(ItemStack.class, input);
+		ing.setInputLists(ItemStack.class, input);
 		ing.setInputs(FluidStack.class, inF);
 		ing.setOutputs(ItemStack.class, output);
 		ing.setOutputs(FluidStack.class, outF);

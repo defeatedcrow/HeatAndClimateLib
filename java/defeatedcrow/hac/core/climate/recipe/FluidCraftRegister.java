@@ -108,8 +108,7 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 		// DCLogger.debugLog("heat: " + clm.getHeat().name());
 		List<FluidCraftRecipe> list = getRecipeList(clm.getHeat());
 		IFluidRecipe ret = null;
-		if (list.isEmpty()) {
-		} else {
+		if (list.isEmpty()) {} else {
 			// DCLogger.debugLog("### searching... ###");
 			for (IFluidRecipe recipe : list) {
 				if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {
@@ -124,8 +123,7 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 		if (ret == null) {
 			if (clm.getHeat() == DCHeatTier.NORMAL) {
 				List<FluidCraftRecipe> list2 = getRecipeList(DCHeatTier.WARM);
-				if (list2.isEmpty()) {
-				} else {
+				if (list2.isEmpty()) {} else {
 					for (IFluidRecipe recipe : list2) {
 						if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {
 							ret = recipe;
@@ -137,8 +135,7 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 				DCHeatTier next = clm.getHeat().addTier(i);
 				// DCLogger.debugLog("heat2: " + next.name());
 				List<FluidCraftRecipe> list2 = getRecipeList(next);
-				if (list2.isEmpty()) {
-				} else {
+				if (list2.isEmpty()) {} else {
 					// DCLogger.debugLog("### searching... ###");
 					for (IFluidRecipe recipe : list2) {
 						if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {

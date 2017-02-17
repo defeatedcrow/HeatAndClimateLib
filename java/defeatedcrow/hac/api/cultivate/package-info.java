@@ -8,7 +8,7 @@
 /**
  * このAPIは、気候を利用した農作物・植物を扱うAPIです。
  */
-@API(apiVersion = "1.0.2", owner = "dcs_climate|lib", provides = "DCsHaCAPI|cultivate")
+@API(apiVersion = "1.0.3", owner = "dcs_climate|lib", provides = "DCsHaCAPI|cultivate")
 package defeatedcrow.hac.api.cultivate;
 
 import net.minecraftforge.fml.common.API;

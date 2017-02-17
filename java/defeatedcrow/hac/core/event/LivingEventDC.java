@@ -191,7 +191,7 @@ public class LivingEventDC {
 							prev += 2.0F;
 						}
 						if (living.isImmuneToFire()) {
-							prev += 2.0F;
+							prev += 3.0F;
 						}
 						if (heat.getTier() > DCHeatTier.OVEN.getTier() && living.isEntityUndead()) {
 							prev -= 2.0F;

@@ -26,15 +26,15 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
  */
 public class CustomizeVanillaRecipe {
 
-	private CustomizeVanillaRecipe() {
-	}
+	private CustomizeVanillaRecipe() {}
 
 	private static Map<ItemStack, String> replaceTable = new HashMap<ItemStack, String>();
 
 	private static ArrayList<ItemStack> exclusions = new ArrayList<ItemStack>();
 
 	private static ItemStack[] shapelessOnly = new ItemStack[] {
-			new ItemStack(Items.WHEAT) };
+			new ItemStack(Items.WHEAT)
+	};
 
 	static void initializeMap() {
 
@@ -104,7 +104,7 @@ public class CustomizeVanillaRecipe {
 				for (Object object : recipe.getInput()) {
 					ItemStack item = null;
 
-					if (object instanceof ItemStack) {
+					if (object instanceof ItemStack && ((ItemStack) object).getItem() != null) {
 						item = new ItemStack(((ItemStack) object).getItem(), 1, ((ItemStack) object).getItemDamage());
 					} else if (object instanceof Item) {
 						item = new ItemStack((Item) object);
@@ -134,7 +134,7 @@ public class CustomizeVanillaRecipe {
 				for (Object object : recipe.getInput()) {
 					ItemStack item = null;
 
-					if (object instanceof ItemStack) {
+					if (object instanceof ItemStack && ((ItemStack) object).getItem() != null) {
 						item = new ItemStack(((ItemStack) object).getItem(), 1, ((ItemStack) object).getItemDamage());
 					} else if (object instanceof Item) {
 						item = new ItemStack((Item) object);
@@ -200,25 +200,11 @@ public class CustomizeVanillaRecipe {
 
 		// 3x3より大きなレシピには全く対応していない
 		String[] s = {
-				"A",
-				"B",
-				"C",
-				"D",
-				"E",
-				"F",
-				"G",
-				"H",
-				"I" };
+				"A", "B", "C", "D", "E", "F", "G", "H", "I"
+		};
 		Character[] c = {
-				'A',
-				'B',
-				'C',
-				'D',
-				'E',
-				'F',
-				'G',
-				'H',
-				'I' };
+				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'
+		};
 
 		String[] returnArray = new String[y];
 
@@ -323,25 +309,11 @@ public class CustomizeVanillaRecipe {
 
 		// 3x3より大きなレシピには全く対応していない
 		String[] s = {
-				"A",
-				"B",
-				"C",
-				"D",
-				"E",
-				"F",
-				"G",
-				"H",
-				"I" };
+				"A", "B", "C", "D", "E", "F", "G", "H", "I"
+		};
 		Character[] c = {
-				'A',
-				'B',
-				'C',
-				'D',
-				'E',
-				'F',
-				'G',
-				'H',
-				'I' };
+				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'
+		};
 
 		String[] returnArray = new String[y];
 
