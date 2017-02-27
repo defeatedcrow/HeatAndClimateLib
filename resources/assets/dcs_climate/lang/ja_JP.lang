@@ -11,11 +11,12 @@ dcs_climate.tip.resistance=気候耐性
 
 dcs.tip.shift=Lshiftキー: 詳細を表示
 
-dcs_climate.smelting=Climate Smelting
-dcs_climate.recipe=Climate Crafting
-dcs_climate.mill=Mill Recipe
-dcs_climate.fluidcraft=Fluid Processing
-dcs_climate.crop=Climate Crops
+dcs_climate.smelting=気候精錬レシピ
+dcs_climate.recipe=気候利用クラフト
+dcs_climate.mill=石臼
+dcs_climate.fluidcraft=液体加工レシピ
+dcs_climate.crop=気候利用作物
+dcs_climate.effective=気候に影響するブロック
 
 death.attack.dcs_heat=%1$sはこんがり焼き上がった。
 death.attack.dcs_cold=%1$sはシャーベットになった。

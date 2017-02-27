@@ -16,6 +16,7 @@ dcs_climate.recipe=Climate Crafting
 dcs_climate.mill=Mill Recipe
 dcs_climate.fluidcraft=Fluid Processing
 dcs_climate.crop=Climate Crops
+dcs_climate.effective=Climate Effective Tiles
 
 death.attack.dcs_heat=%1$s was burnt browned.
 death.attack.dcs_cold=%1$s became a sherbet.

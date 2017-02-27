@@ -9,7 +9,10 @@ import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IHeatBlockRegister;
+import defeatedcrow.hac.core.plugin.ClimateEffectiveTile;
+import defeatedcrow.hac.core.plugin.DCsJEIPluginLists;
 import net.minecraft.block.Block;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class HeatBlockRegister implements IHeatBlockRegister {
 
@@ -27,8 +30,10 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 	public void registerHeatBlock(Block block, int meta, DCHeatTier temp) {
 		if (block != null) {
 			BlockSet set = new BlockSet(block, meta);
-			if (!this.isRegisteredHeat(block, meta))
+			if (!this.isRegisteredHeat(block, meta)) {
 				heats.put(set, temp);
+				registerEffectiveHeat(block, meta, temp);
+			}
 		}
 	}
 
@@ -36,8 +41,10 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 	public void registerHumBlock(Block block, int meta, DCHumidity hum) {
 		if (block != null) {
 			BlockSet set = new BlockSet(block, meta);
-			if (!this.isRegisteredHum(block, meta))
+			if (!this.isRegisteredHum(block, meta)) {
 				hums.put(set, hum);
+				registerEffectiveHum(block, meta, hum);
+			}
 		}
 	}
 
@@ -45,8 +52,10 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 	public void registerAirBlock(Block block, int meta, DCAirflow air) {
 		if (block != null) {
 			BlockSet set = new BlockSet(block, meta);
-			if (!this.isRegisteredAir(block, meta))
+			if (!this.isRegisteredAir(block, meta)) {
 				airs.put(set, air);
+				registerEffectiveAir(block, meta, air);
+			}
 		}
 	}
 
@@ -137,6 +146,63 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 			}
 		}
 		return ret;
+	}
+
+	private void registerEffectiveHeat(Block block, int meta, DCHeatTier t) {
+		if (DCsJEIPluginLists.climate.isEmpty()) {
+			DCsJEIPluginLists.climate.add(new ClimateEffectiveTile(block, meta, t, null, null));
+		} else {
+			boolean flag = false;
+			for (ClimateEffectiveTile tile : DCsJEIPluginLists.climate) {
+				if (tile.isSameBlock(block)
+						&& (tile.getInputMeta() == OreDictionary.WILDCARD_VALUE || tile.getInputMeta() == meta)) {
+					tile.setHeat(t);
+					flag = true;
+					break;
+				}
+			}
+			if (!flag) {
+				DCsJEIPluginLists.climate.add(new ClimateEffectiveTile(block, meta, t, null, null));
+			}
+		}
+	}
+
+	private void registerEffectiveHum(Block block, int meta, DCHumidity h) {
+		if (DCsJEIPluginLists.climate.isEmpty()) {
+			DCsJEIPluginLists.climate.add(new ClimateEffectiveTile(block, meta, null, h, null));
+		} else {
+			boolean flag = false;
+			for (ClimateEffectiveTile tile : DCsJEIPluginLists.climate) {
+				if (tile.isSameBlock(block)
+						&& (tile.getInputMeta() == OreDictionary.WILDCARD_VALUE || tile.getInputMeta() == meta)) {
+					tile.setHumidity(h);
+					flag = true;
+					break;
+				}
+			}
+			if (!flag) {
+				DCsJEIPluginLists.climate.add(new ClimateEffectiveTile(block, meta, null, h, null));
+			}
+		}
+	}
+
+	private void registerEffectiveAir(Block block, int meta, DCAirflow a) {
+		if (DCsJEIPluginLists.climate.isEmpty()) {
+			DCsJEIPluginLists.climate.add(new ClimateEffectiveTile(block, meta, null, null, a));
+		} else {
+			boolean flag = false;
+			for (ClimateEffectiveTile tile : DCsJEIPluginLists.climate) {
+				if (tile.isSameBlock(block)
+						&& (tile.getInputMeta() == OreDictionary.WILDCARD_VALUE || tile.getInputMeta() == meta)) {
+					tile.setAirflow(a);
+					flag = true;
+					break;
+				}
+			}
+			if (!flag) {
+				DCsJEIPluginLists.climate.add(new ClimateEffectiveTile(block, meta, null, null, a));
+			}
+		}
 	}
 
 }
