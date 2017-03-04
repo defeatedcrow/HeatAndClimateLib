@@ -4,14 +4,14 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * Climateを条件に進む、液体加工を含む多対多のレシピ。<br>
@@ -40,14 +40,14 @@ public interface IFluidRecipe {
 	/**
 	 * Inputのコンテナアイテムのリスト
 	 */
-	List<ItemStack> getContainerItems(List<ItemStack> items);
+	List<ItemStack> getContainerItems(List<Object> items);
 
 	float getSecondaryChance();
 
 	/**
 	 * macth条件判定用、鉱石辞書変換後のInputリスト
 	 */
-	List<ItemStack> getProcessedInput();
+	List<Object> getProcessedInput();
 
 	/**
 	 * inputの大きさ

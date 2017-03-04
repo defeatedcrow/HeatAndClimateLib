@@ -1,6 +1,5 @@
 package defeatedcrow.hac.core.plugin;
 
-import java.util.Collection;
 import java.util.List;
 
 import mezz.jei.api.IGuiHelper;
@@ -76,10 +75,8 @@ public class FluidRecipeCategory implements IRecipeCategory {
 				int l = i;
 				if (l < inputs.size()) {
 					recipeLayout.getItemStacks().init(l, true, 48, 13 + i * 18);
-					if (inputs.get(l) instanceof ItemStack) {
-						recipeLayout.getItemStacks().set(l, (ItemStack) inputs.get(l));
-					} else if (inputs.get(l) instanceof Collection) {
-						recipeLayout.getItemStacks().set(l, (Collection<ItemStack>) inputs.get(l));
+					if (inputs.get(l) instanceof List) {
+						recipeLayout.getItemStacks().set(l, (List<ItemStack>) inputs.get(l));
 					}
 				}
 			}

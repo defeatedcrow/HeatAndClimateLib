@@ -8,7 +8,6 @@ import defeatedcrow.hac.api.cultivate.CropAPI;
 import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.core.DCInit;
-import defeatedcrow.hac.core.climate.recipe.ClimateRecipe;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
 import mezz.jei.api.IJeiHelpers;
@@ -29,11 +28,14 @@ public class DCsJEIPlugin implements IModPlugin {
 	public void register(IModRegistry registry) {
 		helper = registry.getJeiHelpers();
 
-		registry.addRecipeCategories(new ClimateSmeltingCategory(helper.getGuiHelper()),
-				new ClimateRecipeCategory(helper.getGuiHelper()), new MillRecipeCategory(helper.getGuiHelper()),
+		registry.addRecipeCategories(new ClimateEffectiveCategory(helper.getGuiHelper()),
+				new ClimateSmeltingCategory(helper.getGuiHelper()), new MillRecipeCategory(helper.getGuiHelper()),
 				new FluidRecipeCategory(helper.getGuiHelper()), new ClimateCropCategory(helper.getGuiHelper()));
-		registry.addRecipeHandlers(new ClimateSmeltingHandler(), new ClimateRecipeHandler(), new MillRecipeHandler(),
-				new FluidRecipeHandler(), new ClimateCropHandler());
+		registry.addRecipeHandlers(new ClimateEffectiveHandler(), new ClimateSmeltingHandler(),
+				new ClimateRecipeHandler(), new MillRecipeHandler(), new FluidRecipeHandler(),
+				new ClimateCropHandler());
+
+		registry.addRecipes(DCsJEIPluginLists.climate);
 
 		List<ClimateSmelting> list = new ArrayList<ClimateSmelting>();
 		list.addAll((List<ClimateSmelting>) RecipeAPI.registerSmelting.getRecipeList(DCHeatTier.ABSOLUTE));
@@ -49,19 +51,19 @@ public class DCsJEIPlugin implements IModPlugin {
 		list.addAll((List<ClimateSmelting>) RecipeAPI.registerSmelting.getRecipeList(DCHeatTier.UHT));
 		list.addAll((List<ClimateSmelting>) RecipeAPI.registerSmelting.getRecipeList(DCHeatTier.INFERNO));
 
-		List<ClimateRecipe> list2 = new ArrayList<ClimateRecipe>();
-		list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.ABSOLUTE));
-		list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.FROSTBITE));
-		list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.COLD));
-		list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.COOL));
-		list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.NORMAL));
-		list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.WARM));
-		list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.HOT));
-		list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.OVEN));
-		list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.KILN));
-		list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.SMELTING));
-		list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.UHT));
-		list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.FROSTBITE));
+		// List<ClimateRecipe> list2 = new ArrayList<ClimateRecipe>();
+		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.ABSOLUTE));
+		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.FROSTBITE));
+		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.COLD));
+		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.COOL));
+		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.NORMAL));
+		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.WARM));
+		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.HOT));
+		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.OVEN));
+		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.KILN));
+		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.SMELTING));
+		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.UHT));
+		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.FROSTBITE));
 
 		List<FluidCraftRecipe> list3 = new ArrayList<FluidCraftRecipe>();
 		list3.addAll((List<FluidCraftRecipe>) RecipeAPI.registerFluidRecipes.getRecipeList(DCHeatTier.ABSOLUTE));
@@ -81,10 +83,18 @@ public class DCsJEIPlugin implements IModPlugin {
 		list4.addAll(CropAPI.register.getList().values());
 
 		registry.addRecipes(list);
-		registry.addRecipes(list2);
+		// registry.addRecipes(list2);
 		registry.addRecipes(RecipeAPI.registerMills.getRecipeList());
 		registry.addRecipes(list3);
 		registry.addRecipes(list4);
+
+		if (!DCsJEIPluginLists.climateIcons.isEmpty()) {
+			for (ItemStack item : DCsJEIPluginLists.climateIcons) {
+				registry.addRecipeCategoryCraftingItem(item, new String[] {
+						"dcs_climate.effective"
+				});
+			}
+		}
 
 		registry.addRecipeCategoryCraftingItem(new ItemStack(DCInit.climate_checker), new String[] {
 				"dcs_climate.smelting"
@@ -116,7 +126,7 @@ public class DCsJEIPlugin implements IModPlugin {
 
 		if (!DCsJEIPluginLists.excluder.isEmpty()) {
 			for (ItemStack item : DCsJEIPluginLists.excluder) {
-				helper.getItemBlacklist().addItemToBlacklist(item);
+				helper.getIngredientBlacklist().addIngredientToBlacklist(item);
 			}
 		}
 
@@ -126,13 +136,9 @@ public class DCsJEIPlugin implements IModPlugin {
 	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {}
 
 	@Override
-	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-		// TODO 自動生成されたメソッド・スタブ
-	}
+	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {}
 
 	@Override
-	public void registerIngredients(IModIngredientRegistration registry) {
-		// TODO 自動生成されたメソッド・スタブ
-	}
+	public void registerIngredients(IModIngredientRegistration registry) {}
 
 }

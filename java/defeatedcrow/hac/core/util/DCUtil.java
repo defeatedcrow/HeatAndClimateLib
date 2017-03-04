@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
@@ -19,15 +20,18 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 // 色々不足しているもの
 public class DCUtil {
+
+	public static Random rand = new Random();
 
 	/*
 	 * stacksize以外の比較
 	 */
 	public static boolean isSameItem(ItemStack i1, ItemStack i2) {
-		if (i1 == null || i2 == null) {
+		if (i1 == null || i2 == null || i1.getItem() == null || i2.getItem() == null) {
 			return false;
 		} else {
 			if (i1.getItem() == i2.getItem() && i1.getItemDamage() == i2.getItemDamage()) {
@@ -47,11 +51,11 @@ public class DCUtil {
 	 * stacksize以外の比較、ワイルドカード付き
 	 */
 	public static boolean isIntegratedItem(ItemStack i1, ItemStack i2) {
-		if (i1 == null || i2 == null) {
+		if (i1 == null || i2 == null || i1.getItem() == null || i2.getItem() == null) {
 			return false;
 		} else {
 			if (i1.getItem() == i2.getItem()) {
-				if (i1.getItemDamage() == i2.getItemDamage() || i2.getItemDamage() == 32767) {
+				if (i1.getItemDamage() == i2.getItemDamage() || i2.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
 					NBTTagCompound t1 = i1.getTagCompound();
 					NBTTagCompound t2 = i2.getTagCompound();
 					if (t1 == null && t2 == null) {
@@ -97,10 +101,8 @@ public class DCUtil {
 
 	// 防具の登録時の並び
 	public static final EntityEquipmentSlot[] SLOTS = new EntityEquipmentSlot[] {
-			EntityEquipmentSlot.HEAD,
-			EntityEquipmentSlot.CHEST,
-			EntityEquipmentSlot.LEGS,
-			EntityEquipmentSlot.FEET };
+			EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET
+	};
 
 	// チャームを保持しているかのチェック
 	public static Map<Integer, ItemStack> getPlayerCharm(EntityPlayer player, CharmType type) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import defeatedcrow.hac.api.climate.ClimateAPI;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -22,7 +23,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
-import defeatedcrow.hac.api.climate.ClimateAPI;
 
 /**
  * 加工機能とSidedInventory持ちTorqueTileのベースクラス
@@ -35,11 +35,13 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	private int lastTier = 0;
 	private int lastBurn = 0;
+	private int tickCount = 5;
 
 	@Override
-	public void updateTile() {
-		super.updateTile();
-		if (!worldObj.isRemote) {
+	protected void onServerUpdate() {
+		super.onServerUpdate();
+		if (tickCount <= 0) {
+			tickCount = 5;
 			// 完了処理
 			if (this.maxBurnTime > 0) {
 				if (this.currentBurnTime >= this.maxBurnTime) {
@@ -70,6 +72,8 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 				// レシピ開始可能かどうか
 				this.maxBurnTime = this.getProcessTime(this.getStackInSlot(0));
 			}
+		} else {
+			tickCount--;
 		}
 	}
 
@@ -125,20 +129,21 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	/* ========== 以下、ISidedInventoryのメソッド ========== */
 
 	protected int[] slotsTop() {
-		return new int[] { 0 };
+		return new int[] {
+				0
+		};
 	};
 
 	protected int[] slotsBottom() {
 		return new int[] {
-				1,
-				2 };
+				1, 2
+		};
 	};
 
 	protected int[] slotsSides() {
 		return new int[] {
-				0,
-				1,
-				2 };
+				0, 1, 2
+		};
 	};
 
 	public ItemStack[] inv = new ItemStack[this.getSizeInventory()];
@@ -235,13 +240,12 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	// par1EntityPlayerがTileEntityを使えるかどうか
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getWorld().getTileEntity(this.pos) != this ? false : player.getDistanceSq(this.pos.getX() + 0.5D,
-				this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64.0D;
+		return getWorld().getTileEntity(this.pos) != this ? false
+				: player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
-	}
+	public void openInventory(EntityPlayer player) {}
 
 	@Override
 	public void closeInventory(EntityPlayer player) {

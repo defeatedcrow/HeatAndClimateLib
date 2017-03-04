@@ -18,14 +18,25 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class ClimateRecipeWrapper implements IRecipeWrapper {
 
-	private final List<Object> input;
+	private final List<List<ItemStack>> input;
 	private final List<ItemStack> output;
 	private final ClimateRecipe rec;
 
 	@SuppressWarnings("unchecked")
 	public ClimateRecipeWrapper(ClimateRecipe recipe) {
 		rec = recipe;
-		input = recipe.getProcessedInput();
+		input = new ArrayList<List<ItemStack>>();
+		if (!recipe.getProcessedInput().isEmpty()) {
+			for (Object obj : recipe.getProcessedInput()) {
+				if (obj instanceof ItemStack) {
+					List<ItemStack> ret = new ArrayList<ItemStack>();
+					ret.add((ItemStack) obj);
+					input.add(ret);
+				} else if (obj instanceof List) {
+					input.add((List<ItemStack>) obj);
+				}
+			}
+		}
 		output = new ArrayList<ItemStack>();
 		output.add(recipe.getOutput());
 		if (recipe.getSecondary() != null) {
@@ -35,7 +46,7 @@ public class ClimateRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ing) {
-		ing.setInputs(Object.class, input);
+		ing.setInputLists(ItemStack.class, input);
 		ing.setOutputs(ItemStack.class, output);
 	}
 

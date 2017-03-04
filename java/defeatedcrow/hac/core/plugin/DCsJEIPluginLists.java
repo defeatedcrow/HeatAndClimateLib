@@ -15,4 +15,7 @@ public class DCsJEIPluginLists {
 
 	public static final List<ItemStack> excluder = new ArrayList<ItemStack>();
 
+	public static final List<ClimateEffectiveTile> climate = new ArrayList<ClimateEffectiveTile>();
+	public static final List<ItemStack> climateIcons = new ArrayList<ItemStack>();
+
 }

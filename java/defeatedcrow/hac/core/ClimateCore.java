@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -31,7 +32,7 @@ public class ClimateCore {
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 1;
 	public static final int MOD_MINOR = 3;
-	public static final int MOD_BUILD = 0;
+	public static final int MOD_BUILD = 5;
 	public static final String MOD_DEPENDENCIES = "required-after:Forge@[12.18.3.2185,)";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.10,1.11]";
 
@@ -68,7 +69,12 @@ public class ClimateCore {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		CustomizeVanillaRecipe.initCustomize();
+		if (!CoreConfigDC.disableCustomRecipe) {
+			CustomizeVanillaRecipe.initCustomize();
+		}
 		FluidIDRegisterDC.post();
 	}
+
+	@EventHandler
+	public void loadComplete(FMLLoadCompleteEvent event) {}
 }

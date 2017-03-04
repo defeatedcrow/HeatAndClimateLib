@@ -5,11 +5,7 @@
  * Please check the License(MMPL_1.0).txt included in the package file of this Mod.
  */
 
-/**
- * 宝石アクセサリーなどの魔法効果を扱うAPIです。<br>
- * 判定用インターフェイスや、効果の発動に干渉するEventを含みます。
- */
-@API(apiVersion = "1.0.3", owner = "dcs_climate|lib", provides = "DCsHaCAPI|magic")
-package defeatedcrow.hac.api.magic;
+@API(apiVersion = "1.0.3", owner = "dcs_climate|lib", provides = "DCsHaCAPI|core")
+package defeatedcrow.hac.api;
 
 import net.minecraftforge.fml.common.API;

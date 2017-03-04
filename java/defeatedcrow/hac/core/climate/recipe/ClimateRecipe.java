@@ -61,7 +61,9 @@ public class ClimateRecipe implements IClimateRecipe {
 		processedInput = new ArrayList<Object>();
 		for (int i = 0; i < inputs.length; i++) {
 			if (inputs[i] instanceof String) {
-				processedInput.add(OreDictionary.getOres((String) inputs[i]));
+				List<ItemStack> ret = new ArrayList<ItemStack>();
+				ret.addAll(OreDictionary.getOres((String) inputs[i]));
+				processedInput.add(ret);
 			} else if (inputs[i] instanceof ItemStack) {
 				processedInput.add(((ItemStack) inputs[i]).copy());
 			} else if (inputs[i] instanceof Item) {

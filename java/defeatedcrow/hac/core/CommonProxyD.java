@@ -2,11 +2,13 @@ package defeatedcrow.hac.core;
 
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
+import defeatedcrow.hac.core.climate.WeatherChecker;
 import defeatedcrow.hac.core.event.BlockUpdateDC;
 import defeatedcrow.hac.core.event.CaveGenLavaDC;
 import defeatedcrow.hac.core.event.ClickEventDC;
 import defeatedcrow.hac.core.event.LivingEventDC;
 import defeatedcrow.hac.core.event.LivingHurtDC;
+import defeatedcrow.hac.core.event.TickEventDC;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.util.DCPotion;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,11 +26,9 @@ public class CommonProxyD {
 		TileRegister.load();
 	}
 
-	public void loadWorldGen() {
-	}
+	public void loadWorldGen() {}
 
-	public void loadEntity() {
-	}
+	public void loadEntity() {}
 
 	public void loadInit() {
 		OreRegister.load();
@@ -40,6 +40,7 @@ public class CommonProxyD {
 		MinecraftForge.EVENT_BUS.register(new LivingHurtDC());
 		MinecraftForge.EVENT_BUS.register(new ClickEventDC());
 		MinecraftForge.TERRAIN_GEN_BUS.register(new CaveGenLavaDC());
+		MinecraftForge.EVENT_BUS.register(new TickEventDC());
 
 		HaCPacket.init();
 	}
@@ -70,6 +71,33 @@ public class CommonProxyD {
 
 	public World getClientWorld() {
 		return null;
+	}
+
+	public int getWeatherHeatOffset(World world) {
+		if (world != null) {
+			int dim = world.provider.getDimension();
+			boolean isHell = world.provider.doesWaterVaporize();
+			return WeatherChecker.INSTANCE.getTempOffset(dim, isHell);
+		}
+		return 0;
+	}
+
+	public int getWeatherHumOffset(World world) {
+		if (world != null) {
+			int dim = world.provider.getDimension();
+			boolean isHell = world.provider.doesWaterVaporize();
+			return WeatherChecker.INSTANCE.getHumOffset(dim, isHell);
+		}
+		return 0;
+	}
+
+	public int getWeatherAirOffset(World world) {
+		if (world != null) {
+			int dim = world.provider.getDimension();
+			boolean isHell = world.provider.doesWaterVaporize();
+			return WeatherChecker.INSTANCE.getWindOffset(dim, isHell);
+		}
+		return 0;
 	}
 
 }

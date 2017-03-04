@@ -10,6 +10,8 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.climate.IClimateTileEntity;
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.packet.HaCPacket;
+import defeatedcrow.hac.core.packet.MessageClimateUpdate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -19,6 +21,7 @@ public abstract class ClimateReceiverLockable extends DCLockableTE {
 
 	private final List<BlockPos> effectiveTiles = new ArrayList<BlockPos>();
 
+	protected int lastClimate;
 	protected IClimate current = null;
 	protected DCHeatTier highTemp = DCHeatTier.NORMAL;
 	protected DCHeatTier lowTemp = DCHeatTier.NORMAL;
@@ -74,6 +77,11 @@ public abstract class ClimateReceiverLockable extends DCLockableTE {
 			if (!remove.isEmpty()) {
 				effectiveTiles.removeAll(remove);
 				remove.clear();
+			}
+
+			if (current != null && lastClimate != current.getClimateInt()) {
+				lastClimate = current.getClimateInt();
+				HaCPacket.INSTANCE.sendToAll(new MessageClimateUpdate(pos, lastClimate));
 			}
 		}
 	}
@@ -131,6 +139,17 @@ public abstract class ClimateReceiverLockable extends DCLockableTE {
 	public void addHeatTilePos(BlockPos pos) {
 		if (pos != null && !effectiveTiles.contains(pos)) {
 			effectiveTiles.add(pos);
+		}
+	}
+
+	public IClimate getClimate() {
+		return current;
+	}
+
+	public void setClimate(int i) {
+		IClimate ret = ClimateAPI.register.getClimateFromInt(i);
+		if (ret != null) {
+			current = ret;
 		}
 	}
 

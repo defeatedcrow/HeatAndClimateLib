@@ -44,6 +44,7 @@ public class CoreConfigDC {
 	// recipe
 	public static boolean enableVanilla = true;
 	public static int updateFrequency = 5;
+	public static boolean disableCustomRecipe = false;
 
 	// world
 	public static boolean enableFreezeDrop = true;
@@ -137,6 +138,9 @@ public class CoreConfigDC {
 			Property enableWall = cfg.get("setting", "Thermal Insulation Wall", wall,
 					"Some of stone blocks enable to have a thermal insulation property.");
 
+			Property disableCustom = cfg.get("setting", "Disable Recipe Customize", disableCustomRecipe,
+					"Disable replacing the recipe with the ore dictionary.");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
@@ -150,6 +154,7 @@ public class CoreConfigDC {
 			enableFreezeDrop = freeze_drop.getBoolean();
 			waterFix = water.getBoolean();
 			wall = enableWall.getBoolean();
+			disableCustomRecipe = disableCustom.getBoolean();
 
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)

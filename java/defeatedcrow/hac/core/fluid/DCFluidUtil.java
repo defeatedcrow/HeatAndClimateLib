@@ -30,8 +30,8 @@ public class DCFluidUtil {
 			IFluidHandler cont = item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 			IFluidHandler dummy = copy.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 			IFluidHandler intank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP);
-			IFluidHandler outtank = tile
-					.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN);
+			IFluidHandler outtank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,
+					EnumFacing.DOWN);
 
 			// dummyを使った検証
 			if (dummy != null && dummy.getTankProperties() != null && intank instanceof DCTank
@@ -44,13 +44,14 @@ public class DCFluidUtil {
 				ItemStack ret = null;
 				boolean success = false;
 				// input
-				if (f1 != null && dc_in.fill(f1, false) == max) {
-					FluidStack fill = dummy.drain(max, true);
+				if (f1 != null && dc_in.fill(f1, false) > 0) {
+					int f2 = dc_in.fill(f1, false);
+					FluidStack fill = dummy.drain(f2, true);
 					ret = copy;
 					if (ret.stackSize <= 0) {
 						ret = null;
 					}
-					if (fill != null && fill.amount == max) {
+					if (fill != null && fill.amount > 0) {
 						dc_in.fill(fill, true);
 						success = true;
 					}
@@ -62,14 +63,14 @@ public class DCFluidUtil {
 					if (ret.stackSize <= 0) {
 						ret = null;
 					}
-					if (drain == max) {
+					if (drain > 0) {
 						dc_out.drain(drain, true);
 						success = true;
 					}
 				}
 
 				if (success) {
-					if (!player.capabilities.isCreativeMode && item.stackSize-- <= 0) {
+					if (/* !player.capabilities.isCreativeMode && */ item.stackSize-- <= 0) {
 						item = null;
 					}
 					tile.markDirty();
