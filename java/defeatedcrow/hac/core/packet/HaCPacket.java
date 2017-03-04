@@ -11,5 +11,7 @@ public class HaCPacket {
 	public static void init() {
 		INSTANCE.registerMessage(MHandlerCharmKey.class, MessageCharmKey.class, 0, Side.SERVER);
 		INSTANCE.registerMessage(MHandlerTorqueTile.class, MessageTorqueTile.class, 1, Side.CLIENT);
+		INSTANCE.registerMessage(MHandlerClimateTile.class, MessageClimateUpdate.class, 2, Side.CLIENT);
+		INSTANCE.registerMessage(MHandlerWeatherUpdate.class, MessageWeatherUpdate.class, 3, Side.CLIENT);
 	}
 }

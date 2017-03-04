@@ -6,10 +6,11 @@ import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
-import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.base.DCItem;
-import net.minecraft.block.Block;
+import defeatedcrow.hac.core.climate.WeatherChecker;
+import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,16 +60,27 @@ public class ItemClimateChecker extends DCItem {
 					if (ClimateCore.isDebug) {
 						player.addChatMessage(
 								new TextComponentString("Climate int: " + Integer.toBinaryString(c.getClimateInt())));
-						// recipe
-						Block block = state.getBlock();
-						int i = block.getMetaFromState(state);
-						String s = block.getRegistryName() + ":" + i;
-						recipe = RecipeAPI.registerSmelting.getRecipe(c, new ItemStack(block, 1, i));
-						if (recipe != null) {
-							player.addChatMessage(new TextComponentString(s + " ** Climate Smelting Confotable! **"));
-						} else {
-							player.addChatMessage(new TextComponentString(s));
+						// weather
+						int time = DCTimeHelper.currentTime(world);
+						int dim = world.provider.getDimension();
+						int count = 0;
+						int sun = 0;
+						float rain = 0F;
+						if (WeatherChecker.rainPowerMap.containsKey(dim)) {
+							rain = WeatherChecker.rainPowerMap.get(dim);
 						}
+						if (WeatherChecker.rainCountMap.containsKey(dim)) {
+							count = WeatherChecker.rainCountMap.get(dim);
+						}
+						if (WeatherChecker.sunCountMap.containsKey(dim)) {
+							sun = WeatherChecker.sunCountMap.get(dim);
+						}
+
+						DCLogger.debugLog("== current weather info ==");
+						DCLogger.debugLog("remote world: " + world.isRemote + ". time: " + time);
+						DCLogger.debugLog("world rain: " + world.rainingStrength);
+						DCLogger.debugLog("rain: " + rain + ", time: " + count);
+						DCLogger.debugLog("sun time: " + sun);
 					}
 					return EnumActionResult.SUCCESS;
 				}

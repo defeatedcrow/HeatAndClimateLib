@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
@@ -23,6 +24,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 // 色々不足しているもの
 public class DCUtil {
+
+	public static Random rand = new Random();
 
 	/*
 	 * stacksize以外の比較

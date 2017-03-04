@@ -9,6 +9,7 @@ import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
 import defeatedcrow.hac.core.client.event.RenderTempHUDEvent;
 import defeatedcrow.hac.core.client.event.WaterFogEvent;
+import defeatedcrow.hac.core.climate.WeatherChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -33,8 +34,7 @@ public class ClientProxyD extends CommonProxyD {
 	}
 
 	@Override
-	public void loadTE() {
-	}
+	public void loadTE() {}
 
 	@Override
 	public void loadEntity() {
@@ -72,38 +72,18 @@ public class ClientProxyD extends CommonProxyD {
 
 	@Override
 	public boolean isJumpKeyDown() {
-		if (getJumpKey() <= 0) {
-			return false;
-		} else if (getJumpKey() > Keyboard.KEYBOARD_SIZE) {
-			return false;
-		}
-		return Keyboard.isCreated() && Keyboard.isKeyDown(getJumpKey());
+		return Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
 	}
 
 	@Override
 	public boolean isSneakKeyDown() {
-		if (getSneakKey() <= 0) {
-			return false;
-		} else if (getSneakKey() >= Keyboard.KEYBOARD_SIZE) {
-			return false;
-		}
-		return Keyboard.isCreated() && Keyboard.isKeyDown(getSneakKey());
+		return Minecraft.getMinecraft().gameSettings.keyBindSneak.isKeyDown();
 	}
 
 	@Override
 	public boolean isWarpKeyDown() {
 		return CoreConfigDC.charmWarpKey <= 0 || CoreConfigDC.charmWarpKey >= Keyboard.KEYBOARD_SIZE ? false
 				: Keyboard.isCreated() && Keyboard.isKeyDown(CoreConfigDC.charmWarpKey);
-	}
-
-	private int getJumpKey() {
-		return CoreConfigDC.altJumpKey >= 0 ? CoreConfigDC.altJumpKey
-				: Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode();
-	}
-
-	private int getSneakKey() {
-		return CoreConfigDC.altSneakKey >= 0 ? CoreConfigDC.altSneakKey
-				: Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode();
 	}
 
 	@Override
@@ -119,9 +99,9 @@ public class ClientProxyD extends CommonProxyD {
 	// ruby氏に無限に感謝
 	/**
 	 * @param cls
-	 *            えんちちーのくらす
+	 *        えんちちーのくらす
 	 * @param render
-	 *            Renderの継承クラス
+	 *        Renderの継承クラス
 	 */
 	private void registRender(Class<? extends Entity> cls, final Class<? extends Render> render) {
 		RenderingRegistry.registerEntityRenderingHandler(cls, new IRenderFactory() {
@@ -135,6 +115,36 @@ public class ClientProxyD extends CommonProxyD {
 				return null;
 			}
 		});
+	}
+
+	@Override
+	public int getWeatherHeatOffset(World world) {
+		if (world != null) {
+			int dim = world.provider.getDimension();
+			boolean isHell = world.provider.doesWaterVaporize();
+			return WeatherChecker.INSTANCE.getTempOffset(dim, isHell);
+		}
+		return 0;
+	}
+
+	@Override
+	public int getWeatherHumOffset(World world) {
+		if (world != null) {
+			int dim = world.provider.getDimension();
+			boolean isHell = world.provider.doesWaterVaporize();
+			return WeatherChecker.INSTANCE.getHumOffset(dim, isHell);
+		}
+		return 0;
+	}
+
+	@Override
+	public int getWeatherAirOffset(World world) {
+		if (world != null) {
+			int dim = world.provider.getDimension();
+			boolean isHell = world.provider.doesWaterVaporize();
+			return WeatherChecker.INSTANCE.getWindOffset(dim, isHell);
+		}
+		return 0;
 	}
 
 }

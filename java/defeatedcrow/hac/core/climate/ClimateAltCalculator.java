@@ -11,6 +11,7 @@ import defeatedcrow.hac.api.climate.IHeatCanceler;
 import defeatedcrow.hac.api.climate.IHeatTile;
 import defeatedcrow.hac.api.climate.IHumidityTile;
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -28,9 +29,8 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	@Override
 	public IClimate getClimate(World world, BlockPos pos) {
 		int[] r = new int[] {
-				CoreConfigDC.heatRange,
-				CoreConfigDC.humRange,
-				CoreConfigDC.airRange };
+				CoreConfigDC.heatRange, CoreConfigDC.humRange, CoreConfigDC.airRange
+		};
 		return getClimate(world, pos, r);
 	}
 
@@ -53,9 +53,8 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	public IClimate getClimate(World world, BlockPos pos, int[] r) {
 		if (r == null || r.length < 3)
 			r = new int[] {
-					CoreConfigDC.heatRange,
-					CoreConfigDC.humRange,
-					CoreConfigDC.airRange };
+					CoreConfigDC.heatRange, CoreConfigDC.humRange, CoreConfigDC.airRange
+			};
 		DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos, r[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, r[1], false);
 		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, r[2], false);
@@ -79,6 +78,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			} else {
 				temp = temp.addTier(cold.getTier());
 			}
+		}
+		if (temp.getTier() < cold.getTier()) {
+			temp = cold;
 		}
 		return temp;
 	}
@@ -105,7 +107,14 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			} else if (temp.getTier() > 0) {
 				hot = temp.addTier(-1);
 			}
+		} else {
+			int offset = WeatherChecker.getTempOffset(world.provider.getDimension(),
+					world.provider.doesWaterVaporize());
+			if (offset > 0 && DCTimeHelper.isDayTime(world)) {
+				hot = temp.addTier(offset);
+			}
 		}
+
 		if (pos.getY() >= 100) {
 			hot = hot.addTier(-1);
 		}
@@ -223,7 +232,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		 * 屋根あり: Tierが1段階Normalに近づく
 		 * 屋根無し: 天候によって変化
 		 * 晴れ: Biome気温のまま
-		 * 雷雨: Tierが1段階低い物になる (夜雨はクライアント側でうまく検知できないため廃止)
+		 * 雨: Tierが1段階低い物になる (夜雨はクライアント側でうまく検知できないため廃止)
 		 */
 		DCHeatTier cold = temp;
 		if (hasRoof(world, pos)) {
@@ -232,9 +241,12 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			} else if (temp.getTier() > 0) {
 				cold = cold.addTier(-1);
 			}
-		} else if (world.getThunderStrength(1.0F) > 0.5F) {
-			cold = cold.addTier(-1);
+		} else {
+			int offset = WeatherChecker.getTempOffset(world.provider.getDimension(),
+					world.provider.doesWaterVaporize());
+			cold = cold.addTier(offset);
 		}
+
 		if (pos.getY() > 100) {
 			cold = cold.addTier(-1);
 		}
@@ -382,8 +394,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		}
 
 		// 雨が降っている
-		if (world.isRaining() && (biome != null && biome.canRain()) && world.canBlockSeeSky(pos.up())) {
-			ret++;
+		if (!hasRoof(world, pos)) {
+			int offset = WeatherChecker.getHumOffset(world.provider.getDimension(), world.provider.doesWaterVaporize());
+			ret += offset;
 		}
 		/*
 		 * blockの値
@@ -441,7 +454,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 
 		// biomeベース通気 -> 屋内ではNORMALになる
 		if (!hasRoof(world, pos)) {
-			if (pos.getY() > 170) {
+			if (pos.getY() > 135) {
 				air = DCAirflow.WIND;
 				hasWind = true;
 				hasBlow = true;
@@ -490,14 +503,19 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			return DCAirflow.WIND;
 		}
 		if (count > 2) {
+			DCAirflow ret = air;
 			if (hasWind) {
-				if (world.getThunderStrength(1.0F) > 0.5F) {
-					return DCAirflow.WIND;
+				ret = DCAirflow.FLOW;
+				if (WeatherChecker.getWindOffset(world.provider.getDimension(),
+						world.provider.doesWaterVaporize()) > 0) {
+					ret = DCAirflow.getTypeByID(ret.getID() + 1);
 				}
-				return DCAirflow.FLOW;
 			} else {
-				return air;
+				ret = air;
 			}
+
+			return ret;
+
 		} else {
 			return DCAirflow.TIGHT;
 		}

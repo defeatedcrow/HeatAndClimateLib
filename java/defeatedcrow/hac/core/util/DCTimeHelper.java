@@ -4,15 +4,14 @@ import net.minecraft.world.World;
 
 public class DCTimeHelper {
 
-	private DCTimeHelper() {
-	}
+	private DCTimeHelper() {}
 
 	public static long time(World world) {
 		return world.getWorldInfo().getWorldTime() % 24000L;
 	}
 
 	public static long totalTime(World world) {
-		return world.getWorldInfo().getWorldTotalTime();
+		return world.getTotalWorldTime();
 	}
 
 	public static boolean isDayTime(World world) {
@@ -39,7 +38,8 @@ public class DCTimeHelper {
 
 	/* int上限でカンスト */
 	public static int getDay(World world) {
-		long day = (totalTime(world) / 24000L) + 1;
+		long day = totalTime(world) / 24000L;
+		day++;
 		if (day > Integer.MAX_VALUE)
 			day -= Integer.MAX_VALUE;
 		return (int) day;
