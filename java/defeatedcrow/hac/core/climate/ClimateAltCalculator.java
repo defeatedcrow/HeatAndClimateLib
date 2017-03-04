@@ -110,7 +110,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		} else {
 			int offset = WeatherChecker.getTempOffset(world.provider.getDimension(),
 					world.provider.doesWaterVaporize());
-			if (offset > 0 && DCTimeHelper.isDayTime(world)) {
+			if (offset < 0 || DCTimeHelper.isDayTime(world)) {
 				hot = temp.addTier(offset);
 			}
 		}

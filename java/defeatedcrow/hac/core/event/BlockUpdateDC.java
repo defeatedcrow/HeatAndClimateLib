@@ -11,7 +11,6 @@ import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
-import defeatedcrow.hac.core.DCLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
@@ -81,10 +80,10 @@ public class BlockUpdateDC {
 						if ((clm.getHeat() == DCHeatTier.WARM || clm.getHeat() == DCHeatTier.HOT)
 								&& clm.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
-							DCLogger.debugLog("Grow!");
+							// DCLogger.debugLog("Grow!");
 						} else if (clm.getHeat().getTier() < -1) {
 							event.setCanceled(true);
-							DCLogger.debugLog("Grow Canceled");
+							// DCLogger.debugLog("Grow Canceled");
 						}
 					}
 				}
@@ -102,14 +101,14 @@ public class BlockUpdateDC {
 						world.setBlockState(p, Blocks.PACKED_ICE.getDefaultState(), 2);
 						world.notifyBlockOfStateChange(p, Blocks.PACKED_ICE);
 						event.setCanceled(true);
-						DCLogger.debugLog("Freeze!!");
+						// DCLogger.debugLog("Freeze!!");
 					}
 					event.setCanceled(true);
 				} else if (clm.getHeat().getTier() > 0) {
 					world.setBlockState(p, Blocks.WATER.getDefaultState(), 2);
 					world.notifyBlockOfStateChange(p, Blocks.WATER);
 					event.setCanceled(true);
-					DCLogger.debugLog("Melted");
+					// DCLogger.debugLog("Melted");
 				}
 				/*
 				 * SNOW
@@ -121,7 +120,7 @@ public class BlockUpdateDC {
 				} else if (clm.getHeat().getTier() > 0) {
 					world.setBlockToAir(p);
 					event.setCanceled(true);
-					DCLogger.debugLog("Melted");
+					// DCLogger.debugLog("Melted");
 				}
 			}
 
@@ -136,7 +135,7 @@ public class BlockUpdateDC {
 						world.setBlockState(p, ret, 2);
 						world.notifyBlockOfStateChange(p, ret.getBlock());
 						event.setCanceled(true);
-						DCLogger.debugLog("Update climate change!");
+						// DCLogger.debugLog("Update climate change!");
 					}
 				}
 			}
@@ -154,7 +153,7 @@ public class BlockUpdateDC {
 				world.setBlockState(pos, Blocks.ICE.getDefaultState(), 2);
 				world.notifyBlockOfStateChange(pos, Blocks.ICE);
 				event.setResult(Result.ALLOW);
-				DCLogger.debugLog("Success to freeze!!");
+				// DCLogger.debugLog("Success to freeze!!");
 			}
 		}
 	}

@@ -61,8 +61,8 @@ public class WeatherChecker {
 			if (sunCountMap.containsKey(dim)) {
 				int count = sunCountMap.get(dim);
 				count++;
-				if (count > 30) {
-					count = DCUtil.rand.nextInt(10);
+				if (count > 148) {
+					count = DCUtil.rand.nextInt(100);
 				}
 				sunCountMap.put(dim, count);
 			} else {
@@ -76,7 +76,7 @@ public class WeatherChecker {
 		rainPowerMap.put(dim, rain);
 		rainCountMap.put(dim, countR);
 		sunCountMap.put(dim, countS);
-		DCLogger.debugLog("received data: " + rain + "/" + countR + ", " + countS);
+		DCLogger.debugLog("dim " + dim + " received data: " + rain + "/" + countR + ", " + countS);
 	}
 
 	public static int getTempOffset(int dim, boolean isHell) {
@@ -92,7 +92,7 @@ public class WeatherChecker {
 		if (sunCountMap.containsKey(dim)) {
 			sun = sunCountMap.get(dim);
 		}
-		if (sun > 20 && !isHell) {
+		if (sun > 240 && !isHell) {
 			// 日照り気味
 			return 1;
 		}
@@ -133,7 +133,7 @@ public class WeatherChecker {
 			count = rainCountMap.get(dim);
 		}
 
-		if (count > 3 && rain > 0.25F) {
+		if (count > 2 && rain > 0.25F) {
 			return 1;
 		}
 		if (rain > 0.85F) {
