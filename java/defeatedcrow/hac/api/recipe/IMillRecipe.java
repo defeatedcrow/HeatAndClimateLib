@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 
 /**
- * Climateは不要の臼引きの1:1交換レシピ。<br>
+ * Climate不要の臼引きの1:1交換レシピ。<br>
  * 材料は辞書対応。
  */
 public interface IMillRecipe {

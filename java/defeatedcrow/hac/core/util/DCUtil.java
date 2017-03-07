@@ -30,9 +30,9 @@ public class DCUtil {
 	/*
 	 * stacksize以外の比較
 	 */
-	public static boolean isSameItem(ItemStack i1, ItemStack i2) {
+	public static boolean isSameItem(ItemStack i1, ItemStack i2, boolean nullable) {
 		if (i1 == null || i2 == null || i1.getItem() == null || i2.getItem() == null) {
-			return false;
+			return nullable;
 		} else {
 			if (i1.getItem() == i2.getItem() && i1.getItemDamage() == i2.getItemDamage()) {
 				NBTTagCompound t1 = i1.getTagCompound();
@@ -50,9 +50,9 @@ public class DCUtil {
 	/*
 	 * stacksize以外の比較、ワイルドカード付き
 	 */
-	public static boolean isIntegratedItem(ItemStack i1, ItemStack i2) {
+	public static boolean isIntegratedItem(ItemStack i1, ItemStack i2, boolean nullable) {
 		if (i1 == null || i2 == null || i1.getItem() == null || i2.getItem() == null) {
-			return false;
+			return nullable;
 		} else {
 			if (i1.getItem() == i2.getItem()) {
 				if (i1.getItemDamage() == i2.getItemDamage() || i2.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
@@ -73,7 +73,7 @@ public class DCUtil {
 	 * stackが重ねられるかどうか
 	 */
 	public static boolean isStackable(ItemStack i1, ItemStack i2) {
-		if (isSameItem(i1, i2)) {
+		if (isSameItem(i1, i2, false)) {
 			return i1.stackSize <= (i2.getMaxStackSize() - i2.stackSize);
 		}
 		return false;

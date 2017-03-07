@@ -25,6 +25,7 @@ public class ClimateReceiveTile extends DCTileEntity {
 	protected IClimate current = null;
 	protected DCHeatTier highTemp = DCHeatTier.NORMAL;
 	protected DCHeatTier lowTemp = DCHeatTier.NORMAL;
+	private int count = 1;
 
 	@Override
 	public void updateTile() {
@@ -79,9 +80,13 @@ public class ClimateReceiveTile extends DCTileEntity {
 				remove.clear();
 			}
 
-			if (current != null && lastClimate != current.getClimateInt()) {
-				lastClimate = current.getClimateInt();
-				HaCPacket.INSTANCE.sendToAll(new MessageClimateUpdate(pos, lastClimate));
+			if (count < 0) {
+				if (current != null && lastClimate != current.getClimateInt()) {
+					lastClimate = current.getClimateInt();
+					HaCPacket.INSTANCE.sendToAll(new MessageClimateUpdate(pos, lastClimate));
+				}
+			} else {
+				count--;
 			}
 		}
 	}

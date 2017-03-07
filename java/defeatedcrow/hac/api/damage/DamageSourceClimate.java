@@ -2,6 +2,10 @@ package defeatedcrow.hac.api.damage;
 
 import net.minecraft.util.DamageSource;
 
+/**
+ * 気候によるダメージのDamageSource<br>
+ * 専用死亡メッセージあり
+ */
 public class DamageSourceClimate extends DamageSource {
 
 	public static DamageSourceClimate climateHeatDamage = (new DamageSourceClimate("dcs_heat")).setHeatDamage();

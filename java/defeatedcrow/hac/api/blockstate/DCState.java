@@ -9,7 +9,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 
 /**
- * BlockStateが使いづらかったのでアクセスポイント作った
+ * BlockStateが使いづらかったのでアクセスポイント作った<br>
+ * HaCのBlockが使用するStateの共通クラス、及び便利メソッド
  */
 public class DCState {
 	// int系
@@ -25,7 +26,7 @@ public class DCState {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
 	// side
-	public static final PropertyEnum<EnumSide> SIDE = PropertyEnum.<EnumSide> create("side", EnumSide.class);
+	public static final PropertyEnum<EnumSide> SIDE = PropertyEnum.<EnumSide>create("side", EnumSide.class);
 
 	// crop
 	public static final PropertyInteger STAGE4 = PropertyInteger.create("stage", 0, 3);

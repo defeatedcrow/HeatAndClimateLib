@@ -7,6 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 
+/**
+ * チャーム<br>
+ * プレイヤーのインベントリ上部9スロットにこのインターフェイスを実装したItemが入っていた場合、<br>
+ * チャームであると判定され効果が発動します。
+ */
 public interface IJewelCharm extends IJewel {
 
 	// Defense charm
@@ -35,7 +40,8 @@ public interface IJewelCharm extends IJewel {
 	 * プレイヤーがダメージを与えたときに呼ばれ、アクションを起こす。<br>
 	 * trueの場合、チャームアイテムのダメージ処理を呼ぶ(消費、耐久値減少など)
 	 */
-	boolean onAttacking(EntityPlayer player, EntityLivingBase target, DamageSource source, float damage, ItemStack charm);
+	boolean onAttacking(EntityPlayer player, EntityLivingBase target, DamageSource source, float damage,
+			ItemStack charm);
 
 	// Tool charm
 	/**
@@ -56,7 +62,7 @@ public interface IJewelCharm extends IJewel {
 	/**
 	 * KEY<br>
 	 * プレイヤーがコンフィグで設定したUseキーを押すと呼ばれ、アクションを起こす。<br>
-	 * 
+	 *
 	 * @return
 	 */
 	boolean onUsing(EntityPlayer player, ItemStack charm);
