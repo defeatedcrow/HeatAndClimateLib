@@ -2,6 +2,9 @@ package defeatedcrow.hac.api.energy;
 
 import net.minecraft.util.EnumFacing;
 
+/**
+ * トルクを扱うTileEntityに実装するもの
+ */
 public abstract interface ITorqueDC {
 
 	/* 向きの制御 */

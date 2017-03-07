@@ -37,8 +37,8 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		int j = Math.min(stack.getMetadata(), getMaxMeta());
-		return getNameSuffix() != null && j < getNameSuffix().length ? super.getUnlocalizedName() + "_"
-				+ getNameSuffix()[j] : super.getUnlocalizedName();
+		return getNameSuffix() != null && j < getNameSuffix().length
+				? super.getUnlocalizedName() + "_" + getNameSuffix()[j] : super.getUnlocalizedName();
 	}
 
 	public int getMaxMeta() {
@@ -63,7 +63,8 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 			EntityPlayer player = (EntityPlayer) living;
 			player.getFoodStats().addStats(getFoodAmo(meta), getSaturation(meta));
 			worldIn.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ,
-					SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+					SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F,
+					worldIn.rand.nextFloat() * 0.1F + 0.9F);
 			this.addEffects(stack, worldIn, living);
 			this.dropContainerItem(worldIn, stack, living);
 			--stack.stackSize;
@@ -73,7 +74,8 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target,
+			EnumHand hand) {
 		if (this.addEffects(stack, player.worldObj, target)) {
 			this.dropContainerItem(player.worldObj, stack, player);
 			--stack.stackSize;
@@ -120,6 +122,22 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	public abstract int getFoodAmo(int meta);
 
 	public abstract float getSaturation(int meta);
+
+	@Override
+	public int getHealAmount(ItemStack stack) {
+		if (stack != null && stack.getItem() != null) {
+			return getFoodAmo(stack.getItemDamage());
+		}
+		return super.getHealAmount(stack);
+	}
+
+	@Override
+	public float getSaturationModifier(ItemStack stack) {
+		if (stack != null && stack.getItem() != null) {
+			return getSaturation(stack.getItemDamage());
+		}
+		return super.getSaturationModifier(stack);
+	}
 
 	public List<PotionEffect> getPotionEffect(int meta) {
 		List<PotionEffect> ret = new ArrayList<PotionEffect>();

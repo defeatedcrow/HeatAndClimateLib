@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.item.ItemStack;
 import defeatedcrow.hac.core.util.DCUtil;
+import net.minecraft.item.ItemStack;
 
 public class ConvertTargetList {
 
-	private ConvertTargetList() {
-	}
+	private ConvertTargetList() {}
 
 	private static ArrayList<ItemStack> EXCLUSIONS = new ArrayList<ItemStack>();
 
@@ -30,7 +29,7 @@ public class ConvertTargetList {
 		}
 		boolean f = true;
 		for (ItemStack tar : EXCLUSIONS) {
-			if (DCUtil.isSameItem(item, tar)) {
+			if (DCUtil.isSameItem(item, tar, false)) {
 				f = false;
 			}
 		}
@@ -46,7 +45,7 @@ public class ConvertTargetList {
 		}
 		boolean f = true;
 		for (ItemStack tar : REPLACES.keySet()) {
-			if (DCUtil.isSameItem(item, tar)) {
+			if (DCUtil.isSameItem(item, tar, false)) {
 				f = false;
 			}
 		}

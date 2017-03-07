@@ -47,8 +47,9 @@ public class BlockUpdateDC {
 			// 直接指定の仕様
 			if (block == Blocks.FARMLAND) {
 				DCHumidity hum = ClimateAPI.calculator.getHumidity(world, p, 4, true);
+				DCHumidity hum2 = ClimateAPI.calculator.getHumidity(world, p);
 				// 耕地はWET以上の湿度では湿る
-				if (hum.getID() > 1) {
+				if (hum.getID() > 1 || hum2.getID() > 1) {
 					world.setBlockState(p, block.getStateFromMeta(7), 2);
 					// DCLogger.debugLog("farmland update");
 					event.setCanceled(true);

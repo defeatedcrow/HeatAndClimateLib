@@ -205,7 +205,7 @@ public class FluidCraftRecipe implements IFluidRecipe {
 
 						if (next instanceof ItemStack) {
 							// DCLogger.debugLog("target: item");
-							match = DCUtil.isSameItem((ItemStack) next, slot);
+							match = DCUtil.isSameItem((ItemStack) next, slot, false);
 						} else if (next instanceof String) {
 							// DCLogger.debugLog("target: string " + "[" + (String) next + "]");
 							int target = OreDictionary.getOreID((String) next);

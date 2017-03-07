@@ -2,6 +2,9 @@ package defeatedcrow.hac.api.energy;
 
 import net.minecraft.util.EnumFacing;
 
+/**
+ * トルクを受け取るTileEntityに実装するもの
+ */
 public interface ITorqueReceiver {
 
 	boolean canReceiveTorque(float amount, EnumFacing side);

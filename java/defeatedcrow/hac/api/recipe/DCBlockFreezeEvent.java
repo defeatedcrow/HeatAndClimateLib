@@ -6,6 +6,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.Event.HasResult;
 
+/**
+ * asm挿入用の追加イベント
+ */
 @HasResult
 public class DCBlockFreezeEvent extends Event {
 

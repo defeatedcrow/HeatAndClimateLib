@@ -25,7 +25,7 @@ public class ClimateReceiveTile extends DCTileEntity {
 	protected IClimate current = null;
 	protected DCHeatTier highTemp = DCHeatTier.NORMAL;
 	protected DCHeatTier lowTemp = DCHeatTier.NORMAL;
-	private int count = 3;
+	private int count = 1;
 
 	@Override
 	public void updateTile() {

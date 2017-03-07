@@ -2,17 +2,17 @@ package defeatedcrow.hac.api.recipe;
 
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
  * Climateを条件に進む、1:1交換のレシピ。<br>
- * 材料は辞書対応。
+ * 材料は辞書対応。<br>
  */
 public interface IClimateSmelting {
 

@@ -9,6 +9,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
+/**
+ * asm挿入用の追加イベント
+ */
 @Cancelable
 public class DCBlockUpdateEvent extends Event {
 
