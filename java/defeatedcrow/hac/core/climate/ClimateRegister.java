@@ -15,7 +15,7 @@ import net.minecraftforge.common.BiomeDictionary;
 
 public class ClimateRegister implements IBiomeClimateRegister {
 
-	private Map<Integer, DCClimate> recipes;
+	private static Map<Integer, DCClimate> recipes;
 
 	public ClimateRegister() {
 		this.recipes = new HashMap<Integer, DCClimate>();
@@ -47,17 +47,17 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	}
 
 	private boolean isAlreadyRegistered(int id) {
-		return recipes.containsKey(id);
+		return recipes.containsKey(Integer.valueOf(id));
 	}
 
 	private boolean isAlreadyRegistered(int id, int dim) {
 		int i = dim << 8 + id;
-		return recipes.containsKey(i);
+		return recipes.containsKey(Integer.valueOf(i));
 	}
 
 	private IClimate getClimateFromList(int id) {
-		if (recipes.containsKey(id)) {
-			return recipes.get(id);
+		if (recipes.containsKey(Integer.valueOf(id))) {
+			return recipes.get(Integer.valueOf(id));
 		}
 		return null;
 	}
@@ -139,7 +139,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	@Override
 	public DCHeatTier getHeatTier(int biome) {
 		IClimate clm = getClimateFromList(biome);
-		int id = biome & 255;
+		int id = biome & 127;
 		Biome b = Biome.getBiome(id);
 		if (clm != null) {
 			return clm.getHeat();

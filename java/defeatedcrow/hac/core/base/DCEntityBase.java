@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import defeatedcrow.hac.api.placeable.IItemDropEntity;
 import defeatedcrow.hac.api.placeable.IRapidCollectables;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -39,9 +40,9 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 	private int count = 0;
 	private byte sideInt = 0;
 
-	private static final DataParameter<Integer> AGE = EntityDataManager.<Integer> createKey(DCEntityBase.class,
+	private static final DataParameter<Integer> AGE = EntityDataManager.<Integer>createKey(DCEntityBase.class,
 			DataSerializers.VARINT);
-	private static final DataParameter<EnumFacing> SIDE = EntityDataManager.<EnumFacing> createKey(DCEntityBase.class,
+	private static final DataParameter<EnumFacing> SIDE = EntityDataManager.<EnumFacing>createKey(DCEntityBase.class,
 			DataSerializers.FACING);
 
 	private final Random rand = new Random();
@@ -179,7 +180,7 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 
 	protected void collideWithNearbyEntities() {
 		List<Entity> list = this.worldObj.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox(),
-				EntitySelectors.<Entity> getTeamCollisionPredicate(this));
+				EntitySelectors.<Entity>getTeamCollisionPredicate(this));
 
 		if (!list.isEmpty()) {
 			for (int i = 0; i < list.size(); ++i) {
@@ -274,7 +275,7 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 	}
 
 	protected void dropAsItem(double x, double y, double z) {
-		if (!worldObj.isRemote && this.getDropItem() != null) {
+		if (!worldObj.isRemote && !DCUtil.isEmpty(getDropItem())) {
 			ItemStack item = this.getDropItem();
 			EntityItem drop = new EntityItem(worldObj, x, y, z, item);
 			drop.motionY = 0.025D;
@@ -399,7 +400,7 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 	/* IRapidCollectable */
 	@Override
 	public boolean isCollectable(@Nullable ItemStack item) {
-		return item != null && item.getItem() instanceof ItemSpade;
+		return !DCUtil.isEmpty(item) && item.getItem() instanceof ItemSpade;
 
 	}
 
@@ -410,7 +411,7 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 
 	@Override
 	public boolean doCollect(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack tool) {
-		if (!worldObj.isRemote && this.getDropItem() != null) {
+		if (!worldObj.isRemote && !DCUtil.isEmpty(getDropItem())) {
 			this.dropAndDeath(player.getPosition());
 			return true;
 		}

@@ -9,6 +9,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
+import defeatedcrow.hac.core.util.DCUtil;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
@@ -44,7 +45,7 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 		}
 		output = new ArrayList<ItemStack>();
 		output.add(recipe.getOutput());
-		if (recipe.getSecondary() != null) {
+		if (!DCUtil.isEmpty(recipe.getSecondary())) {
 			output.add(recipe.getSecondary());
 		}
 

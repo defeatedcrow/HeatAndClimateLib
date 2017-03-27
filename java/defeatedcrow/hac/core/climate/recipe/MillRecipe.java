@@ -53,7 +53,7 @@ public class MillRecipe implements IMillRecipe {
 
 	@Override
 	public ItemStack getSecondary() {
-		if (this.secondary != null) {
+		if (!DCUtil.isEmpty(secondary)) {
 			return this.secondary.copy();
 		} else {
 			return null;
@@ -67,7 +67,7 @@ public class MillRecipe implements IMillRecipe {
 
 	@Override
 	public ItemStack getContainerItem(ItemStack item) {
-		if (item == null) {
+		if (DCUtil.isEmpty(item)) {
 			return null;
 		} else if (FluidContainerRegistry.isFilledContainer(item)) {
 			return FluidContainerRegistry.drainFluidContainer(item);
@@ -84,39 +84,46 @@ public class MillRecipe implements IMillRecipe {
 	@Override
 	public boolean matchInput(ItemStack item) {
 		ArrayList<ItemStack> required = new ArrayList<ItemStack>(this.processedInput);
-		if (item != null && item.getItem() != null && !required.isEmpty()) {
+		if (!DCUtil.isEmpty(item) && !required.isEmpty()) {
+			// DCLogger.debugLog("in stonemill debug");
 			Iterator<ItemStack> itr = required.iterator();
-			boolean match = false;
-			while (itr.hasNext() && !match) {
-				match = OreDictionary.itemMatches(itr.next(), item, false);
+			while (itr.hasNext()) {
+				ItemStack next = itr.next();
+				if (DCUtil.isIntegratedItem(item, next, false)) {
+					if (item.stackSize >= next.stackSize) {
+						// DCLogger.debugLog("clear 1");
+						return true;
+					}
+				}
 			}
-			itr = null;
-			return match;
 		}
 		return false;
 	}
 
 	@Override
 	public boolean matchOutput(List<ItemStack> items, ItemStack in, int slotsize) {
+		// DCLogger.debugLog("in stonemill debug 2");
 		if (items != null && !items.isEmpty()) {
 			int req = 3;
 			for (ItemStack get : items) {
-				if (getOutput() == null || DCUtil.isStackable(getOutput(), get)) {
+				if (DCUtil.isEmpty(getOutput()) || DCUtil.isStackable(getOutput(), get)) {
 					req--;
 				}
-				if (getSecondary() == null || DCUtil.isStackable(getSecondary(), get)) {
+				if (DCUtil.isEmpty(getSecondary()) || DCUtil.isStackable(getSecondary(), get)) {
 					req--;
 				}
-				if (getContainerItem(in) == null || DCUtil.isStackable(getContainerItem(in), get)) {
+				if (DCUtil.isEmpty(getContainerItem(in)) || DCUtil.isStackable(getContainerItem(in), get)) {
 					req--;
 				}
 			}
 			if (items.size() <= slotsize - req) {
+				// DCLogger.debugLog("clear 2");
 				return true;
 			} else {
 				return false;
 			}
 		} else {
+			// DCLogger.debugLog("clear 2");
 			return true;
 		}
 	}

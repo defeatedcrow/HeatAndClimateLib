@@ -17,6 +17,7 @@ import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import defeatedcrow.hac.api.placeable.IRapidCollectables;
 import defeatedcrow.hac.api.placeable.ISidedTexture;
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
@@ -263,7 +264,7 @@ public abstract class ClimateCropBase extends Block
 			GrowingStage stage = this.getCurrentStage(thisState);
 			if (stage == GrowingStage.GROWN) {
 				int f = 0;
-				if (player != null && player.getActiveItemStack() != null) {
+				if (player != null && !DCUtil.isEmpty(player.getActiveItemStack())) {
 					f = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getActiveItemStack());
 				}
 				List<ItemStack> crops = this.getCropItems(thisState, f);
@@ -333,7 +334,7 @@ public abstract class ClimateCropBase extends Block
 
 	@Override
 	public boolean isCollectable(ItemStack item) {
-		if (item == null || item.getItem() == null)
+		if (DCUtil.isEmpty(item))
 			return false;
 		// デフォルトではハサミ
 		return item.getItem() instanceof ItemShears;
@@ -375,7 +376,8 @@ public abstract class ClimateCropBase extends Block
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {
-				DCState.STAGE4 });
+				DCState.STAGE4
+		});
 	}
 
 	// drop

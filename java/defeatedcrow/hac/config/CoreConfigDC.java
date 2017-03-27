@@ -43,6 +43,7 @@ public class CoreConfigDC {
 
 	// recipe
 	public static boolean enableVanilla = true;
+	public static boolean harderVanilla = false;
 	public static int updateFrequency = 5;
 	public static boolean disableCustomRecipe = false;
 
@@ -82,6 +83,9 @@ public class CoreConfigDC {
 
 			Property vanilla_block = cfg.get("world setting", "Enable Vanilla Block Recipe", enableVanilla,
 					"Enable climate change of vanilla blocks.");
+
+			Property vanilla_harder = cfg.get("world setting", "Enable Harder Vanilla Block Recipe", harderVanilla,
+					"Enable harder climate recipe of vanilla blocks.");
 
 			Property update_block = cfg.get("world setting", "Set Update Frequency", updateFrequency,
 					"Set the number of the update times per sec.");
@@ -147,6 +151,7 @@ public class CoreConfigDC {
 			showAltTips = alt_tips.getBoolean();
 			charmWarpKey = warp_key.getInt();
 			enableVanilla = vanilla_block.getBoolean();
+			harderVanilla = vanilla_harder.getBoolean();
 			burntFood = burnt_food.getBoolean();
 			showDamageIcon = hud_icon.getBoolean();
 			enableDeepWater = water_cave.getBoolean();

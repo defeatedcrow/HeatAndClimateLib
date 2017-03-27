@@ -23,7 +23,7 @@ public class CommonProxyD {
 	}
 
 	public void loadTE() {
-		TileRegister.load();
+
 	}
 
 	public void loadWorldGen() {}

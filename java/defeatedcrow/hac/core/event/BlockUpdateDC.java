@@ -11,13 +11,16 @@ import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.climate.ThermalInsulationUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
@@ -65,6 +68,15 @@ public class BlockUpdateDC {
 							grow.grow(world, world.rand, p, st);
 						}
 					}
+				} else if (block == Blocks.GRASS) {
+					// DRYかつ高温すぎると枯れてしまう
+					IGrowable grow = (IGrowable) block;
+					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
+						if (clm.getHumidity() == DCHumidity.DRY
+								&& clm.getHeat().getTier() > DCHeatTier.OVEN.getTier()) {
+							event.setCanceled(true);
+						}
+					}
 				} else if (block instanceof IClimateCrop) {
 					// WARMかつWETの場合に成長が促進されるが、バニラ植物ほど加速はしない
 					IGrowable grow = (IGrowable) block;
@@ -74,7 +86,7 @@ public class BlockUpdateDC {
 							grow.grow(world, world.rand, p, st);
 						}
 					}
-				} else if (block != Blocks.DOUBLE_PLANT && block != Blocks.GRASS) {
+				} else if (block != Blocks.DOUBLE_PLANT) {
 					// WARMかつWETの場合に成長が促進され、COLD以下の場合は成長が遅くなる
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
@@ -126,9 +138,10 @@ public class BlockUpdateDC {
 			}
 
 			// レシピ判定
-			else if (CoreConfigDC.enableVanilla && !(block instanceof IClimateObject)) {
+			if (CoreConfigDC.enableVanilla && !(block instanceof IClimateObject)) {
 				IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(block, 1, meta));
-				if (recipe != null && recipe.matchClimate(clm) && recipe.hasPlaceableOutput() == 1) {
+				if (recipe != null && recipe.matchClimate(clm) && recipe.additionalRequire(world, p)
+						&& recipe.hasPlaceableOutput() == 1) {
 					if (recipe.getOutput() != null && recipe.getOutput().getItem() instanceof ItemBlock) {
 						Block retB = Block.getBlockFromItem(recipe.getOutput().getItem());
 						int retM = recipe.getOutput().getMetadata();
@@ -137,6 +150,34 @@ public class BlockUpdateDC {
 						world.notifyBlockOfStateChange(p, ret.getBlock());
 						event.setCanceled(true);
 						// DCLogger.debugLog("Update climate change!");
+					}
+				}
+			}
+
+			// ハードモード
+			if (CoreConfigDC.harderVanilla) {
+				if (clm.getHeat().getTier() >= DCHeatTier.SMELTING.getTier()) {
+					if (clm.getHeat() == DCHeatTier.INFERNO) {
+						// 融解
+						if (st.getMaterial() == Material.ROCK || st.getMaterial() == Material.SAND
+								|| st.getMaterial() == Material.GROUND) {
+							if (!ThermalInsulationUtil.BLOCK_MAP.containsKey(block)) {
+								world.setBlockState(p, Blocks.LAVA.getDefaultState(), 2);
+								world.notifyBlockOfStateChange(p, Blocks.LAVA);
+							}
+						}
+					}
+					// 自然発火
+					if (st.getMaterial().getCanBurn() && world.isAirBlock(p.up())
+							&& block.isFlammable(world, p, EnumFacing.UP)) {
+						world.setBlockState(p.up(), Blocks.FIRE.getDefaultState(), 2);
+						world.notifyBlockOfStateChange(p.up(), Blocks.FIRE);
+					} else if (st.getMaterial() == Material.GRASS) {
+						world.setBlockState(p, Blocks.DIRT.getDefaultState(), 2);
+						world.notifyBlockOfStateChange(p, Blocks.DIRT);
+					} else if (block instanceof BlockDirt) {
+						world.setBlockState(p, Blocks.SAND.getDefaultState(), 2);
+						world.notifyBlockOfStateChange(p, Blocks.SAND);
 					}
 				}
 			}

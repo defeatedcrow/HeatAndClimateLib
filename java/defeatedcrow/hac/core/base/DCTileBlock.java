@@ -15,6 +15,7 @@ import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -81,8 +82,7 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 	}
 
 	@Override
-	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
-	}
+	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {}
 
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
@@ -197,8 +197,8 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {
-				DCState.FACING,
-				DCState.TYPE4 });
+				DCState.FACING, DCState.TYPE4
+		});
 	}
 
 	/* climate */
@@ -231,9 +231,9 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 			int meta = this.getMetaFromState(state);
 			ItemStack check = new ItemStack(this, 1, meta);
 			IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, check);
-			if (recipe != null) {
+			if (recipe != null && recipe.additionalRequire(world, pos)) {
 				ItemStack output = recipe.getOutput();
-				if (output != null && output.getItem() instanceof ItemBlock) {
+				if (!DCUtil.isEmpty(output) && output.getItem() instanceof ItemBlock) {
 					Block ret = ((ItemBlock) output.getItem()).block;
 					IBlockState retS = ret.getStateFromMeta(output.getMetadata());
 					if (world.setBlockState(pos, retS, 2)) {

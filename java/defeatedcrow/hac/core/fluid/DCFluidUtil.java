@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.fluid;
 
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +23,8 @@ public class DCFluidUtil {
 	 */
 	public static boolean onActivateDCTank(TileEntity tile, ItemStack item, World world, IBlockState state,
 			EnumFacing side, EntityPlayer player) {
-		if (item != null && tile != null && item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)
+		if (!DCUtil.isEmpty(item) && tile != null
+				&& item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)
 				&& tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
 			ItemStack copy = new ItemStack(item.getItem(), 1, item.getItemDamage());
 			if (item.getTagCompound() != null)
@@ -75,7 +77,7 @@ public class DCFluidUtil {
 					}
 					tile.markDirty();
 					player.inventory.markDirty();
-					if (ret != null) {
+					if (!DCUtil.isEmpty(ret)) {
 						EntityItem drop = new EntityItem(world, player.posX, player.posY + 0.25D, player.posZ, ret);
 						world.spawnEntityInWorld(drop);
 					}

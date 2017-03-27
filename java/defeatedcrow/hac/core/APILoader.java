@@ -51,6 +51,10 @@ public class APILoader {
 	}
 
 	public static void registerClimate() {
+		// biome
+		// ClimateAPI.register.addBiomeClimate(Biomes.DESERT, DCHeatTier.INFERNO, DCHumidity.DRY, DCAirflow.NORMAL);
+		// ClimateAPI.register.addBiomeClimate(Biomes.HELL, DCHeatTier.INFERNO, DCHumidity.DRY, DCAirflow.NORMAL);
+
 		// heat
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LIT_PUMPKIN, 32767, DCHeatTier.WARM);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.TORCH, 32767, DCHeatTier.HOT);

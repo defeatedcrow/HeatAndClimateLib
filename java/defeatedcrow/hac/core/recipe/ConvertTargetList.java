@@ -24,7 +24,7 @@ public class ConvertTargetList {
 	}
 
 	public static void addExclusing(ItemStack item) {
-		if (item == null || item.getItem() == null) {
+		if (DCUtil.isEmpty(item)) {
 			return;
 		}
 		boolean f = true;
@@ -40,7 +40,7 @@ public class ConvertTargetList {
 	}
 
 	public static void addReplaceTarget(ItemStack item, String name) {
-		if (item == null || item.getItem() == null || name == null) {
+		if (DCUtil.isEmpty(item) || name == null) {
 			return;
 		}
 		boolean f = true;

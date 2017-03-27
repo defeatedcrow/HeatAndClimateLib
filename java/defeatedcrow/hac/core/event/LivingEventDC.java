@@ -164,7 +164,7 @@ public class LivingEventDC {
 					Iterable<ItemStack> items = living.getArmorInventoryList();
 					if (items != null) {
 						for (ItemStack item : items) {
-							if (item != null && item.getItem() instanceof ItemArmor) {
+							if (!DCUtil.isEmpty(item) && item.getItem() instanceof ItemArmor) {
 								ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
 								prev += DamageAPI.armorRegister.getPreventAmount(mat);
 								if (!isCold && EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
@@ -313,10 +313,12 @@ public class LivingEventDC {
 								IClimate clm = ClimateAPI.calculator.getClimate(world, pos);
 								IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm,
 										new ItemStack(block, 1, meta));
-								if (recipe == null || !recipe.matchClimate(clm) || recipe.hasPlaceableOutput() != 1)
+								if (recipe == null || !recipe.matchClimate(clm) || !recipe.additionalRequire(world, pos)
+										|| recipe.hasPlaceableOutput() != 1)
 									continue;
 
-								if (recipe.getOutput() != null && recipe.getOutput().getItem() instanceof ItemBlock) {
+								if (!DCUtil.isEmpty(recipe.getOutput())
+										&& recipe.getOutput().getItem() instanceof ItemBlock) {
 									Block retB = Block.getBlockFromItem(recipe.getOutput().getItem());
 									int retM = recipe.getOutput().getMetadata();
 									IBlockState ret = retB.getStateFromMeta(retM);

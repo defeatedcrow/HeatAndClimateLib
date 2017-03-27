@@ -3,10 +3,11 @@ package defeatedcrow.hac.core.climate.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
 import defeatedcrow.hac.api.recipe.IMillRecipe;
 import defeatedcrow.hac.api.recipe.IMillRecipeRegister;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.util.DCUtil;
+import net.minecraft.item.ItemStack;
 
 public class MillRecipeRegister implements IMillRecipeRegister {
 
@@ -27,7 +28,7 @@ public class MillRecipeRegister implements IMillRecipeRegister {
 
 	@Override
 	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, Object input) {
-		if (input != null && output != null) {
+		if (input != null && !DCUtil.isEmpty(output)) {
 			list.add(new MillRecipe(output, secondary, secondaryChance, input));
 		}
 	}
@@ -52,10 +53,10 @@ public class MillRecipeRegister implements IMillRecipeRegister {
 	@Override
 	public IMillRecipe getRecipe(ItemStack item) {
 		IMillRecipe ret = null;
-		if (list.isEmpty()) {
-		} else {
+		if (!list.isEmpty()) {
 			for (IMillRecipe recipe : list) {
 				if (recipe.matchInput(item)) {
+					// DCLogger.debugLog("get recipe");
 					ret = recipe;
 				}
 			}

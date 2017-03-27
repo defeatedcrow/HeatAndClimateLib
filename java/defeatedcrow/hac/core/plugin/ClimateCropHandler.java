@@ -1,6 +1,7 @@
 package defeatedcrow.hac.core.plugin;
 
 import defeatedcrow.hac.api.cultivate.IClimateCrop;
+import defeatedcrow.hac.core.util.DCUtil;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.block.Block;
@@ -28,7 +29,7 @@ public class ClimateCropHandler implements IRecipeHandler<IClimateCrop> {
 		if (recipe instanceof Block) {
 			IBlockState state = recipe.getGrownState();
 			if (state != null) {
-				if (!recipe.getCropItems(state, 0).isEmpty() && recipe.getSeedItem(state) != null) {
+				if (!recipe.getCropItems(state, 0).isEmpty() && !DCUtil.isEmpty(recipe.getSeedItem(state))) {
 					return true;
 				}
 			}
