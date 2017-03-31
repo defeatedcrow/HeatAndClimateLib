@@ -5,8 +5,7 @@ package defeatedcrow.hac.api.climate;
  */
 public class ClimateAPI {
 
-	private ClimateAPI() {
-	}
+	private ClimateAPI() {}
 
 	public static boolean isLoaded;
 

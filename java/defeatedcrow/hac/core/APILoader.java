@@ -7,16 +7,26 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.cultivate.CropAPI;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.ArmorMaterialRegister;
 import defeatedcrow.hac.core.climate.ClimateAltCalculator;
 import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
+import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.climate.ThermalInsulationUtil;
 import defeatedcrow.hac.core.climate.recipe.ClimateCropRegister;
 import defeatedcrow.hac.core.climate.recipe.ClimateRecipeRegister;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmeltingRegister;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRegister;
 import defeatedcrow.hac.core.climate.recipe.MillRecipeRegister;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.EntityPolarBear;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 
@@ -35,6 +45,7 @@ public class APILoader {
 		RecipeAPI.isLoaded = true;
 
 		DamageAPI.armorRegister = new ArmorMaterialRegister();
+		DamageAPI.resistantData = new MobResistantRegister();
 		DamageAPI.isLoaded = true;
 
 		CropAPI.register = new ClimateCropRegister();
@@ -42,6 +53,7 @@ public class APILoader {
 
 		registerClimate();
 		registerMaterial();
+		registerMobResistant();
 		ThermalInsulationUtil.load();
 	}
 
@@ -51,6 +63,10 @@ public class APILoader {
 	}
 
 	public static void registerClimate() {
+		// biome
+		if (CoreConfigDC.infernalInferno)
+			ClimateAPI.register.addBiomeClimate(Biomes.HELL, -1, DCHeatTier.INFERNO, DCHumidity.DRY, DCAirflow.NORMAL);
+
 		// heat
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LIT_PUMPKIN, 32767, DCHeatTier.WARM);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.TORCH, 32767, DCHeatTier.HOT);
@@ -84,6 +100,16 @@ public class APILoader {
 		ClimateAPI.registerBlock.registerAirBlock(Blocks.LEAVES, 32767, DCAirflow.TIGHT);
 		ClimateAPI.registerBlock.registerAirBlock(Blocks.LEAVES2, 32767, DCAirflow.TIGHT);
 
+	}
+
+	static void registerMobResistant() {
+		DamageAPI.resistantData.registerEntityResistant(EntityVillager.class, 2.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityGolem.class, 2.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityWither.class, 2.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityDragon.class, 2.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntitySheep.class, 1.0F, 3.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityPolarBear.class, 1.0F, 3.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 0.0F, 2.0F);
 	}
 
 }

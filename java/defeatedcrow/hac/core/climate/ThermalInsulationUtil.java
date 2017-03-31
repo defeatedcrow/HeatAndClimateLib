@@ -34,6 +34,7 @@ public class ThermalInsulationUtil {
 
 	public static void load() {
 		BLOCK_MAP.put(Blocks.BRICK_BLOCK, 2);
+		BLOCK_MAP.put(Blocks.NETHER_BRICK, 2);
 		BLOCK_MAP.put(Blocks.STAINED_HARDENED_CLAY, 2);
 		BLOCK_MAP.put(Blocks.HARDENED_CLAY, 2);
 		BLOCK_MAP.put(Blocks.SPONGE, 2);

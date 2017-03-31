@@ -3,6 +3,7 @@ package defeatedcrow.hac.core.base;
 import java.util.ArrayList;
 import java.util.List;
 
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -112,7 +113,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	public void dropContainerItem(World world, ItemStack food, EntityLivingBase living) {
 		if (!world.isRemote && living != null) {
 			ItemStack stack = this.getFoodContainerItem(food);
-			if (stack != null) {
+			if (!DCUtil.isEmpty(stack)) {
 				EntityItem drop = new EntityItem(world, living.posX, living.posY + 0.25D, living.posZ, stack);
 				world.spawnEntityInWorld(drop);
 			}
@@ -125,7 +126,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 
 	@Override
 	public int getHealAmount(ItemStack stack) {
-		if (stack != null && stack.getItem() != null) {
+		if (!DCUtil.isEmpty(stack)) {
 			return getFoodAmo(stack.getItemDamage());
 		}
 		return super.getHealAmount(stack);
@@ -133,7 +134,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 
 	@Override
 	public float getSaturationModifier(ItemStack stack) {
-		if (stack != null && stack.getItem() != null) {
+		if (!DCUtil.isEmpty(stack)) {
 			return getSaturation(stack.getItemDamage());
 		}
 		return super.getSaturationModifier(stack);

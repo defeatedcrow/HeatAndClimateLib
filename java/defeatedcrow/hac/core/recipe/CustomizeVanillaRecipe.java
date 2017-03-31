@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -70,7 +71,7 @@ public class CustomizeVanillaRecipe {
 			if (rec instanceof ShapedRecipes) {
 				ShapedRecipes recipe = (ShapedRecipes) rec;
 				ItemStack output = recipe.getRecipeOutput();
-				if (output != null
+				if (!DCUtil.isEmpty(output)
 						&& containsMatch(false, exclusions.toArray(new ItemStack[exclusions.size()]), output)) {
 					continue;
 				}
@@ -82,7 +83,7 @@ public class CustomizeVanillaRecipe {
 			} else if (rec instanceof ShapelessRecipes) {
 				ShapelessRecipes recipe = (ShapelessRecipes) rec;
 				ItemStack output = recipe.getRecipeOutput();
-				if (output != null
+				if (!DCUtil.isEmpty(output)
 						&& containsMatch(false, exclusions.toArray(new ItemStack[exclusions.size()]), output)) {
 					continue;
 				}
@@ -95,7 +96,7 @@ public class CustomizeVanillaRecipe {
 			if (rec instanceof ShapedOreRecipe) {
 				ShapedOreRecipe recipe = (ShapedOreRecipe) rec;
 				ItemStack output = recipe.getRecipeOutput();
-				if (output != null
+				if (!DCUtil.isEmpty(output)
 						&& containsMatch(false, exclusions.toArray(new ItemStack[exclusions.size()]), output)) {
 					continue;
 				}
@@ -112,7 +113,7 @@ public class CustomizeVanillaRecipe {
 						item = new ItemStack((Block) object, 1, 32767);
 					}
 
-					if (item != null) {
+					if (!DCUtil.isEmpty(item)) {
 						check.add(item);
 					}
 				}
@@ -125,7 +126,7 @@ public class CustomizeVanillaRecipe {
 			} else if (rec instanceof ShapelessOreRecipe) {
 				ShapelessOreRecipe recipe = (ShapelessOreRecipe) rec;
 				ItemStack output = recipe.getRecipeOutput();
-				if (output != null
+				if (!DCUtil.isEmpty(output)
 						&& containsMatch(false, exclusions.toArray(new ItemStack[exclusions.size()]), output)) {
 					continue;
 				}
@@ -142,7 +143,7 @@ public class CustomizeVanillaRecipe {
 						item = new ItemStack((Block) object, 1, 32767);
 					}
 
-					if (item != null) {
+					if (!DCUtil.isEmpty(item)) {
 						check.add(item);
 					}
 				}
@@ -224,7 +225,7 @@ public class CustomizeVanillaRecipe {
 		// ItemStack配列部分の追加
 		// Character、ItemStack/String の順に追加していけば良い。空欄はnullのまま。
 		for (int i = 0; i < x * y; i++) {
-			if (items[i] != null) {
+			if (!DCUtil.isEmpty(items[i])) {
 				String sign = s[i];
 				ItemStack item = items[i].copy();
 				boolean b = false;
@@ -259,7 +260,7 @@ public class CustomizeVanillaRecipe {
 
 		for (ItemStack item : items) {
 			boolean b = false;
-			if (item != null) {
+			if (!DCUtil.isEmpty(item)) {
 				for (Entry<ItemStack, String> entry : replaceTable.entrySet()) {
 					if (itemMatches(entry.getKey(), item, true)) {
 						String oreName = entry.getValue();
@@ -349,7 +350,7 @@ public class CustomizeVanillaRecipe {
 				if ((List<ItemStack>) obj != null && !((List<ItemStack>) obj).isEmpty()) {
 					List<ItemStack> list = (List<ItemStack>) obj;
 					for (ItemStack oreItem : list) {
-						if (oreItem == null || OreDictionary.getOreIDs(oreItem).length == 0)
+						if (DCUtil.isEmpty(oreItem) || OreDictionary.getOreIDs(oreItem).length == 0)
 							continue;
 						int[] id = OreDictionary.getOreIDs(oreItem);
 						if (id != null) {
@@ -418,7 +419,7 @@ public class CustomizeVanillaRecipe {
 				if ((List<ItemStack>) obj != null && !((List<ItemStack>) obj).isEmpty()) {
 					List<ItemStack> list = (List<ItemStack>) obj;
 					for (ItemStack oreItem : list) {
-						if (oreItem == null || OreDictionary.getOreIDs(oreItem).length == 0)
+						if (DCUtil.isEmpty(oreItem) || OreDictionary.getOreIDs(oreItem).length == 0)
 							continue;
 						int[] id = OreDictionary.getOreIDs(oreItem);
 						if (id != null) {
@@ -477,11 +478,8 @@ public class CustomizeVanillaRecipe {
 	}
 
 	public static boolean itemMatches(ItemStack target, ItemStack input, boolean strict) {
-		if (input == null && target != null || input != null && target == null) {
-			return false;
-		}
-		if (input == null && target == null) {
-			return true;
+		if (DCUtil.isEmpty(input) || DCUtil.isEmpty(target)) {
+			return DCUtil.isEmpty(input) && DCUtil.isEmpty(target);
 		}
 		return (target.getItem() == input.getItem()
 				&& ((target.getItemDamage() == OreDictionary.WILDCARD_VALUE && !strict)

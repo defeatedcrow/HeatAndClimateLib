@@ -102,7 +102,7 @@ public class FluidCraftRecipe implements IFluidRecipe {
 
 	@Override
 	public ItemStack getSecondary() {
-		if (this.secondary != null) {
+		if (!DCUtil.isEmpty(secondary)) {
 			return this.secondary.copy();
 		} else {
 			List<ItemStack> ret = getContainerItems(processedInput);
@@ -135,13 +135,13 @@ public class FluidCraftRecipe implements IFluidRecipe {
 			if (items.get(i) instanceof ItemStack) {
 				ItemStack next = (ItemStack) items.get(i);
 				ItemStack cont = null;
-				if (next != null) {
+				if (!DCUtil.isEmpty(next)) {
 					cont = next.getItem().getContainerItem(next);
-					if (cont != null) {
+					if (!DCUtil.isEmpty(cont)) {
 						list.add(cont);
 					} else {
 						cont = FluidContainerRegistry.drainFluidContainer(next);
-						if (cont != null) {
+						if (!DCUtil.isEmpty(cont)) {
 							list.add(cont);
 						}
 					}
@@ -253,10 +253,10 @@ public class FluidCraftRecipe implements IFluidRecipe {
 				boolean b2 = false;
 				boolean b3 = false;
 				for (ItemStack get : items) {
-					if (getOutput() == null || DCUtil.isStackable(getOutput(), get)) {
+					if (!DCUtil.isEmpty(getOutput()) || DCUtil.isStackable(getOutput(), get)) {
 						b2 = true;
 					}
-					if (getSecondary() == null || DCUtil.isStackable(getSecondary(), get)) {
+					if (!DCUtil.isEmpty(getSecondary()) || DCUtil.isStackable(getSecondary(), get)) {
 						b3 = true;
 					}
 				}
@@ -271,9 +271,9 @@ public class FluidCraftRecipe implements IFluidRecipe {
 				if (slotsize > 1) {
 					return true;
 				} else if (slotsize > 0) {
-					return getOutput() == null || getSecondary() == null;
+					return DCUtil.isEmpty(getOutput()) || DCUtil.isEmpty(getSecondary());
 				} else {
-					return getOutput() == null && getSecondary() == null;
+					return DCUtil.isEmpty(getOutput()) && DCUtil.isEmpty(getSecondary());
 				}
 			}
 		}

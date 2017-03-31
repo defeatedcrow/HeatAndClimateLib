@@ -4,6 +4,12 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import defeatedcrow.hac.api.blockstate.DCState;
+import defeatedcrow.hac.api.blockstate.EnumSide;
+import defeatedcrow.hac.api.energy.IWrenchDC;
+import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -21,13 +27,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import defeatedcrow.hac.api.blockstate.DCState;
-import defeatedcrow.hac.api.blockstate.EnumSide;
-import defeatedcrow.hac.api.energy.IWrenchDC;
-import defeatedcrow.hac.core.ClimateCore;
-import defeatedcrow.hac.core.DCLogger;
 
-/* 
+/*
  * トルク系装置のBlockクラス。
  * メタデータは基本的に持たない。
  */
@@ -47,7 +48,7 @@ public abstract class BlockTorqueBase extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			@Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null && heldItem.getItem() instanceof IWrenchDC) {
+		if (!DCUtil.isEmpty(heldItem) && heldItem.getItem() instanceof IWrenchDC) {
 			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileTorqueBase) {
 				((TileTorqueBase) tile).rotateFace();
@@ -123,8 +124,8 @@ public abstract class BlockTorqueBase extends BlockContainer {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {
-				DCState.SIDE,
-				DCState.POWERED });
+				DCState.SIDE, DCState.POWERED
+		});
 
 	}
 }

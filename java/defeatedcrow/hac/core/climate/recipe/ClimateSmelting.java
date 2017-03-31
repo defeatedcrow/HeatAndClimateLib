@@ -12,6 +12,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.placeable.IEntityItem;
 import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -85,7 +86,7 @@ public class ClimateSmelting implements IClimateSmelting {
 
 	@Override
 	public ItemStack getSecondary() {
-		if (this.secondary != null) {
+		if (!DCUtil.isEmpty(secondary)) {
 			return this.secondary.copy();
 		} else {
 			return null;
@@ -116,7 +117,7 @@ public class ClimateSmelting implements IClimateSmelting {
 	@Override
 	public boolean matcheInput(ItemStack item) {
 		ArrayList<ItemStack> required = new ArrayList<ItemStack>(this.processedInput);
-		if (item != null && item.getItem() != null && !required.isEmpty()) {
+		if (!DCUtil.isEmpty(item) && !required.isEmpty()) {
 			Iterator<ItemStack> itr = required.iterator();
 			boolean match = false;
 			while (itr.hasNext() && !match) {
@@ -182,7 +183,7 @@ public class ClimateSmelting implements IClimateSmelting {
 
 	@Override
 	public int recipeFrequency() {
-		if (processedInput.isEmpty() || processedInput.get(0) == null)
+		if (processedInput.isEmpty() || DCUtil.isEmpty(processedInput.get(0)))
 			return 2;
 		ItemStack i = processedInput.get(0);
 		if (i.getItem() instanceof IClimateObject) {

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -109,10 +110,10 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	/** itemの減少数を返す */
 	public int insertResult(ItemStack item) {
-		if (item == null || item.getItem() == null)
+		if (DCUtil.isEmpty(item))
 			return 0;
 		for (int i = 1; i < this.getSizeInventory(); i++) {
-			if (this.getStackInSlot(i) == null) {
+			if (DCUtil.isEmpty(getStackInSlot(i))) {
 				this.incrStackInSlot(i, item.copy());
 				return item.stackSize;
 			} else {
@@ -150,7 +151,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	public List<ItemStack> getInputs() {
 		List<ItemStack> ret = new ArrayList<ItemStack>();
-		if (inv[0] != null)
+		if (!DCUtil.isEmpty(inv[0]))
 			ret.add(inv[0]);
 		return ret;
 	}
@@ -158,7 +159,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	public List<ItemStack> getOutputs() {
 		List<ItemStack> ret = new ArrayList<ItemStack>();
 		for (int i = 1; i < this.getSizeInventory(); i++) {
-			if (inv[i] != null)
+			if (!DCUtil.isEmpty(inv[i]))
 				ret.add(inv[i]);
 		}
 		return ret;
@@ -183,7 +184,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	public ItemStack decrStackSize(int i, int num) {
 		if (i < 0 || i >= this.getSizeInventory())
 			return null;
-		if (this.inv[i] != null) {
+		if (!DCUtil.isEmpty(inv[i])) {
 			ItemStack itemstack;
 
 			if (this.inv[i].stackSize <= num) {
@@ -209,7 +210,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 		} else {
 			this.inv[i] = stack;
 
-			if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
+			if (!DCUtil.isEmpty(stack) && stack.stackSize > this.getInventoryStackLimit()) {
 				stack.stackSize = this.getInventoryStackLimit();
 			}
 		}
@@ -281,7 +282,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	// 追加メソッド
 	public static int isItemStackable(ItemStack target, ItemStack current) {
-		if (target == null || current == null)
+		if (DCUtil.isEmpty(target) || DCUtil.isEmpty(current))
 			return 0;
 
 		if (target.getItem() == current.getItem() && target.getMetadata() == current.getMetadata()
@@ -298,8 +299,8 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	}
 
 	public void incrStackInSlot(int i, ItemStack input) {
-		if (i < this.getSizeInventory() && input != null) {
-			if (this.inv[i] != null) {
+		if (i < this.getSizeInventory() && !DCUtil.isEmpty(input)) {
+			if (!DCUtil.isEmpty(inv[i])) {
 				if (this.inv[i].getItem() == input.getItem() && this.inv[i].getMetadata() == input.getMetadata()) {
 					this.inv[i].stackSize += input.stackSize;
 					if (this.inv[i].stackSize > this.getInventoryStackLimit()) {
@@ -316,7 +317,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	public ItemStack removeStackFromSlot(int i) {
 		i = MathHelper.clamp_int(i, 0, this.getSizeInventory() - 1);
 		if (i < inv.length) {
-			if (this.inv[i] != null) {
+			if (!DCUtil.isEmpty(inv[i])) {
 				ItemStack itemstack = this.inv[i];
 				this.inv[i] = null;
 				return itemstack;
@@ -425,7 +426,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < inv.length; ++i) {
-			if (inv[i] != null) {
+			if (!DCUtil.isEmpty(inv[i])) {
 				NBTTagCompound tag1 = new NBTTagCompound();
 				tag1.setByte("Slot", (byte) i);
 				inv[i].writeToNBT(tag1);
@@ -447,7 +448,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < inv.length; ++i) {
-			if (inv[i] != null) {
+			if (!DCUtil.isEmpty(inv[i])) {
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				nbttagcompound1.setByte("Slot", (byte) i);
 				inv[i].writeToNBT(nbttagcompound1);

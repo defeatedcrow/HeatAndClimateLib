@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import defeatedcrow.hac.api.magic.CharmType;
+import defeatedcrow.hac.api.magic.IJewelCharm;
+import defeatedcrow.hac.api.placeable.IRapidCollectables;
+import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,11 +22,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import defeatedcrow.hac.api.magic.CharmType;
-import defeatedcrow.hac.api.magic.IJewelCharm;
-import defeatedcrow.hac.api.placeable.IRapidCollectables;
-import defeatedcrow.hac.core.DCLogger;
-import defeatedcrow.hac.core.util.DCUtil;
 
 public class ClickEventDC {
 
@@ -38,7 +38,7 @@ public class ClickEventDC {
 				DCLogger.debugLog("mining charm");
 				IJewelCharm charm = ((IJewelCharm) entry.getValue().getItem());
 				if (charm.onToolUsing(event.getPlayer(), event.getPos(), event.getState(), entry.getValue())) {
-					if (charm.consumeCharmItem(entry.getValue()) == null) {
+					if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
 						event.getPlayer().inventory.setInventorySlotContents(entry.getKey(), null);
 						event.getPlayer().inventory.markDirty();
 						event.getPlayer().playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
@@ -89,7 +89,7 @@ public class ClickEventDC {
 	public void onRightClickAir(PlayerInteractEvent.RightClickItem event) {
 		EntityPlayer player = event.getEntityPlayer();
 		ItemStack held = event.getItemStack();
-		if (player != null && player.isSneaking() && held != null && !player.worldObj.isRemote) {
+		if (player != null && player.isSneaking() && !DCUtil.isEmpty(held) && !player.worldObj.isRemote) {
 			RayTraceResult ray = DCUtil.getRayTrace(player.worldObj, player);
 			BlockPos pos = null;
 			if (ray == null) {

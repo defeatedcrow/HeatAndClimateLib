@@ -11,7 +11,7 @@
  * 基本はトルク(Torque)の形でエネルギーを伝えます。必要に応じて回転力やピストン動力に変換されます。<br>
  * インターフェイスでは加速度(acceleration)にしか干渉できません。スピードは、加速度に応じて常に変動します。
  */
-@API(apiVersion = "1.0.3", owner = "dcs_climate|lib", provides = "DCsHaCAPI|energy")
+@API(apiVersion = "1.0.4", owner = "dcs_climate|lib", provides = "DCsHaCAPI|energy")
 package defeatedcrow.hac.api.energy;
 
 import net.minecraftforge.fml.common.API;

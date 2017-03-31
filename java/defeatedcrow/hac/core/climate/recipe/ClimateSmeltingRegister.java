@@ -11,6 +11,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.IClimateSmeltingRegister;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
 
 public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
@@ -85,8 +86,8 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	@Override
 	public void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air,
 			float secondaryChance, boolean cooling, Object input) {
-		List<ClimateSmelting> list = getRecipeList(heat);
-		if (input != null && output != null && heat != null) {
+		if (input != null && !DCUtil.isEmpty(output) && heat != null) {
+			List<ClimateSmelting> list = getRecipeList(heat);
 			list.add(new ClimateSmelting(output, secondary, heat, hum, air, secondaryChance, cooling, input));
 		}
 	}
@@ -94,8 +95,8 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	@Override
 	public void addRecipe(ItemStack output, DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling,
 			Object input) {
-		List<ClimateSmelting> list = getRecipeList(heat);
-		if (input != null && output != null && heat != null) {
+		if (input != null && !DCUtil.isEmpty(output) && heat != null) {
+			List<ClimateSmelting> list = getRecipeList(heat);
 			list.add(new ClimateSmelting(output, null, heat, hum, air, 1.0F, false, input));
 		}
 	}
@@ -122,8 +123,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	public IClimateSmelting getRecipe(IClimate clm, ItemStack item) {
 		List<ClimateSmelting> list = getRecipeList(clm.getHeat());
 		IClimateSmelting ret = null;
-		if (list.isEmpty()) {
-		} else {
+		if (list.isEmpty()) {} else {
 			for (IClimateSmelting recipe : list) {
 				if (recipe.matcheInput(item) && recipe.matchClimate(clm)) {
 					ret = recipe;
@@ -136,8 +136,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 		if (ret == null) {
 			if (clm.getHeat() == DCHeatTier.NORMAL) {
 				List<ClimateSmelting> list2 = getRecipeList(DCHeatTier.WARM);
-				if (list2.isEmpty()) {
-				} else {
+				if (list2.isEmpty()) {} else {
 					for (IClimateSmelting recipe : list2) {
 						if (recipe.matcheInput(item) && recipe.matchClimate(clm)) {
 							ret = recipe;
@@ -147,8 +146,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 			} else {
 				int i = clm.getHeat().getTier() < 0 ? 1 : -1;
 				List<ClimateSmelting> list2 = getRecipeList(clm.getHeat().addTier(i));
-				if (list2.isEmpty()) {
-				} else {
+				if (list2.isEmpty()) {} else {
 					for (IClimateSmelting recipe : list2) {
 						if (recipe.matcheInput(item) && recipe.matchClimate(clm)) {
 							ret = recipe;

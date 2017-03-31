@@ -3,16 +3,16 @@ package defeatedcrow.hac.core.packet;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import defeatedcrow.hac.api.magic.CharmType;
+import defeatedcrow.hac.api.magic.IJewelCharm;
+import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import defeatedcrow.hac.api.magic.CharmType;
-import defeatedcrow.hac.api.magic.IJewelCharm;
-import defeatedcrow.hac.core.DCLogger;
-import defeatedcrow.hac.core.util.DCUtil;
 
 public class MHandlerCharmKey implements IMessageHandler<MessageCharmKey, IMessage> {
 
@@ -28,7 +28,7 @@ public class MHandlerCharmKey implements IMessageHandler<MessageCharmKey, IMessa
 			for (Entry<Integer, ItemStack> entry : charms.entrySet()) {
 				IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
 				if (charm.onUsing(player, entry.getValue())) {
-					if (charm.consumeCharmItem(entry.getValue()) == null) {
+					if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
 						player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 						player.inventory.setInventorySlotContents(entry.getKey(), null);
 						player.inventory.markDirty();

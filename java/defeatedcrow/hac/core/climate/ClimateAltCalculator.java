@@ -1,6 +1,7 @@
 package defeatedcrow.hac.core.climate;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.ClimateCalculateEvent;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
@@ -61,7 +62,11 @@ public class ClimateAltCalculator implements IClimateCalculator {
 
 		int code = (air.getID() << 6) + (hum.getID() << 4) + temp.getID();
 		IClimate clm = ClimateAPI.register.getClimateFromInt(code);
-		return clm;
+
+		ClimateCalculateEvent event = new ClimateCalculateEvent(world, pos, clm);
+		IClimate result = event.result();
+
+		return result == null ? clm : result;
 	}
 
 	@Override
@@ -472,7 +477,8 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			for (int z = pos.getZ() - r; z <= pos.getZ() + r; z++) {
 				for (int y = pos.getY() - h1; y <= pos.getY() + h1; y++) {
 					BlockPos p2 = new BlockPos(x, y, z);
-					Block block = world.getBlockState(p2).getBlock();
+					IBlockState s2 = world.getBlockState(p2);
+					Block block = s2.getBlock();
 					int m = block.getMetaFromState(world.getBlockState(p2));
 					if (block instanceof IAirflowTile) {
 						DCAirflow current = ((IAirflowTile) block).getAirflow(world, pos, p2);
@@ -495,6 +501,8 @@ public class ClimateAltCalculator implements IClimateCalculator {
 									hasBlow = true;
 							}
 						}
+					} else if (s2.getMaterial() == Material.PLANTS || s2.getMaterial() == Material.VINE) {
+						count++;
 					}
 				}
 			}
@@ -525,7 +533,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		BlockPos pos2 = pos.up();
 		int lim = pos.getY() + 16;
 		if (world.provider.getHasNoSky()) {
-			lim = pos.getY() + 5;
+			lim = pos.getY() + 12;
 		}
 		while (pos2.getY() < lim && pos2.getY() < world.getActualHeight()) {
 			IBlockState state = world.getBlockState(pos2);

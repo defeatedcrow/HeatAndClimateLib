@@ -15,6 +15,7 @@ import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -42,7 +43,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-//TESR持ちブロックのベース
+// TESR持ちブロックのベース
 public class DCFacelessTileBlock extends BlockContainer implements IClimateObject, INameSuffix {
 
 	protected Random rand = new Random();
@@ -74,8 +75,7 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 	}
 
 	@Override
-	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
-	}
+	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
@@ -186,7 +186,8 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {
-				DCState.TYPE16 });
+				DCState.TYPE16
+		});
 	}
 
 	/* climate */
@@ -219,9 +220,9 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 			int meta = this.getMetaFromState(state);
 			ItemStack check = new ItemStack(this, 1, meta);
 			IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, check);
-			if (recipe != null) {
+			if (recipe != null && recipe.additionalRequire(world, pos)) {
 				ItemStack output = recipe.getOutput();
-				if (output != null && output.getItem() instanceof ItemBlock) {
+				if (!DCUtil.isEmpty(output) && output.getItem() instanceof ItemBlock) {
 					Block ret = ((ItemBlock) output.getItem()).block;
 					IBlockState retS = ret.getStateFromMeta(output.getMetadata());
 					if (world.setBlockState(pos, retS, 2)) {

@@ -6,12 +6,10 @@ import java.util.Map;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.damage.ClimateDamageEvent;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.damage.DamageSourceClimate;
 import defeatedcrow.hac.api.magic.IJewelCharm;
-import defeatedcrow.hac.api.recipe.IClimateSmelting;
-import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.packet.HaCPacket;
@@ -24,21 +22,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -48,6 +37,8 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -160,11 +151,38 @@ public class LivingEventDC {
 					}
 
 					/* damage判定 */
+					// mobごとの特性
+					if (isCold) {
+						float adj = DamageAPI.resistantData.getColdResistant(living);
+						if (adj != 0F) {
+							prev += adj;
+						}
+						if (living.isImmuneToFire()) {
+							prev -= 2.0F;
+						}
+						if (living.isEntityUndead()) {
+							prev += 2.0F;
+						}
+					} else {
+						float adj = DamageAPI.resistantData.getHeatResistant(living);
+						if (adj != 0F) {
+							prev += adj;
+						}
+						if (living.isPotionActive(DCPotion.fire_reg)) {
+							prev += 2.0F;
+						}
+						if (living.isImmuneToFire()) {
+							prev += CoreConfigDC.infernalInferno ? 6.0F : 2.0F;
+						} else if (heat.getTier() > DCHeatTier.OVEN.getTier() && living.isEntityUndead()) {
+							prev -= 2.0F;
+						}
+					}
+
 					// 防具の計算
 					Iterable<ItemStack> items = living.getArmorInventoryList();
 					if (items != null) {
 						for (ItemStack item : items) {
-							if (item != null && item.getItem() instanceof ItemArmor) {
+							if (!DCUtil.isEmpty(item) && item.getItem() instanceof ItemArmor) {
 								ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
 								prev += DamageAPI.armorRegister.getPreventAmount(mat);
 								if (!isCold && EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
@@ -177,39 +195,13 @@ public class LivingEventDC {
 					}
 					items = null;
 
-					// mobごとの特性
-					if (isCold) {
-						if (living.isImmuneToFire()) {
-							prev -= 2.0F;
-						}
-						if (living.isEntityUndead() || living instanceof EntityEnderman || living instanceof EntitySheep
-								|| living instanceof EntityPolarBear) {
-							prev += 2.0F;
-						}
-					} else {
-						if (living.isPotionActive(DCPotion.fire_reg)) {
-							prev += 2.0F;
-						}
-						if (living.isImmuneToFire()) {
-							prev += 2.0F;
-						} else if (heat.getTier() > DCHeatTier.OVEN.getTier() && living.isEntityUndead()) {
-							prev -= 2.0F;
-						}
-					}
-
-					// 村人補正
-					if (living instanceof EntityVillager || living instanceof EntityGolem) {
-						prev += 2.0F;
-					} else if (living instanceof EntityAnimal) {
-						prev += 1.0F;
-					}
-
-					// boss
-					if (living instanceof EntityDragon || living instanceof EntityWither) {
-						prev += 2.0F;
-					}
-
 					dam -= prev;
+
+					DamageSourceClimate source = isCold ? DamageSourceClimate.climateColdDamage
+							: DamageSourceClimate.climateHeatDamage;
+					ClimateDamageEvent fireEvent = new ClimateDamageEvent(living, source, heat, dam);
+					float result = fireEvent.result();
+					dam = result;
 
 					// 2.0F未満の場合はとどめを刺さない
 					if (dam < 2.0F && living.getHealth() < 1.0F) {
@@ -217,13 +209,7 @@ public class LivingEventDC {
 					}
 
 					if (dam >= 1.0F) {
-						if (isCold) {
-							living.attackEntityFrom(DamageSourceClimate.climateColdDamage, dam);
-							// DCLogger.debugLog("cold dam:" + dam);
-						} else {
-							living.attackEntityFrom(DamageSourceClimate.climateHeatDamage, dam);
-							// DCLogger.debugLog("heat dam:" + dam);
-						}
+						living.attackEntityFrom(source, dam);
 					}
 				}
 			}
@@ -275,54 +261,48 @@ public class LivingEventDC {
 	}
 
 	private int localCount = 0;
+	private int count2 = 20;
 
 	// Block Update をプレイヤーに肩代わりさせる
 	public void playerChunkUpdate(LivingEvent.LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 
 		if (CoreConfigDC.enableVanilla && (entity instanceof EntityPlayer)) {
+			if (count2 > 0) {
+				count2--;
+				return;
+			}
 			EntityPlayer player = (EntityPlayer) event.getEntity();
 			World world = player.worldObj;
 			int count = DCTimeHelper.getCount2(world);
 
-			int tick = (count >> 4) & 15;
+			int tick = count & 255;
 
 			if (tick != localCount) {
 				localCount = tick;
+				// DCLogger.debugLog("update tick" + tick);
 				// 3x3回やる
 				int i = 0;
 				while (i < 3) {
-					int cx = player.chunkCoordX - 4 + world.rand.nextInt(9);
-					int cz = player.chunkCoordZ - 4 + world.rand.nextInt(9);
+					int cx = player.chunkCoordX - 3 + world.rand.nextInt(7);
+					int cz = player.chunkCoordZ - 3 + world.rand.nextInt(7);
 					if (world.getChunkFromChunkCoords(cx, cz).isLoaded()) {
 						int j = 0;
 						while (j < 3) {
 							int x = (cx << 4) + world.rand.nextInt(16);
 							int z = (cz << 4) + world.rand.nextInt(16);
-							int y = world.provider.getActualHeight();
-							for (int y1 = 1; y1 <= y; y1++) {
+							int y = world.provider.getHasNoSky() ? MathHelper.floor_double(player.posY) + 5
+									: world.provider.getActualHeight();
+							for (int y1 = y; y1 > 1; y1--) {
 								BlockPos pos = new BlockPos(x, y1, z);
-								if (world.rand.nextBoolean())
-									continue;
-								if (world.isAirBlock(pos)) {
+								if (world.isAirBlock(pos) || world.getBlockState(pos).getMaterial().isLiquid()) {
 									continue;
 								}
+								// 表面のみ
 								IBlockState state = world.getBlockState(pos);
 								Block block = state.getBlock();
-								int meta = block.getMetaFromState(state);
-								IClimate clm = ClimateAPI.calculator.getClimate(world, pos);
-								IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm,
-										new ItemStack(block, 1, meta));
-								if (recipe == null || !recipe.matchClimate(clm) || recipe.hasPlaceableOutput() != 1)
-									continue;
-
-								if (recipe.getOutput() != null && recipe.getOutput().getItem() instanceof ItemBlock) {
-									Block retB = Block.getBlockFromItem(recipe.getOutput().getItem());
-									int retM = recipe.getOutput().getMetadata();
-									IBlockState ret = retB.getStateFromMeta(retM);
-									world.setBlockState(pos, ret, 2);
-									world.notifyBlockOfStateChange(pos, ret.getBlock());
-								}
+								world.scheduleUpdate(pos, block, 200);
+								break;
 							}
 							j++;
 						}
@@ -330,6 +310,18 @@ public class LivingEventDC {
 					i++;
 				}
 
+			}
+		}
+	}
+
+	/* spawn制御 */
+	public void spawnEvent(LivingSpawnEvent.CheckSpawn event) {
+		if (CoreConfigDC.customizedSpawn && event.getEntityLiving() != null
+				&& event.getEntityLiving() instanceof IMob) {
+			float i1 = 64F - event.getY();
+			int abs = (int) Math.abs(i1);
+			if (event.getWorld().rand.nextInt(64) > i1) {
+				event.setResult(Result.DENY);
 			}
 		}
 	}

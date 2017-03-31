@@ -79,7 +79,7 @@ public class RenderTempHUDEvent {
 						Iterable<ItemStack> items = player.getArmorInventoryList();
 						if (items != null) {
 							for (ItemStack item : items) {
-								if (item != null && item.getItem() instanceof ItemArmor) {
+								if (!DCUtil.isEmpty(item) && item.getItem() instanceof ItemArmor) {
 									ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
 									prev2 += DamageAPI.armorRegister.getPreventAmount(mat);
 									if (tier > 0 && EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,

@@ -27,11 +27,15 @@ public class DCUtil {
 
 	public static Random rand = new Random();
 
+	public static boolean isEmpty(ItemStack item) {
+		return item == null || item.getItem() == null;
+	}
+
 	/*
 	 * stacksize以外の比較
 	 */
 	public static boolean isSameItem(ItemStack i1, ItemStack i2, boolean nullable) {
-		if (i1 == null || i2 == null || i1.getItem() == null || i2.getItem() == null) {
+		if (isEmpty(i1) || isEmpty(i2)) {
 			return nullable;
 		} else {
 			if (i1.getItem() == i2.getItem() && i1.getItemDamage() == i2.getItemDamage()) {
@@ -51,7 +55,7 @@ public class DCUtil {
 	 * stacksize以外の比較、ワイルドカード付き
 	 */
 	public static boolean isIntegratedItem(ItemStack i1, ItemStack i2, boolean nullable) {
-		if (i1 == null || i2 == null || i1.getItem() == null || i2.getItem() == null) {
+		if (isEmpty(i1) || isEmpty(i2)) {
 			return nullable;
 		} else {
 			if (i1.getItem() == i2.getItem()) {
@@ -111,7 +115,7 @@ public class DCUtil {
 			return ret;
 		for (int i = 9; i < 18; i++) {
 			ItemStack check = player.inventory.getStackInSlot(i);
-			if (check != null && check.getItem() != null && check.getItem() instanceof IJewelCharm) {
+			if (!isEmpty(check) && check.getItem() instanceof IJewelCharm) {
 				IJewelCharm charm = (IJewelCharm) check.getItem();
 				int m = check.getItemDamage();
 				if (type == null || charm.getType(m) == type)
