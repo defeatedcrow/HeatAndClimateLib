@@ -137,6 +137,7 @@ public class BlockUpdateDC {
 				}
 			}
 
+			boolean f2 = false;
 			// レシピ判定
 			if (CoreConfigDC.enableVanilla && !(block instanceof IClimateObject)) {
 				IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(block, 1, meta));
@@ -149,6 +150,7 @@ public class BlockUpdateDC {
 						world.setBlockState(p, ret, 2);
 						world.notifyBlockOfStateChange(p, ret.getBlock());
 						event.setCanceled(true);
+						f2 = true;
 						// DCLogger.debugLog("Update climate change!");
 					}
 				}
@@ -157,11 +159,13 @@ public class BlockUpdateDC {
 			// ハードモード
 			if (CoreConfigDC.harderVanilla) {
 				if (clm.getHeat().getTier() >= DCHeatTier.SMELTING.getTier()) {
+
 					if (clm.getHeat() == DCHeatTier.INFERNO) {
 						// 融解
 						if (st.getMaterial() == Material.ROCK || st.getMaterial() == Material.SAND
 								|| st.getMaterial() == Material.GROUND) {
-							if (!ThermalInsulationUtil.BLOCK_MAP.containsKey(block)) {
+							if (st.getBlock() != Blocks.OBSIDIAN
+									&& !ThermalInsulationUtil.BLOCK_MAP.containsKey(block)) {
 								world.setBlockState(p, Blocks.LAVA.getDefaultState(), 2);
 								world.notifyBlockOfStateChange(p, Blocks.LAVA);
 							}
@@ -175,9 +179,21 @@ public class BlockUpdateDC {
 					} else if (st.getMaterial() == Material.GRASS) {
 						world.setBlockState(p, Blocks.DIRT.getDefaultState(), 2);
 						world.notifyBlockOfStateChange(p, Blocks.DIRT);
+						f2 = true;
 					} else if (block instanceof BlockDirt) {
 						world.setBlockState(p, Blocks.SAND.getDefaultState(), 2);
 						world.notifyBlockOfStateChange(p, Blocks.SAND);
+						f2 = true;
+					}
+				}
+			}
+
+			if (f2) {
+				for (EnumFacing face : EnumFacing.VALUES) {
+					if (!world.isAirBlock(p.offset(face))) {
+						Block target = world.getBlockState(p.offset(face)).getBlock();
+						if (!world.isUpdateScheduled(p.offset(face), target))
+							world.scheduleUpdate(p.offset(face), target, 600 + world.rand.nextInt(600));
 					}
 				}
 			}

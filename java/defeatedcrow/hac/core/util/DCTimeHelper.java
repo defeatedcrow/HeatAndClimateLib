@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.util;
 
+import defeatedcrow.hac.config.CoreConfigDC;
 import net.minecraft.world.World;
 
 public class DCTimeHelper {
@@ -63,7 +64,8 @@ public class DCTimeHelper {
 	}
 
 	public static int getCount2(World world) {
-		long i = (totalTime(world) % 256L);
+		long f = 1200L / CoreConfigDC.updateFrequency;
+		long i = (totalTime(world) / f);
 		return (int) i;
 	}
 

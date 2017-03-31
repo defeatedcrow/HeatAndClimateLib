@@ -43,7 +43,6 @@ public class CoreConfigDC {
 
 	// recipe
 	public static boolean enableVanilla = true;
-	public static boolean harderVanilla = false;
 	public static int updateFrequency = 5;
 	public static boolean disableCustomRecipe = false;
 
@@ -51,6 +50,12 @@ public class CoreConfigDC {
 	public static boolean enableFreezeDrop = true;
 	public static boolean enableDeepWater = true;
 	public static boolean enableUnderLake = true;
+	public static boolean customizedSpawn = false;
+
+	// hardmode
+	public static boolean harderVanilla = false;
+	public static boolean infernalInferno = false;
+	public static boolean enableSuffocation = false;
 
 	public void load(Configuration cfg) {
 
@@ -65,6 +70,7 @@ public class CoreConfigDC {
 					"This mod is not using the Forge KeyHandler. Please setting it in here.");
 			cfg.addCustomCategoryComment("entity setting", "This setting is for entities.");
 			cfg.addCustomCategoryComment("setting", "This setting is for game play.");
+			cfg.addCustomCategoryComment("hardmode setting", "This may destroy your game play. Be careful!");
 
 			Property debug = cfg.get("debug setting", "Debug Mode Pass", debugPass,
 					"Input the password for starting in debug mode. This is only for authers.");
@@ -83,9 +89,6 @@ public class CoreConfigDC {
 
 			Property vanilla_block = cfg.get("world setting", "Enable Vanilla Block Recipe", enableVanilla,
 					"Enable climate change of vanilla blocks.");
-
-			Property vanilla_harder = cfg.get("world setting", "Enable Harder Vanilla Block Recipe", harderVanilla,
-					"Enable harder climate recipe of vanilla blocks.");
 
 			Property update_block = cfg.get("world setting", "Set Update Frequency", updateFrequency,
 					"Set the number of the update times per sec.");
@@ -145,13 +148,24 @@ public class CoreConfigDC {
 			Property disableCustom = cfg.get("setting", "Disable Recipe Customize", disableCustomRecipe,
 					"Disable replacing the recipe with the ore dictionary.");
 
+			Property vanilla_harder = cfg.get("hardmode setting", "Enable Harder Vanilla Block Recipe", harderVanilla,
+					"Enable harder climate recipe of vanilla blocks.");
+
+			Property inferno = cfg.get("hardmode setting", "Infernal Nether world", infernalInferno,
+					"Set the temperature of Nether to maximum.");
+
+			// Property suffocation = cfg.get("hardmode setting", "Enable Suffocation Damage", enableSuffocation,
+			// "Enable the suffocation effect when creatures or players in tight space.");
+
+			Property spawn = cfg.get("hardmode setting", "Customized Enemy Spawn Rate", customizedSpawn,
+					"Enemy increases at low altitude and decreases at high altitude.");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
 			showAltTips = alt_tips.getBoolean();
 			charmWarpKey = warp_key.getInt();
 			enableVanilla = vanilla_block.getBoolean();
-			harderVanilla = vanilla_harder.getBoolean();
 			burntFood = burnt_food.getBoolean();
 			showDamageIcon = hud_icon.getBoolean();
 			enableDeepWater = water_cave.getBoolean();
@@ -160,6 +174,10 @@ public class CoreConfigDC {
 			waterFix = water.getBoolean();
 			wall = enableWall.getBoolean();
 			disableCustomRecipe = disableCustom.getBoolean();
+			harderVanilla = vanilla_harder.getBoolean();
+			infernalInferno = inferno.getBoolean();
+			// enableSuffocation = suffocation.getBoolean();
+			customizedSpawn = spawn.getBoolean();
 
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)
@@ -167,8 +185,8 @@ public class CoreConfigDC {
 			damageDifficulty = d;
 
 			int h = update_block.getInt();
-			if (h < 0 || h > 20)
-				h = 20;
+			if (h < 0 || h > 60)
+				h = 60;
 			updateFrequency = h;
 
 			iconX = hud_x.getInt();

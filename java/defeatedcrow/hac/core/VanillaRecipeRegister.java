@@ -158,7 +158,7 @@ public class VanillaRecipeRegister {
 					DCHumidity.DRY, null, 0, false, new ItemStack(Blocks.GRASS, 1, 0)) {
 				@Override
 				public boolean additionalRequire(World world, BlockPos pos) {
-					if (world.rand.nextInt(4) == 1)
+					if (world.rand.nextInt(2) == 0)
 						return true;
 					return false;
 				}
@@ -172,12 +172,17 @@ public class VanillaRecipeRegister {
 					DCHumidity.WET, null, 0, false, new ItemStack(Blocks.SAND, 1, 0)) {
 				@Override
 				public boolean additionalRequire(World world, BlockPos pos) {
-					if (world.rand.nextInt(4) == 1)
+					if (world.rand.nextInt(2) == 0)
 						return true;
 					return false;
 				}
 			};
+			dirt2.requiredHum().add(DCHumidity.UNDERWATER);
 			RecipeAPI.registerSmelting.addRecipe(dirt2, DCHeatTier.WARM);
+
+			ClimateSmelting dirt3 = new ClimateSmelting(new ItemStack(Blocks.GRASS, 1, 0), null, DCHeatTier.WARM,
+					DCHumidity.WET, null, 0, false, new ItemStack(Blocks.DIRT, 1, 0));
+			RecipeAPI.registerSmelting.addRecipe(dirt3, DCHeatTier.WARM);
 
 			ClimateSmelting sap = new ClimateSmelting(new ItemStack(Blocks.SAPLING, 1, 0), null, DCHeatTier.WARM,
 					DCHumidity.WET, null, 0, false, new ItemStack(Blocks.DEADBUSH, 1, 0)) {
