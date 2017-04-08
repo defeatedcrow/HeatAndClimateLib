@@ -22,8 +22,9 @@ import defeatedcrow.hac.core.climate.recipe.MillRecipeRegister;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityPolarBear;
+import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Biomes;
@@ -45,7 +46,7 @@ public class APILoader {
 		RecipeAPI.isLoaded = true;
 
 		DamageAPI.armorRegister = new ArmorMaterialRegister();
-		DamageAPI.resistantData = new MobResistantRegister();
+		DamageAPI.resistantData = MobResistantRegister.INSTANCE;
 		DamageAPI.isLoaded = true;
 
 		CropAPI.register = new ClimateCropRegister();
@@ -104,12 +105,14 @@ public class APILoader {
 
 	static void registerMobResistant() {
 		DamageAPI.resistantData.registerEntityResistant(EntityVillager.class, 2.0F, 2.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityGolem.class, 2.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityIronGolem.class, 2.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntitySnowman.class, 0.0F, 6.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityWither.class, 2.0F, 2.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityDragon.class, 2.0F, 2.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntitySheep.class, 1.0F, 3.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityPolarBear.class, 1.0F, 3.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 0.0F, 2.0F);
+		MobResistantRegister.pre();
 	}
 
 }

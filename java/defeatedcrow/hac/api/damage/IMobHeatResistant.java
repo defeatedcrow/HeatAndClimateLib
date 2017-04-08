@@ -33,7 +33,7 @@ public interface IMobHeatResistant {
 	 * @param heat heat resistant (default:0.0F)
 	 * @param cold cold resistant (default:0.0F)
 	 *        <br>
-	 * 		ResourceLocationからクラス名を特定して登録するメソッド
+	 *        ResourceLocationからクラス名を特定して登録するメソッド
 	 */
 	void registerEntityResistant(ResourceLocation name, float heat, float cold);
 
@@ -44,6 +44,7 @@ public interface IMobHeatResistant {
 	 *        <br>
 	 *        特定のEntityClassに対して熱・冷耐性を登録する。<br>
 	 *        EntityListに登録されたクラスのみ登録可能で、一致(優先)、または継承関係であるかを判定する。
+	 * @return
 	 */
 	void registerEntityResistant(Class<? extends Entity> entityClass, float heat, float cold);
 

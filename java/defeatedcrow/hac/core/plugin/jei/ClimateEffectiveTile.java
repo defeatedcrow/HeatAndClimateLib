@@ -1,4 +1,4 @@
-package defeatedcrow.hac.core.plugin;
+package defeatedcrow.hac.core.plugin.jei;
 
 import javax.annotation.Nullable;
 

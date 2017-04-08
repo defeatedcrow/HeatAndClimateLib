@@ -104,4 +104,10 @@ public interface IFluidRecipe {
 	 */
 	String additionalString();
 
+	/**
+	 * レシピ一致度<br>
+	 * レシピ検索時、より一致する材料の多いレシピを優先的に選択するためのもの
+	 */
+	int recipeCoincidence();
+
 }

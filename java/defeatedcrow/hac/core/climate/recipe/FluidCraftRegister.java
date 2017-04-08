@@ -110,9 +110,13 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 		IFluidRecipe ret = null;
 		if (list.isEmpty()) {} else {
 			// DCLogger.debugLog("### searching... ###");
+			int c = 0;
 			for (IFluidRecipe recipe : list) {
 				if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {
-					ret = recipe;
+					if (recipe.recipeCoincidence() >= c) {
+						ret = recipe;
+						c = recipe.recipeCoincidence();
+					}
 				}
 			}
 		}
@@ -123,10 +127,15 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 		if (ret == null) {
 			if (clm.getHeat() == DCHeatTier.NORMAL) {
 				List<FluidCraftRecipe> list2 = getRecipeList(DCHeatTier.WARM);
+				list2.addAll(getRecipeList(DCHeatTier.COOL));
 				if (list2.isEmpty()) {} else {
+					int c = 0;
 					for (IFluidRecipe recipe : list2) {
 						if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {
-							ret = recipe;
+							if (recipe.recipeCoincidence() >= c) {
+								ret = recipe;
+								c = recipe.recipeCoincidence();
+							}
 						}
 					}
 				}
@@ -137,9 +146,13 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 				List<FluidCraftRecipe> list2 = getRecipeList(next);
 				if (list2.isEmpty()) {} else {
 					// DCLogger.debugLog("### searching... ###");
+					int c = 0;
 					for (IFluidRecipe recipe : list2) {
 						if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {
-							ret = recipe;
+							if (recipe.recipeCoincidence() >= c) {
+								ret = recipe;
+								c = recipe.recipeCoincidence();
+							}
 						}
 					}
 				}

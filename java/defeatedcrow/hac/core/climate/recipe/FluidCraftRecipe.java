@@ -37,6 +37,7 @@ public class FluidCraftRecipe implements IFluidRecipe {
 	private List<DCAirflow> air = new ArrayList<DCAirflow>();
 	private String type = "";
 	private static final ArrayList<Object> EMPTY = new ArrayList<Object>();
+	private final int count;
 
 	public FluidCraftRecipe(ItemStack o, ItemStack s, FluidStack oF, DCHeatTier t, DCHumidity h, DCAirflow a, float c,
 			boolean cooling, FluidStack iF, Object... inputs) {
@@ -87,6 +88,9 @@ public class FluidCraftRecipe implements IFluidRecipe {
 					throw new IllegalArgumentException("Unknown Object passed to recipe!");
 				}
 			}
+			count = input.length;
+		} else {
+			count = 0;
 		}
 	}
 
@@ -332,5 +336,10 @@ public class FluidCraftRecipe implements IFluidRecipe {
 	@Override
 	public String additionalString() {
 		return type;
+	}
+
+	@Override
+	public int recipeCoincidence() {
+		return count;
 	}
 }

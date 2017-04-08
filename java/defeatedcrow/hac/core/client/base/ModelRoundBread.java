@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.client.base;
 
+import defeatedcrow.hac.core.base.FoodEntityBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,8 +34,8 @@ public class ModelRoundBread extends DCFoodModelBase {
 	}
 
 	@Override
-	public void render(float scale) {
-		render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, scale);
+	public void render(float scale, FoodEntityBase entity) {
+		render(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, scale);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package defeatedcrow.hac.core.plugin;
+package defeatedcrow.hac.core.plugin.jei;
 
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
 import mezz.jei.api.recipe.IRecipeHandler;

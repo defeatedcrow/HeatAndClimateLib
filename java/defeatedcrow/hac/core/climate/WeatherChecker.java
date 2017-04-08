@@ -3,6 +3,7 @@ package defeatedcrow.hac.core.climate;
 import java.util.HashMap;
 import java.util.Map;
 
+import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.packet.MessageWeatherUpdate;
@@ -20,6 +21,8 @@ public class WeatherChecker {
 	public static final Map<Integer, Integer> rainCountMap = new HashMap<Integer, Integer>();
 
 	public static final Map<Integer, Integer> sunCountMap = new HashMap<Integer, Integer>();
+
+	private static final int drought = CoreConfigDC.droughtFrequency;
 
 	public static void setWeather(World world) {
 		if (world == null || world.isRemote) {
@@ -61,8 +64,9 @@ public class WeatherChecker {
 			if (sunCountMap.containsKey(dim)) {
 				int count = sunCountMap.get(dim);
 				count++;
-				if (count > 148) {
-					count = DCUtil.rand.nextInt(100);
+				int i = drought / 2;
+				if (count > drought + i) {
+					count = DCUtil.rand.nextInt(i);
 				}
 				sunCountMap.put(dim, count);
 			} else {
@@ -92,7 +96,7 @@ public class WeatherChecker {
 		if (sunCountMap.containsKey(dim)) {
 			sun = sunCountMap.get(dim);
 		}
-		if (sun > 240 && !isHell) {
+		if (sun > drought && !isHell) {
 			// 日照り気味
 			return 1;
 		}

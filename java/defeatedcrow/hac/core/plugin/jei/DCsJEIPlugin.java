@@ -1,4 +1,4 @@
-package defeatedcrow.hac.core.plugin;
+package defeatedcrow.hac.core.plugin.jei;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
+import defeatedcrow.hac.core.plugin.DCsJEIPluginLists;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;

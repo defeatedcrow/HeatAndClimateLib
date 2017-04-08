@@ -51,6 +51,7 @@ public class CoreConfigDC {
 	public static boolean enableDeepWater = true;
 	public static boolean enableUnderLake = true;
 	public static boolean customizedSpawn = false;
+	public static int droughtFrequency = 120;
 
 	// hardmode
 	public static boolean harderVanilla = false;
@@ -160,6 +161,9 @@ public class CoreConfigDC {
 			Property spawn = cfg.get("hardmode setting", "Customized Enemy Spawn Rate", customizedSpawn,
 					"Enemy increases at low altitude and decreases at high altitude.");
 
+			Property drought = cfg.get("world setting", "Drought Frequency", droughtFrequency,
+					"Set the number of days of fine weather required for drought.");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
@@ -188,6 +192,11 @@ public class CoreConfigDC {
 			if (h < 0 || h > 60)
 				h = 60;
 			updateFrequency = h;
+
+			int dr = drought.getInt();
+			if (dr < 2 || dr > 1000)
+				dr = 120;
+			droughtFrequency = dr;
 
 			iconX = hud_x.getInt();
 			iconY = hud_y.getInt();

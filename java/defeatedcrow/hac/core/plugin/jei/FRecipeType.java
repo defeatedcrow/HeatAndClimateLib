@@ -1,4 +1,4 @@
-package defeatedcrow.hac.core.plugin;
+package defeatedcrow.hac.core.plugin.jei;
 
 import net.minecraftforge.fluids.FluidStack;
 import defeatedcrow.hac.api.climate.IClimate;

@@ -1,4 +1,4 @@
-package defeatedcrow.hac.core.plugin;
+package defeatedcrow.hac.core.plugin.jei;
 
 import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import defeatedcrow.hac.core.util.DCUtil;

@@ -284,8 +284,8 @@ public class LivingEventDC {
 				// 3x3回やる
 				int i = 0;
 				while (i < 3) {
-					int cx = player.chunkCoordX - 3 + world.rand.nextInt(7);
-					int cz = player.chunkCoordZ - 3 + world.rand.nextInt(7);
+					int cx = player.chunkCoordX - 4 + world.rand.nextInt(9);
+					int cz = player.chunkCoordZ - 4 + world.rand.nextInt(9);
 					if (world.getChunkFromChunkCoords(cx, cz).isLoaded()) {
 						int j = 0;
 						while (j < 3) {
@@ -320,7 +320,7 @@ public class LivingEventDC {
 				&& event.getEntityLiving() instanceof IMob) {
 			float i1 = 64F - event.getY();
 			int abs = (int) Math.abs(i1);
-			if (event.getWorld().rand.nextInt(64) > i1) {
+			if (event.getWorld().rand.nextInt(64) > abs) {
 				event.setResult(Result.DENY);
 			}
 		}

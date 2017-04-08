@@ -3,6 +3,7 @@ package defeatedcrow.hac.core.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
+import defeatedcrow.hac.core.plugin.jei.ClimateEffectiveTile;
 import net.minecraft.item.ItemStack;
 
 public class DCsJEIPluginLists {
