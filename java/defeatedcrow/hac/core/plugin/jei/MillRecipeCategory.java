@@ -62,7 +62,7 @@ public class MillRecipeCategory implements IRecipeCategory {
 		if (!(recipeWrapper instanceof MillRecipeWrapper))
 			return;
 		MillRecipeWrapper wrapper = ((MillRecipeWrapper) recipeWrapper);
-		wrapper.getIngredients(ingredients);
+		// wrapper.getIngredients(ingredients);
 
 		List inputs = wrapper.getInputs();
 		List outputs = wrapper.getOutputs();

@@ -26,6 +26,9 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 	private final List<FluidStack> outF;
 	private final String type;
 	private final boolean cooling;
+	private final List<DCHeatTier> temps;
+	private final List<DCHumidity> hums;
+	private final List<DCAirflow> airs;
 
 	@SuppressWarnings("unchecked")
 	public FluidRecipeWrapper(FluidCraftRecipe recipe) {
@@ -58,6 +61,36 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 			outF.add(recipe.getOutputFluid());
 		}
 		cooling = recipe.isNeedCooling();
+
+		temps = new ArrayList<DCHeatTier>();
+		temps.addAll(recipe.requiredHeat());
+		if (temps.isEmpty()) {
+			temps.addAll(DCHeatTier.createList());
+		}
+
+		hums = new ArrayList<DCHumidity>();
+		hums.addAll(recipe.requiredHum());
+		if (hums.isEmpty()) {
+			hums.addAll(DCHumidity.createList());
+		}
+
+		airs = new ArrayList<DCAirflow>();
+		airs.addAll(recipe.requiredAir());
+		if (airs.isEmpty()) {
+			airs.addAll(DCAirflow.createList());
+		}
+	}
+
+	public List<DCAirflow> getAirs() {
+		return airs;
+	}
+
+	public List<DCHumidity> getHums() {
+		return hums;
+	}
+
+	public List<DCHeatTier> getTemps() {
+		return temps;
 	}
 
 	@Override
@@ -66,6 +99,9 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 		ing.setInputs(FluidStack.class, inF);
 		ing.setOutputs(ItemStack.class, output);
 		ing.setOutputs(FluidStack.class, outF);
+		ing.setInputs(DCHeatTier.class, temps);
+		ing.setInputs(DCHumidity.class, hums);
+		ing.setInputs(DCAirflow.class, airs);
 	}
 
 	@Override

@@ -22,6 +22,9 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 	private final List<ItemStack> output;
 	private final IClimateCrop rec;
 	private final Block block;
+	private final List<DCHeatTier> temps;
+	private final List<DCHumidity> hums;
+	private final List<DCAirflow> airs;
 
 	@SuppressWarnings("unchecked")
 	public ClimateCropWrapper(IClimateCrop recipe) {
@@ -37,12 +40,45 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 		} else {
 			block = null;
 		}
+
+		temps = new ArrayList<DCHeatTier>();
+		temps.addAll(recipe.getSuitableTemp(block.getDefaultState()));
+		if (temps.isEmpty()) {
+			temps.addAll(DCHeatTier.createList());
+		}
+
+		hums = new ArrayList<DCHumidity>();
+		hums.addAll(recipe.getSuitableHum(block.getDefaultState()));
+		if (hums.isEmpty()) {
+			hums.addAll(DCHumidity.createList());
+		}
+
+		airs = new ArrayList<DCAirflow>();
+		airs.addAll(recipe.getSuitableAir(block.getDefaultState()));
+		if (airs.isEmpty()) {
+			airs.addAll(DCAirflow.createList());
+		}
+	}
+
+	public List<DCAirflow> getAirs() {
+		return airs;
+	}
+
+	public List<DCHumidity> getHums() {
+		return hums;
+	}
+
+	public List<DCHeatTier> getTemps() {
+		return temps;
 	}
 
 	@Override
 	public void getIngredients(IIngredients ing) {
 		ing.setInputs(ItemStack.class, input);
 		ing.setOutputs(ItemStack.class, output);
+		ing.setInputs(DCHeatTier.class, temps);
+		ing.setInputs(DCHumidity.class, hums);
+		ing.setInputs(DCAirflow.class, airs);
 	}
 
 	@Override

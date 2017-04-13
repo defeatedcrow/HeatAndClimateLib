@@ -2,6 +2,12 @@ package defeatedcrow.hac.core.plugin.jei;
 
 import java.util.List;
 
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowRenderer;
+import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
+import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityRenderer;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -60,12 +66,25 @@ public class ClimateEffectiveCategory implements IRecipeCategory {
 		if (!(recipeWrapper instanceof ClimateEffectiveWrapper))
 			return;
 		ClimateEffectiveWrapper wrapper = ((ClimateEffectiveWrapper) recipeWrapper);
-		wrapper.getIngredients(ingredients);
+		// wrapper.getIngredients(ingredients);
 
 		List inputs = wrapper.getInputs();
 
 		recipeLayout.getItemStacks().init(0, true, 44, 24);
 		recipeLayout.getItemStacks().set(0, inputs);
+
+		List<DCHeatTier> temps = wrapper.getTemps();
+		recipeLayout.getIngredientsGroup(DCHeatTier.class).init(0, true, new HeatTierRenderer(), 73, 20, 40, 5, 0, 0);
+		recipeLayout.getIngredientsGroup(DCHeatTier.class).set(0, temps.get(0));
+
+		List<DCHumidity> hums = wrapper.getHums();
+		recipeLayout.getIngredientsGroup(DCHumidity.class).init(0, true, new HumidityRenderer(), 73, 34, 40, 5, 0, 0);
+		recipeLayout.getIngredientsGroup(DCHumidity.class).set(0, hums.get(0));
+
+		List<DCAirflow> airs = wrapper.getAirs();
+		recipeLayout.getIngredientsGroup(DCAirflow.class).init(0, true, new AirflowRenderer(), 73, 48, 40, 5, 0, 0);
+		recipeLayout.getIngredientsGroup(DCAirflow.class).set(0, airs.get(0));
+
 	}
 
 }

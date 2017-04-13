@@ -63,7 +63,7 @@ public class ClimateRecipeCategory implements IRecipeCategory {
 		if (!(recipeWrapper instanceof ClimateRecipeWrapper))
 			return;
 		ClimateRecipeWrapper wrapper = ((ClimateRecipeWrapper) recipeWrapper);
-		wrapper.getIngredients(ingredients);
+		// wrapper.getIngredients(ingredients);
 
 		List inputs = wrapper.getInputs();
 		List outputs = wrapper.getOutputs();

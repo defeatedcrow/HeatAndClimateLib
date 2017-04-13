@@ -19,6 +19,9 @@ public class ClimateEffectiveWrapper implements IRecipeWrapper {
 
 	private final List<ItemStack> input;
 	private final ClimateEffectiveTile rec;
+	private final List<DCHeatTier> temps;
+	private final List<DCHumidity> hums;
+	private final List<DCAirflow> airs;
 
 	@SuppressWarnings("unchecked")
 	public ClimateEffectiveWrapper(ClimateEffectiveTile recipe) {
@@ -29,11 +32,23 @@ public class ClimateEffectiveWrapper implements IRecipeWrapper {
 		Item i = recipe.getInputItem();
 		ItemStack item = new ItemStack(i, 1, m);
 		input.add(new ItemStack(i, 1, m));
+
+		temps = new ArrayList<DCHeatTier>();
+		temps.add(recipe.getHeat());
+
+		hums = new ArrayList<DCHumidity>();
+		hums.add(recipe.getHumidity());
+
+		airs = new ArrayList<DCAirflow>();
+		airs.add(recipe.getAirflow());
 	}
 
 	@Override
 	public void getIngredients(IIngredients ing) {
 		ing.setInputs(ItemStack.class, input);
+		ing.setInputs(DCHeatTier.class, temps);
+		ing.setInputs(DCHumidity.class, hums);
+		ing.setInputs(DCAirflow.class, airs);
 	}
 
 	@Override
@@ -54,6 +69,18 @@ public class ClimateEffectiveWrapper implements IRecipeWrapper {
 	@Override
 	public List<FluidStack> getFluidOutputs() {
 		return null;
+	}
+
+	public List<DCHeatTier> getTemps() {
+		return temps;
+	}
+
+	public List<DCHumidity> getHums() {
+		return hums;
+	}
+
+	public List<DCAirflow> getAirs() {
+		return airs;
 	}
 
 	@Override

@@ -3,7 +3,9 @@ package defeatedcrow.hac.core.plugin.jei;
 import java.util.ArrayList;
 import java.util.List;
 
+import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.cultivate.CropAPI;
 import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
@@ -11,6 +13,12 @@ import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
 import defeatedcrow.hac.core.plugin.DCsJEIPluginLists;
+import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowHelper;
+import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowRenderer;
+import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierHelper;
+import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
+import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityHelper;
+import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityRenderer;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
@@ -140,6 +148,10 @@ public class DCsJEIPlugin implements IModPlugin {
 	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {}
 
 	@Override
-	public void registerIngredients(IModIngredientRegistration registry) {}
+	public void registerIngredients(IModIngredientRegistration registry) {
+		registry.register(DCHeatTier.class, DCHeatTier.createList(), new HeatTierHelper(), new HeatTierRenderer());
+		registry.register(DCHumidity.class, DCHumidity.createList(), new HumidityHelper(), new HumidityRenderer());
+		registry.register(DCAirflow.class, DCAirflow.createList(), new AirflowHelper(), new AirflowRenderer());
+	}
 
 }

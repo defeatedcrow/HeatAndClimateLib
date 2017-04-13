@@ -121,37 +121,26 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 
 	@Override
 	public IClimateSmelting getRecipe(IClimate clm, ItemStack item) {
-		List<ClimateSmelting> list = getRecipeList(clm.getHeat());
+		List<ClimateSmelting> list = new ArrayList<ClimateSmelting>();
+		list.addAll(getRecipeList(clm.getHeat()));
+		/*
+		 * 現在環境の1つ下の温度帯のレシピも条件にあてまはる
+		 */
+		if (clm.getHeat() == DCHeatTier.NORMAL) {
+			list.addAll(getRecipeList(DCHeatTier.WARM));
+			list.addAll(getRecipeList(DCHeatTier.COOL));
+		} else {
+			int i = clm.getHeat().getTier() < 0 ? 1 : -1;
+			DCHeatTier next = clm.getHeat().addTier(i);
+			list.addAll(getRecipeList(next));
+		}
 		IClimateSmelting ret = null;
 		if (list.isEmpty()) {} else {
+			// DCLogger.debugLog("### searching... ###");
+			int c = 0;
 			for (IClimateSmelting recipe : list) {
 				if (recipe.matcheInput(item) && recipe.matchClimate(clm)) {
 					ret = recipe;
-				}
-			}
-		}
-		/*
-		 * Tier絶対値が1以上の場合、現在環境の1つ下の温度帯のレシピも条件にあてまはる
-		 */
-		if (ret == null) {
-			if (clm.getHeat() == DCHeatTier.NORMAL) {
-				List<ClimateSmelting> list2 = getRecipeList(DCHeatTier.WARM);
-				if (list2.isEmpty()) {} else {
-					for (IClimateSmelting recipe : list2) {
-						if (recipe.matcheInput(item) && recipe.matchClimate(clm)) {
-							ret = recipe;
-						}
-					}
-				}
-			} else {
-				int i = clm.getHeat().getTier() < 0 ? 1 : -1;
-				List<ClimateSmelting> list2 = getRecipeList(clm.getHeat().addTier(i));
-				if (list2.isEmpty()) {} else {
-					for (IClimateSmelting recipe : list2) {
-						if (recipe.matcheInput(item) && recipe.matchClimate(clm)) {
-							ret = recipe;
-						}
-					}
 				}
 			}
 		}

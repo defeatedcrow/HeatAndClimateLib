@@ -2,6 +2,12 @@ package defeatedcrow.hac.core.plugin.jei;
 
 import java.util.List;
 
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowRenderer;
+import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
+import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityRenderer;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -54,7 +60,6 @@ public class FluidRecipeCategory implements IRecipeCategory {
 
 	@Override
 	public IDrawable getIcon() {
-		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 
@@ -63,7 +68,7 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		if (!(recipeWrapper instanceof FluidRecipeWrapper))
 			return;
 		FluidRecipeWrapper wrapper = ((FluidRecipeWrapper) recipeWrapper);
-		wrapper.getIngredients(ingredients);
+		// wrapper.getIngredients(ingredients);
 
 		List inputs = wrapper.getInputs();
 		List outputs = wrapper.getOutputs();
@@ -98,6 +103,33 @@ public class FluidRecipeCategory implements IRecipeCategory {
 			FluidStack f2 = outF.get(0);
 			recipeLayout.getFluidStacks().init(1, false, 117, 16, 12, 50, 5000, false, null);
 			recipeLayout.getFluidStacks().set(1, f2);
+		}
+
+		List<DCHeatTier> temps = wrapper.getTemps();
+		int i = 0;
+		for (DCHeatTier temp : temps) {
+			recipeLayout.getIngredientsGroup(DCHeatTier.class).init(i, true, new HeatTierRenderer(),
+					44 + temp.getID() * 6, 74, 6, 5, 0, 0);
+			recipeLayout.getIngredientsGroup(DCHeatTier.class).set(i, temp);
+			i++;
+		}
+
+		List<DCHumidity> hums = wrapper.getHums();
+		int j = 0;
+		for (DCHumidity hum : hums) {
+			recipeLayout.getIngredientsGroup(DCHumidity.class).init(j, true, new HumidityRenderer(),
+					44 + hum.getID() * 18, 84, 18, 5, 0, 0);
+			recipeLayout.getIngredientsGroup(DCHumidity.class).set(j, hum);
+			j++;
+		}
+
+		List<DCAirflow> airs = wrapper.getAirs();
+		int k = 0;
+		for (DCAirflow air : airs) {
+			recipeLayout.getIngredientsGroup(DCAirflow.class).init(k, true, new AirflowRenderer(),
+					44 + air.getID() * 18, 94, 18, 5, 0, 0);
+			recipeLayout.getIngredientsGroup(DCAirflow.class).set(k, air);
+			k++;
 		}
 	}
 
