@@ -51,7 +51,7 @@ public class CoreConfigDC {
 	public static boolean enableDeepWater = true;
 	public static boolean enableUnderLake = true;
 	public static boolean customizedSpawn = false;
-	public static int droughtFrequency = 120;
+	public static int droughtFrequency = 60;
 
 	// hardmode
 	public static boolean harderVanilla = false;
@@ -155,8 +155,8 @@ public class CoreConfigDC {
 			Property inferno = cfg.get("hardmode setting", "Infernal Nether world", infernalInferno,
 					"Set the temperature of Nether to maximum.");
 
-			// Property suffocation = cfg.get("hardmode setting", "Enable Suffocation Damage", enableSuffocation,
-			// "Enable the suffocation effect when creatures or players in tight space.");
+			Property suffocation = cfg.get("hardmode setting", "Enable Suffocation Damage", enableSuffocation,
+					"Enable the suffocation effect when creatures or players in tight space.");
 
 			Property spawn = cfg.get("hardmode setting", "Customized Enemy Spawn Rate", customizedSpawn,
 					"Enemy increases at low altitude and decreases at high altitude.");
@@ -180,7 +180,7 @@ public class CoreConfigDC {
 			disableCustomRecipe = disableCustom.getBoolean();
 			harderVanilla = vanilla_harder.getBoolean();
 			infernalInferno = inferno.getBoolean();
-			// enableSuffocation = suffocation.getBoolean();
+			enableSuffocation = suffocation.getBoolean();
 			customizedSpawn = spawn.getBoolean();
 
 			int d = diff_dam.getInt();
@@ -189,8 +189,8 @@ public class CoreConfigDC {
 			damageDifficulty = d;
 
 			int h = update_block.getInt();
-			if (h < 0 || h > 60)
-				h = 60;
+			if (h < 0 || h > 20)
+				h = 20;
 			updateFrequency = h;
 
 			int dr = drought.getInt();

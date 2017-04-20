@@ -64,7 +64,7 @@ public class WeatherChecker {
 			if (sunCountMap.containsKey(dim)) {
 				int count = sunCountMap.get(dim);
 				count++;
-				int i = drought / 2;
+				int i = Math.max(drought / 2, 10);
 				if (count > drought + i) {
 					count = DCUtil.rand.nextInt(i);
 				}

@@ -315,18 +315,20 @@ public class LivingEventDC {
 	}
 
 	/* spawn制御 */
+	@SubscribeEvent
 	public void spawnEvent(LivingSpawnEvent.CheckSpawn event) {
 		if (CoreConfigDC.customizedSpawn && event.getEntityLiving() != null
 				&& event.getEntityLiving() instanceof IMob) {
 			float i1 = 64F - event.getY();
 			int abs = (int) Math.abs(i1);
-			if (event.getWorld().rand.nextInt(64) > abs) {
+			if (abs < 20 || event.getWorld().rand.nextInt(64) >= abs) {
 				event.setResult(Result.DENY);
 			}
 		}
 	}
 
 	/* dropが消えなくなる */
+	@SubscribeEvent
 	public void livingDropItemEvent(ItemExpireEvent event) {
 		EntityItem item = event.getEntityItem();
 		int life = event.getExtraLife();

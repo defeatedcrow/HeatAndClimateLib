@@ -193,7 +193,7 @@ public class BlockUpdateDC {
 				for (BlockPos p3 : BlockPos.getAllInBox(p.east().north(), p.west().south())) {
 					if (!world.isAirBlock(p3)) {
 						Block target = world.getBlockState(p3).getBlock();
-						if (!world.isUpdateScheduled(p3, target))
+						if (!world.isUpdateScheduled(p3, target) && world.rand.nextBoolean())
 							world.scheduleUpdate(p3, target, 600 + world.rand.nextInt(600));
 					}
 				}

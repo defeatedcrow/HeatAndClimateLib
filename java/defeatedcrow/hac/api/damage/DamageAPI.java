@@ -8,5 +8,6 @@ public class DamageAPI {
 
 	public static IArmorMaterialRegister armorRegister;
 	public static IMobHeatResistant resistantData;
+	public static ISuffocationGauge suffocationGauge;
 
 }

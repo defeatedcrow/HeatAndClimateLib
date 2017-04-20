@@ -39,7 +39,7 @@ public enum CRecipeType {
 			if (h > 2)
 				return STEAMING;
 			else
-				return COOKING;
+				return h == 0 ? DRYING : COOKING;
 		case 8:
 			if (a < 1)
 				return PYROLYSIS;

@@ -8,6 +8,7 @@ import defeatedcrow.hac.core.event.CaveGenLavaDC;
 import defeatedcrow.hac.core.event.ClickEventDC;
 import defeatedcrow.hac.core.event.LivingEventDC;
 import defeatedcrow.hac.core.event.LivingHurtDC;
+import defeatedcrow.hac.core.event.SuffocationEventDC;
 import defeatedcrow.hac.core.event.TickEventDC;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.util.DCPotion;
@@ -41,6 +42,9 @@ public class CommonProxyD {
 		MinecraftForge.EVENT_BUS.register(new ClickEventDC());
 		MinecraftForge.TERRAIN_GEN_BUS.register(new CaveGenLavaDC());
 		MinecraftForge.EVENT_BUS.register(new TickEventDC());
+		if (CoreConfigDC.enableSuffocation) {
+			MinecraftForge.EVENT_BUS.register(new SuffocationEventDC());
+		}
 
 		HaCPacket.init();
 	}

@@ -40,29 +40,6 @@ public class VanillaRecipeRegister {
 		// OVEN
 
 		// KILN
-		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONE, 1, 2), DCHeatTier.KILN,
-		// null, null, false,
-		// new ItemStack(Blocks.STONE, 1, 1));
-		//
-		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONE, 1, 4), DCHeatTier.KILN,
-		// null, null, false,
-		// new ItemStack(Blocks.STONE, 1, 3));
-		//
-		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONE, 1, 6), DCHeatTier.KILN,
-		// null, null, false,
-		// new ItemStack(Blocks.STONE, 1, 5));
-		//
-		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONE, 1, 0), DCHeatTier.KILN,
-		// null, null, false,
-		// new ItemStack(Blocks.COBBLESTONE, 1, 0));
-		//
-		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.HARDENED_CLAY, 1, 0),
-		// DCHeatTier.KILN,
-		// DCHumidity.DRY, null, false, new ItemStack(Blocks.CLAY, 1, 0));
-		//
-		// RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONEBRICK, 1, 2),
-		// DCHeatTier.KILN, null, null,
-		// false, new ItemStack(Blocks.STONEBRICK, 1, 0));
 
 		// SMELT
 
@@ -178,10 +155,13 @@ public class VanillaRecipeRegister {
 				}
 			};
 			dirt2.requiredHum().add(DCHumidity.UNDERWATER);
+			dirt2.requiredHeat().remove(DCHeatTier.NORMAL);
 			RecipeAPI.registerSmelting.addRecipe(dirt2, DCHeatTier.WARM);
 
 			ClimateSmelting dirt3 = new ClimateSmelting(new ItemStack(Blocks.GRASS, 1, 0), null, DCHeatTier.WARM,
 					DCHumidity.WET, null, 0, false, new ItemStack(Blocks.DIRT, 1, 0));
+			dirt3.requiredHum().add(DCHumidity.UNDERWATER);
+			dirt3.requiredHeat().remove(DCHeatTier.NORMAL);
 			RecipeAPI.registerSmelting.addRecipe(dirt3, DCHeatTier.WARM);
 
 			ClimateSmelting sap = new ClimateSmelting(new ItemStack(Blocks.SAPLING, 1, 0), null, DCHeatTier.WARM,
@@ -201,7 +181,8 @@ public class VanillaRecipeRegister {
 				@Override
 				public boolean additionalRequire(World world, BlockPos pos) {
 					if (world.getBlockState(pos.down()).getBlock() instanceof BlockDirt
-							|| world.getBlockState(pos.down()).getMaterial() == Material.SAND)
+							|| world.getBlockState(pos.down()).getMaterial() == Material.SAND
+							|| world.getBlockState(pos.down()).getMaterial() == Material.GRASS)
 						return true;
 					return false;
 				}
