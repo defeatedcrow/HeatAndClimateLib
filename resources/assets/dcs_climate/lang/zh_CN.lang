@@ -1,0 +1,22 @@
+
+## item
+item.dcs_checker_normal.name=气候检查器
+item.dcs_repair_patty.name=修补油灰
+
+## massage
+dcs.climate.tip.checker=右击能够检测该位置的气候信息（范围2）
+dcs_climate.tip.durability=最大耐久度
+dcs_climate.tip.harvestlevel=挖掘等级
+dcs_climate.tip.resistance=气候抗性
+
+dcs.tip.shift=按下左Shift键查看更多
+
+dcs_climate.smelting=气候冶炼
+dcs_climate.recipe=气候合成
+dcs_climate.mill=石臼合成
+dcs_climate.fluidcraft=流体合成F
+dcs_climate.crop=气候作物
+dcs_climate.effective=气候效果
+
+death.attack.dcs_heat=%1$s被烤的焦黄。
+death.attack.dcs_cold=%1$s变成了冰冻果子露。
