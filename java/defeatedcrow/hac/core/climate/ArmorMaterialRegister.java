@@ -1,13 +1,15 @@
 package defeatedcrow.hac.core.climate;
 
 import java.util.HashMap;
+import java.util.Map;
 
-import net.minecraft.item.ItemArmor.ArmorMaterial;
 import defeatedcrow.hac.api.damage.IArmorMaterialRegister;
+import defeatedcrow.hac.core.DCLogger;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
 
 public class ArmorMaterialRegister implements IArmorMaterialRegister {
 
-	private HashMap<ArmorMaterial, Float> map;
+	private static HashMap<ArmorMaterial, Float> map;
 
 	public ArmorMaterialRegister() {
 		this.map = new HashMap<ArmorMaterial, Float>();
@@ -22,7 +24,22 @@ public class ArmorMaterialRegister implements IArmorMaterialRegister {
 	public void RegisterMaterial(ArmorMaterial material, float amount) {
 		if (!map.containsKey(material)) {
 			map.put(material, amount);
+			Map<String, Float> res = new HashMap<String, Float>();
+			res.put("resistant", amount);
+			DCLogger.debugLog("register armor material: " + material.getName() + " " + amount);
+			ArmorResistantRegister.INSTANCE.floatMap.put(material.getName(), res);
 		}
+	}
+
+	protected static void RegisterMaterialFromJson(ArmorMaterial material, float amount) {
+		if (!map.containsKey(material)) {
+			map.remove(material);
+		}
+		map.put(material, amount);
+		Map<String, Float> res = new HashMap<String, Float>();
+		res.put("resistant", amount);
+		DCLogger.debugLog("register armor material: " + material.getName() + " " + amount);
+		ArmorResistantRegister.INSTANCE.floatMap.put(material.getName(), res);
 	}
 
 	@Override

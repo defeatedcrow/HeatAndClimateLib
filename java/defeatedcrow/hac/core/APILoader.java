@@ -19,6 +19,7 @@ import defeatedcrow.hac.core.climate.recipe.ClimateRecipeRegister;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmeltingRegister;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRegister;
 import defeatedcrow.hac.core.climate.recipe.MillRecipeRegister;
+import defeatedcrow.hac.core.climate.recipe.ReactorRecipeRegister;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -43,6 +44,7 @@ public class APILoader {
 		RecipeAPI.registerSmelting = new ClimateSmeltingRegister();
 		RecipeAPI.registerFluidRecipes = new FluidCraftRegister();
 		RecipeAPI.registerMills = new MillRecipeRegister();
+		RecipeAPI.registerReactorRecipes = new ReactorRecipeRegister();
 		RecipeAPI.isLoaded = true;
 
 		DamageAPI.armorRegister = new ArmorMaterialRegister();
@@ -112,7 +114,6 @@ public class APILoader {
 		DamageAPI.resistantData.registerEntityResistant(EntitySheep.class, 1.0F, 3.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityPolarBear.class, 1.0F, 3.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 0.0F, 2.0F);
-		MobResistantRegister.pre();
 	}
 
 }

@@ -1,8 +1,15 @@
 package defeatedcrow.hac.core;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.recipe.IReactorRecipe;
+import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
 import defeatedcrow.hac.core.climate.WeatherChecker;
+import defeatedcrow.hac.core.climate.recipe.ReactorRecipe;
 import defeatedcrow.hac.core.event.BlockUpdateDC;
 import defeatedcrow.hac.core.event.CaveGenLavaDC;
 import defeatedcrow.hac.core.event.ClickEventDC;
@@ -12,9 +19,16 @@ import defeatedcrow.hac.core.event.SuffocationEventDC;
 import defeatedcrow.hac.core.event.TickEventDC;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.util.DCPotion;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class CommonProxyD {
 
@@ -47,6 +61,17 @@ public class CommonProxyD {
 		}
 
 		HaCPacket.init();
+
+		ItemStack ret = new ItemStack(Items.IRON_PICKAXE);
+		Map<Enchantment, Integer> ench = new HashMap<>();
+		ench.put(Enchantments.UNBREAKING, 1);
+		EnchantmentHelper.setEnchantments(ench, ret);
+		IReactorRecipe recipe = new ReactorRecipe(ret, null, new FluidStack(FluidRegistry.WATER, 1000), null,
+				DCHeatTier.WARM, 0F, new ItemStack(Items.IRON_INGOT), new FluidStack(FluidRegistry.WATER, 1000), null,
+				new Object[] {
+						new ItemStack(Items.IRON_PICKAXE)
+				});
+		RecipeAPI.registerReactorRecipes.addRecipe(recipe, DCHeatTier.WARM);
 	}
 
 	public ModelThinBiped getArmorModel(int slot) {

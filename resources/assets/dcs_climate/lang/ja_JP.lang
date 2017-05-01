@@ -15,6 +15,7 @@ dcs_climate.smelting=気候精錬レシピ
 dcs_climate.recipe=気候利用クラフト
 dcs_climate.mill=石臼
 dcs_climate.fluidcraft=液体加工レシピ
+dcs_climate.reactor=合成反応レシピ
 dcs_climate.crop=気候利用作物
 dcs_climate.effective=気候に影響するブロック
 

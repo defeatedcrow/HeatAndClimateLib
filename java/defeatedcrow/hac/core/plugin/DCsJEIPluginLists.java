@@ -10,13 +10,14 @@ public class DCsJEIPluginLists {
 
 	private DCsJEIPluginLists() {}
 
-	public static final List<ItemStack> millstones = new ArrayList<ItemStack>();
-	public static final List<ItemStack> fluidcrafters = new ArrayList<ItemStack>();
-	public static final List<ItemStack> crops = new ArrayList<ItemStack>();
+	public static final List<ItemStack> millstones = new ArrayList<>();
+	public static final List<ItemStack> fluidcrafters = new ArrayList<>();
+	public static final List<ItemStack> reactors = new ArrayList<>();
+	public static final List<ItemStack> crops = new ArrayList<>();
 
-	public static final List<ItemStack> excluder = new ArrayList<ItemStack>();
+	public static final List<ItemStack> excluder = new ArrayList<>();
 
-	public static final List<ClimateEffectiveTile> climate = new ArrayList<ClimateEffectiveTile>();
-	public static final List<ItemStack> climateIcons = new ArrayList<ItemStack>();
+	public static final List<ClimateEffectiveTile> climate = new ArrayList<>();
+	public static final List<ItemStack> climateIcons = new ArrayList<>();
 
 }

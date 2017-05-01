@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.recipe.IFluidRecipe;
+import defeatedcrow.hac.api.recipe.IReactorRecipe;
 import defeatedcrow.hac.api.recipe.IRecipePanel;
 import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import defeatedcrow.hac.core.util.DCUtil;
@@ -22,33 +18,35 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class FluidCraftRecipe implements IFluidRecipe {
+public class ReactorRecipe implements IReactorRecipe {
 
 	private final Object[] input;
-	private final FluidStack inputF;
+	private final FluidStack inputF1;
+	private final FluidStack inputF2;
 	private ArrayList<Object> processedInput = new ArrayList<Object>();
 	private ArrayList<Object> inputList = new ArrayList<Object>();
 	private final ItemStack output;
-	private final FluidStack outputF;
+	private final FluidStack outputF1;
+	private final FluidStack outputF2;
 	private final ItemStack secondary;
 	private final float chance;
-	private final boolean needCooling;
+	private final ItemStack catalyst;
 	private List<DCHeatTier> heat = new ArrayList<DCHeatTier>();
-	private List<DCHumidity> hum = new ArrayList<DCHumidity>();
-	private List<DCAirflow> air = new ArrayList<DCAirflow>();
 	private String type = "";
 	private static final ArrayList<Object> EMPTY = new ArrayList<Object>();
 	private final int count;
 
-	public FluidCraftRecipe(ItemStack o, ItemStack s, FluidStack oF, DCHeatTier t, DCHumidity h, DCAirflow a, float c,
-			boolean cooling, FluidStack iF, Object... inputs) {
+	public ReactorRecipe(ItemStack o, ItemStack s, FluidStack oF1, FluidStack oF2, DCHeatTier t, float c, ItemStack cat,
+			FluidStack iF1, FluidStack iF2, Object... inputs) {
 		input = inputs;
-		inputF = iF;
+		inputF1 = iF1;
+		inputF2 = iF2;
 		output = o;
-		outputF = oF;
+		outputF1 = oF1;
+		outputF2 = oF2;
 		secondary = s;
 		chance = c;
-		needCooling = cooling;
+		catalyst = cat;
 		if (t != null) {
 			heat.add(t);
 			if (t.getID() < DCHeatTier.INFERNO.getID()) {
@@ -62,10 +60,6 @@ public class FluidCraftRecipe implements IFluidRecipe {
 				}
 			}
 		}
-		if (h != null)
-			hum.add(h);
-		if (a != null)
-			air.add(a);
 		if (inputs != null && input.length > 0) {
 			for (int i = 0; i < inputs.length; i++) {
 				if (inputs[i] instanceof String) {
@@ -125,12 +119,27 @@ public class FluidCraftRecipe implements IFluidRecipe {
 
 	@Override
 	public FluidStack getInputFluid() {
-		return this.inputF;
+		return this.inputF1;
 	}
 
 	@Override
 	public FluidStack getOutputFluid() {
-		return this.outputF;
+		return this.outputF1;
+	}
+
+	@Override
+	public ItemStack getCatalyst() {
+		return catalyst;
+	}
+
+	@Override
+	public FluidStack getSubInputFluid() {
+		return inputF2;
+	}
+
+	@Override
+	public FluidStack getSubOutputFluid() {
+		return outputF2;
 	}
 
 	@Override
@@ -174,18 +183,28 @@ public class FluidCraftRecipe implements IFluidRecipe {
 	}
 
 	@Override
-	public boolean matches(List<ItemStack> items, FluidStack fluid) {
+	public boolean matches(List<ItemStack> items, FluidStack fluid1, FluidStack fluid2) {
 		boolean b1 = false;
-		if (this.inputF == null) {
+		if (this.inputF1 == null) {
 			b1 = true;
-		} else if (fluid != null) {
-			if (inputF.getFluid() == fluid.getFluid()
-					|| FluidDictionaryDC.matchFluid(fluid.getFluid(), inputF.getFluid())) {
-				b1 = inputF.amount <= fluid.amount;
+		} else if (fluid1 != null) {
+			if (inputF1.getFluid() == fluid1.getFluid()
+					|| FluidDictionaryDC.matchFluid(fluid1.getFluid(), inputF1.getFluid())) {
+				b1 = inputF1.amount <= fluid1.amount;
 			}
 		}
 
-		if (b1) {
+		boolean b2 = false;
+		if (this.inputF2 == null) {
+			b2 = true;
+		} else if (fluid2 != null) {
+			if (inputF2.getFluid() == fluid2.getFluid()
+					|| FluidDictionaryDC.matchFluid(fluid2.getFluid(), inputF2.getFluid())) {
+				b2 = inputF2.amount <= fluid2.amount;
+			}
+		}
+
+		if (b1 && b2) {
 			// DCLogger.debugLog("1: fluid match");
 			ArrayList<Object> required = new ArrayList<Object>(this.inputList);
 			if (required.isEmpty())
@@ -248,21 +267,28 @@ public class FluidCraftRecipe implements IFluidRecipe {
 	}
 
 	@Override
-	public boolean matchOutput(List<ItemStack> items, FluidStack fluid, int slotsize) {
+	public boolean matchOutput(List<ItemStack> items, FluidStack fluid1, FluidStack fluid2, int slotsize) {
 		boolean b1 = false;
-		if (this.outputF == null || fluid == null) {
+		if (this.outputF1 == null) {
 			b1 = true;
-		} else {
-			b1 = outputF.getFluid() == fluid.getFluid();
+		} else if (fluid1 != null) {
+			b1 = (outputF1.getFluid() == fluid1.getFluid());
 		}
 
-		if (b1) {
+		boolean b2 = false;
+		if (this.inputF2 == null) {
+			b2 = true;
+		} else if (fluid2 != null) {
+			b2 = (outputF2.getFluid() == fluid2.getFluid());
+		}
+
+		if (b1 && b2) {
 			if (items != null && !items.isEmpty()) {
-				boolean b2 = false;
+				boolean b4 = false;
 				boolean b3 = false;
 				for (ItemStack get : items) {
 					if (!DCUtil.isEmpty(getOutput()) || DCUtil.isStackable(getOutput(), get)) {
-						b2 = true;
+						b4 = true;
 					}
 					if (!DCUtil.isEmpty(getSecondary()) || DCUtil.isStackable(getSecondary(), get)) {
 						b3 = true;
@@ -271,9 +297,9 @@ public class FluidCraftRecipe implements IFluidRecipe {
 				if (items.size() < slotsize - 1) {
 					return true;
 				} else if (items.size() == slotsize - 1) {
-					return b2 || b3;
+					return b4 || b3;
 				} else {
-					return b2 && b3;
+					return b4 && b3;
 				}
 			} else {
 				if (slotsize > 1) {
@@ -289,52 +315,33 @@ public class FluidCraftRecipe implements IFluidRecipe {
 	}
 
 	@Override
-	public boolean matchClimate(int code) {
-		IClimate clm = ClimateAPI.register.getClimateFromInt(code);
-		return matchClimate(clm);
+	public boolean matchCatalyst(ItemStack cat) {
+		if (DCUtil.isEmpty(catalyst) || DCUtil.isSameItem(catalyst, cat, false)) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
-	public boolean isNeedCooling() {
-		return this.needCooling;
+	public boolean matchHeatTier(int id) {
+		DCHeatTier tier = DCHeatTier.getTypeByID(id);
+		return matchHeatTier(tier);
 	}
 
 	@Override
-	public boolean matchClimate(IClimate climate) {
-		boolean t = requiredHeat().isEmpty() || requiredHeat().contains(climate.getHeat());
-		boolean h = requiredHum().isEmpty() || requiredHum().contains(climate.getHumidity());
-		boolean a = requiredAir().isEmpty() || requiredAir().contains(climate.getAirflow());
-		// if (t && h && a)
-		// DCLogger.debugLog("3: clm match");
-		return t && h && a;
+	public boolean matchHeatTier(DCHeatTier tier) {
+		boolean t = requiredHeat().isEmpty() || requiredHeat().contains(tier);
+		return t;
 	}
 
 	@Override
 	public boolean additionalRequire(World world, BlockPos pos) {
-		if (isNeedCooling()) {
-			return ClimateAPI.calculator.getCold(world, pos, 1, false).getID() <= 0;
-		}
 		return true;
-	}
-
-	@Override
-	public int hasPlaceableOutput() {
-		return 0;
 	}
 
 	@Override
 	public List<DCHeatTier> requiredHeat() {
 		return heat;
-	}
-
-	@Override
-	public List<DCHumidity> requiredHum() {
-		return hum;
-	}
-
-	@Override
-	public List<DCAirflow> requiredAir() {
-		return air;
 	}
 
 	@Override
