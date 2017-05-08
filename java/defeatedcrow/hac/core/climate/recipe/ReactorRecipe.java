@@ -186,7 +186,7 @@ public class ReactorRecipe implements IReactorRecipe {
 	public boolean matches(List<ItemStack> items, FluidStack fluid1, FluidStack fluid2) {
 		boolean b1 = false;
 		if (this.inputF1 == null) {
-			b1 = true;
+			b1 = fluid1 == null;
 		} else if (fluid1 != null) {
 			if (inputF1.getFluid() == fluid1.getFluid()
 					|| FluidDictionaryDC.matchFluid(fluid1.getFluid(), inputF1.getFluid())) {
@@ -196,7 +196,7 @@ public class ReactorRecipe implements IReactorRecipe {
 
 		boolean b2 = false;
 		if (this.inputF2 == null) {
-			b2 = true;
+			b2 = fluid2 == null;
 		} else if (fluid2 != null) {
 			if (inputF2.getFluid() == fluid2.getFluid()
 					|| FluidDictionaryDC.matchFluid(fluid2.getFluid(), inputF2.getFluid())) {
@@ -269,17 +269,19 @@ public class ReactorRecipe implements IReactorRecipe {
 	@Override
 	public boolean matchOutput(List<ItemStack> items, FluidStack fluid1, FluidStack fluid2, int slotsize) {
 		boolean b1 = false;
-		if (this.outputF1 == null) {
+		if (this.outputF1 == null || fluid1 == null) {
 			b1 = true;
 		} else if (fluid1 != null) {
-			b1 = (outputF1.getFluid() == fluid1.getFluid());
+			b1 = (outputF1.getFluid() == fluid1.getFluid())
+					|| FluidDictionaryDC.matchFluid(outputF1.getFluid(), fluid1.getFluid());
 		}
 
 		boolean b2 = false;
-		if (this.inputF2 == null) {
+		if (this.outputF2 == null || fluid2 == null) {
 			b2 = true;
 		} else if (fluid2 != null) {
-			b2 = (outputF2.getFluid() == fluid2.getFluid());
+			b2 = (outputF2.getFluid() == fluid2.getFluid())
+					|| FluidDictionaryDC.matchFluid(outputF2.getFluid(), fluid2.getFluid());
 		}
 
 		if (b1 && b2) {

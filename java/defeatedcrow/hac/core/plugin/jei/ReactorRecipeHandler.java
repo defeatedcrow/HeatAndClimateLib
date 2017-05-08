@@ -1,7 +1,5 @@
 package defeatedcrow.hac.core.plugin.jei;
 
-import java.util.List;
-
 import defeatedcrow.hac.core.climate.recipe.ReactorRecipe;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -25,24 +23,7 @@ public class ReactorRecipeHandler implements IRecipeHandler<ReactorRecipe> {
 
 	@Override
 	public boolean isRecipeValid(ReactorRecipe recipe) {
-		if (recipe.getProcessedInput() != null && !recipe.getProcessedInput().isEmpty()) {
-			if (recipe.getProcessedInput().size() > 4) {
-				return false;
-			}
-			boolean ret = true;
-			for (Object obj : recipe.getProcessedInput()) {
-				if (obj instanceof List) {
-					if (((List) obj).isEmpty())
-						ret = false;
-				} else if (obj == null) {
-					ret = false;
-				}
-			}
-			return ret;
-		} else if (recipe.getInputFluid() != null) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	@Override

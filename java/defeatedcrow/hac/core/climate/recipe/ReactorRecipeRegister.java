@@ -84,16 +84,8 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 			FluidStack outFluid2, DCHeatTier heat, ItemStack catalyst, FluidStack inFluid1, FluidStack inFluid2,
 			Object... input) {
 		List<ReactorRecipe> list = getRecipeList(heat);
-		if (outFluid1 == null && outFluid2 != null) {
-			outFluid1 = outFluid2.copy();
-			outFluid2 = null;
-		}
-		if (inFluid1 == null && inFluid2 != null) {
-			inFluid1 = inFluid2.copy();
-			inFluid2 = null;
-		}
-		boolean b1 = input == null && inFluid1 == null;
-		boolean b2 = output == null && outFluid1 == null;
+		boolean b1 = input == null && inFluid1 == null && inFluid2 == null;
+		boolean b2 = output == null && outFluid1 == null && outFluid2 == null;
 		if (!b1 && !b2) {
 			list.add(new ReactorRecipe(output, secondary, outFluid1, outFluid2, heat, secondaryChance, catalyst,
 					inFluid1, inFluid2, input));

@@ -26,10 +26,10 @@ public class ArmorResistantRegister {
 	public static final ArmorResistantRegister INSTANCE = new ArmorResistantRegister();
 
 	public void registerArmorResistant(String name, float heat) {
-		if (name != null) {
+		if (name != null && ArmorMaterial.values() != null) {
 			DCLogger.debugLog("register target from json: " + name);
 			for (ArmorMaterial target : ArmorMaterial.values()) {
-				if (target.getName().equalsIgnoreCase(name)) {
+				if (target != null && target.getName().equalsIgnoreCase(name)) {
 					ArmorMaterialRegister.RegisterMaterialFromJson(target, heat);
 				}
 			}
