@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class ReactorRecipeWrapper implements IRecipeWrapper {
 
 	private final List<List<ItemStack>> input;
+	private final List<List<ItemStack>> input2;
 	private final List<ItemStack> output;
 	private final ReactorRecipe rec;
 	private final List<ItemStack> catalyst;
@@ -33,6 +34,7 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 	public ReactorRecipeWrapper(ReactorRecipe recipe) {
 		rec = recipe;
 		input = Lists.newArrayList();
+		input2 = Lists.newArrayList();
 		if (!recipe.getProcessedInput().isEmpty()) {
 			for (Object obj : recipe.getProcessedInput()) {
 				if (obj instanceof ItemStack) {
@@ -46,6 +48,9 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 		}
 		catalyst = new ArrayList<>();
 		catalyst.add(recipe.getCatalyst());
+		input2.addAll(input);
+		input2.add(catalyst);
+
 		output = new ArrayList<>();
 		output.add(recipe.getOutput());
 		if (!DCUtil.isEmpty(recipe.getSecondary())) {
@@ -58,7 +63,7 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 			inF.add(recipe.getInputFluid());
 		}
 		if (recipe.getSubInputFluid() != null) {
-			inF.add(recipe.getInputFluid());
+			inF.add(recipe.getSubInputFluid());
 		}
 		if (recipe.getOutputFluid() != null) {
 			outF.add(recipe.getOutputFluid());
@@ -80,8 +85,7 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ing) {
-		ing.setInputLists(ItemStack.class, input);
-		ing.setInputs(ItemStack.class, catalyst);
+		ing.setInputLists(ItemStack.class, input2);
 		ing.setInputs(FluidStack.class, inF);
 		ing.setOutputs(ItemStack.class, output);
 		ing.setOutputs(FluidStack.class, outF);

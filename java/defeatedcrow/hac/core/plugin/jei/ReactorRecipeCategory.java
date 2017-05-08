@@ -104,7 +104,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 			recipeLayout.getFluidStacks().set(0, f1);
 			if (inF1.size() > 1) {
 				FluidStack f2 = inF1.get(1);
-				recipeLayout.getFluidStacks().init(1, false, 48, 18, 12, 40, 4000, false, null);
+				recipeLayout.getFluidStacks().init(1, false, 47, 18, 12, 40, 4000, false, null);
 				recipeLayout.getFluidStacks().set(1, f2);
 			}
 		}

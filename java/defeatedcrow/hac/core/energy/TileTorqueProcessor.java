@@ -47,11 +47,10 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 			if (this.maxBurnTime > 0) {
 				if (this.currentBurnTime >= this.maxBurnTime) {
 					// レシピ進行の再チェック
-					if (this.isRecipeMaterial(this.getStackInSlot(0))) {
+					if (this.isRecipeMaterial()) {
 						if (this.onProcess()) {
 							this.currentBurnTime = 0;
 							this.maxBurnTime = 0;
-							this.decrStackSize(0, 1);
 							this.markDirty();
 						}
 					} else {
@@ -61,7 +60,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 					}
 				} else {
 					// レシピ進行の再チェック
-					if (this.isRecipeMaterial(this.getStackInSlot(0))) {
+					if (this.isRecipeMaterial()) {
 						this.currentBurnTime += this.prevTorque;
 					} else {
 						// 一致しないためリセット
@@ -71,7 +70,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 				}
 			} else if (this.canStartProcess()) {
 				// レシピ開始可能かどうか
-				this.maxBurnTime = this.getProcessTime(this.getStackInSlot(0));
+				this.maxBurnTime = this.getProcessTime();
 			}
 		} else {
 			tickCount--;
@@ -100,9 +99,9 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	/* === レシピ判定 === */
 
-	public abstract int getProcessTime(ItemStack item);
+	public abstract int getProcessTime();
 
-	public abstract boolean isRecipeMaterial(ItemStack item);
+	public abstract boolean isRecipeMaterial();
 
 	public abstract boolean canStartProcess();
 
@@ -241,8 +240,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	// par1EntityPlayerがTileEntityを使えるかどうか
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getWorld().getTileEntity(this.pos) != this ? false
-				: player.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64.0D;
+		return true;
 	}
 
 	@Override
@@ -255,7 +253,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		return i > 0 ? false : getProcessTime(stack) > 0;
+		return i > 0 ? false : true;
 	}
 
 	// ホッパーにアイテムの受け渡しをする際の優先度
