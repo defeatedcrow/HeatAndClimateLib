@@ -9,6 +9,7 @@ import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.ArmorMaterialRegister;
+import defeatedcrow.hac.core.climate.ArmorResistantRegister;
 import defeatedcrow.hac.core.climate.ClimateAltCalculator;
 import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
@@ -30,7 +31,9 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
 
 public class APILoader {
 
@@ -48,6 +51,7 @@ public class APILoader {
 		RecipeAPI.isLoaded = true;
 
 		DamageAPI.armorRegister = new ArmorMaterialRegister();
+		DamageAPI.itemRegister = ArmorResistantRegister.INSTANCE;
 		DamageAPI.resistantData = MobResistantRegister.INSTANCE;
 		DamageAPI.isLoaded = true;
 
@@ -61,8 +65,9 @@ public class APILoader {
 	}
 
 	private static void registerMaterial() {
-		DamageAPI.armorRegister.RegisterMaterial(ArmorMaterial.LEATHER, 2.0F);
-		DamageAPI.armorRegister.RegisterMaterial(ArmorMaterial.DIAMOND, 0.5F);
+		DamageAPI.armorRegister.registerMaterial(ArmorMaterial.LEATHER, 2.0F, 2.0F);
+		DamageAPI.armorRegister.registerMaterial(ArmorMaterial.DIAMOND, 0.5F, 0.5F);
+		DamageAPI.itemRegister.registerMaterial(new ItemStack(Items.DIAMOND_HORSE_ARMOR), 2.0F, 2.0F);
 	}
 
 	public static void registerClimate() {

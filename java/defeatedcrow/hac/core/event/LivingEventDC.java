@@ -19,15 +19,12 @@ import defeatedcrow.hac.core.util.DCTimeHelper;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -42,6 +39,8 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 // 常時監視系
 public class LivingEventDC {
@@ -182,17 +181,23 @@ public class LivingEventDC {
 					Iterable<ItemStack> items = living.getArmorInventoryList();
 					if (items != null) {
 						for (ItemStack item : items) {
-							if (!DCUtil.isEmpty(item) && item.getItem() instanceof ItemArmor) {
-								ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
-								prev += DamageAPI.armorRegister.getPreventAmount(mat);
-								if (!isCold && EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
-										item) > 0) {
-									prev += EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, item)
-											* 1.0F;
-								}
-							}
+							if (DCUtil.isEmpty(item))
+								continue;
+
+							float p = DCUtil.getItemResistantData(item, isCold);
+							prev += p;
 						}
 					}
+
+					if (living instanceof EntityHorse) {
+						IItemHandler handler = living.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
+								null);
+						if (handler != null) {
+							float p = DCUtil.getItemResistantData(handler.getStackInSlot(1), isCold);
+							prev += p;
+						}
+					}
+
 					items = null;
 
 					dam -= prev;

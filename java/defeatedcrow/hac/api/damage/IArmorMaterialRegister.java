@@ -9,10 +9,16 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
  */
 public interface IArmorMaterialRegister {
 
-	HashMap<ArmorMaterial, Float> getArmorMap();
+	HashMap<ArmorMaterial, Float> getHeatMap();
 
-	void RegisterMaterial(ArmorMaterial material, float amount);
+	HashMap<ArmorMaterial, Float> getColdMap();
 
-	float getPreventAmount(ArmorMaterial material);
+	void registerMaterial(ArmorMaterial material, float heat, float cold);
+
+	void registerMaterial(ArmorMaterial material, float f);
+
+	float getHeatPreventAmount(ArmorMaterial material);
+
+	float getColdPreventAmount(ArmorMaterial material);
 
 }

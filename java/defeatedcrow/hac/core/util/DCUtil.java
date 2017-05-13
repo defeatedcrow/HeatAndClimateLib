@@ -6,12 +6,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.DCLogger;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -176,6 +181,30 @@ public class DCUtil {
 			}
 		}
 		return EnumFacing.EAST;
+	}
+
+	public static float getItemResistantData(ItemStack item, boolean isCold) {
+		if (DCUtil.isEmpty(item))
+			return 0;
+
+		float p = 0F;
+		if (isCold) {
+			p += DamageAPI.itemRegister.getColdPreventAmount(item);
+		} else {
+			p += DamageAPI.itemRegister.getHeatPreventAmount(item);
+		}
+		if (p == 0F && item.getItem() instanceof ItemArmor) {
+			ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
+			if (isCold) {
+				p += DamageAPI.armorRegister.getColdPreventAmount(mat);
+			} else {
+				p += DamageAPI.armorRegister.getHeatPreventAmount(mat);
+			}
+			if (!isCold && EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, item) > 0) {
+				p += EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, item) * 1.0F;
+			}
+		}
+		return p;
 	}
 
 	// デバッグモード
