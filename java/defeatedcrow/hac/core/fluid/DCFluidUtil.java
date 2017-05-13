@@ -72,7 +72,7 @@ public class DCFluidUtil {
 				}
 
 				if (success) {
-					if (/* !player.capabilities.isCreativeMode && */ item.stackSize-- <= 0) {
+					if (!player.capabilities.isCreativeMode && item.stackSize-- <= 0) {
 						item = null;
 					}
 					tile.markDirty();

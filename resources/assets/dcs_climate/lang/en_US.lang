@@ -15,6 +15,7 @@ dcs_climate.smelting=Climate Smelting
 dcs_climate.recipe=Climate Crafting
 dcs_climate.mill=Mill Recipe
 dcs_climate.fluidcraft=Fluid Processing
+dcs_climate.reactor=Reactor Processing
 dcs_climate.crop=Climate Crops
 dcs_climate.effective=Climate Effective Tiles
 

@@ -5,8 +5,7 @@ package defeatedcrow.hac.api.recipe;
  */
 public class RecipeAPI {
 
-	private RecipeAPI() {
-	}
+	private RecipeAPI() {}
 
 	public static boolean isLoaded;
 
@@ -15,5 +14,5 @@ public class RecipeAPI {
 
 	public static IMillRecipeRegister registerMills;
 	public static IFluidRecipeRegister registerFluidRecipes;
-
+	public static IReactorRecipeRegister registerReactorRecipes;
 }

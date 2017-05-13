@@ -19,15 +19,12 @@ import defeatedcrow.hac.core.util.DCTimeHelper;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -42,6 +39,8 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 // 常時監視系
 public class LivingEventDC {
@@ -182,17 +181,23 @@ public class LivingEventDC {
 					Iterable<ItemStack> items = living.getArmorInventoryList();
 					if (items != null) {
 						for (ItemStack item : items) {
-							if (!DCUtil.isEmpty(item) && item.getItem() instanceof ItemArmor) {
-								ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
-								prev += DamageAPI.armorRegister.getPreventAmount(mat);
-								if (!isCold && EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
-										item) > 0) {
-									prev += EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, item)
-											* 1.0F;
-								}
-							}
+							if (DCUtil.isEmpty(item))
+								continue;
+
+							float p = DCUtil.getItemResistantData(item, isCold);
+							prev += p;
 						}
 					}
+
+					if (living instanceof EntityHorse) {
+						IItemHandler handler = living.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
+								null);
+						if (handler != null) {
+							float p = DCUtil.getItemResistantData(handler.getStackInSlot(1), isCold);
+							prev += p;
+						}
+					}
+
 					items = null;
 
 					dam -= prev;
@@ -284,8 +289,8 @@ public class LivingEventDC {
 				// 3x3回やる
 				int i = 0;
 				while (i < 3) {
-					int cx = player.chunkCoordX - 3 + world.rand.nextInt(7);
-					int cz = player.chunkCoordZ - 3 + world.rand.nextInt(7);
+					int cx = player.chunkCoordX - 4 + world.rand.nextInt(9);
+					int cz = player.chunkCoordZ - 4 + world.rand.nextInt(9);
 					if (world.getChunkFromChunkCoords(cx, cz).isLoaded()) {
 						int j = 0;
 						while (j < 3) {
@@ -315,18 +320,20 @@ public class LivingEventDC {
 	}
 
 	/* spawn制御 */
+	@SubscribeEvent
 	public void spawnEvent(LivingSpawnEvent.CheckSpawn event) {
 		if (CoreConfigDC.customizedSpawn && event.getEntityLiving() != null
 				&& event.getEntityLiving() instanceof IMob) {
 			float i1 = 64F - event.getY();
 			int abs = (int) Math.abs(i1);
-			if (event.getWorld().rand.nextInt(64) > i1) {
+			if (abs < 20 || event.getWorld().rand.nextInt(64) >= abs) {
 				event.setResult(Result.DENY);
 			}
 		}
 	}
 
 	/* dropが消えなくなる */
+	@SubscribeEvent
 	public void livingDropItemEvent(ItemExpireEvent event) {
 		EntityItem item = event.getEntityItem();
 		int life = event.getExtraLife();

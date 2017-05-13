@@ -1,5 +1,8 @@
 package defeatedcrow.hac.api.climate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -25,77 +28,29 @@ import net.minecraft.util.math.MathHelper;
  */
 public enum DCHeatTier {
 	// absolute
-	ABSOLUTE(
-			-273,
-			-4,
-			0,
-			0x0000FF),
+	ABSOLUTE(-273, -4, 0, 0x0060FF),
 	// icecream making and cooling
-	FROSTBITE(
-			-70,
-			-3,
-			1,
-			0x0070FF),
+	FROSTBITE(-70, -3, 1, 0x00AEFF),
 	// cold climate biome
-	COLD(
-			-20,
-			-2,
-			2,
-			0x00FFFF),
+	COLD(-20, -2, 2, 0x00FFFF),
 	// cool climate biome
-	COOL(
-			0,
-			-1,
-			3,
-			0x70FFFF),
+	COOL(0, -1, 3, 0x70FFFF),
 	// electric or mechanical energy require
-	NORMAL(
-			20,
-			0,
-			4,
-			0x00FF30),
+	NORMAL(20, 0, 4, 0x00E115),
 	// warm climate biome
-	WARM(
-			35,
-			1,
-			5,
-			0xA0FF00),
+	WARM(35, 1, 5, 0xA0FF00),
 	// drying or brewing
-	HOT(
-			50,
-			2,
-			6,
-			0xFFE000),
+	HOT(50, 2, 6, 0xFFE000),
 	// cooking
-	OVEN(
-			220,
-			3,
-			7,
-			0xFFA000),
+	OVEN(220, 3, 7, 0xFFA000),
 	// making charcoal, bronze, burn dust
-	KILN(
-			800,
-			4,
-			8,
-			0xFF5000),
+	KILN(800, 4, 8, 0xFF5000),
 	// making iron or another metal
-	SMELTING(
-			1500,
-			5,
-			9,
-			0xFF0000),
+	SMELTING(1500, 5, 9, 0xFF0000),
 	// special alloy
-	UHT(
-			3000,
-			6,
-			10,
-			0xFF00FF),
+	UHT(3000, 6, 10, 0xFF00FF),
 	// only on data
-	INFERNO(
-			8000,
-			7,
-			11,
-			0x600020);
+	INFERNO(8000, 7, 11, 0x470000);
 
 	private final int temp;
 	private final int tier;
@@ -173,12 +128,21 @@ public enum DCHeatTier {
 		int g = (color >> 8) & 255;
 		int b = color & 255;
 		return new int[] {
-				r,
-				g,
-				b };
+				r, g, b
+		};
 	}
 
 	public int getColorInt() {
 		return color;
+	}
+
+	public static List<DCHeatTier> createList() {
+		List<DCHeatTier> tiers = new ArrayList<DCHeatTier>();
+
+		for (DCHeatTier t : DCHeatTier.values()) {
+			tiers.add(t);
+		}
+
+		return tiers;
 	}
 }

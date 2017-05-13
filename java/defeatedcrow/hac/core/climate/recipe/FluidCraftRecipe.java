@@ -11,6 +11,7 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IFluidRecipe;
 import defeatedcrow.hac.api.recipe.IRecipePanel;
+import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -37,6 +38,7 @@ public class FluidCraftRecipe implements IFluidRecipe {
 	private List<DCAirflow> air = new ArrayList<DCAirflow>();
 	private String type = "";
 	private static final ArrayList<Object> EMPTY = new ArrayList<Object>();
+	private final int count;
 
 	public FluidCraftRecipe(ItemStack o, ItemStack s, FluidStack oF, DCHeatTier t, DCHumidity h, DCAirflow a, float c,
 			boolean cooling, FluidStack iF, Object... inputs) {
@@ -87,6 +89,9 @@ public class FluidCraftRecipe implements IFluidRecipe {
 					throw new IllegalArgumentException("Unknown Object passed to recipe!");
 				}
 			}
+			count = input.length;
+		} else {
+			count = 0;
 		}
 	}
 
@@ -174,7 +179,10 @@ public class FluidCraftRecipe implements IFluidRecipe {
 		if (this.inputF == null) {
 			b1 = true;
 		} else if (fluid != null) {
-			b1 = (inputF.getFluid() == fluid.getFluid()) && (inputF.amount <= fluid.amount);
+			if (inputF.getFluid() == fluid.getFluid()
+					|| FluidDictionaryDC.matchFluid(fluid.getFluid(), inputF.getFluid())) {
+				b1 = inputF.amount <= fluid.amount;
+			}
 		}
 
 		if (b1) {
@@ -332,5 +340,10 @@ public class FluidCraftRecipe implements IFluidRecipe {
 	@Override
 	public String additionalString() {
 		return type;
+	}
+
+	@Override
+	public int recipeCoincidence() {
+		return count;
 	}
 }

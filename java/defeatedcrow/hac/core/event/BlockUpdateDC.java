@@ -189,11 +189,12 @@ public class BlockUpdateDC {
 			}
 
 			if (f2) {
-				for (EnumFacing face : EnumFacing.VALUES) {
-					if (!world.isAirBlock(p.offset(face))) {
-						Block target = world.getBlockState(p.offset(face)).getBlock();
-						if (!world.isUpdateScheduled(p.offset(face), target))
-							world.scheduleUpdate(p.offset(face), target, 600 + world.rand.nextInt(600));
+
+				for (BlockPos p3 : BlockPos.getAllInBox(p.east().north(), p.west().south())) {
+					if (!world.isAirBlock(p3)) {
+						Block target = world.getBlockState(p3).getBlock();
+						if (!world.isUpdateScheduled(p3, target) && world.rand.nextBoolean())
+							world.scheduleUpdate(p3, target, 600 + world.rand.nextInt(600));
 					}
 				}
 			}

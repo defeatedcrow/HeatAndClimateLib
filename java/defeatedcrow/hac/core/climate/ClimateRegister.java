@@ -184,9 +184,9 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		if (clm != null) {
 			return clm.getHumidity();
 		} else if (b != null) {
-			if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.DRY)) {
+			if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.DRY) || !b.canRain()) {
 				return DCHumidity.DRY;
-			} else if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.WET)) {
+			} else if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.WET) || b.getRainfall() > 0.8F) {
 				return DCHumidity.WET;
 			}
 		}

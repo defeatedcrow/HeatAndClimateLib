@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.client.base;
 
+import defeatedcrow.hac.core.base.FoodEntityBase;
 import net.minecraft.client.model.ModelBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,7 +15,7 @@ public abstract class DCFoodModelBase extends ModelBase {
 		isBaked = baked;
 	}
 
-	public abstract void render(float scale);
+	public abstract void render(float scale, FoodEntityBase entity);
 
 	public boolean isBaked() {
 		return isBaked;

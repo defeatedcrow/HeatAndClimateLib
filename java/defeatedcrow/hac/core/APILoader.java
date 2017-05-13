@@ -9,6 +9,7 @@ import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.ArmorMaterialRegister;
+import defeatedcrow.hac.core.climate.ArmorResistantRegister;
 import defeatedcrow.hac.core.climate.ClimateAltCalculator;
 import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
@@ -19,16 +20,20 @@ import defeatedcrow.hac.core.climate.recipe.ClimateRecipeRegister;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmeltingRegister;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRegister;
 import defeatedcrow.hac.core.climate.recipe.MillRecipeRegister;
+import defeatedcrow.hac.core.climate.recipe.ReactorRecipeRegister;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityPolarBear;
+import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
 
 public class APILoader {
 
@@ -42,10 +47,12 @@ public class APILoader {
 		RecipeAPI.registerSmelting = new ClimateSmeltingRegister();
 		RecipeAPI.registerFluidRecipes = new FluidCraftRegister();
 		RecipeAPI.registerMills = new MillRecipeRegister();
+		RecipeAPI.registerReactorRecipes = new ReactorRecipeRegister();
 		RecipeAPI.isLoaded = true;
 
 		DamageAPI.armorRegister = new ArmorMaterialRegister();
-		DamageAPI.resistantData = new MobResistantRegister();
+		DamageAPI.itemRegister = ArmorResistantRegister.INSTANCE;
+		DamageAPI.resistantData = MobResistantRegister.INSTANCE;
 		DamageAPI.isLoaded = true;
 
 		CropAPI.register = new ClimateCropRegister();
@@ -58,8 +65,9 @@ public class APILoader {
 	}
 
 	private static void registerMaterial() {
-		DamageAPI.armorRegister.RegisterMaterial(ArmorMaterial.LEATHER, 2.0F);
-		DamageAPI.armorRegister.RegisterMaterial(ArmorMaterial.DIAMOND, 0.5F);
+		DamageAPI.armorRegister.registerMaterial(ArmorMaterial.LEATHER, 2.0F, 2.0F);
+		DamageAPI.armorRegister.registerMaterial(ArmorMaterial.DIAMOND, 0.5F, 0.5F);
+		DamageAPI.itemRegister.registerMaterial(new ItemStack(Items.DIAMOND_HORSE_ARMOR), 2.0F, 2.0F);
 	}
 
 	public static void registerClimate() {
@@ -104,7 +112,8 @@ public class APILoader {
 
 	static void registerMobResistant() {
 		DamageAPI.resistantData.registerEntityResistant(EntityVillager.class, 2.0F, 2.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityGolem.class, 2.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityIronGolem.class, 2.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntitySnowman.class, 0.0F, 6.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityWither.class, 2.0F, 2.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityDragon.class, 2.0F, 2.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntitySheep.class, 1.0F, 3.0F);

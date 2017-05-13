@@ -30,6 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -56,14 +57,17 @@ public class RenderTempHUDEvent {
 			EntityPlayer player = ClimateCore.proxy.getPlayer();
 			World world = ClimateCore.proxy.getClientWorld();
 			GuiScreen gui = Minecraft.getMinecraft().currentScreen;
-			if (player != null && world != null && gui == null && !player.capabilities.isCreativeMode) {
+			if (player != null && world != null && gui == null && !player.capabilities.isCreativeMode
+					&& !player.isSpectator()) {
 				if (enable) {
 					if (count == 0) {
 						count = 10;
 
 						/* 10Fごとに使用データを更新 */
-
-						BlockPos pos = player.getPosition();
+						int px = MathHelper.floor_double(player.posX);
+						int py = MathHelper.floor_double(player.posY) + 1;
+						int pz = MathHelper.floor_double(player.posZ);
+						BlockPos pos = new BlockPos(px, py, pz);
 						if (pos != null && world.isAreaLoaded(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
 							DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos);
 							if (temp != null) {
@@ -79,15 +83,29 @@ public class RenderTempHUDEvent {
 						Iterable<ItemStack> items = player.getArmorInventoryList();
 						if (items != null) {
 							for (ItemStack item : items) {
-								if (!DCUtil.isEmpty(item) && item.getItem() instanceof ItemArmor) {
+								if (DCUtil.isEmpty(item))
+									continue;
+
+								float p = 0F;
+								if (tier < 0) {
+									p += DamageAPI.itemRegister.getColdPreventAmount(item);
+								} else {
+									p += DamageAPI.itemRegister.getHeatPreventAmount(item);
+								}
+								if (p == 0F && item.getItem() instanceof ItemArmor) {
 									ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
-									prev2 += DamageAPI.armorRegister.getPreventAmount(mat);
+									if (tier < 0) {
+										p += DamageAPI.armorRegister.getColdPreventAmount(mat);
+									} else {
+										p += DamageAPI.armorRegister.getHeatPreventAmount(mat);
+									}
 									if (tier > 0 && EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
 											item) > 0) {
-										prev2 += EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
-												item) * 1.0F;
+										p += EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, item)
+												* 1.0F;
 									}
 								}
+								prev2 += p;
 							}
 						}
 

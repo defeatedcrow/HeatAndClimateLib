@@ -47,6 +47,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	private int cookingTime = 32; // 2~16 sec 焼く
 	private int burntTime = 64;
 	private byte sideInt = 0;
+	private int individual;
 
 	private static final DataParameter<Boolean> RAW = EntityDataManager.<Boolean>createKey(FoodEntityBase.class,
 			DataSerializers.BOOLEAN);
@@ -56,6 +57,8 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			DataSerializers.VARINT);
 	private static final DataParameter<EnumFacing> SIDE = EntityDataManager.<EnumFacing>createKey(FoodEntityBase.class,
 			DataSerializers.FACING);
+	private static final DataParameter<Integer> INDIVIDUAL = EntityDataManager.<Integer>createKey(FoodEntityBase.class,
+			DataSerializers.VARINT);
 
 	private final Random rand = new Random();
 
@@ -141,7 +144,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		this.prevPosZ = this.posZ;
 		if (collideable())
 			this.noClip = this.pushOutOfBlocks(this.posX,
-					(this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
+					(this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY), this.posZ);
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 
 		if (this.isFallable()) {
@@ -472,6 +475,10 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		return false;
 	}
 
+	// ワープ禁止
+	@Override
+	public void setPortal(BlockPos pos) {}
+
 	// @Override
 	// public void onCollideWithPlayer(EntityPlayer entity) {
 	// if (!this.worldObj.isRemote && entity != null && entity.isSneaking()) {
@@ -521,6 +528,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		this.dataManager.register(BURNT, Boolean.valueOf(false));
 		this.dataManager.register(AGE, 0);
 		this.dataManager.register(SIDE, EnumFacing.DOWN);
+		this.dataManager.register(INDIVIDUAL, 0);
 	}
 
 	@Override
@@ -584,6 +592,15 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 	public int getTotalAge() {
 		return this.totalAge;
+	}
+
+	public void setIndividual(int i) {
+		individual = i & 31;
+		this.dataManager.set(INDIVIDUAL, individual);
+	}
+
+	public int getIndividual() {
+		return this.dataManager.get(INDIVIDUAL);
 	}
 
 }

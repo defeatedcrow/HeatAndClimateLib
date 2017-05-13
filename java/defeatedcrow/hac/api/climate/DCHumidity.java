@@ -1,5 +1,8 @@
 package defeatedcrow.hac.api.climate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -11,18 +14,10 @@ import net.minecraft.util.math.MathHelper;
  * UNDERWATER: 完全に水没しており空気ブロックが存在しない状態。水中でしか生育しない植物などに必要。
  */
 public enum DCHumidity {
-	DRY(
-			0,
-			0x700000),
-	NORMAL(
-			1,
-			0x00FF30),
-	WET(
-			2,
-			0x00EFCC),
-	UNDERWATER(
-			3,
-			0x0060FF);
+	DRY(0, 0x950000),
+	NORMAL(1, 0x00E115),
+	WET(2, 0x77EAFF),
+	UNDERWATER(3, 0x0060FF);
 
 	private final int id;
 	private final int color;
@@ -41,9 +36,8 @@ public enum DCHumidity {
 		int g = (color >> 4) & 255;
 		int b = color & 255;
 		return new int[] {
-				r,
-				g,
-				b };
+				r, g, b
+		};
 	}
 
 	public int getColorInt() {
@@ -57,6 +51,16 @@ public enum DCHumidity {
 				return e;
 		}
 		return NORMAL;
+	}
+
+	public static List<DCHumidity> createList() {
+		List<DCHumidity> tiers = new ArrayList<DCHumidity>();
+
+		for (DCHumidity t : DCHumidity.values()) {
+			tiers.add(t);
+		}
+
+		return tiers;
 	}
 
 }

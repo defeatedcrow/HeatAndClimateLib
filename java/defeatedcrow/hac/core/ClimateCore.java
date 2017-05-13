@@ -9,6 +9,8 @@ package defeatedcrow.hac.core;
 
 import defeatedcrow.hac.config.ClimateConfig;
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.climate.ArmorResistantRegister;
+import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.fluid.FluidIDRegisterDC;
 import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
@@ -31,8 +33,8 @@ public class ClimateCore {
 	public static final String MOD_ID = "dcs_climate|lib";
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 1;
-	public static final int MOD_MINOR = 4;
-	public static final int MOD_BUILD = 0;
+	public static final int MOD_MINOR = 5;
+	public static final int MOD_BUILD = 3;
 	public static final String MOD_DEPENDENCIES = "required-after:Forge@[12.18.3.2185,)";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.10,1.11]";
 
@@ -72,7 +74,13 @@ public class ClimateCore {
 		if (!CoreConfigDC.disableCustomRecipe) {
 			CustomizeVanillaRecipe.initCustomize();
 		}
+
+		MobResistantRegister.pre();
+		ArmorResistantRegister.pre();
+
 		FluidIDRegisterDC.post();
+		MobResistantRegister.post();
+		ArmorResistantRegister.post();
 	}
 
 	@EventHandler

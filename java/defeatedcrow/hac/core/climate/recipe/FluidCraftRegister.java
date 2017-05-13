@@ -104,43 +104,28 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 
 	@Override
 	public IFluidRecipe getRecipe(IClimate clm, List<ItemStack> items, FluidStack fluid) {
-		// DCLogger.debugLog("### fluid recipe checking ###");
-		// DCLogger.debugLog("heat: " + clm.getHeat().name());
-		List<FluidCraftRecipe> list = getRecipeList(clm.getHeat());
+		List<FluidCraftRecipe> list = new ArrayList<FluidCraftRecipe>();
+		list.addAll(getRecipeList(clm.getHeat()));
+		/*
+		 * 現在環境の1つ下の温度帯のレシピも条件にあてまはる
+		 */
+		if (clm.getHeat() == DCHeatTier.NORMAL) {
+			list.addAll(getRecipeList(DCHeatTier.WARM));
+			list.addAll(getRecipeList(DCHeatTier.COOL));
+		} else {
+			int i = clm.getHeat().getTier() < 0 ? 1 : -1;
+			DCHeatTier next = clm.getHeat().addTier(i);
+			list.addAll(getRecipeList(next));
+		}
 		IFluidRecipe ret = null;
 		if (list.isEmpty()) {} else {
 			// DCLogger.debugLog("### searching... ###");
+			int c = 0;
 			for (IFluidRecipe recipe : list) {
 				if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {
-					ret = recipe;
-				}
-			}
-		}
-
-		/*
-		 * Tier絶対値が1以上の場合、現在環境の1つ下の温度帯のレシピも条件にあてまはる
-		 */
-		if (ret == null) {
-			if (clm.getHeat() == DCHeatTier.NORMAL) {
-				List<FluidCraftRecipe> list2 = getRecipeList(DCHeatTier.WARM);
-				if (list2.isEmpty()) {} else {
-					for (IFluidRecipe recipe : list2) {
-						if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {
-							ret = recipe;
-						}
-					}
-				}
-			} else {
-				int i = clm.getHeat().getTier() < 0 ? 1 : -1;
-				DCHeatTier next = clm.getHeat().addTier(i);
-				// DCLogger.debugLog("heat2: " + next.name());
-				List<FluidCraftRecipe> list2 = getRecipeList(next);
-				if (list2.isEmpty()) {} else {
-					// DCLogger.debugLog("### searching... ###");
-					for (IFluidRecipe recipe : list2) {
-						if (recipe.matches(items, fluid) && recipe.matchClimate(clm)) {
-							ret = recipe;
-						}
+					if (recipe.recipeCoincidence() >= c) {
+						ret = recipe;
+						c = recipe.recipeCoincidence();
 					}
 				}
 			}

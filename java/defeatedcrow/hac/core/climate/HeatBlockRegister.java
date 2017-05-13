@@ -9,8 +9,8 @@ import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IHeatBlockRegister;
-import defeatedcrow.hac.core.plugin.ClimateEffectiveTile;
 import defeatedcrow.hac.core.plugin.DCsJEIPluginLists;
+import defeatedcrow.hac.core.plugin.jei.ClimateEffectiveTile;
 import net.minecraft.block.Block;
 import net.minecraftforge.oredict.OreDictionary;
 
