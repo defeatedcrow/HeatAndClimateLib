@@ -41,6 +41,11 @@ public class ArmorMaterialRegister implements IArmorMaterialRegister {
 	}
 
 	@Override
+	public void RegisterMaterial(ArmorMaterial material, float f) {
+		registerMaterial(material, f, f);
+	}
+
+	@Override
 	public float getHeatPreventAmount(ArmorMaterial material) {
 		if (heatMap.containsKey(material)) {
 			float ret = heatMap.get(material);
@@ -56,6 +61,11 @@ public class ArmorMaterialRegister implements IArmorMaterialRegister {
 			return ret;
 		}
 		return 0.25F;
+	}
+
+	@Override
+	public float getPreventAmount(ArmorMaterial material) {
+		return getPreventAmount(material);
 	}
 
 }

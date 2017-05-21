@@ -5,7 +5,7 @@ import net.minecraft.util.EnumFacing;
 /**
  * トルクを受け取るTileEntityに実装するもの
  */
-public interface ITorqueReceiver {
+public interface ITorqueReceiver extends ITorqueDC {
 
 	boolean canReceiveTorque(float amount, EnumFacing side);
 

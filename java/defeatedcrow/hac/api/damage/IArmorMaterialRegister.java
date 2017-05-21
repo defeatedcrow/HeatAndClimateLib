@@ -21,4 +21,14 @@ public interface IArmorMaterialRegister {
 
 	float getColdPreventAmount(ArmorMaterial material);
 
+	/**
+	 * old method
+	 */
+	void RegisterMaterial(ArmorMaterial material, float f);
+
+	/**
+	 * old method
+	 */
+	float getPreventAmount(ArmorMaterial material);
+
 }

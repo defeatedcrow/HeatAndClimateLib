@@ -170,7 +170,7 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 		IClimate clm = ClimateAPI.register.getClimateFromParam(minT, maxH, maxA);
 		FluidStack fluid = inF.isEmpty() ? null : inF.get(0);
 		String message = FRecipeType.getType(clm, cooling, fluid).name();
-		mc.fontRendererObj.drawString(message + " " + type, 30, 0, 0x0099FF, true);
+		mc.fontRendererObj.drawString(message + " " + type, 30, 0, 0x0099FF, false);
 	}
 
 	@Override

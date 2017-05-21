@@ -60,9 +60,13 @@ public class WeatherChecker {
 				rainCountMap.put(dim, 1);
 			}
 			sunCountMap.put(dim, 0);
+			DCLogger.debugLog("dim " + dim + " raining");
 		} else {
 			if (sunCountMap.containsKey(dim)) {
 				int count = sunCountMap.get(dim);
+				if (count > drought) {
+					DCLogger.debugLog("dim " + dim + " drought");
+				}
 				count++;
 				int i = Math.max(drought / 2, 10);
 				if (count > drought + i) {
@@ -80,7 +84,7 @@ public class WeatherChecker {
 		rainPowerMap.put(dim, rain);
 		rainCountMap.put(dim, countR);
 		sunCountMap.put(dim, countS);
-		DCLogger.debugLog("dim " + dim + " received data: " + rain + "/" + countR + ", " + countS);
+		// DCLogger.debugLog("dim " + dim + " received data: " + rain + "/" + countR + ", " + countS);
 	}
 
 	public static int getTempOffset(int dim, boolean isHell) {

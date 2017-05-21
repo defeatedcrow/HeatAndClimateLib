@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.blockstate.EnumSide;
 import defeatedcrow.hac.api.energy.ITorqueDC;
+import defeatedcrow.hac.api.energy.capability.TorqueCapabilityHandler;
 import defeatedcrow.hac.core.base.DCTileEntity;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.packet.MessageTorqueTile;
@@ -15,6 +16,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -405,5 +407,20 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 		default:
 			return EnumFacing.SOUTH;
 		}
+	}
+
+	TorqueHandlerWrapper torqueWrapper = new TorqueHandlerWrapper(this);
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == TorqueCapabilityHandler.TORQUE_HANDLER_CAPABILITY ? true
+				: super.hasCapability(capability, facing);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		return capability == TorqueCapabilityHandler.TORQUE_HANDLER_CAPABILITY ? (T) torqueWrapper
+				: super.getCapability(capability, facing);
 	}
 }
