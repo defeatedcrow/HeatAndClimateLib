@@ -68,7 +68,7 @@ public class WeatherChecker {
 					DCLogger.debugLog("dim " + dim + " drought");
 				}
 				count++;
-				int i = Math.max(drought / 2, 10);
+				int i = Math.max(drought / 4, 10);
 				if (count > drought + i) {
 					count = DCUtil.rand.nextInt(i);
 				}
