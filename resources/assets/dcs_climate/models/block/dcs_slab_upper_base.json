@@ -2,10 +2,7 @@
     "parent": "block/block",
     "ambientocclusion": true,
     "textures": {
-        "particle": "#side",
-        "down": "#down",
-        "up": "#up",
-        "side": "#side"
+        "particle": "#side"
     },
     "elements": [
         {   "from": [ 0, 8, 0 ],

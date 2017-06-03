@@ -75,6 +75,13 @@ public class APILoader {
 		if (CoreConfigDC.infernalInferno)
 			ClimateAPI.register.addBiomeClimate(Biomes.HELL, -1, DCHeatTier.INFERNO, DCHumidity.DRY, DCAirflow.NORMAL);
 
+		ClimateAPI.register.setNoSeason(Biomes.FROZEN_OCEAN);
+		ClimateAPI.register.setNoSeason(Biomes.JUNGLE);
+		ClimateAPI.register.setNoSeason(Biomes.JUNGLE_HILLS);
+		ClimateAPI.register.setNoSeason(Biomes.MUSHROOM_ISLAND);
+		ClimateAPI.register.setNoSeason(Biomes.SAVANNA);
+		ClimateAPI.register.setNoSeason(Biomes.SAVANNA_PLATEAU);
+
 		// heat
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LIT_PUMPKIN, 32767, DCHeatTier.WARM);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.TORCH, 32767, DCHeatTier.HOT);
