@@ -39,12 +39,12 @@ public class DCsJEIPlugin implements IModPlugin {
 		helper = registry.getJeiHelpers();
 
 		registry.addRecipeCategories(new ClimateEffectiveCategory(helper.getGuiHelper()),
-				new ClimateSmeltingCategory(helper.getGuiHelper()), new MillRecipeCategory(helper.getGuiHelper()),
-				new FluidRecipeCategory(helper.getGuiHelper()), new ReactorRecipeCategory(helper.getGuiHelper()),
-				new ClimateCropCategory(helper.getGuiHelper()));
+				new ClimateSmeltingCategory(helper.getGuiHelper()), new SpinningRecipeCategory(helper.getGuiHelper()),
+				new MillRecipeCategory(helper.getGuiHelper()), new FluidRecipeCategory(helper.getGuiHelper()),
+				new ReactorRecipeCategory(helper.getGuiHelper()), new ClimateCropCategory(helper.getGuiHelper()));
 		registry.addRecipeHandlers(new ClimateEffectiveHandler(), new ClimateSmeltingHandler(),
-				new ClimateRecipeHandler(), new MillRecipeHandler(), new FluidRecipeHandler(),
-				new ReactorRecipeHandler(), new ClimateCropHandler());
+				new ClimateRecipeHandler(), new SpinningRecipeHandler(), new MillRecipeHandler(),
+				new FluidRecipeHandler(), new ReactorRecipeHandler(), new ClimateCropHandler());
 
 		registry.addRecipes(DCsJEIPluginLists.climate);
 
@@ -62,20 +62,6 @@ public class DCsJEIPlugin implements IModPlugin {
 		list.addAll((List<ClimateSmelting>) RecipeAPI.registerSmelting.getRecipeList(DCHeatTier.UHT));
 		list.addAll((List<ClimateSmelting>) RecipeAPI.registerSmelting.getRecipeList(DCHeatTier.INFERNO));
 
-		// List<ClimateRecipe> list2 = new ArrayList<ClimateRecipe>();
-		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.ABSOLUTE));
-		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.FROSTBITE));
-		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.COLD));
-		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.COOL));
-		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.NORMAL));
-		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.WARM));
-		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.HOT));
-		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.OVEN));
-		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.KILN));
-		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.SMELTING));
-		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.UHT));
-		// list2.addAll((List<ClimateRecipe>) RecipeAPI.registerRecipes.getRecipeList(DCHeatTier.FROSTBITE));
-
 		List<FluidCraftRecipe> list3 = new ArrayList<FluidCraftRecipe>();
 		list3.addAll((List<FluidCraftRecipe>) RecipeAPI.registerFluidRecipes.getRecipeList(DCHeatTier.ABSOLUTE));
 		list3.addAll((List<FluidCraftRecipe>) RecipeAPI.registerFluidRecipes.getRecipeList(DCHeatTier.FROSTBITE));
@@ -88,7 +74,7 @@ public class DCsJEIPlugin implements IModPlugin {
 		list3.addAll((List<FluidCraftRecipe>) RecipeAPI.registerFluidRecipes.getRecipeList(DCHeatTier.KILN));
 		list3.addAll((List<FluidCraftRecipe>) RecipeAPI.registerFluidRecipes.getRecipeList(DCHeatTier.SMELTING));
 		list3.addAll((List<FluidCraftRecipe>) RecipeAPI.registerFluidRecipes.getRecipeList(DCHeatTier.UHT));
-		list3.addAll((List<FluidCraftRecipe>) RecipeAPI.registerFluidRecipes.getRecipeList(DCHeatTier.FROSTBITE));
+		list3.addAll((List<FluidCraftRecipe>) RecipeAPI.registerFluidRecipes.getRecipeList(DCHeatTier.INFERNO));
 
 		List<IClimateCrop> list4 = new ArrayList<IClimateCrop>();
 		list4.addAll(CropAPI.register.getList().values());
@@ -105,10 +91,10 @@ public class DCsJEIPlugin implements IModPlugin {
 		list5.addAll((List<ReactorRecipe>) RecipeAPI.registerReactorRecipes.getRecipeList(DCHeatTier.KILN));
 		list5.addAll((List<ReactorRecipe>) RecipeAPI.registerReactorRecipes.getRecipeList(DCHeatTier.SMELTING));
 		list5.addAll((List<ReactorRecipe>) RecipeAPI.registerReactorRecipes.getRecipeList(DCHeatTier.UHT));
-		list5.addAll((List<ReactorRecipe>) RecipeAPI.registerReactorRecipes.getRecipeList(DCHeatTier.FROSTBITE));
+		list5.addAll((List<ReactorRecipe>) RecipeAPI.registerReactorRecipes.getRecipeList(DCHeatTier.INFERNO));
 
 		registry.addRecipes(list);
-		// registry.addRecipes(list2);
+		registry.addRecipes(RecipeAPI.registerSpinningRecipes.getRecipeList());
 		registry.addRecipes(RecipeAPI.registerMills.getRecipeList());
 		registry.addRecipes(list3);
 		registry.addRecipes(list4);
@@ -146,6 +132,14 @@ public class DCsJEIPlugin implements IModPlugin {
 			for (ItemStack item : DCsJEIPluginLists.millstones) {
 				registry.addRecipeCategoryCraftingItem(item, new String[] {
 						"dcs_climate.mill"
+				});
+			}
+		}
+
+		if (!DCsJEIPluginLists.spinning.isEmpty()) {
+			for (ItemStack item : DCsJEIPluginLists.spinning) {
+				registry.addRecipeCategoryCraftingItem(item, new String[] {
+						"dcs_climate.spinning"
 				});
 			}
 		}

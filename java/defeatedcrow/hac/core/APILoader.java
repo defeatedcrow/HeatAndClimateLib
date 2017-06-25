@@ -21,6 +21,7 @@ import defeatedcrow.hac.core.climate.recipe.ClimateSmeltingRegister;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRegister;
 import defeatedcrow.hac.core.climate.recipe.MillRecipeRegister;
 import defeatedcrow.hac.core.climate.recipe.ReactorRecipeRegister;
+import defeatedcrow.hac.core.climate.recipe.SpinningRecipeRegister;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -48,6 +49,7 @@ public class APILoader {
 		RecipeAPI.registerFluidRecipes = new FluidCraftRegister();
 		RecipeAPI.registerMills = new MillRecipeRegister();
 		RecipeAPI.registerReactorRecipes = new ReactorRecipeRegister();
+		RecipeAPI.registerSpinningRecipes = new SpinningRecipeRegister();
 		RecipeAPI.isLoaded = true;
 
 		DamageAPI.armorRegister = new ArmorMaterialRegister();

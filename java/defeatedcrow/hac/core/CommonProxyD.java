@@ -12,20 +12,30 @@ import defeatedcrow.hac.core.event.SuffocationEventDC;
 import defeatedcrow.hac.core.event.TickEventDC;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.util.DCPotion;
+import defeatedcrow.hac.core.util.PotionFreezeResistance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.PotionType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CommonProxyD {
 
 	public void loadMaterial() {
 		DCPotion.init();
 		MaterialRegister.load();
+
+		DCInit.prevFreeze = new PotionFreezeResistance();
+		GameRegistry.register(DCInit.prevFreeze, new ResourceLocation(ClimateCore.MOD_ID, "dcs.potion.freeze_res"));
+		DCInit.prevFreezeType = new PotionType("dcs.freeze_res", new PotionEffect[] {
+				new PotionEffect(DCInit.prevFreeze, 3600, 0)
+		});
+		GameRegistry.register(DCInit.prevFreezeType, new ResourceLocation(ClimateCore.MOD_ID, "dcs.freeze_res"));
 	}
 
-	public void loadTE() {
-
-	}
+	public void loadTE() {}
 
 	public void loadWorldGen() {}
 

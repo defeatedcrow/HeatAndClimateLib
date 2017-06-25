@@ -37,6 +37,27 @@ public class DCUtil {
 		return item == null || item.getItem() == null;
 	}
 
+	public static boolean reduceStackSize(ItemStack item, int i) {
+		if (!isEmpty(item)) {
+			if (item.stackSize > i) {
+				item.stackSize -= i;
+				return false;
+			} else {
+				item.stackSize = 0;
+				return true;
+			}
+		}
+		return true;
+	}
+
+	public static ItemStack reduceAndDeleteStack(ItemStack item, int i) {
+		if (reduceStackSize(item, i)) {
+			return null;
+		} else {
+			return item;
+		}
+	}
+
 	/*
 	 * stacksize以外の比較
 	 */
