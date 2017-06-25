@@ -7,6 +7,9 @@
 
 package defeatedcrow.hac.core;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import defeatedcrow.hac.config.ClimateConfig;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.ArmorResistantRegister;
@@ -34,9 +37,11 @@ public class ClimateCore {
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 1;
 	public static final int MOD_MINOR = 5;
-	public static final int MOD_BUILD = 3;
+	public static final int MOD_BUILD = 8;
 	public static final String MOD_DEPENDENCIES = "required-after:Forge@[12.18.3.2185,)";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.10,1.11]";
+	public static final String PACKAGE_BASE = "dcs";
+	public static final String PACKAGE_ID = "dcs_climate";
 
 	@SidedProxy(clientSide = "defeatedcrow.hac.core.client.ClientProxyD", serverSide = "defeatedcrow.hac.core.CommonProxyD")
 	public static CommonProxyD proxy;
@@ -44,8 +49,8 @@ public class ClimateCore {
 	@Instance("dcs_climate|lib")
 	public static ClimateCore instance;
 
-	public static final String PACKAGE_BASE = "dcs";
-	public static final String PACKAGE_ID = "dcs_climate";
+	public static final Logger LOGGER = LogManager.getLogger(PACKAGE_ID);
+
 	public static final CreativeTabs climate = new CreativeTabClimate(MOD_ID);
 
 	public static boolean isDebug = false;

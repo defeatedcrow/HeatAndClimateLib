@@ -14,6 +14,7 @@ public class DCsJEIPluginLists {
 	public static final List<ItemStack> fluidcrafters = new ArrayList<>();
 	public static final List<ItemStack> reactors = new ArrayList<>();
 	public static final List<ItemStack> crops = new ArrayList<>();
+	public static final List<ItemStack> spinning = new ArrayList<>();
 
 	public static final List<ItemStack> excluder = new ArrayList<>();
 

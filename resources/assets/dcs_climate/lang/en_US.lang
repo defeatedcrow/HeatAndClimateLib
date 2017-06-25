@@ -18,6 +18,12 @@ dcs_climate.fluidcraft=Fluid Processing
 dcs_climate.reactor=Reactor Processing
 dcs_climate.crop=Climate Crops
 dcs_climate.effective=Climate Effective Tiles
+dcs_climate.spinning=Spinning Machine
 
 death.attack.dcs_heat=%1$s was burnt browned.
 death.attack.dcs_cold=%1$s became a sherbet.
+
+dcs.potion.freeze_res=Cold Resistance
+potion.effect.dcs.freeze_res=Potion of Cold Resistance
+splash_potion.effect.dcs.freeze_res=Splash Potion of Cold Resistance
+lingering_potion.effect.dcs.freeze_res=Lingering Potion of Cold Resistance

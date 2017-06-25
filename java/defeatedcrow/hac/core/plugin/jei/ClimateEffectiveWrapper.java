@@ -104,16 +104,16 @@ public class ClimateEffectiveWrapper implements IRecipeWrapper {
 		}
 
 		String t = heat == null ? "  -" : heat.name();
-		mc.fontRendererObj.drawString("TEMP", 73, baseY, 0x993030, true);
-		mc.fontRendererObj.drawString(t, 93, baseY, 0x993030, true);
+		mc.fontRendererObj.drawString("TEMP", 73, baseY, 0x993030, false);
+		mc.fontRendererObj.drawString(t, 93, baseY, 0x993030, false);
 
 		String h = hum == null ? "  -" : hum.name();
-		mc.fontRendererObj.drawString("HUM", 73, baseY + 14, 0x303099, true);
-		mc.fontRendererObj.drawString(h, 93, baseY + 14, 0x303099, true);
+		mc.fontRendererObj.drawString("HUM", 73, baseY + 14, 0x303099, false);
+		mc.fontRendererObj.drawString(h, 93, baseY + 14, 0x303099, false);
 
 		String a = air == null ? "  -" : air.name();
-		mc.fontRendererObj.drawString("AIR", 73, baseY + 28, 0x309930, true);
-		mc.fontRendererObj.drawString(a, 93, baseY + 28, 0x309930, true);
+		mc.fontRendererObj.drawString("AIR", 73, baseY + 28, 0x309930, false);
+		mc.fontRendererObj.drawString(a, 93, baseY + 28, 0x309930, false);
 	}
 
 	@Override

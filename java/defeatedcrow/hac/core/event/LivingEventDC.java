@@ -12,6 +12,7 @@ import defeatedcrow.hac.api.damage.DamageSourceClimate;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.packet.MessageCharmKey;
 import defeatedcrow.hac.core.util.DCPotion;
@@ -155,6 +156,9 @@ public class LivingEventDC {
 						float adj = DamageAPI.resistantData.getColdResistant(living);
 						if (adj != 0F) {
 							prev += adj;
+						}
+						if (living.isPotionActive(DCInit.prevFreeze)) {
+							prev += 4.0F;
 						}
 						if (living.isImmuneToFire()) {
 							prev -= 2.0F;

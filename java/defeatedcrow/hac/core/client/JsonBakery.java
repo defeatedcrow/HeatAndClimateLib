@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
+
+import defeatedcrow.hac.api.placeable.ISidedTexture;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -28,11 +32,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableMap;
-
-import defeatedcrow.hac.api.placeable.ISidedTexture;
-
 /**
  * Original code was made by A.K.<br>
  * <br>
@@ -47,15 +46,18 @@ public class JsonBakery {
 	 * Dummy Model
 	 * 横向きの丸太状のSided、縦向きの丸太状のTBの2種がある
 	 */
-	private static ModelResourceLocation normalSided = new ModelResourceLocation("dcs_climate:dcs_cube_sided", "normal");
+	private static ModelResourceLocation normalSided = new ModelResourceLocation("dcs_climate:dcs_cube_sided",
+			"normal");
 	private static ModelResourceLocation inventorySided = new ModelResourceLocation("dcs_climate:dcs_cube_sided",
 			"inventory");
 
 	private static ModelResourceLocation normalTB = new ModelResourceLocation("dcs_climate:dcs_cube_tb", "normal");
-	private static ModelResourceLocation inventoryTB = new ModelResourceLocation("dcs_climate:dcs_cube_tb", "inventory");
+	private static ModelResourceLocation inventoryTB = new ModelResourceLocation("dcs_climate:dcs_cube_tb",
+			"inventory");
 
 	private static ModelResourceLocation normalCrop = new ModelResourceLocation("dcs_climate:dcs_cross", "normal");
-	private static ModelResourceLocation inventoryCrop = new ModelResourceLocation("dcs_climate:dcs_cross", "inventory");
+	private static ModelResourceLocation inventoryCrop = new ModelResourceLocation("dcs_climate:dcs_cross",
+			"inventory");
 
 	private static final List<String> TEX = new ArrayList<String>();
 
@@ -167,7 +169,7 @@ public class JsonBakery {
 		@Override
 		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 			/* 6面それぞれの貼り替え */
-			if (state.getBlock() instanceof ISidedTexture) {
+			if (state != null && state.getBlock() instanceof ISidedTexture) {
 				ISidedTexture sided = (ISidedTexture) state.getBlock();
 				int meta = state.getBlock().getMetaFromState(state);
 				boolean face = (state.getBlock().getMetaFromState(state) & 8) == 0;
@@ -246,15 +248,15 @@ public class JsonBakery {
 		@Override
 		public List<BakedQuad> getQuads(IBlockState state, EnumFacing face, long rand) {
 			/* 6面それぞれの貼り替え */
-			if (state.getBlock() instanceof ISidedTexture) {
+			if (state != null && state.getBlock() instanceof ISidedTexture) {
 				ISidedTexture sided = (ISidedTexture) state.getBlock();
 				int meta = state.getBlock().getMetaFromState(state);
 				String top = sided.getTexture(meta, 0, false);
 				String down = sided.getTexture(meta, 1, false);
 				String side = sided.getTexture(meta, 2, false);
-				IBakedModel baked = retexturableModel.retexture(
-						ImmutableMap.of("particle", top, "down", down, "up", top, "side", side)).bake(
-						retexturableModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+				IBakedModel baked = retexturableModel
+						.retexture(ImmutableMap.of("particle", top, "down", down, "up", top, "side", side))
+						.bake(retexturableModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 				return baked.getQuads(state, face, rand);
 			}
 			IBakedModel defModel = retexturableModel.bake(retexturableModel.getDefaultState(),
@@ -311,12 +313,12 @@ public class JsonBakery {
 		@Override
 		public List<BakedQuad> getQuads(IBlockState state, EnumFacing face, long rand) {
 			/* 6面それぞれの貼り替え */
-			if (state.getBlock() instanceof ISidedTexture) {
+			if (state != null && state.getBlock() instanceof ISidedTexture) {
 				ISidedTexture sided = (ISidedTexture) state.getBlock();
 				int meta = state.getBlock().getMetaFromState(state);
 				String side = sided.getTexture(meta, 0, false);
-				IBakedModel baked = retexturableModel.retexture(ImmutableMap.of("particle", side, "crop", side)).bake(
-						retexturableModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+				IBakedModel baked = retexturableModel.retexture(ImmutableMap.of("particle", side, "crop", side))
+						.bake(retexturableModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 				return baked.getQuads(state, face, rand);
 			}
 			IBakedModel defModel = retexturableModel.bake(retexturableModel.getDefaultState(),

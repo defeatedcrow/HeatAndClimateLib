@@ -1,13 +1,17 @@
 package defeatedcrow.hac.core.climate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.EnumSeason;
 import defeatedcrow.hac.api.climate.IBiomeClimateRegister;
 import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -16,9 +20,11 @@ import net.minecraftforge.common.BiomeDictionary;
 public class ClimateRegister implements IBiomeClimateRegister {
 
 	private static Map<Integer, DCClimate> recipes;
+	private static List<Integer> seasons;
 
 	public ClimateRegister() {
 		this.recipes = new HashMap<Integer, DCClimate>();
+		this.seasons = new ArrayList<Integer>();
 	}
 
 	@Override
@@ -42,8 +48,28 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	}
 
 	@Override
+	public void addBiomeClimate(Biome biome, DCHeatTier temp, DCHumidity hum, DCAirflow airflow, boolean hasSeason) {
+		if (biome != null && !hasSeason && !seasons.contains(Biome.getIdForBiome(biome))) {
+			seasons.add(Biome.getIdForBiome(biome));
+		}
+		addBiomeClimate(biome, temp, hum, airflow);
+	}
+
+	@Override
+	public void setNoSeason(Biome biome) {
+		if (biome != null && !seasons.contains(Biome.getIdForBiome(biome))) {
+			seasons.add(Biome.getIdForBiome(biome));
+		}
+	}
+
+	@Override
 	public Map<Integer, ? extends IClimate> getClimateList() {
 		return recipes;
+	}
+
+	@Override
+	public List<Integer> getNoSeasonList() {
+		return seasons;
 	}
 
 	private boolean isAlreadyRegistered(int id) {
@@ -117,6 +143,16 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		int dim = world.provider.getDimension();
 		int i = getKey(biome, dim);
 		DCHeatTier tier = getHeatTier(i);
+
+		// season
+		EnumSeason season = DCTimeHelper.getSeasonEnum(world);
+		if (biome != null && !seasons.contains(Biome.getIdForBiome(biome))) {
+			if (season == EnumSeason.SUMMER && tier.getTier() < DCHeatTier.HOT.getTier()) {
+				return tier.addTier(1);
+			} else if (season == EnumSeason.WINTER && tier.getTier() > DCHeatTier.COLD.getTier()) {
+				return tier.addTier(-1);
+			}
+		}
 		return tier;
 	}
 

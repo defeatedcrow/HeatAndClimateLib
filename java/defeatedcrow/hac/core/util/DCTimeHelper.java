@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.util;
 
+import defeatedcrow.hac.api.climate.EnumSeason;
 import defeatedcrow.hac.config.CoreConfigDC;
 import net.minecraft.world.World;
 
@@ -67,6 +68,19 @@ public class DCTimeHelper {
 		long f = 1200L / CoreConfigDC.updateFrequency;
 		long i = (totalTime(world) / f);
 		return (int) i;
+	}
+
+	public static EnumSeason getSeasonEnum(World world) {
+		int s = getSeason(world);
+		if (s == 1) {
+			return EnumSeason.SUMMER;
+		} else if (s == 2) {
+			return EnumSeason.AUTUMN;
+		} else if (s == 3) {
+			return EnumSeason.WINTER;
+		} else {
+			return EnumSeason.SPRING;
+		}
 	}
 
 }

@@ -35,7 +35,7 @@ public class ItemSet {
 
 	@Override
 	public int hashCode() {
-		int i = item.getIdFromItem(item) + meta * 31;
+		int i = item.getUnlocalizedName().hashCode() + meta;
 		return i;
 	}
 }

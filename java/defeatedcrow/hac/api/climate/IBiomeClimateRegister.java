@@ -1,5 +1,6 @@
 package defeatedcrow.hac.api.climate;
 
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.util.math.BlockPos;
@@ -17,13 +18,13 @@ public interface IBiomeClimateRegister {
 	 * そのPosの基礎値として加算される。<br>
 	 *
 	 * @param biome
-	 *            : 登録対象Biome
+	 *        : 登録対象Biome
 	 * @param temp
-	 *            : 気温
+	 *        : 気温
 	 * @param hum
-	 *            : 湿度
+	 *        : 湿度
 	 * @param airflow
-	 *            : 通気
+	 *        : 通気
 	 */
 	void addBiomeClimate(Biome biome, DCHeatTier temp, DCHumidity hum, DCAirflow airflow);
 
@@ -32,19 +33,25 @@ public interface IBiomeClimateRegister {
 	 * 特定のdimension内のみで適用される。<br>
 	 *
 	 * @param biome
-	 *            : 登録対象Biome
+	 *        : 登録対象Biome
 	 * @param dim
-	 *            : 登録対象dimension
+	 *        : 登録対象dimension
 	 * @param temp
-	 *            : 気温
+	 *        : 気温
 	 * @param hum
-	 *            : 湿度
+	 *        : 湿度
 	 * @param airflow
-	 *            : 通気
+	 *        : 通気
 	 */
 	void addBiomeClimate(Biome biome, int dim, DCHeatTier temp, DCHumidity hum, DCAirflow airflow);
 
+	void addBiomeClimate(Biome biome, DCHeatTier temp, DCHumidity hum, DCAirflow airflow, boolean haSeason);
+
+	void setNoSeason(Biome biome);
+
 	Map<Integer, ? extends IClimate> getClimateList();
+
+	List<Integer> getNoSeasonList();
 
 	/**
 	 * 現在の環境チェック。

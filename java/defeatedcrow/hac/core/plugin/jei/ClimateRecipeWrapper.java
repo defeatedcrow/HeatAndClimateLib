@@ -114,7 +114,7 @@ public class ClimateRecipeWrapper implements IRecipeWrapper {
 
 		IClimate clm = ClimateAPI.register.getClimateFromParam(minT, maxH, maxA);
 		String s = CRecipeType.getType(clm).name();
-		mc.fontRendererObj.drawString(s, 72, 0, 0x0099FF, true);
+		mc.fontRendererObj.drawString(s, 72, 0, 0x0099FF, false);
 	}
 
 	@Override

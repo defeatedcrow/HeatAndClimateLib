@@ -11,7 +11,7 @@ import net.minecraft.world.World;
  * トルクマシンは、発生側のTileEntityが能動的に動くため、<br>
  * 外部からこれを利用したトルク発生機を追加する場合は、隣接Tileへの伝達処理を自作して下さい。
  */
-public interface ITorqueProvider {
+public interface ITorqueProvider extends ITorqueDC {
 
 	List<EnumFacing> getOutputSide();
 

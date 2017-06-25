@@ -468,6 +468,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 				hasWind = true;
 			}
 		}
+		if (CoreConfigDC.tightUnderworld && pos.getY() < 30) {
+			air = DCAirflow.TIGHT;
+		}
 
 		/*
 		 * blockの値

@@ -57,6 +57,7 @@ public class CoreConfigDC {
 	public static boolean harderVanilla = false;
 	public static boolean infernalInferno = false;
 	public static boolean enableSuffocation = false;
+	public static boolean tightUnderworld = false;
 
 	public void load(Configuration cfg) {
 
@@ -164,6 +165,9 @@ public class CoreConfigDC {
 			Property drought = cfg.get("world setting", "Drought Frequency", droughtFrequency,
 					"Set the number of days of fine weather required for drought.");
 
+			Property tight = cfg.get("hardmode setting", "Anaerobic Underworld", tightUnderworld,
+					"Set the indoor underground (<Y30) airflow to tight.");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
@@ -182,6 +186,7 @@ public class CoreConfigDC {
 			infernalInferno = inferno.getBoolean();
 			enableSuffocation = suffocation.getBoolean();
 			customizedSpawn = spawn.getBoolean();
+			tightUnderworld = tight.getBoolean();
 
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)

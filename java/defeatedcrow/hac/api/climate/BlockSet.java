@@ -32,7 +32,7 @@ public class BlockSet {
 
 	@Override
 	public int hashCode() {
-		int i = block.getIdFromBlock(block) + meta * 31;
+		int i = block.getUnlocalizedName().hashCode() + meta;
 		return i;
 	}
 }

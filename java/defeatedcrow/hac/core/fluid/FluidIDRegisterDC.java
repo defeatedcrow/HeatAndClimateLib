@@ -6,33 +6,34 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
+import java.util.TreeMap;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import defeatedcrow.hac.core.DCLogger;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 // 数値IDの保管用
 public class FluidIDRegisterDC {
 
-	private FluidIDRegisterDC() {
-	}
+	private FluidIDRegisterDC() {}
 
 	public static final FluidIDRegisterDC INSTANCE = new FluidIDRegisterDC();
 
 	static int maxID = 0;
 
 	private static BiMap<String, Object> jsonMap = HashBiMap.create();
-	private static BiMap<Integer, String> fluidMap = HashBiMap.create();
+	private static TreeMap<Integer, String> fluidMap = Maps.newTreeMap();
 
 	private static File dir = null;
 
@@ -170,7 +171,7 @@ public class FluidIDRegisterDC {
 					JsonWriter jsw = new JsonWriter(osw);
 					jsw.setIndent(" ");
 					Gson gson = new Gson();
-					gson.toJson(fluidMap, Map.class, jsw);
+					gson.toJson(fluidMap, HashMap.class, jsw);
 
 					osw.close();
 					fos.close();

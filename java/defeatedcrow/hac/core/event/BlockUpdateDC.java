@@ -59,12 +59,14 @@ public class BlockUpdateDC {
 					return;
 				}
 			} else if (block instanceof IGrowable) {
+				// WETの参照posを真下に
+				IClimate clm2 = ClimateAPI.calculator.getClimate(world, p.down());
 				if (block == Blocks.TALLGRASS) {
 					// WARMかつWETの場合に成長が促進される
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
 						if ((clm.getHeat() == DCHeatTier.WARM || clm.getHeat() == DCHeatTier.HOT)
-								&& clm.getHumidity() == DCHumidity.WET) {
+								&& clm2.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
 						}
 					}
@@ -82,7 +84,7 @@ public class BlockUpdateDC {
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(10) == 0) {
 						if ((clm.getHeat() == DCHeatTier.WARM || clm.getHeat() == DCHeatTier.HOT)
-								&& clm.getHumidity() == DCHumidity.WET) {
+								&& clm2.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
 						}
 					}
@@ -91,7 +93,7 @@ public class BlockUpdateDC {
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
 						if ((clm.getHeat() == DCHeatTier.WARM || clm.getHeat() == DCHeatTier.HOT)
-								&& clm.getHumidity() == DCHumidity.WET) {
+								&& clm2.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
 							// DCLogger.debugLog("Grow!");
 						} else if (clm.getHeat().getTier() < -1) {

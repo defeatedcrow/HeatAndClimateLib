@@ -18,6 +18,15 @@ dcs_climate.fluidcraft=液体加工レシピ
 dcs_climate.reactor=合成反応レシピ
 dcs_climate.crop=気候利用作物
 dcs_climate.effective=気候に影響するブロック
+dcs_climate.spinning=紡績機
 
 death.attack.dcs_heat=%1$sはこんがり焼き上がった。
 death.attack.dcs_cold=%1$sはシャーベットになった。
+
+dcs.potion.freeze_resistance=冷気耐性
+dcs.freeze_resistance=冷気耐性
+
+dcs.potion.freeze_res=冷気耐性
+potion.effect.dcs.freeze_res=冷気耐性
+splash_potion.effect.dcs.freeze_res=冷気耐性のスプラッシュポーション
+lingering_potion.effect.dcs.freeze_res=冷気耐性の残留ポーション

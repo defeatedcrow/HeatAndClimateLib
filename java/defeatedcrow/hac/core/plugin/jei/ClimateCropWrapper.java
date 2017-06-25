@@ -147,9 +147,9 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 		String name = "PLANT BLOCK";
 		String crop = "CROPS";
 		String seed = "SEEDS";
-		mc.fontRendererObj.drawString(name, 26, 20, 0x0099FF, true);
-		mc.fontRendererObj.drawString(crop, 80, 14, 0x0099FF, true);
-		mc.fontRendererObj.drawString(seed, 80, 42, 0x0099FF, true);
+		mc.fontRendererObj.drawString(name, 26, 20, 0x0099FF, false);
+		mc.fontRendererObj.drawString(crop, 80, 14, 0x0099FF, false);
+		mc.fontRendererObj.drawString(seed, 80, 42, 0x0099FF, false);
 	}
 
 	@Override

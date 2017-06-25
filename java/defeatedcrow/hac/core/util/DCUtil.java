@@ -9,6 +9,7 @@ import java.util.Random;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
+import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,6 +35,27 @@ public class DCUtil {
 
 	public static boolean isEmpty(ItemStack item) {
 		return item == null || item.getItem() == null;
+	}
+
+	public static boolean reduceStackSize(ItemStack item, int i) {
+		if (!isEmpty(item)) {
+			if (item.stackSize > i) {
+				item.stackSize -= i;
+				return false;
+			} else {
+				item.stackSize = 0;
+				return true;
+			}
+		}
+		return true;
+	}
+
+	public static ItemStack reduceAndDeleteStack(ItemStack item, int i) {
+		if (reduceStackSize(item, i)) {
+			return null;
+		} else {
+			return item;
+		}
 	}
 
 	/*
@@ -218,7 +240,7 @@ public class DCUtil {
 			md5.update(pass.getBytes());
 			b = md5.digest();
 		} catch (NoSuchAlgorithmException e) {
-			DCLogger.LOGGER.warn("Failed to check password...", e);
+			ClimateCore.LOGGER.warn("Failed to check password...", e);
 		}
 
 		get = getStringFromBytes(b);
@@ -226,7 +248,7 @@ public class DCUtil {
 
 		if (!get.isEmpty()) {
 			boolean match = get.matches("7805f2fa0adc68cd9a8f7cb2135e0b57");
-			DCLogger.LOGGER.info("DebugMode : " + match);
+			DCLogger.infoLog("DebugMode : " + match);
 			return match;
 		}
 
