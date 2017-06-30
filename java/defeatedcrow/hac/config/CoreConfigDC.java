@@ -51,6 +51,7 @@ public class CoreConfigDC {
 	public static boolean enableDeepWater = true;
 	public static boolean enableUnderLake = true;
 	public static boolean customizedSpawn = false;
+	public static boolean enableForestLake = true;
 	public static int droughtFrequency = 60;
 
 	// hardmode
@@ -100,6 +101,9 @@ public class CoreConfigDC {
 
 			Property under_lake = cfg.get("world setting", "Enable Modificated Lake", enableUnderLake,
 					"Enable modification the underground lakes.");
+
+			Property forest_lake = cfg.get("world setting", "Disable Forest Lava Lake", enableForestLake,
+					"Disable generation the lava lakes on ground of forest biomes.");
 
 			Property freeze_drop = cfg.get("world setting", "Enable Freeze EntityItem", enableFreezeDrop,
 					"EntityItems avoids to despawn in cold temp than the FROSTBITE tier.");
@@ -178,6 +182,7 @@ public class CoreConfigDC {
 			showDamageIcon = hud_icon.getBoolean();
 			enableDeepWater = water_cave.getBoolean();
 			enableUnderLake = under_lake.getBoolean();
+			enableForestLake = forest_lake.getBoolean();
 			enableFreezeDrop = freeze_drop.getBoolean();
 			waterFix = water.getBoolean();
 			wall = enableWall.getBoolean();

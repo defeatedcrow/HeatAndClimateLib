@@ -31,20 +31,27 @@ public class CaveGenLavaDC {
 
 	@SubscribeEvent
 	public void initLakeGen(PopulateChunkEvent.Populate event) {
-		if (CoreConfigDC.enableUnderLake
-				&& event.getType() == net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.LAVA) {
-			BlockPos pos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16);
-			Biome biome = event.getWorld().getBiomeForCoordsBody(pos);
-			if (biome.getRainfall() >= 0.85F) {
-				int x = rand.nextInt(16) + 8;
-				int y = rand.nextInt(256);
-				int z = rand.nextInt(16) + 8;
-				BlockPos pos1 = pos.add(x, y, z);
-				if (y < event.getWorld().getSeaLevel()) {
-					(new WorldGenLakes(Blocks.MAGMA)).generate(event.getWorld(), rand, pos1);
-					// DCLogger.debugLog("underlava changed: " + pos1.getX() + "," + pos1.getY() + "," + pos1.getZ());
+		if (event.getType() == net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.LAVA) {
+			if (CoreConfigDC.enableUnderLake) {
+				BlockPos pos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16);
+				Biome biome = event.getWorld().getBiomeForCoordsBody(pos);
+				if (biome.getRainfall() > 0.8F) {
+					int x = rand.nextInt(16) + 8;
+					int y = rand.nextInt(256);
+					int z = rand.nextInt(16) + 8;
+					BlockPos pos1 = pos.add(x, y, z);
+					if (y < event.getWorld().getSeaLevel()) {
+						(new WorldGenLakes(Blocks.MAGMA)).generate(event.getWorld(), rand, pos1);
+						// DCLogger.debugLog("underlava changed: " + pos1.getX() + "," + pos1.getY() + "," +
+						// pos1.getZ());
+					}
+					event.setResult(Result.DENY);
 				}
-				event.setResult(Result.DENY);
+			} else if (CoreConfigDC.enableForestLake) {
+				BlockPos pos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16);
+				if (pos.getY() > 60) {
+					event.setResult(Result.DENY);
+				}
 			}
 		}
 	}
@@ -56,7 +63,7 @@ public class CaveGenLavaDC {
 			Biome biome = event.getWorld().getBiomeForCoordsBody(event.getPos());
 			Random random = event.getWorld().rand;
 			boolean flag = false;
-			if (biome.getRainfall() >= 0.85F) {
+			if (biome.getRainfall() > 0.8F) {
 				// 降雨量が多いと溶岩ができない
 				event.setResult(Result.DENY);
 			}

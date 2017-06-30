@@ -3,6 +3,8 @@ package defeatedcrow.hac.core.plugin.jei;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
@@ -27,7 +29,9 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.biome.Biome;
 
 @JEIPlugin
 public class DCsJEIPlugin implements IModPlugin {
@@ -38,15 +42,19 @@ public class DCsJEIPlugin implements IModPlugin {
 	public void register(IModRegistry registry) {
 		helper = registry.getJeiHelpers();
 
-		registry.addRecipeCategories(new ClimateEffectiveCategory(helper.getGuiHelper()),
-				new ClimateSmeltingCategory(helper.getGuiHelper()), new SpinningRecipeCategory(helper.getGuiHelper()),
-				new MillRecipeCategory(helper.getGuiHelper()), new FluidRecipeCategory(helper.getGuiHelper()),
-				new ReactorRecipeCategory(helper.getGuiHelper()), new ClimateCropCategory(helper.getGuiHelper()));
-		registry.addRecipeHandlers(new ClimateEffectiveHandler(), new ClimateSmeltingHandler(),
-				new ClimateRecipeHandler(), new SpinningRecipeHandler(), new MillRecipeHandler(),
-				new FluidRecipeHandler(), new ReactorRecipeHandler(), new ClimateCropHandler());
+		registry.addRecipeCategories(new ClimateBiomeCategory(helper.getGuiHelper()),
+				new ClimateEffectiveCategory(helper.getGuiHelper()), new ClimateSmeltingCategory(helper.getGuiHelper()),
+				new SpinningRecipeCategory(helper.getGuiHelper()), new MillRecipeCategory(helper.getGuiHelper()),
+				new FluidRecipeCategory(helper.getGuiHelper()), new ReactorRecipeCategory(helper.getGuiHelper()),
+				new ClimateCropCategory(helper.getGuiHelper()));
+		registry.addRecipeHandlers(new ClimateBiomeHandler(), new ClimateEffectiveHandler(),
+				new ClimateSmeltingHandler(), new ClimateRecipeHandler(), new SpinningRecipeHandler(),
+				new MillRecipeHandler(), new FluidRecipeHandler(), new ReactorRecipeHandler(),
+				new ClimateCropHandler());
 
 		registry.addRecipes(DCsJEIPluginLists.climate);
+		List<Biome> biomes = Lists.newArrayList(Biome.EXPLORATION_BIOMES_LIST);
+		registry.addRecipes(biomes);
 
 		List<ClimateSmelting> list = new ArrayList<ClimateSmelting>();
 		list.addAll((List<ClimateSmelting>) RecipeAPI.registerSmelting.getRecipeList(DCHeatTier.ABSOLUTE));
@@ -107,6 +115,10 @@ public class DCsJEIPlugin implements IModPlugin {
 				});
 			}
 		}
+
+		registry.addRecipeCategoryCraftingItem(new ItemStack(Blocks.SAPLING), new String[] {
+				"dcs_climate.biome"
+		});
 
 		registry.addRecipeCategoryCraftingItem(new ItemStack(DCInit.climate_checker), new String[] {
 				"dcs_climate.smelting"

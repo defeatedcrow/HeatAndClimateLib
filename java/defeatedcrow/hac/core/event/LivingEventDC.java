@@ -330,7 +330,7 @@ public class LivingEventDC {
 				&& event.getEntityLiving() instanceof IMob) {
 			float i1 = 64F - event.getY();
 			int abs = (int) Math.abs(i1);
-			if (abs < 20 || event.getWorld().rand.nextInt(64) >= abs) {
+			if (abs < 20) {
 				event.setResult(Result.DENY);
 			}
 		}
