@@ -53,7 +53,7 @@ public class DCsJEIPlugin implements IModPlugin {
 				new ClimateCropHandler());
 
 		registry.addRecipes(DCsJEIPluginLists.climate);
-		List<Biome> biomes = Lists.newArrayList(Biome.EXPLORATION_BIOMES_LIST);
+		List<Biome> biomes = Lists.newArrayList(Biome.REGISTRY.iterator());
 		registry.addRecipes(biomes);
 
 		List<ClimateSmelting> list = new ArrayList<ClimateSmelting>();

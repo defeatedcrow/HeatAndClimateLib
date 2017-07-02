@@ -90,6 +90,14 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 	@Override
 	public void drawInfo(Minecraft mc, int wid, int hei, int mouseX, int mouseY) {
 		DCHeatTier heat = climate.getHeat();
+		DCHeatTier upper = heat.addTier(1);
+		DCHeatTier under = heat.addTier(-1);
+		if (upper.getTier() > DCHeatTier.HOT.getTier()) {
+			upper = DCHeatTier.HOT;
+		}
+		if (under.getTier() < DCHeatTier.COLD.getTier()) {
+			under = DCHeatTier.COLD;
+		}
 		DCHumidity hum = climate.getHumidity();
 		DCAirflow air = climate.getAirflow();
 		int baseY = 12;
@@ -107,7 +115,7 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 			mc.currentScreen.drawTexturedModalRect(17, baseY + 70, air.getID() * 40, 178, 40, 3);
 		}
 
-		String t = heat == null ? "  -" : heat.name();
+		String t = heat.name();
 		int heatColor = heat.getTier() < 0 ? 0x5050FF : 0xFF5050;
 		mc.fontRendererObj.drawString("TEMP : " + biome.getTemperature(), 17, baseY + 14, heatColor, false);
 		mc.fontRendererObj.drawString(t, 70, baseY + 22, heatColor, false);
@@ -137,7 +145,7 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 			mc.fontRendererObj.drawString(ty, 18, baseY - 8, 0x000000, false);
 		}
 
-		String b = biome.getBiomeName();
+		String b = biome.getBiomeName() + " Biome";
 		mc.fontRendererObj.drawString(b, 18, baseY - 20, 0x000000, false);
 	}
 
