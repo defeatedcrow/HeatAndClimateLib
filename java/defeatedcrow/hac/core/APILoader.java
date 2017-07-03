@@ -28,6 +28,7 @@ import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.monster.EntitySnowman;
+import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Biomes;
@@ -83,6 +84,8 @@ public class APILoader {
 		ClimateAPI.register.setNoSeason(Biomes.MUSHROOM_ISLAND);
 		ClimateAPI.register.setNoSeason(Biomes.SAVANNA);
 		ClimateAPI.register.setNoSeason(Biomes.SAVANNA_PLATEAU);
+		ClimateAPI.register.setNoSeason(Biomes.HELL);
+		ClimateAPI.register.setNoSeason(Biomes.SKY);
 
 		// heat
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LIT_PUMPKIN, 32767, DCHeatTier.WARM);
@@ -121,13 +124,14 @@ public class APILoader {
 
 	static void registerMobResistant() {
 		DamageAPI.resistantData.registerEntityResistant(EntityVillager.class, 2.0F, 2.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityIronGolem.class, 2.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityIronGolem.class, 4.0F, 4.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntitySnowman.class, 0.0F, 6.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityWither.class, 2.0F, 2.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityDragon.class, 2.0F, 2.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntitySheep.class, 1.0F, 3.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityPolarBear.class, 1.0F, 3.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 0.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityRabbit.class, 2.0F, 3.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityPolarBear.class, 1.0F, 4.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 0.0F, 4.0F);
 	}
 
 }

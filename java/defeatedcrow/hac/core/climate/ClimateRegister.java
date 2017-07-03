@@ -182,15 +182,17 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		} else if (b != null) {
 			if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.NETHER)) {
 				return DCHeatTier.OVEN;
+			} else if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.END)) {
+				return DCHeatTier.COLD;
 			} else {
 				float temp = b.getTemperature();
 				if (temp > 1.1F) {
 					return DCHeatTier.HOT;
 				} else if (temp > 0.8F) {
 					return DCHeatTier.WARM;
-				} else if (temp <= 0.4F) {
+				} else if (temp >= 0.1F && temp <= 0.4F) {
 					return DCHeatTier.COOL;
-				} else if (temp <= 0.1F) {
+				} else if (temp < 0.1F) {
 					return DCHeatTier.COLD;
 				}
 			}

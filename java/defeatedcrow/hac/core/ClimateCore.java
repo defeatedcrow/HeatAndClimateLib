@@ -37,7 +37,7 @@ public class ClimateCore {
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 1;
 	public static final int MOD_MINOR = 5;
-	public static final int MOD_BUILD = 8;
+	public static final int MOD_BUILD = 9;
 	public static final String MOD_DEPENDENCIES = "required-after:Forge@[12.18.3.2185,)";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.10,1.11]";
 	public static final String PACKAGE_BASE = "dcs";
