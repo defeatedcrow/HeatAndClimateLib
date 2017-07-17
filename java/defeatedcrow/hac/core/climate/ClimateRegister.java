@@ -190,9 +190,11 @@ public class ClimateRegister implements IBiomeClimateRegister {
 					return DCHeatTier.HOT;
 				} else if (temp > 0.8F) {
 					return DCHeatTier.WARM;
-				} else if (temp >= 0.1F && temp <= 0.4F) {
+				} else if (temp > 0.4F) {
+					return DCHeatTier.NORMAL;
+				} else if (temp > 0.1F) {
 					return DCHeatTier.COOL;
-				} else if (temp < 0.1F) {
+				} else {
 					return DCHeatTier.COLD;
 				}
 			}

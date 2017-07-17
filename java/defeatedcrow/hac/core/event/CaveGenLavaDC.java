@@ -7,6 +7,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.terraingen.InitMapGenEvent.EventType;
@@ -47,9 +48,11 @@ public class CaveGenLavaDC {
 					}
 					event.setResult(Result.DENY);
 				}
-			} else if (CoreConfigDC.enableForestLake) {
+			}
+			if (CoreConfigDC.enableForestLake) {
 				BlockPos pos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16);
-				if (pos.getY() > 60) {
+				Biome biome = event.getWorld().getBiomeForCoordsBody(pos);
+				if (pos.getY() > 55 && BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.FOREST)) {
 					event.setResult(Result.DENY);
 				}
 			}
