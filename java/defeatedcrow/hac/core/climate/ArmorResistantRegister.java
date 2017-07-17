@@ -22,6 +22,7 @@ import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ArmorResistantRegister implements IArmorItemRegister {
 
@@ -65,7 +66,8 @@ public class ArmorResistantRegister implements IArmorItemRegister {
 		if (DCUtil.isEmpty(item))
 			return 0;
 		ItemSet set = new ItemSet(item.getItem(), item.getItemDamage());
-		if (heatMap.containsKey(set)) {
+		ItemSet wildcard = new ItemSet(item.getItem(), OreDictionary.WILDCARD_VALUE);
+		if (heatMap.containsKey(set) || heatMap.containsKey(wildcard)) {
 			float ret = heatMap.get(set);
 			return ret;
 		}
@@ -77,7 +79,8 @@ public class ArmorResistantRegister implements IArmorItemRegister {
 		if (DCUtil.isEmpty(item))
 			return 0;
 		ItemSet set = new ItemSet(item.getItem(), item.getItemDamage());
-		if (coldMap.containsKey(set)) {
+		ItemSet wildcard = new ItemSet(item.getItem(), OreDictionary.WILDCARD_VALUE);
+		if (coldMap.containsKey(set) || coldMap.containsKey(wildcard)) {
 			float ret = coldMap.get(set);
 			return ret;
 		}

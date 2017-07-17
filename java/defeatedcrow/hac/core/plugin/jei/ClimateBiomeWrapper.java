@@ -93,10 +93,10 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 		DCHeatTier upper = heat.addTier(1);
 		DCHeatTier under = heat.addTier(-1);
 		if (upper.getTier() > DCHeatTier.HOT.getTier()) {
-			upper = DCHeatTier.HOT;
+			upper = heat;
 		}
 		if (under.getTier() < DCHeatTier.COLD.getTier()) {
-			under = DCHeatTier.COLD;
+			under = heat;
 		}
 		DCHumidity hum = climate.getHumidity();
 		DCAirflow air = climate.getAirflow();
