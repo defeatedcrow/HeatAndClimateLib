@@ -37,7 +37,7 @@ public abstract class BlockTorqueBase extends BlockContainer {
 	public BlockTorqueBase(Material m, String s, int max) {
 		super(m);
 		this.setUnlocalizedName(s);
-		this.setHardness(0.5F);
+		this.setHardness(1.5F);
 		this.setResistance(15.0F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.SIDE, EnumSide.DOWN)
 				.withProperty(DCState.POWERED, false));
