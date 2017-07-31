@@ -67,8 +67,11 @@ public class ArmorResistantRegister implements IArmorItemRegister {
 			return 0;
 		ItemSet set = new ItemSet(item.getItem(), item.getItemDamage());
 		ItemSet wildcard = new ItemSet(item.getItem(), OreDictionary.WILDCARD_VALUE);
-		if (heatMap.containsKey(set) || heatMap.containsKey(wildcard)) {
+		if (heatMap.containsKey(set)) {
 			float ret = heatMap.get(set);
+			return ret;
+		} else if (heatMap.containsKey(wildcard)) {
+			float ret = heatMap.get(wildcard);
 			return ret;
 		}
 		return 0F;
@@ -80,8 +83,11 @@ public class ArmorResistantRegister implements IArmorItemRegister {
 			return 0;
 		ItemSet set = new ItemSet(item.getItem(), item.getItemDamage());
 		ItemSet wildcard = new ItemSet(item.getItem(), OreDictionary.WILDCARD_VALUE);
-		if (coldMap.containsKey(set) || coldMap.containsKey(wildcard)) {
+		if (coldMap.containsKey(set)) {
 			float ret = coldMap.get(set);
+			return ret;
+		} else if (coldMap.containsKey(wildcard)) {
+			float ret = coldMap.get(wildcard);
 			return ret;
 		}
 		return 0F;
@@ -113,9 +119,10 @@ public class ArmorResistantRegister implements IArmorItemRegister {
 					return;
 				}
 			}
-			DCLogger.debugLog("register target item from json: " + modid + ":" + itemName + ", " + meta);
+
 			Item item = Item.REGISTRY.getObject(new ResourceLocation(modid, itemName));
 			if (item != null) {
+				DCLogger.debugLog("register target item from json: " + modid + ":" + itemName + ", " + meta);
 				ItemSet set = new ItemSet(item, meta);
 				INSTANCE.registerMaterial(set.getSingleStack(), heat, cold);
 			}

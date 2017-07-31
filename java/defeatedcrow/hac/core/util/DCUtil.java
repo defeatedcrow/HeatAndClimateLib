@@ -50,6 +50,20 @@ public class DCUtil {
 		return true;
 	}
 
+	public static int addStackSize(ItemStack item, int i) {
+		if (!isEmpty(item)) {
+			int ret = item.getMaxStackSize() - item.stackSize;
+			if (ret < i) {
+				item.stackSize += ret;
+				return ret;
+			} else {
+				item.stackSize += i;
+				return i;
+			}
+		}
+		return 0;
+	}
+
 	public static ItemStack reduceAndDeleteStack(ItemStack item, int i) {
 		if (reduceStackSize(item, i)) {
 			return null;

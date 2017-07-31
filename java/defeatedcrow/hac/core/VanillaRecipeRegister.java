@@ -96,6 +96,7 @@ public class VanillaRecipeRegister {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.SADDLE, 1, 0), new Object[] {
 				"X", "Y", "Z", 'X', "itemLeather", 'Y', "itemCloth", 'Z', "ingotIron"
 		}));
+
 	}
 
 	static void loadHarderRecipes() {

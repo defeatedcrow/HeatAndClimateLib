@@ -16,6 +16,7 @@ import defeatedcrow.hac.core.climate.ArmorResistantRegister;
 import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.fluid.FluidIDRegisterDC;
 import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
+import defeatedcrow.hac.core.recipe.ShapedNBTRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
 import defeatedcrow.hac.core.util.DCWaterOpaque;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,6 +28,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.oredict.RecipeSorter;
 
 // @SortingIndex(1102)
 @Mod(modid = ClimateCore.MOD_ID, name = ClimateCore.MOD_NAME, version = ClimateCore.MOD_MEJOR + "."
@@ -37,7 +39,7 @@ public class ClimateCore {
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 1;
 	public static final int MOD_MINOR = 5;
-	public static final int MOD_BUILD = 11;
+	public static final int MOD_BUILD = 12;
 	public static final String MOD_DEPENDENCIES = "required-after:Forge@[12.18.3.2185,)";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.10,1.11]";
 	public static final String PACKAGE_BASE = "dcs";
@@ -65,6 +67,10 @@ public class ClimateCore {
 
 		// water opaque
 		DCWaterOpaque.load();
+
+		// nbt recipe
+		RecipeSorter.INSTANCE.register("dcs_climate:shapednbt", ShapedNBTRecipe.class, RecipeSorter.Category.SHAPED,
+				"after:forge:shapedore before:minecraft:shapeless");
 	}
 
 	@EventHandler
