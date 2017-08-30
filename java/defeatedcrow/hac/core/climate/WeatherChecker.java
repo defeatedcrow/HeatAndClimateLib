@@ -61,14 +61,14 @@ public class WeatherChecker {
 			}
 			sunCountMap.put(dim, 0);
 			DCLogger.debugLog("dim " + dim + " raining");
-		} else {
+		} else if (drought > 0) {
 			if (sunCountMap.containsKey(dim)) {
 				int count = sunCountMap.get(dim);
 				if (count > drought) {
 					DCLogger.debugLog("dim " + dim + " drought");
 				}
 				count++;
-				int i = Math.max(drought / 4, 10);
+				int i = Math.max(drought / 4, 2);
 				if (count > drought + i) {
 					count = DCUtil.rand.nextInt(i);
 				}
@@ -88,6 +88,9 @@ public class WeatherChecker {
 	}
 
 	public static int getTempOffset(int dim, boolean isHell) {
+		if (!CoreConfigDC.enableSeasonEffect) {
+			return 0;
+		}
 		int count = 0;
 		int sun = 0;
 		float rain = 0F;
@@ -100,7 +103,7 @@ public class WeatherChecker {
 		if (sunCountMap.containsKey(dim)) {
 			sun = sunCountMap.get(dim);
 		}
-		if (sun > drought && !isHell) {
+		if (drought > 0 && sun > drought && !isHell) {
 			// 日照り気味
 			return 1;
 		}
@@ -115,6 +118,9 @@ public class WeatherChecker {
 	}
 
 	public static int getHumOffset(int dim, boolean isHell) {
+		if (!CoreConfigDC.enableSeasonEffect) {
+			return 0;
+		}
 		int count = 0;
 		float rain = 0F;
 		if (rainPowerMap.containsKey(dim)) {
@@ -132,6 +138,9 @@ public class WeatherChecker {
 	}
 
 	public static int getWindOffset(int dim, boolean isHell) {
+		if (!CoreConfigDC.enableSeasonEffect) {
+			return 0;
+		}
 		int count = 0;
 		float rain = 0F;
 		if (rainPowerMap.containsKey(dim)) {

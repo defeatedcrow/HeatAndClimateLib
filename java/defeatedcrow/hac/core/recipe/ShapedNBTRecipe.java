@@ -36,6 +36,7 @@ public class ShapedNBTRecipe implements IRecipe {
 	protected int width = 0;
 	protected int height = 0;
 	protected boolean mirrored = true;
+	protected boolean sensitive = false;
 
 	public ShapedNBTRecipe(ItemStack result, Object... recipe) {
 		output = result.copy();
@@ -116,6 +117,11 @@ public class ShapedNBTRecipe implements IRecipe {
 			originalInput[x] = originalMap.get(chr);
 			x++;
 		}
+	}
+
+	public ShapedNBTRecipe(boolean amountSensitive, ItemStack result, Object... recipe) {
+		this(result, recipe);
+		sensitive = amountSensitive;
 	}
 
 	public ShapedNBTRecipe(ShapedRecipes recipe, Map<ItemStack, String> replacements) {
@@ -209,7 +215,7 @@ public class ShapedNBTRecipe implements IRecipe {
 									.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 							FluidStack f2 = handler2.drain(Fluid.BUCKET_VOLUME, false);
 							if (f != null && f2 != null && f.getFluid() == f2.getFluid()) {
-								check = true;
+								check = !sensitive || f.amount == Fluid.BUCKET_VOLUME;
 							}
 						}
 						if (!check) {
