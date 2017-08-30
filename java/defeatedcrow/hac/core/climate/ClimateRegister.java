@@ -11,6 +11,7 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.EnumSeason;
 import defeatedcrow.hac.api.climate.IBiomeClimateRegister;
 import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -146,7 +147,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 
 		// season
 		EnumSeason season = DCTimeHelper.getSeasonEnum(world);
-		if (biome != null && !seasons.contains(Biome.getIdForBiome(biome))) {
+		if (CoreConfigDC.enableSeasonEffect && biome != null && !seasons.contains(Biome.getIdForBiome(biome))) {
 			if (season == EnumSeason.SUMMER && tier.getTier() < DCHeatTier.HOT.getTier()) {
 				return tier.addTier(1);
 			} else if (season == EnumSeason.WINTER && tier.getTier() > DCHeatTier.COLD.getTier()) {

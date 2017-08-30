@@ -53,6 +53,8 @@ public class CoreConfigDC {
 	public static boolean customizedSpawn = false;
 	public static boolean enableForestLake = true;
 	public static int droughtFrequency = 60;
+	public static boolean enableSeasonEffect = true;
+	public static boolean enableWeatherEffect = true;
 
 	// hardmode
 	public static boolean harderVanilla = false;
@@ -172,6 +174,12 @@ public class CoreConfigDC {
 			Property tight = cfg.get("hardmode setting", "Anaerobic Underworld", tightUnderworld,
 					"Set the indoor underground (<Y30) airflow to tight.");
 
+			Property weather = cfg.get("world setting", "Enable Weather Effect", enableWeatherEffect,
+					"Enable temperature change due to the weather.");
+
+			Property season = cfg.get("world setting", "Enable Season Effect", enableSeasonEffect,
+					"Enable temperature change due to the season.");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
@@ -192,6 +200,8 @@ public class CoreConfigDC {
 			enableSuffocation = suffocation.getBoolean();
 			customizedSpawn = spawn.getBoolean();
 			tightUnderworld = tight.getBoolean();
+			enableWeatherEffect = weather.getBoolean();
+			enableSeasonEffect = season.getBoolean();
 
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)
