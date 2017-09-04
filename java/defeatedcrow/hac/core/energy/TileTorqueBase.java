@@ -99,12 +99,14 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 			// 動いていれば摩擦が小さくなる
 			frict = 1.0F;
 		}
+		prevSpeed = currentSpeed;
 		currentSpeed = (prevSpeed * frict) + effectiveAccel * 0.1F;
 		if (currentSpeed > maxSpeed())
 			currentSpeed = maxSpeed();
 		if (currentSpeed < 0.005F)
 			currentSpeed = 0;
-		prevSpeed = currentSpeed;
+
+		// DCLogger.debugLog("current" + currentSpeed);
 
 		prevRotation = currentRotation;
 		currentRotation += currentSpeed;

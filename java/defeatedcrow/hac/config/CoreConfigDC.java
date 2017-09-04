@@ -34,6 +34,7 @@ public class CoreConfigDC {
 	public static int iconX = 0;
 	public static int iconY = 0;
 	public static boolean waterFix = true;
+	public static boolean hudEffect = true;
 
 	// difficulty
 	public static boolean climateDam = true;
@@ -115,6 +116,9 @@ public class CoreConfigDC {
 
 			Property hud_icon = cfg.get("render setting", "Enable Thermal Damage Icon on HUD", showDamageIcon,
 					"Enable the heart-shaped icon on HUD for display of thermal damage.");
+
+			Property hud_effect = cfg.get("render setting", "Enable Display Effect of Climate", hudEffect,
+					"Enable the display effect of high or low temperature.");
 
 			Property hud_x = cfg.get("render setting", "Thermal Damage Icon Offset X", iconX,
 					"Set the amount of Xoffset of the thermal damage icon.");
@@ -202,6 +206,7 @@ public class CoreConfigDC {
 			tightUnderworld = tight.getBoolean();
 			enableWeatherEffect = weather.getBoolean();
 			enableSeasonEffect = season.getBoolean();
+			hudEffect = hud_effect.getBoolean();
 
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)

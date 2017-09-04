@@ -18,7 +18,7 @@ public abstract class DCTorqueTESRBase extends TileEntitySpecialRenderer<TileTor
 		if (model == null) {
 			return;
 		}
-		float speed = te.currentSpeed;
+		float speed = te.prevSpeed + (te.currentSpeed - te.prevSpeed) * partialTicks;
 		float rot = te.prevRotation + (te.currentRotation - te.prevRotation) * partialTicks;
 
 		this.bindTexture(new ResourceLocation(getTexPass(0)));

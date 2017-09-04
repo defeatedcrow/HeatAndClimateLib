@@ -50,9 +50,9 @@ public class CaveGenLavaDC {
 				}
 			}
 			if (CoreConfigDC.enableForestLake) {
-				BlockPos pos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16);
+				BlockPos pos = new BlockPos(event.getChunkX() * 16 + 8, 64, event.getChunkZ() * 16 + 8);
 				Biome biome = event.getWorld().getBiomeForCoordsBody(pos);
-				if (pos.getY() > 55 && BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.FOREST)) {
+				if (pos.getY() > 50 && BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.FOREST)) {
 					event.setResult(Result.DENY);
 				}
 			}

@@ -57,108 +57,108 @@ public class RenderTempHUDEvent {
 			EntityPlayer player = ClimateCore.proxy.getPlayer();
 			World world = ClimateCore.proxy.getClientWorld();
 			GuiScreen gui = Minecraft.getMinecraft().currentScreen;
-			if (player != null && world != null && gui == null && !player.capabilities.isCreativeMode
-					&& !player.isSpectator()) {
-				if (enable) {
-					if (count == 0) {
-						count = 10;
+			if (player != null && world != null && gui == null && !player.isSpectator()) {
 
-						/* 10Fごとに使用データを更新 */
-						int px = MathHelper.floor_double(player.posX);
-						int py = MathHelper.floor_double(player.posY) + 1;
-						int pz = MathHelper.floor_double(player.posZ);
-						BlockPos pos = new BlockPos(px, py, pz);
-						if (pos != null && world.isAreaLoaded(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
-							DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos);
-							if (temp != null) {
-								tier = temp.getTier();
-							}
+				if (count == 0) {
+					count = 10;
+
+					/* 10Fごとに使用データを更新 */
+					int px = MathHelper.floor_double(player.posX);
+					int py = MathHelper.floor_double(player.posY) + 1;
+					int pz = MathHelper.floor_double(player.posZ);
+					BlockPos pos = new BlockPos(px, py, pz);
+					if (pos != null && world.isAreaLoaded(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
+						DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos);
+						if (temp != null) {
+							tier = temp.getTier();
 						}
+					}
 
-						conf_prev = 3F - CoreConfigDC.damageDifficulty;
-						damage = 0;
-						prev2 = 0F;
+					conf_prev = 3F - CoreConfigDC.damageDifficulty;
+					damage = 0;
+					prev2 = 0F;
 
-						// 防具の計算
-						Iterable<ItemStack> items = player.getArmorInventoryList();
-						if (items != null) {
-							for (ItemStack item : items) {
-								if (DCUtil.isEmpty(item))
-									continue;
+					// 防具の計算
+					Iterable<ItemStack> items = player.getArmorInventoryList();
+					if (items != null) {
+						for (ItemStack item : items) {
+							if (DCUtil.isEmpty(item))
+								continue;
 
-								float p = 0F;
+							float p = 0F;
+							if (tier < 0) {
+								p += DamageAPI.itemRegister.getColdPreventAmount(item);
+							} else {
+								p += DamageAPI.itemRegister.getHeatPreventAmount(item);
+							}
+							if (p == 0F && item.getItem() instanceof ItemArmor) {
+								ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
 								if (tier < 0) {
-									p += DamageAPI.itemRegister.getColdPreventAmount(item);
+									p += DamageAPI.armorRegister.getColdPreventAmount(mat);
 								} else {
-									p += DamageAPI.itemRegister.getHeatPreventAmount(item);
+									p += DamageAPI.armorRegister.getHeatPreventAmount(mat);
 								}
-								if (p == 0F && item.getItem() instanceof ItemArmor) {
-									ArmorMaterial mat = ((ItemArmor) item.getItem()).getArmorMaterial();
-									if (tier < 0) {
-										p += DamageAPI.armorRegister.getColdPreventAmount(mat);
-									} else {
-										p += DamageAPI.armorRegister.getHeatPreventAmount(mat);
-									}
-									if (tier > 0 && EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
-											item) > 0) {
-										p += EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, item)
-												* 1.0F;
-									}
+								if (tier > 0 && EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION,
+										item) > 0) {
+									p += EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_PROTECTION, item)
+											* 1.0F;
 								}
-								prev2 += p;
 							}
-						}
-
-						// charm
-						Map<Integer, ItemStack> charms = DCUtil.getPlayerCharm(player, CharmType.DEFFENCE);
-						DamageSource source = tier > 0 ? DamageSourceClimate.climateHeatDamage
-								: DamageSourceClimate.climateColdDamage;
-						for (Entry<Integer, ItemStack> entry : charms.entrySet()) {
-							IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
-							prev2 += charm.reduceDamage(source, entry.getValue());
-						}
-
-						items = null;
-						charms = null;
-
-					} else {
-						count--;
-					}
-
-					if (tier < 0) {
-						damage = (tier + conf_prev) * 2;
-						damage += prev2;
-						if (damage > 0F) {
-							damage = 0F;
-						}
-					} else if (tier > 0) {
-						damage = tier - conf_prev;
-						damage -= prev2;
-						if (damage < 0F) {
-							damage = 0F;
+							prev2 += p;
 						}
 					}
 
-					int tX = 2;
+					// charm
+					Map<Integer, ItemStack> charms = DCUtil.getPlayerCharm(player, CharmType.DEFFENCE);
+					DamageSource source = tier > 0 ? DamageSourceClimate.climateHeatDamage
+							: DamageSourceClimate.climateColdDamage;
+					for (Entry<Integer, ItemStack> entry : charms.entrySet()) {
+						IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
+						prev2 += charm.reduceDamage(source, entry.getValue());
+					}
+
+					items = null;
+					charms = null;
+
+				} else {
+					count--;
+				}
+
+				if (tier < 0) {
+					damage = (tier + conf_prev) * 2;
+					damage += prev2;
 					if (damage > 0F) {
-						if (damage >= 2F) {
-							tX = 4;
-						} else if (damage >= 1F) {
-							tX = 3;
-						}
-					} else {
-						if (damage <= -2F) {
-							tX = 0;
-						} else if (damage <= -1F) {
-							tX = 1;
-						}
+						damage = 0F;
 					}
-					tX *= 16;
+				} else if (tier > 0) {
+					damage = tier - conf_prev;
+					damage -= prev2;
+					if (damage < 0F) {
+						damage = 0F;
+					}
+				}
 
-					Minecraft.getMinecraft().getTextureManager().bindTexture(DCTextures.HUD.getRocation());
-					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-					GlStateManager.enableBlend();
+				int tX = 2;
+				if (damage > 0F) {
+					if (damage >= 2F) {
+						tX = 4;
+					} else if (damage >= 1F) {
+						tX = 3;
+					}
+				} else {
+					if (damage <= -2F) {
+						tX = 0;
+					} else if (damage <= -1F) {
+						tX = 1;
+					}
+				}
+				tX *= 16;
 
+				Minecraft.getMinecraft().getTextureManager().bindTexture(DCTextures.HUD.getRocation());
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				GlStateManager.enableBlend();
+
+				if (enable && !player.capabilities.isCreativeMode) {
 					int factX = -106;
 					int factY = -4;
 					int offsetX = CoreConfigDC.iconX;
@@ -166,9 +166,30 @@ public class RenderTempHUDEvent {
 					int x = (event.getResolution().getScaledWidth() / 2) + factX + offsetX;
 					int y = event.getResolution().getScaledHeight() - 39 + factY + offsetY;
 					drawTexturedModalRect(x, y, tX, 0, 16, 16);
-
-					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				}
+
+				int sizeX = event.getResolution().getScaledWidth();
+				int sizeY = event.getResolution().getScaledHeight();
+
+				if (CoreConfigDC.hudEffect) {
+					if (tX > 32) {
+						GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+								GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+								GlStateManager.DestFactor.ZERO);
+						GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.3F);
+						Minecraft.getMinecraft().getTextureManager().bindTexture(DCTextures.HOT_DISP.getRocation());
+						drawDispTexture(0, 0, sizeX, sizeY);
+					} else if (tX < 32) {
+						GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+								GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+								GlStateManager.DestFactor.ZERO);
+						GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.5F);
+						Minecraft.getMinecraft().getTextureManager().bindTexture(DCTextures.COLD_DISP.getRocation());
+						drawDispTexture(0, 0, sizeX, sizeY);
+					}
+				}
+
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			}
 		}
 	}
@@ -183,6 +204,19 @@ public class RenderTempHUDEvent {
 		vertexbuffer.pos(x + width, y + height, -90.0F).tex((tX + width) * f, (tY + height) * f1).endVertex();
 		vertexbuffer.pos(x + width, y + 0, -90.0F).tex((tX + width) * f, (tY + 0) * f1).endVertex();
 		vertexbuffer.pos(x + 0, y + 0, -90.0F).tex((tX + 0) * f, (tY + 0) * f1).endVertex();
+		tessellator.draw();
+	}
+
+	public void drawDispTexture(int x, int y, int width, int height) {
+		float f = 0.00390625F * 256;
+		float f1 = 0.00390625F;
+		Tessellator tessellator = Tessellator.getInstance();
+		VertexBuffer vertexbuffer = tessellator.getBuffer();
+		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		vertexbuffer.pos(x + 0, y + height, -90.0F).tex(0, f).endVertex();
+		vertexbuffer.pos(x + width, y + height, -90.0F).tex(f, f).endVertex();
+		vertexbuffer.pos(x + width, y + 0, -90.0F).tex(f, 0).endVertex();
+		vertexbuffer.pos(x + 0, y + 0, -90.0F).tex(0, 0).endVertex();
 		tessellator.draw();
 	}
 
