@@ -63,24 +63,28 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 		// torqueの処理
 		// 生成直後は10Tickのインターバルがある
 		if (age > 10) {
-			if (!worldObj.isRemote) {
-				HaCPacket.INSTANCE.sendToAll(new MessageTorqueTile(pos, currentTorque));
-			}
+
 			prevTorque = currentTorque;
-			currentTorque = 0.0F;
-			currentAccel = prevTorque / getGearTier();
-			if (currentAccel > maxAccel())
-				currentAccel = maxAccel();
 
-			// Acceleration
-			float acc = (currentAccel - prevAccel) / 2.0F;
-			if (Math.abs(acc) < 0.005F) {
-				acc = 0.0F;
+			if (!worldObj.isRemote) {
+
+				currentTorque = 0.0F;
+				currentAccel = prevTorque / getGearTier();
+				if (currentAccel > maxAccel())
+					currentAccel = maxAccel();
+
+				// Acceleration
+				float acc = (currentAccel - prevAccel) / 2.0F;
+				if (Math.abs(acc) < 0.005F) {
+					acc = 0.0F;
+				}
+
+				prevEffective = effectiveAccel;
+				effectiveAccel = acc;
+				prevAccel += effectiveAccel;
+
+				HaCPacket.INSTANCE.sendToAll(new MessageTorqueTile(pos, currentTorque, effectiveAccel, prevAccel));
 			}
-
-			prevEffective = effectiveAccel;
-			effectiveAccel = acc;
-			prevAccel += acc;
 
 		}
 	}
@@ -99,12 +103,14 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 			// 動いていれば摩擦が小さくなる
 			frict = 1.0F;
 		}
-		currentSpeed = (prevSpeed * frict) + effectiveAccel * 0.1F;
+		prevSpeed = currentSpeed;
+		currentSpeed = (prevSpeed * frict) + effectiveAccel * 0.2F;
 		if (currentSpeed > maxSpeed())
 			currentSpeed = maxSpeed();
 		if (currentSpeed < 0.005F)
 			currentSpeed = 0;
-		prevSpeed = currentSpeed;
+
+		//
 
 		prevRotation = currentRotation;
 		currentRotation += currentSpeed;
