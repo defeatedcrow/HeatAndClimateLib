@@ -10,7 +10,7 @@
             "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45, "rescale": true },
             "shade": true,
             "faces": {
-                "north": { "uv": [ 16, 0, 0, 16 ], "texture": "#crop" },
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#crop" },
                 "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#crop" }
             }
         },
@@ -20,7 +20,7 @@
             "shade": true,
             "faces": {
                 "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#crop" },
-                "east": { "uv": [ 16, 0, 0, 16 ], "texture": "#crop" }
+                "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#crop" }
             }
         }
     ]

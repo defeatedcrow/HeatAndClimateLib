@@ -16,11 +16,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -124,6 +126,30 @@ public class DCUtil {
 		return false;
 	}
 
+	/* Playerの所持チェック */
+	public static boolean isPlayerHeldItem(Item item, EntityPlayer player) {
+		if (item == null || player == null)
+			return false;
+
+		return isPlayerHeldItem(new ItemStack(item, 1, 0), player);
+	}
+
+	public static boolean isPlayerHeldItem(ItemStack item, EntityPlayer player) {
+		if (DCUtil.isEmpty(item) || player == null)
+			return false;
+
+		if (player.getHeldItem(EnumHand.MAIN_HAND) != null) {
+			if (DCUtil.isSameItem(item, player.getHeldItem(EnumHand.MAIN_HAND), false))
+				return true;
+		}
+		if (player.getHeldItem(EnumHand.OFF_HAND) != null) {
+			if (DCUtil.isSameItem(item, player.getHeldItem(EnumHand.OFF_HAND), false))
+				return true;
+		}
+
+		return false;
+	}
+
 	/*
 	 * 直線距離
 	 */
@@ -164,6 +190,19 @@ public class DCUtil {
 			}
 		}
 		return ret;
+	}
+
+	// チャームを保持しているかのチェック2
+	public static boolean hasItemInTopSlots(EntityPlayer player, ItemStack item) {
+		if (player == null || isEmpty(item))
+			return false;
+		for (int i = 9; i < 18; i++) {
+			ItemStack check = player.inventory.getStackInSlot(i);
+			if (!isEmpty(check) && OreDictionary.itemMatches(check, item, false)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	// Itemクラスのやつがprotectedだった

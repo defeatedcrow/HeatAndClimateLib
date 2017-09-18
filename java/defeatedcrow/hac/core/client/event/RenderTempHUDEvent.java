@@ -152,7 +152,6 @@ public class RenderTempHUDEvent {
 						tX = 1;
 					}
 				}
-				tX *= 16;
 
 				Minecraft.getMinecraft().getTextureManager().bindTexture(DCTextures.HUD.getRocation());
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -165,21 +164,21 @@ public class RenderTempHUDEvent {
 					int offsetY = CoreConfigDC.iconY;
 					int x = (event.getResolution().getScaledWidth() / 2) + factX + offsetX;
 					int y = event.getResolution().getScaledHeight() - 39 + factY + offsetY;
-					drawTexturedModalRect(x, y, tX, 0, 16, 16);
+					drawTexturedModalRect(x, y, tX * 16, 0, 16, 16);
 				}
 
 				int sizeX = event.getResolution().getScaledWidth();
 				int sizeY = event.getResolution().getScaledHeight();
 
 				if (CoreConfigDC.hudEffect) {
-					if (tX > 32) {
+					if (tX > 2) {
 						GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
 								GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
 								GlStateManager.DestFactor.ZERO);
 						GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.3F);
 						Minecraft.getMinecraft().getTextureManager().bindTexture(DCTextures.HOT_DISP.getRocation());
 						drawDispTexture(0, 0, sizeX, sizeY);
-					} else if (tX < 32) {
+					} else if (tX < 2) {
 						GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
 								GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
 								GlStateManager.DestFactor.ZERO);
