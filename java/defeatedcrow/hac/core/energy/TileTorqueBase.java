@@ -37,6 +37,7 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 	public float prevSpeed = 0;
 	public float currentSpeed = 0;
+	public float maxSpeed = 0;
 
 	public float prevRotation;
 	public float currentRotation = 0;
@@ -94,17 +95,24 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 		age++;
 		if (age > 72000) {
 			// 1h程度でリセット
-			age = 21;
+			age = 41;
 		}
+
+		prevSpeed = currentSpeed;
 
 		// Speed
 		float frict = 0.95F;
-		if (prevAccel != 0.0F) {
+		if (prevAccel != 0.0F || age < 40) {
 			// 動いていれば摩擦が小さくなる
 			frict = 1.0F;
 		}
-		prevSpeed = currentSpeed;
+
 		currentSpeed = (prevSpeed * frict) + effectiveAccel * 0.2F;
+
+		// float f = 2.0F * currentTorque / getGearTier();
+		// float speed = (f + prevSpeed) * 0.5F;
+		// currentSpeed = speed;
+
 		if (currentSpeed > maxSpeed())
 			currentSpeed = maxSpeed();
 		if (currentSpeed < 0.005F)
