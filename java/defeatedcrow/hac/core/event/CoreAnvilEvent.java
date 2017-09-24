@@ -17,8 +17,8 @@ public class CoreAnvilEvent {
 		if (!DCUtil.isEmpty(right) && !DCUtil.isEmpty(left)) {
 			if (right.getItem() instanceof IPlatingTool && ret == null) {
 				IPlatingTool tool = (IPlatingTool) right.copy().getItem();
-				if (tool.canEnchant(left)) {
-					ItemStack result = tool.getEnchantedItem(left);
+				if (tool.canEnchant(left, right)) {
+					ItemStack result = tool.getEnchantedItem(left, right);
 					if (result != null) {
 						event.setOutput(result);
 						event.setMaterialCost(1);

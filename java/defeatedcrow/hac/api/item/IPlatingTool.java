@@ -11,8 +11,8 @@ public interface IPlatingTool {
 
 	Enchantment[] getEnchantments(int meta);
 
-	boolean canEnchant(ItemStack target);
+	boolean canEnchant(ItemStack target, ItemStack tool);
 
-	ItemStack getEnchantedItem(ItemStack target);
+	ItemStack getEnchantedItem(ItemStack target, ItemStack tool);
 
 }

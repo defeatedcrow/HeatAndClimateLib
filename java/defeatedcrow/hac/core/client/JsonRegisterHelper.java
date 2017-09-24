@@ -32,10 +32,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class JsonRegisterHelper {
 	private final String basePath;
-	public final boolean active = ClimateCore.isDebug;
+	public boolean active = ClimateCore.isDebug;
 
 	public JsonRegisterHelper(String s) {
 		basePath = s;
+	}
+
+	public JsonRegisterHelper(String s, boolean b) {
+		basePath = s;
+		active = b;
 	}
 
 	public static final JsonRegisterHelper INSTANCE = new JsonRegisterHelper(
@@ -203,7 +208,7 @@ public class JsonRegisterHelper {
 
 		if (gj.exists()) {
 			find = true;
-			DCLogger.debugLog("File is found! " + gj.getName());
+			DCLogger.debugTrace("File is found! " + gj.getName());
 		}
 
 		if (!find) {
@@ -234,12 +239,12 @@ public class JsonRegisterHelper {
 				pw.println(output);
 				pw.close();
 				output = "";
-				DCLogger.debugLog("File writed! " + gj.getPath());
+				DCLogger.debugTrace("File writed! " + gj.getPath());
 
 			} catch (FileNotFoundException e) {
-				DCLogger.debugLog("File not found! " + gj.getPath());
+				DCLogger.warnLog("File not found! " + gj.getPath());
 			} catch (IOException e) {
-				DCLogger.debugLog("fail");
+				DCLogger.warnLog("fail");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -278,7 +283,7 @@ public class JsonRegisterHelper {
 
 		if (gj.exists()) {
 			find = true;
-			DCLogger.debugLog("File is found! " + gj.getName());
+			DCLogger.debugTrace("File is found! " + gj.getName());
 		}
 
 		if (!find) {
@@ -298,12 +303,12 @@ public class JsonRegisterHelper {
 				pw.println(output);
 				pw.close();
 				output = "";
-				DCLogger.debugLog("File writed! " + gj.getPath());
+				DCLogger.debugTrace("File writed! " + gj.getPath());
 
 			} catch (FileNotFoundException e) {
-				DCLogger.debugLog("File not found! " + gj.getPath());
+				DCLogger.warnLog("File not found! " + gj.getPath());
 			} catch (IOException e) {
-				DCLogger.debugLog("fail");
+				DCLogger.warnLog("fail");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -344,7 +349,7 @@ public class JsonRegisterHelper {
 
 		if (gj.exists()) {
 			find = true;
-			DCLogger.debugLog("File is found! " + gj.getName());
+			DCLogger.debugTrace("File is found! " + gj.getName());
 		}
 
 		if (!find) {
@@ -364,12 +369,12 @@ public class JsonRegisterHelper {
 				pw.println(output);
 				pw.close();
 				output = "";
-				DCLogger.debugLog("File writed! " + gj.getPath());
+				DCLogger.debugTrace("File writed! " + gj.getPath());
 
 			} catch (FileNotFoundException e) {
-				DCLogger.debugLog("File not found! " + gj.getPath());
+				DCLogger.warnLog("File not found! " + gj.getPath());
 			} catch (IOException e) {
-				DCLogger.debugLog("fail");
+				DCLogger.warnLog("fail");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
