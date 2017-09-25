@@ -10,13 +10,19 @@ public class DCLogger {
 
 	public static void debugLog(String s) {
 		if (ClimateCore.isDebug) {
-			ClimateCore.LOGGER.info(s);
+			ClimateCore.LOGGER.debug(s);
 		}
 	}
 
 	public static void debugLog(String id, String s) {
 		if (ClimateCore.isDebug) {
-			ClimateCore.LOGGER.info(id + ": " + s);
+			ClimateCore.LOGGER.debug(id + ": " + s);
+		}
+	}
+
+	public static void debugTrace(String s) {
+		if (ClimateCore.isDebug) {
+			ClimateCore.LOGGER.trace(s);
 		}
 	}
 

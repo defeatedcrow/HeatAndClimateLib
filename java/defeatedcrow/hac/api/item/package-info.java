@@ -5,10 +5,7 @@
  * Please check the License(MMPL_1.0).txt included in the package file of this Mod.
  */
 
-/**
- * 当MODのBlockに含まれているBlockStateへのアクセス用APIです。<br>
- */
-@API(apiVersion = "1.0.9", owner = "dcs_climate|lib", provides = "DCsHaCAPI|blockstate")
-package defeatedcrow.hac.api.blockstate;
+@API(apiVersion = "1.0.9", owner = "dcs_climate|lib", provides = "DCsHaCAPI|item")
+package defeatedcrow.hac.api.item;
 
 import net.minecraftforge.fml.common.API;
