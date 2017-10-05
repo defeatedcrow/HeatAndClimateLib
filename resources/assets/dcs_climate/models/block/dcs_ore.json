@@ -15,8 +15,8 @@
                 "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#stone", "cullface": "east" }
             }
         },
-        {   "from": [ -0.01, -0.01, -0.01 ],
-            "to": [ 16.01, 16.01, 16.01 ],
+        {   "from": [ -0.1, -0.1, -0.1 ],
+            "to": [ 16.1, 16.1, 16.1 ],
             "faces": {
                 "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#ore", "cullface": "down" },
                 "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#ore", "cullface": "up" },
