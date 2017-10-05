@@ -240,7 +240,10 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	// par1EntityPlayerがTileEntityを使えるかどうか
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return true;
+		if (getWorld().getTileEntity(this.pos) != this || player == null)
+			return false;
+		else
+			return Math.sqrt(player.getDistanceSq(pos)) < 256D;
 	}
 
 	@Override

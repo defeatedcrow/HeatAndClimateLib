@@ -63,30 +63,28 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 	public void updateTile() {
 		// torqueの処理
 		// 生成直後は10Tickのインターバルがある
-		if (age > 10) {
-
-			prevTorque = currentTorque;
+		if (age > 20) {
 
 			if (!worldObj.isRemote) {
-
+				prevTorque = currentTorque;
 				currentTorque = 0.0F;
-				currentAccel = prevTorque / getGearTier();
-				if (currentAccel > maxAccel())
-					currentAccel = maxAccel();
-
-				// Acceleration
-				float acc = (currentAccel - prevAccel) / 2.0F;
-				if (Math.abs(acc) < 0.005F) {
-					acc = 0.0F;
-				}
-
-				prevEffective = effectiveAccel;
-				effectiveAccel = acc;
-				prevAccel += effectiveAccel;
-
-				HaCPacket.INSTANCE.sendToAll(new MessageTorqueTile(pos, currentTorque, effectiveAccel, prevAccel));
+				HaCPacket.INSTANCE.sendToAll(new MessageTorqueTile(pos, prevTorque, 0F, 0F));
 			}
 
+			currentAccel = prevTorque / getGearTier();
+
+			if (currentAccel > maxAccel())
+				currentAccel = maxAccel();
+
+			// Acceleration
+			float acc = (currentAccel - prevAccel) / 2.0F;
+			if (Math.abs(acc) < 0.005F) {
+				acc = 0.0F;
+			}
+
+			prevEffective = effectiveAccel;
+			effectiveAccel = acc;
+			prevAccel += effectiveAccel;
 		}
 	}
 
@@ -95,7 +93,7 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 		age++;
 		if (age > 72000) {
 			// 1h程度でリセット
-			age = 41;
+			age = 40;
 		}
 
 		prevSpeed = currentSpeed;
@@ -108,10 +106,6 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 		}
 
 		currentSpeed = (prevSpeed * frict) + effectiveAccel * 0.2F;
-
-		// float f = 2.0F * currentTorque / getGearTier();
-		// float speed = (f + prevSpeed) * 0.5F;
-		// currentSpeed = speed;
 
 		if (currentSpeed > maxSpeed())
 			currentSpeed = maxSpeed();
@@ -266,21 +260,13 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		this.base = tag.getByte("dcs.base");
-		this.facing = tag.getByte("dcs.face");
-
-		this.prevTorque = tag.getFloat("dcs.pretoq");
-		this.currentTorque = tag.getFloat("dcs.curtoq");
+		setNBT(tag);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		tag.setByte("dcs.base", base);
-		tag.setByte("dcs.face", facing);
-
-		tag.setFloat("dcs.pretoq", prevTorque);
-		tag.setFloat("dcs.curtoq", currentTorque);
+		getNBT(tag);
 		return tag;
 	}
 
