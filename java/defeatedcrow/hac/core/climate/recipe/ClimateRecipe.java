@@ -12,13 +12,14 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.placeable.IEntityItem;
 import defeatedcrow.hac.api.recipe.IClimateRecipe;
 import defeatedcrow.hac.api.recipe.IRecipePanel;
+import defeatedcrow.hac.core.fluid.DCFluidUtil;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ClimateRecipe implements IClimateRecipe {
@@ -88,10 +89,10 @@ public class ClimateRecipe implements IClimateRecipe {
 
 	@Override
 	public ItemStack getSecondary() {
-		if (this.secondary != null) {
+		if (!DCUtil.isEmpty(secondary)) {
 			return this.secondary.copy();
 		} else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -105,14 +106,14 @@ public class ClimateRecipe implements IClimateRecipe {
 		List<ItemStack> list = new ArrayList<ItemStack>();
 		for (int i = 0; i < items.size(); i++) {
 			ItemStack next = items.get(i);
-			ItemStack cont = null;
+			ItemStack cont = ItemStack.EMPTY;
 			if (next != null) {
 				cont = next.getItem().getContainerItem(next);
-				if (cont != null) {
+				if (!DCUtil.isEmpty(cont)) {
 					list.add(cont);
 				} else {
-					cont = FluidContainerRegistry.drainFluidContainer(next);
-					if (cont != null) {
+					cont = DCFluidUtil.getEmptyCont(next);
+					if (!DCUtil.isEmpty(cont)) {
 						list.add(cont);
 					}
 				}
@@ -134,7 +135,7 @@ public class ClimateRecipe implements IClimateRecipe {
 		for (int x = 0; x < items.size(); x++) {
 			ItemStack slot = items.get(x);
 
-			if (slot != null) {
+			if (!DCUtil.isEmpty(slot)) {
 				boolean inRecipe = false;
 				Iterator<Object> req = required.iterator();
 

@@ -39,7 +39,6 @@ public class LivingHurtDC {
 					prev += charm.reduceDamage(source, entry.getValue());
 					if (charm.onDiffence(source, player, newDam, entry.getValue())) {
 						if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
-							player.inventory.setInventorySlotContents(entry.getKey(), null);
 							player.inventory.markDirty();
 							player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 						}
@@ -49,9 +48,9 @@ public class LivingHurtDC {
 			}
 
 			// ATTACK側のチャーム判定
-			if (source instanceof EntityDamageSource && source.getEntity() != null
-					&& source.getEntity() instanceof EntityPlayer) {
-				EntityPlayer attacker = (EntityPlayer) source.getEntity();
+			if (source instanceof EntityDamageSource && source.getTrueSource() != null
+					&& source.getTrueSource() instanceof EntityPlayer) {
+				EntityPlayer attacker = (EntityPlayer) source.getTrueSource();
 
 				Map<Integer, ItemStack> charms2 = DCUtil.getPlayerCharm(attacker, CharmType.ATTACK);
 				for (Entry<Integer, ItemStack> entry : charms2.entrySet()) {
@@ -60,7 +59,6 @@ public class LivingHurtDC {
 					add *= charm.increaceDamage(living, entry.getValue());
 					if (charm.onAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
 						if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
-							attacker.inventory.setInventorySlotContents(entry.getKey(), null);
 							attacker.inventory.markDirty();
 							attacker.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 						}

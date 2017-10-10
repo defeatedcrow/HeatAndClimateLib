@@ -10,7 +10,6 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.IStackHelper;
 import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
-import mezz.jei.util.BrokenCraftingRecipeException;
 import mezz.jei.util.ErrorUtil;
 import net.minecraft.item.ItemStack;
 
@@ -26,8 +25,8 @@ public class ShapedNBTWrapper extends BlankRecipeWrapper implements IShapedCraft
 		for (Object input : this.recipe.getInput()) {
 			if (input instanceof ItemStack) {
 				ItemStack itemStack = (ItemStack) input;
-				if (itemStack.stackSize != 1) {
-					itemStack.stackSize = 1;
+				if (itemStack.getCount() != 1) {
+					itemStack.setCount(1);
 				}
 			}
 		}
@@ -49,16 +48,14 @@ public class ShapedNBTWrapper extends BlankRecipeWrapper implements IShapedCraft
 		} catch (RuntimeException e) {
 			String info = ErrorUtil.getInfoFromBrokenCraftingRecipe(recipe, Arrays.asList(recipe.getInput()),
 					recipeOutput);
-			throw new BrokenCraftingRecipeException(info, e);
+			throw new mezz.jei.recipes.BrokenCraftingRecipeException(info, e);
 		}
 	}
 
-	@Override
 	public List getInputs() {
 		return Arrays.asList(recipe.getInput());
 	}
 
-	@Override
 	public List<ItemStack> getOutputs() {
 		return Collections.singletonList(recipe.getRecipeOutput());
 	}

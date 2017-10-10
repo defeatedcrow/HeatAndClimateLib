@@ -7,6 +7,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.recipe.IReactorRecipe;
 import defeatedcrow.hac.api.recipe.IReactorRecipeRegister;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -85,7 +86,7 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 			Object... input) {
 		List<ReactorRecipe> list = getRecipeList(heat);
 		boolean b1 = input == null && inFluid1 == null && inFluid2 == null;
-		boolean b2 = output == null && outFluid1 == null && outFluid2 == null;
+		boolean b2 = DCUtil.isEmpty(output) && outFluid1 == null && outFluid2 == null;
 		if (!b1 && !b2) {
 			list.add(new ReactorRecipe(output, secondary, outFluid1, outFluid2, heat, secondaryChance, catalyst,
 					inFluid1, inFluid2, input));

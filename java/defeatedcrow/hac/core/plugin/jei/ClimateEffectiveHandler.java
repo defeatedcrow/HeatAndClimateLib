@@ -10,7 +10,6 @@ public class ClimateEffectiveHandler implements IRecipeHandler<ClimateEffectiveT
 		return ClimateEffectiveTile.class;
 	}
 
-	@Override
 	public String getRecipeCategoryUid() {
 		return "dcs_climate.effective";
 	}

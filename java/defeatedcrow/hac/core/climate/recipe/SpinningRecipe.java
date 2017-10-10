@@ -73,7 +73,7 @@ public class SpinningRecipe implements ISpinningRecipe {
 			int[] ids = OreDictionary.getOreIDs(item);
 			if (OreDictionary.doesOreNameExist(inputName) && ids != null) {
 				for (int i : ids) {
-					if (i == OreDictionary.getOreID(inputName) && item.stackSize >= count)
+					if (i == OreDictionary.getOreID(inputName) && item.getCount() >= count)
 						return true;
 				}
 			}
@@ -84,7 +84,7 @@ public class SpinningRecipe implements ISpinningRecipe {
 				while (itr.hasNext()) {
 					ItemStack next = itr.next();
 					if (DCUtil.isIntegratedItem(item, next, false)) {
-						if (item.stackSize >= count) {
+						if (item.getCount() >= count) {
 							return true;
 						}
 					}

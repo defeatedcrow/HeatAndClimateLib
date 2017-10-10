@@ -1,22 +1,23 @@
 package defeatedcrow.hac.core.client.base;
 
+import defeatedcrow.hac.core.base.DCTileEntity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import defeatedcrow.hac.core.base.DCTileEntity;
 
 @SideOnly(Side.CLIENT)
 public abstract class DCTESRBase extends TileEntitySpecialRenderer<DCTileEntity> {
 
 	@Override
-	public void renderTileEntityAt(DCTileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void renderTileEntityFast(DCTileEntity te, double x, double y, double z, float partialTicks,
+			int destroyStage, float partial, net.minecraft.client.renderer.BufferBuilder buffer) {
 		int type = 0;
 		int face = 0;
 		float f = 0.0F;
 
-		if (te.hasWorldObj()) {
+		if (te.hasWorld()) {
 			int meta = te.getBlockMetadata();
 
 			type = meta & 3;

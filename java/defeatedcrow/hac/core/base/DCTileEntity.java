@@ -46,17 +46,14 @@ public class DCTileEntity extends TileEntity implements ITickable {
 
 		onTickUpdate();
 
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			onServerUpdate();
 		}
 	}
 
-	public void onTickUpdate() {
-	}
+	public void onTickUpdate() {}
 
-	protected void onServerUpdate() {
-	}
+	protected void onServerUpdate() {}
 
-	public void updateTile() {
-	}
+	public void updateTile() {}
 }

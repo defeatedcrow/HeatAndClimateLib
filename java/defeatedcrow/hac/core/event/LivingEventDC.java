@@ -15,7 +15,6 @@ import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.packet.MessageCharmKey;
-import defeatedcrow.hac.core.util.DCPotion;
 import defeatedcrow.hac.core.util.DCTimeHelper;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
@@ -26,6 +25,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -53,10 +53,11 @@ public class LivingEventDC {
 	public void onEvent(LivingEvent.LivingUpdateEvent event) {
 		EntityLivingBase living = event.getEntityLiving();
 		if (living != null) {
+
 			if (count == 0) {
 				if (living instanceof EntityPlayer) {
 					this.onPlayerUpdate(event);
-					if (!living.worldObj.isRemote) {
+					if (!living.world.isRemote) {
 						this.playerChunkUpdate(event);
 					} else {
 						this.onPlayerKeyUpdate(event);
@@ -77,7 +78,7 @@ public class LivingEventDC {
 
 		if (living != null) {
 
-			if (!living.worldObj.isRemote) {
+			if (!living.world.isRemote) {
 
 				/* Potion */
 				boolean f = true;
@@ -103,7 +104,7 @@ public class LivingEventDC {
 
 						Potion potion = effect.getPotion();
 
-						if (potion != null && potion == DCPotion.jump) {
+						if (potion != null && potion == MobEffects.JUMP_BOOST) {
 							living.fallDistance = 0.0F;
 						}
 
@@ -120,12 +121,11 @@ public class LivingEventDC {
 
 				/* climate damage */
 
-				if (!living.worldObj.isRemote && DCTimeHelper.getCount(living.worldObj) == 0
-						&& CoreConfigDC.climateDam) {
-					int px = MathHelper.floor_double(living.posX);
-					int py = MathHelper.floor_double(living.posY) + 1;
-					int pz = MathHelper.floor_double(living.posZ);
-					DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(living.worldObj, new BlockPos(px, py, pz));
+				if (!living.world.isRemote && DCTimeHelper.getCount(living.world) == 0 && CoreConfigDC.climateDam) {
+					int px = MathHelper.floor(living.posX);
+					int py = MathHelper.floor(living.posY) + 1;
+					int pz = MathHelper.floor(living.posZ);
+					DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(living.world, new BlockPos(px, py, pz));
 
 					float prev = 2.0F; // normal
 					if (living instanceof EntityPlayer) {
@@ -146,7 +146,7 @@ public class LivingEventDC {
 					prev = 0.0F;
 
 					// ピースフルではダメージがない
-					if (living.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL && !CoreConfigDC.peacefulDam) {
+					if (living.world.getDifficulty() == EnumDifficulty.PEACEFUL && !CoreConfigDC.peacefulDam) {
 						dam = 0.0F;
 					}
 
@@ -171,7 +171,7 @@ public class LivingEventDC {
 						if (adj != 0F) {
 							prev += adj;
 						}
-						if (living.isPotionActive(DCPotion.fire_reg)) {
+						if (living.isPotionActive(MobEffects.FIRE_RESISTANCE)) {
 							prev += 2.0F;
 						}
 						if (living.isImmuneToFire()) {
@@ -230,15 +230,9 @@ public class LivingEventDC {
 
 		if ((entity instanceof EntityPlayer)) {
 			EntityPlayer player = (EntityPlayer) event.getEntity();
-			// 装備
-			ItemStack[] equip = player.inventory.armorInventory;
-			ItemStack[] inside = new ItemStack[9];
-			for (int i = 0; i < 9; i++) {
-				inside[i] = player.inventory.getStackInSlot(i + 9);
-			}
 
 			// charm
-			if (!player.worldObj.isRemote) {
+			if (!player.world.isRemote) {
 				Map<Integer, ItemStack> charms = DCUtil.getPlayerCharm(player, null);
 				for (ItemStack item2 : charms.values()) {
 					int m = item2.getMetadata();
@@ -282,7 +276,7 @@ public class LivingEventDC {
 				return;
 			}
 			EntityPlayer player = (EntityPlayer) event.getEntity();
-			World world = player.worldObj;
+			World world = player.world;
 			int count = DCTimeHelper.getCount2(world);
 
 			int tick = count & 255;
@@ -300,7 +294,7 @@ public class LivingEventDC {
 						while (j < 3) {
 							int x = (cx << 4) + world.rand.nextInt(16);
 							int z = (cz << 4) + world.rand.nextInt(16);
-							int y = world.provider.getHasNoSky() ? MathHelper.floor_double(player.posY) + 5
+							int y = world.provider.hasSkyLight() ? MathHelper.floor(player.posY) + 5
 									: world.provider.getActualHeight();
 							for (int y1 = y; y1 > 1; y1--) {
 								BlockPos pos = new BlockPos(x, y1, z);
@@ -341,9 +335,9 @@ public class LivingEventDC {
 	public void livingDropItemEvent(ItemExpireEvent event) {
 		EntityItem item = event.getEntityItem();
 		int life = event.getExtraLife();
-		if (CoreConfigDC.enableFreezeDrop && item != null && !item.worldObj.isRemote) {
+		if (CoreConfigDC.enableFreezeDrop && item != null && !item.world.isRemote) {
 			BlockPos pos = item.getPosition();
-			DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(item.worldObj, pos);
+			DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(item.world, pos);
 			if (heat.getTier() < DCHeatTier.COLD.getTier()) {
 				// frostbite以下
 				life += 6000;

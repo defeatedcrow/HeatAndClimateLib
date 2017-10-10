@@ -114,11 +114,11 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 		for (int i = 1; i < this.getSizeInventory(); i++) {
 			if (DCUtil.isEmpty(getStackInSlot(i))) {
 				this.incrStackInSlot(i, item.copy());
-				return item.stackSize;
+				return item.getCount();
 			} else {
 				int size = this.isItemStackable(item, this.getStackInSlot(i));
-				if (this.isItemStackable(item, this.getStackInSlot(i)) > 0) {
-					this.getStackInSlot(i).stackSize += size;
+				if (size > 0) {
+					DCUtil.addStackSize(this.getStackInSlot(i), size);
 					return size;
 				}
 			}
@@ -186,15 +186,12 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 		if (!DCUtil.isEmpty(inv[i])) {
 			ItemStack itemstack;
 
-			if (this.inv[i].stackSize <= num) {
+			if (this.inv[i].getCount() <= num) {
 				itemstack = this.inv[i];
 				this.inv[i] = null;
 				return itemstack;
 			} else {
 				itemstack = this.inv[i].splitStack(num);
-				if (this.inv[i].stackSize == 0) {
-					this.inv[i] = null;
-				}
 				return itemstack;
 			}
 		} else
@@ -209,8 +206,8 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 		} else {
 			this.inv[i] = stack;
 
-			if (!DCUtil.isEmpty(stack) && stack.stackSize > this.getInventoryStackLimit()) {
-				stack.stackSize = this.getInventoryStackLimit();
+			if (!DCUtil.isEmpty(stack) && stack.getCount() > this.getInventoryStackLimit()) {
+				stack.setCount(this.getInventoryStackLimit());
 			}
 		}
 	}
@@ -239,7 +236,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	// par1EntityPlayerがTileEntityを使えるかどうか
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		if (getWorld().getTileEntity(this.pos) != this || player == null)
 			return false;
 		else
@@ -288,12 +285,12 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 		if (target.getItem() == current.getItem() && target.getMetadata() == current.getMetadata()
 				&& ItemStack.areItemStackTagsEqual(target, current)) {
-			int i = current.stackSize + target.stackSize;
+			int i = current.getCount() + target.getCount();
 			if (i > current.getMaxStackSize()) {
-				i = current.getMaxStackSize() - current.stackSize;
+				i = current.getMaxStackSize() - current.getCount();
 				return i;
 			}
-			return target.stackSize;
+			return target.getCount();
 		}
 
 		return 0;
@@ -303,9 +300,9 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 		if (i < this.getSizeInventory() && !DCUtil.isEmpty(input)) {
 			if (!DCUtil.isEmpty(inv[i])) {
 				if (this.inv[i].getItem() == input.getItem() && this.inv[i].getMetadata() == input.getMetadata()) {
-					this.inv[i].stackSize += input.stackSize;
-					if (this.inv[i].stackSize > this.getInventoryStackLimit()) {
-						this.inv[i].stackSize = this.getInventoryStackLimit();
+					DCUtil.addStackSize(inv[i], input.getCount());
+					if (this.inv[i].getCount() > this.getInventoryStackLimit()) {
+						this.inv[i].setCount(this.getInventoryStackLimit());
 					}
 				}
 			} else {
@@ -316,15 +313,15 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	@Override
 	public ItemStack removeStackFromSlot(int i) {
-		i = MathHelper.clamp_int(i, 0, this.getSizeInventory() - 1);
+		i = MathHelper.clamp(i, 0, this.getSizeInventory() - 1);
 		if (i < inv.length) {
 			if (!DCUtil.isEmpty(inv[i])) {
 				ItemStack itemstack = this.inv[i];
-				this.inv[i] = null;
+				this.inv[i] = ItemStack.EMPTY;
 				return itemstack;
 			}
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -363,7 +360,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	@Override
 	public void clear() {
 		for (int i = 0; i < this.inv.length; ++i) {
-			this.inv[i] = null;
+			this.inv[i] = ItemStack.EMPTY;
 		}
 	}
 
@@ -408,7 +405,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 			byte b0 = tag1.getByte("Slot");
 
 			if (b0 >= 0 && b0 < this.inv.length) {
-				this.inv[b0] = ItemStack.loadItemStackFromNBT(tag1);
+				this.inv[b0] = new ItemStack(tag1);
 			}
 		}
 
@@ -472,7 +469,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 			byte b0 = nbttagcompound1.getByte("Slot");
 
 			if (b0 >= 0 && b0 < this.inv.length) {
-				this.inv[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				this.inv[b0] = new ItemStack(nbttagcompound1);
 			}
 		}
 

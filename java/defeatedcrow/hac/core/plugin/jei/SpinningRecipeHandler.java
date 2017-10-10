@@ -11,7 +11,6 @@ public class SpinningRecipeHandler implements IRecipeHandler<SpinningRecipe> {
 		return SpinningRecipe.class;
 	}
 
-	@Override
 	public String getRecipeCategoryUid() {
 		return "dcs_climate.spinning";
 	}

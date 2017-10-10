@@ -45,7 +45,7 @@ public enum DCHumidity {
 	}
 
 	public static DCHumidity getTypeByID(int i) {
-		MathHelper.clamp_int(i, 0, 3);
+		MathHelper.clamp(i, 0, 3);
 		for (DCHumidity e : values()) {
 			if (i == e.id)
 				return e;

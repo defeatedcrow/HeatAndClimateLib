@@ -11,6 +11,7 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IFluidRecipe;
 import defeatedcrow.hac.api.recipe.IRecipePanel;
+import defeatedcrow.hac.core.fluid.DCFluidUtil;
 import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
@@ -18,7 +19,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -114,7 +114,7 @@ public class FluidCraftRecipe implements IFluidRecipe {
 			if (ret != null && !ret.isEmpty()) {
 				return ret.get(0);
 			}
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -139,13 +139,13 @@ public class FluidCraftRecipe implements IFluidRecipe {
 		for (int i = 0; i < items.size(); i++) {
 			if (items.get(i) instanceof ItemStack) {
 				ItemStack next = (ItemStack) items.get(i);
-				ItemStack cont = null;
+				ItemStack cont = ItemStack.EMPTY;
 				if (!DCUtil.isEmpty(next)) {
 					cont = next.getItem().getContainerItem(next);
 					if (!DCUtil.isEmpty(cont)) {
 						list.add(cont);
 					} else {
-						cont = FluidContainerRegistry.drainFluidContainer(next);
+						cont = DCFluidUtil.getEmptyCont(next);
 						if (!DCUtil.isEmpty(cont)) {
 							list.add(cont);
 						}
@@ -194,7 +194,7 @@ public class FluidCraftRecipe implements IFluidRecipe {
 			for (int x = 0; x < items.size(); x++) {
 				ItemStack slot = items.get(x);
 
-				if (slot != null) {
+				if (!DCUtil.isEmpty(slot)) {
 					boolean inRecipe = false;
 					Iterator<Object> req = required.iterator();
 

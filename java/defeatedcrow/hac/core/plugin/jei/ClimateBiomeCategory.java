@@ -5,6 +5,7 @@ import java.util.List;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowRenderer;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityRenderer;
@@ -47,16 +48,6 @@ public class ClimateBiomeCategory implements IRecipeCategory {
 	public void drawExtras(Minecraft mc) {}
 
 	@Override
-	public void drawAnimations(Minecraft minecraft) {
-
-	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-		setRecipe(recipeLayout, recipeWrapper, null);
-	}
-
-	@Override
 	public IDrawable getIcon() {
 		return null;
 	}
@@ -80,6 +71,11 @@ public class ClimateBiomeCategory implements IRecipeCategory {
 		recipeLayout.getIngredientsGroup(DCAirflow.class).init(0, true, new AirflowRenderer(), 17, 81, 40, 5, 0, 0);
 		recipeLayout.getIngredientsGroup(DCAirflow.class).set(0, airs.get(0));
 
+	}
+
+	@Override
+	public String getModName() {
+		return ClimateCore.MOD_NAME;
 	}
 
 }

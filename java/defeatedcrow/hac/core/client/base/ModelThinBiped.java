@@ -131,8 +131,8 @@ public class ModelThinBiped extends ModelBiped {
 		float f = 1.0F;
 
 		if (flag) {
-			f = (float) (entity.motionX * entity.motionX + entity.motionY * entity.motionY + entity.motionZ
-					* entity.motionZ);
+			f = (float) (entity.motionX * entity.motionX + entity.motionY * entity.motionY
+					+ entity.motionZ * entity.motionZ);
 			f = f / 0.2F;
 			f = f * f * f;
 		}
@@ -204,7 +204,7 @@ public class ModelThinBiped extends ModelBiped {
 			ModelRenderer modelrenderer = this.getArmForSide(enumhandside);
 			this.getArmForSide(enumhandside.opposite());
 			float f1 = this.swingProgress;
-			this.body.rotateAngleY = MathHelper.sin(MathHelper.sqrt_float(f1) * ((float) Math.PI * 2F)) * 0.2F;
+			this.body.rotateAngleY = MathHelper.sin(MathHelper.sqrt(f1) * ((float) Math.PI * 2F)) * 0.2F;
 
 			if (enumhandside == EnumHandSide.LEFT) {
 				this.body.rotateAngleY *= -1.0F;
@@ -280,13 +280,13 @@ public class ModelThinBiped extends ModelBiped {
 	}
 
 	@Override
-	public void setInvisible(boolean invisible) {
-		this.head.showModel = invisible;
-		this.body.showModel = invisible;
-		this.rightArm.showModel = invisible;
-		this.leftArm.showModel = invisible;
-		this.rightLeg.showModel = invisible;
-		this.leftLeg.showModel = invisible;
+	public void setVisible(boolean visible) {
+		this.head.showModel = visible;
+		this.body.showModel = visible;
+		this.rightArm.showModel = visible;
+		this.leftArm.showModel = visible;
+		this.rightLeg.showModel = visible;
+		this.leftLeg.showModel = visible;
 	}
 
 	@Override

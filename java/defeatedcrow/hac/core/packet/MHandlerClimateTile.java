@@ -21,7 +21,7 @@ public class MHandlerClimateTile implements IMessageHandler<MessageClimateUpdate
 			int y = message.y;
 			int z = message.z;
 			int clm = message.climate;
-			TileEntity tile = player.worldObj.getTileEntity(new BlockPos(x, y, z));
+			TileEntity tile = player.world.getTileEntity(new BlockPos(x, y, z));
 			if (tile != null && tile instanceof ClimateReceiveTile) {
 				((ClimateReceiveTile) tile).setClimate(clm);
 			} else if (tile != null && tile instanceof ClimateReceiverLockable) {

@@ -35,7 +35,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 			String n = name.getResourceDomain() + "." + name.getResourcePath();
 			DCLogger.debugLog("register target: " + n);
 			if (heatResistant.containsKey(n)) {
-				Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(n);
+				Class<? extends Entity> entity = EntityList.getClassFromName(n);
 				return heatResistant.get(entity);
 			}
 		}
@@ -48,7 +48,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 			String n = name.getResourceDomain() + "." + name.getResourcePath();
 			DCLogger.debugLog("register target: " + n);
 			if (coldResistant.containsKey(n)) {
-				Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(n);
+				Class<? extends Entity> entity = EntityList.getClassFromName(n);
 				return coldResistant.get(entity);
 			}
 		}
@@ -60,8 +60,8 @@ public class MobResistantRegister implements IMobHeatResistant {
 		if (name != null) {
 			String n = name.getResourceDomain() + "." + name.getResourcePath();
 			DCLogger.debugLog("register target: " + n);
-			if (EntityList.NAME_TO_CLASS.containsKey(n)) {
-				Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(n);
+			if (EntityList.getClassFromName(n) != null) {
+				Class<? extends Entity> entity = EntityList.getClassFromName(n);
 				registerEntityResistant(entity, heat, cold);
 			}
 		}
@@ -70,8 +70,8 @@ public class MobResistantRegister implements IMobHeatResistant {
 	public void registerEntityResistant(String name, float heat, float cold) {
 		if (name != null) {
 			DCLogger.debugLog("register target from json: " + name);
-			if (EntityList.NAME_TO_CLASS.containsKey(name)) {
-				Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(name);
+			if (EntityList.getClassFromName(name) != null) {
+				Class<? extends Entity> entity = EntityList.getClassFromName(name);
 				registerEntityResistant(entity, heat, cold);
 			}
 		}
@@ -93,7 +93,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 				coldResistant.put(entityClass, cold);
 			}
 			DCLogger.debugLog("success registering : " + entityClass.getSimpleName() + " " + heat + "/" + cold);
-			String name = EntityList.CLASS_TO_NAME.get(entityClass);
+			String name = EntityList.getKey(entityClass).toString();
 			if (name != null && !name.equalsIgnoreCase("Null")) {
 				Map<String, Float> res = new HashMap<String, Float>();
 				res.put("heat", heat);

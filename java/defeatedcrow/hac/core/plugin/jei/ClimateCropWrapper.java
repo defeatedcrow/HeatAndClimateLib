@@ -14,7 +14,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
 
 public class ClimateCropWrapper implements IRecipeWrapper {
 
@@ -82,26 +81,6 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 	}
 
 	@Override
-	public List getInputs() {
-		return input;
-	}
-
-	@Override
-	public List getOutputs() {
-		return output;
-	}
-
-	@Override
-	public List<FluidStack> getFluidInputs() {
-		return null;
-	}
-
-	@Override
-	public List<FluidStack> getFluidOutputs() {
-		return null;
-	}
-
-	@Override
 	public void drawInfo(Minecraft mc, int wid, int hei, int mouseX, int mouseY) {
 		List<DCHeatTier> heats = rec.getSuitableTemp(block.getDefaultState());
 		List<DCHumidity> hums = rec.getSuitableHum(block.getDefaultState());
@@ -147,14 +126,9 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 		String name = "PLANT BLOCK";
 		String crop = "CROPS";
 		String seed = "SEEDS";
-		mc.fontRendererObj.drawString(name, 26, 20, 0x0099FF, false);
-		mc.fontRendererObj.drawString(crop, 80, 14, 0x0099FF, false);
-		mc.fontRendererObj.drawString(seed, 80, 42, 0x0099FF, false);
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
+		mc.fontRenderer.drawString(name, 26, 20, 0x0099FF, false);
+		mc.fontRenderer.drawString(crop, 80, 14, 0x0099FF, false);
+		mc.fontRenderer.drawString(seed, 80, 42, 0x0099FF, false);
 	}
 
 	@Override

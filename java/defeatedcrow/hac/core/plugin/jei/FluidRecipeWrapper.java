@@ -104,22 +104,18 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 		ing.setInputs(DCAirflow.class, airs);
 	}
 
-	@Override
-	public List getInputs() {
+	public List<List<ItemStack>> getInputs() {
 		return input;
 	}
 
-	@Override
-	public List getOutputs() {
+	public List<ItemStack> getOutputs() {
 		return output;
 	}
 
-	@Override
 	public List<FluidStack> getFluidInputs() {
 		return inF;
 	}
 
-	@Override
 	public List<FluidStack> getFluidOutputs() {
 		return outF;
 	}
@@ -170,12 +166,7 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 		IClimate clm = ClimateAPI.register.getClimateFromParam(minT, maxH, maxA);
 		FluidStack fluid = inF.isEmpty() ? null : inF.get(0);
 		String message = FRecipeType.getType(clm, cooling, fluid).name();
-		mc.fontRendererObj.drawString(message + " " + type, 30, 0, 0x0099FF, false);
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
+		mc.fontRenderer.drawString(message + " " + type, 30, 0, 0x0099FF, false);
 	}
 
 	@Override

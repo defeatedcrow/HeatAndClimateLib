@@ -14,7 +14,6 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
 
 public class ClimateRecipeWrapper implements IRecipeWrapper {
 
@@ -50,24 +49,12 @@ public class ClimateRecipeWrapper implements IRecipeWrapper {
 		ing.setOutputs(ItemStack.class, output);
 	}
 
-	@Override
-	public List getInputs() {
+	public List<List<ItemStack>> getInputs() {
 		return input;
 	}
 
-	@Override
-	public List getOutputs() {
+	public List<ItemStack> getOutputs() {
 		return output;
-	}
-
-	@Override
-	public List<FluidStack> getFluidInputs() {
-		return null;
-	}
-
-	@Override
-	public List<FluidStack> getFluidOutputs() {
-		return null;
 	}
 
 	@Override
@@ -114,12 +101,7 @@ public class ClimateRecipeWrapper implements IRecipeWrapper {
 
 		IClimate clm = ClimateAPI.register.getClimateFromParam(minT, maxH, maxA);
 		String s = CRecipeType.getType(clm).name();
-		mc.fontRendererObj.drawString(s, 72, 0, 0x0099FF, false);
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
+		mc.fontRenderer.drawString(s, 72, 0, 0x0099FF, false);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package defeatedcrow.hac.core.plugin.jei;
 
 import java.util.List;
 
+import defeatedcrow.hac.core.ClimateCore;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -42,16 +43,6 @@ public class MillRecipeCategory implements IRecipeCategory {
 	public void drawExtras(Minecraft mc) {}
 
 	@Override
-	public void drawAnimations(Minecraft minecraft) {
-
-	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-		setRecipe(recipeLayout, recipeWrapper, null);
-	}
-
-	@Override
 	public IDrawable getIcon() {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
@@ -76,6 +67,11 @@ public class MillRecipeCategory implements IRecipeCategory {
 			recipeLayout.getItemStacks().init(2, false, 117, 29);
 			recipeLayout.getItemStacks().set(2, (ItemStack) outputs.get(1));
 		}
+	}
+
+	@Override
+	public String getModName() {
+		return ClimateCore.MOD_NAME;
 	}
 
 }

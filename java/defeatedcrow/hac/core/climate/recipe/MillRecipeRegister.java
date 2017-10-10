@@ -40,7 +40,7 @@ public class MillRecipeRegister implements IMillRecipeRegister {
 
 	@Override
 	public void addRecipe(ItemStack output, Object input) {
-		addRecipe(output, null, 1.0F, input);
+		addRecipe(output, ItemStack.EMPTY, 0.0F, input);
 	}
 
 	@Override

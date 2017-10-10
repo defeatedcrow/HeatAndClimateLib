@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.core.ClimateCore;
@@ -59,13 +59,25 @@ public class AirflowHelper implements IIngredientHelper<DCAirflow> {
 
 	@Override
 	public String getErrorInfo(DCAirflow ingredient) {
-		Objects.ToStringHelper toStringHelper = Objects.toStringHelper(DCAirflow.class);
+		MoreObjects.ToStringHelper toStringHelper = MoreObjects.toStringHelper(DCAirflow.class);
 		if (ingredient != null) {
 			toStringHelper.add("Airflow", ingredient.name());
 		} else {
 			toStringHelper.add("Airflow", "null");
 		}
 		return toStringHelper.toString();
+	}
+
+	@Override
+	public String getResourceId(DCAirflow ingredient) {
+		String name = ingredient.name();
+		return name;
+	}
+
+	@Override
+	public DCAirflow copyIngredient(DCAirflow ingredient) {
+		int i = ingredient.getID();
+		return DCAirflow.getTypeByID(i);
 	}
 
 }

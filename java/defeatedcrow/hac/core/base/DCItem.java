@@ -1,7 +1,5 @@
 package defeatedcrow.hac.core.base;
 
-import java.util.List;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,6 +9,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,8 +24,8 @@ public abstract class DCItem extends Item implements ITexturePath {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+			float hitX, float hitY, float hitZ) {
 		return EnumActionResult.PASS;
 	}
 
@@ -36,8 +35,9 @@ public abstract class DCItem extends Item implements ITexturePath {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-		return new ActionResult(EnumActionResult.PASS, stack);
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack ret = player.getHeldItem(hand);
+		return new ActionResult(EnumActionResult.PASS, ret);
 	}
 
 	@Override
@@ -48,8 +48,8 @@ public abstract class DCItem extends Item implements ITexturePath {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		int j = Math.min(stack.getMetadata(), getMaxMeta());
-		return getNameSuffix() != null && j < getNameSuffix().length ? super.getUnlocalizedName() + "_"
-				+ getNameSuffix()[j] : super.getUnlocalizedName();
+		return getNameSuffix() != null && j < getNameSuffix().length
+				? super.getUnlocalizedName() + "_" + getNameSuffix()[j] : super.getUnlocalizedName();
 	}
 
 	public int getMaxMeta() {
@@ -60,9 +60,10 @@ public abstract class DCItem extends Item implements ITexturePath {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-		for (int i = 0; i < getMaxMeta() + 1; i++) {
-			subItems.add(new ItemStack(itemIn, 1, i));
-		}
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		if (this.isInCreativeTab(tab))
+			for (int i = 0; i < getMaxMeta() + 1; i++) {
+				subItems.add(new ItemStack(this, 1, i));
+			}
 	}
 }

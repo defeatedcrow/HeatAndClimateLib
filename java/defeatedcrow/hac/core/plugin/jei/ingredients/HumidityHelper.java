@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.core.ClimateCore;
@@ -59,13 +59,24 @@ public class HumidityHelper implements IIngredientHelper<DCHumidity> {
 
 	@Override
 	public String getErrorInfo(DCHumidity ingredient) {
-		Objects.ToStringHelper toStringHelper = Objects.toStringHelper(DCHumidity.class);
+		MoreObjects.ToStringHelper toStringHelper = MoreObjects.toStringHelper(DCHumidity.class);
 		if (ingredient != null) {
 			toStringHelper.add("Humidity", ingredient.name());
 		} else {
 			toStringHelper.add("Humidity", "null");
 		}
 		return toStringHelper.toString();
+	}
+
+	@Override
+	public String getResourceId(DCHumidity ingredient) {
+		return ingredient.name();
+	}
+
+	@Override
+	public DCHumidity copyIngredient(DCHumidity ingredient) {
+		int i = ingredient.getID();
+		return DCHumidity.getTypeByID(i);
 	}
 
 }

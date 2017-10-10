@@ -5,6 +5,7 @@ import java.util.List;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowRenderer;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityRenderer;
@@ -46,20 +47,10 @@ public class ClimateSmeltingCategory implements IRecipeCategory {
 
 	@Override
 	public void drawExtras(Minecraft mc) {
-		mc.fontRendererObj.drawString("TEMP", 23, 39, 0xFF0000, false);
-		mc.fontRendererObj.drawString("HUM", 121, 49, 0x0000FF, false);
-		mc.fontRendererObj.drawString("AIR", 27, 59, 0x00FF00, false);
-		mc.fontRendererObj.drawString("", 0, 0, 0xFFFFFF, false);
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft) {
-
-	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-		setRecipe(recipeLayout, recipeWrapper, null);
+		mc.fontRenderer.drawString("TEMP", 23, 39, 0xFF0000, false);
+		mc.fontRenderer.drawString("HUM", 121, 49, 0x0000FF, false);
+		mc.fontRenderer.drawString("AIR", 27, 59, 0x00FF00, false);
+		mc.fontRenderer.drawString("", 0, 0, 0xFFFFFF, false);
 	}
 
 	@Override
@@ -114,6 +105,11 @@ public class ClimateSmeltingCategory implements IRecipeCategory {
 			recipeLayout.getIngredientsGroup(DCAirflow.class).set(k, air);
 			k++;
 		}
+	}
+
+	@Override
+	public String getModName() {
+		return ClimateCore.MOD_NAME;
 	}
 
 }

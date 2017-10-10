@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
@@ -39,6 +37,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -93,7 +92,8 @@ public abstract class ClimateCropBase extends Block
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+		DCUtil.machCreativeTab(tab, getCreativeTabToDisplayOn());
 		list.add(new ItemStack(this, 1, getGrownMetadata()));
 	}
 
@@ -105,7 +105,7 @@ public abstract class ClimateCropBase extends Block
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			@Nullable ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ) {
+			EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (player != null) {
 			IBlockState crop = world.getBlockState(pos);
 			GrowingStage stage = this.getCurrentStage(crop);
@@ -170,7 +170,7 @@ public abstract class ClimateCropBase extends Block
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos from) {
 		if (!this.canBlockStay(world, pos, state)) {
 			world.destroyBlock(pos, true);
 		}
@@ -231,8 +231,10 @@ public abstract class ClimateCropBase extends Block
 				return GrowingStage.GROWN;
 			} else if (i == 2) {
 				return GrowingStage.FLOWER;
-			} else {
+			} else if (i == 1) {
 				return GrowingStage.YOUNG;
+			} else {
+				return GrowingStage.GROUND;
 			}
 		}
 	}
@@ -271,14 +273,14 @@ public abstract class ClimateCropBase extends Block
 				boolean ret = false;
 				for (ItemStack item : crops) {
 					EntityItem drop = new EntityItem(world);
-					drop.setEntityItemStack(item);
+					drop.setItem(item);
 					if (player != null) {
 						drop.setPosition(player.posX, player.posY + 0.15D, player.posZ);
 					} else {
 						drop.setPosition(pos.getX(), pos.getY() + 0.5D, pos.getZ());
 					}
 					if (!world.isRemote)
-						world.spawnEntityInWorld(drop);
+						world.spawnEntity(drop);
 					ret = true;
 				}
 				if (ret) {

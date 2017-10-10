@@ -2,6 +2,8 @@ package defeatedcrow.hac.core.item;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateObject;
@@ -14,6 +16,7 @@ import defeatedcrow.hac.core.climate.WeatherChecker;
 import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -36,8 +39,8 @@ public class ItemClimateChecker extends DCItem {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+			float hitX, float hitY, float hitZ) {
 		if (!world.isAirBlock(pos)) {
 			if (!world.isRemote) {
 				IBlockState state = world.getBlockState(pos);
@@ -55,12 +58,12 @@ public class ItemClimateChecker extends DCItem {
 				}
 
 				if (c != null) {
-					player.addChatMessage(new TextComponentString("== Current Climate =="));
-					player.addChatMessage(new TextComponentString("Temperature: " + c.getHeat().name()));
-					player.addChatMessage(new TextComponentString("Humidity: " + c.getHumidity().name()));
-					player.addChatMessage(new TextComponentString("Airflow: " + c.getAirflow().name()));
+					player.sendMessage(new TextComponentString("== Current Climate =="));
+					player.sendMessage(new TextComponentString("Temperature: " + c.getHeat().name()));
+					player.sendMessage(new TextComponentString("Humidity: " + c.getHumidity().name()));
+					player.sendMessage(new TextComponentString("Airflow: " + c.getAirflow().name()));
 					if (ClimateCore.isDebug) {
-						player.addChatMessage(
+						player.sendMessage(
 								new TextComponentString("Climate int: " + Integer.toBinaryString(c.getClimateInt())));
 						// weather
 						int time = DCTimeHelper.currentTime(world);
@@ -102,7 +105,7 @@ public class ItemClimateChecker extends DCItem {
 										int retM = recipe.getOutput().getMetadata();
 										IBlockState ret = retB.getStateFromMeta(retM);
 										world.setBlockState(pos, ret, 2);
-										world.notifyBlockOfStateChange(pos, ret.getBlock());
+										world.notifyNeighborsOfStateChange(pos, ret.getBlock(), false);
 										DCLogger.debugLog("after: " + ret.getBlock().getLocalizedName() + " " + retM);
 									}
 								}
@@ -118,7 +121,7 @@ public class ItemClimateChecker extends DCItem {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
 		tooltip.add(I18n.translateToLocal("dcs.climate.tip.checker"));
 	}
 

@@ -30,31 +30,31 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	@Override
 	public IClimate getClimate(World world, BlockPos pos) {
 		int[] r = new int[] {
-				CoreConfigDC.heatRange, CoreConfigDC.humRange, CoreConfigDC.airRange
+				2, 1, 1
 		};
 		return getClimate(world, pos, r);
 	}
 
 	@Override
 	public DCHeatTier getAverageTemp(World world, BlockPos pos) {
-		return getAverageTemp(world, pos, CoreConfigDC.heatRange, false);
+		return getAverageTemp(world, pos, 2, false);
 	}
 
 	@Override
 	public DCHumidity getHumidity(World world, BlockPos pos) {
-		return getHumidity(world, pos, CoreConfigDC.humRange, false);
+		return getHumidity(world, pos, 1, false);
 	}
 
 	@Override
 	public DCAirflow getAirflow(World world, BlockPos pos) {
-		return getAirflow(world, pos, CoreConfigDC.airRange, false);
+		return getAirflow(world, pos, 1, false);
 	}
 
 	@Override
 	public IClimate getClimate(World world, BlockPos pos, int[] r) {
 		if (r == null || r.length < 3)
 			r = new int[] {
-					CoreConfigDC.heatRange, CoreConfigDC.humRange, CoreConfigDC.airRange
+					2, 1, 1
 			};
 		DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos, r[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, r[1], false);
@@ -535,7 +535,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	boolean hasRoof(World world, BlockPos pos) {
 		BlockPos pos2 = pos.up();
 		int lim = pos.getY() + 16;
-		if (world.provider.getHasNoSky()) {
+		if (world.provider.hasSkyLight()) {
 			lim = pos.getY() + 12;
 		}
 		while (pos2.getY() < lim && pos2.getY() < world.getActualHeight()) {

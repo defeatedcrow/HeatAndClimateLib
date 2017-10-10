@@ -1,10 +1,10 @@
 package defeatedcrow.hac.core.base;
 
-import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
+import defeatedcrow.hac.api.blockstate.DCState;
+import defeatedcrow.hac.api.placeable.ISidedTexture;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -17,13 +17,12 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import defeatedcrow.hac.api.blockstate.DCState;
-import defeatedcrow.hac.api.placeable.ISidedTexture;
 
 /*
  * TEなし16種のブロック
@@ -68,13 +67,12 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+			EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
 	@Override
-	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
-	}
+	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {}
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -88,10 +86,11 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-		for (int i = 0; i < maxMeta + 1; i++) {
-			list.add(new ItemStack(this, 1, i));
-		}
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+		if (DCUtil.machCreativeTab(tab, getCreativeTabToDisplayOn()))
+			for (int i = 0; i < maxMeta + 1; i++) {
+				list.add(new ItemStack(this, 1, i));
+			}
 	}
 
 	// 設置・破壊処理
@@ -139,7 +138,9 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { DCState.TYPE16 });
+		return new BlockStateContainer(this, new IProperty[] {
+				DCState.TYPE16
+		});
 	}
 
 	/** T, B, N, S, W, E */

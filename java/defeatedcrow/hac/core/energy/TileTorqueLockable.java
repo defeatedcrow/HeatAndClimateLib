@@ -3,6 +3,13 @@ package defeatedcrow.hac.core.energy;
 import java.util.ArrayList;
 import java.util.List;
 
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.climate.IClimateTileEntity;
+import defeatedcrow.hac.core.base.ITagGetter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -19,16 +26,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCAirflow;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.climate.IClimateTileEntity;
-import defeatedcrow.hac.core.base.ITagGetter;
 
-public abstract class TileTorqueLockable extends TileTorqueBase implements IInteractionObject, ILockableContainer,
-		ITagGetter {
+public abstract class TileTorqueLockable extends TileTorqueBase
+		implements IInteractionObject, ILockableContainer, ITagGetter {
 
 	protected final List<BlockPos> effectiveTiles = new ArrayList<BlockPos>();
 	protected IClimate current = null;
@@ -37,15 +37,15 @@ public abstract class TileTorqueLockable extends TileTorqueBase implements IInte
 	@Override
 	public void updateTile() {
 		super.updateTile();
-		if (!worldObj.isRemote) {
-			DCHeatTier heat = ClimateAPI.calculator.getHeat(worldObj, pos, 2, false);
-			DCHeatTier cold = ClimateAPI.calculator.getCold(worldObj, pos, 2, false);
-			DCHumidity hum = ClimateAPI.calculator.getHumidity(worldObj, pos, 1, false);
-			DCAirflow air = ClimateAPI.calculator.getAirflow(worldObj, pos, 1, false);
+		if (!world.isRemote) {
+			DCHeatTier heat = ClimateAPI.calculator.getHeat(world, pos, 2, false);
+			DCHeatTier cold = ClimateAPI.calculator.getCold(world, pos, 2, false);
+			DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, 1, false);
+			DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, 1, false);
 
 			List<BlockPos> remove = new ArrayList<BlockPos>();
 			for (BlockPos p : effectiveTiles) {
-				TileEntity tile = worldObj.getTileEntity(p);
+				TileEntity tile = world.getTileEntity(p);
 				if (tile != null && tile instanceof IClimateTileEntity) {
 					IClimateTileEntity effect = (IClimateTileEntity) tile;
 					if (effect.isActive()) {

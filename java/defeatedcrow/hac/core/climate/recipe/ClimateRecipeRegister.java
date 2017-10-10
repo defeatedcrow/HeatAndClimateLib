@@ -11,6 +11,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateRecipe;
 import defeatedcrow.hac.api.recipe.IClimateRecipeRegister;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
 
 public class ClimateRecipeRegister implements IClimateRecipeRegister {
@@ -86,7 +87,7 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, DCHeatTier heat, DCHumidity hum,
 			DCAirflow air, boolean cooling, Object... input) {
 		List<ClimateRecipe> list = getRecipeList(heat);
-		if (input != null && output != null && heat != null) {
+		if (input != null && !DCUtil.isEmpty(output) && heat != null) {
 			list.add(new ClimateRecipe(output, secondary, heat, hum, air, secondaryChance, cooling, input));
 		}
 	}
@@ -95,8 +96,8 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 	public void addRecipe(ItemStack output, DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling,
 			Object... input) {
 		List<ClimateRecipe> list = getRecipeList(heat);
-		if (input != null && output != null && heat != null) {
-			list.add(new ClimateRecipe(output, null, heat, hum, air, 0.0F, false, input));
+		if (input != null && !DCUtil.isEmpty(output) && heat != null) {
+			list.add(new ClimateRecipe(output, ItemStack.EMPTY, heat, hum, air, 0.0F, false, input));
 		}
 	}
 
@@ -108,7 +109,7 @@ public class ClimateRecipeRegister implements IClimateRecipeRegister {
 
 	@Override
 	public void addRecipe(ItemStack output, DCHeatTier heat, Object... input) {
-		this.addRecipe(output, null, 0.0F, heat, null, null, false, input);
+		this.addRecipe(output, ItemStack.EMPTY, 0.0F, heat, null, null, false, input);
 	}
 
 	@Override

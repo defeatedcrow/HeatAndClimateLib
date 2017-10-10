@@ -65,7 +65,7 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 		// 生成直後は10Tickのインターバルがある
 		if (age > 20) {
 
-			if (!worldObj.isRemote) {
+			if (!world.isRemote) {
 				prevTorque = currentTorque;
 				currentTorque = 0.0F;
 				HaCPacket.INSTANCE.sendToAll(new MessageTorqueTile(pos, prevTorque, 0F, 0F));
@@ -141,7 +141,7 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 	@Override
 	public EnumFacing getBaseSide() {
-		IBlockState state = worldObj.getBlockState(getPos());
+		IBlockState state = world.getBlockState(getPos());
 		if (DCState.hasProperty(state, DCState.SIDE)) {
 			EnumSide face = state.getValue(DCState.SIDE);
 			return face.getFacing();

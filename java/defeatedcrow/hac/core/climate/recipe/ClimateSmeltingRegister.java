@@ -97,7 +97,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 			Object input) {
 		if (input != null && !DCUtil.isEmpty(output) && heat != null) {
 			List<ClimateSmelting> list = getRecipeList(heat);
-			list.add(new ClimateSmelting(output, null, heat, hum, air, 1.0F, false, input));
+			list.add(new ClimateSmelting(output, ItemStack.EMPTY, heat, hum, air, 1.0F, false, input));
 		}
 	}
 
@@ -109,7 +109,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 
 	@Override
 	public void addRecipe(ItemStack output, DCHeatTier heat, Object input) {
-		this.addRecipe(output, null, heat, null, null, 1.0F, false, input);
+		this.addRecipe(output, ItemStack.EMPTY, heat, null, null, 1.0F, false, input);
 	}
 
 	@Override

@@ -15,11 +15,6 @@ public class ClimateCropHandler implements IRecipeHandler<IClimateCrop> {
 	}
 
 	@Override
-	public String getRecipeCategoryUid() {
-		return "dcs_climate.crop";
-	}
-
-	@Override
 	public IRecipeWrapper getRecipeWrapper(IClimateCrop recipe) {
 		return new ClimateCropWrapper(recipe);
 	}
@@ -40,7 +35,7 @@ public class ClimateCropHandler implements IRecipeHandler<IClimateCrop> {
 
 	@Override
 	public String getRecipeCategoryUid(IClimateCrop recipe) {
-		return getRecipeCategoryUid();
+		return "dcs_climate.crop";
 	}
 
 }

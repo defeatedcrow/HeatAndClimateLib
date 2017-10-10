@@ -92,12 +92,10 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 		ing.setInputs(DCHeatTier.class, temps);
 	}
 
-	@Override
-	public List getInputs() {
+	public List<List<ItemStack>> getInputs() {
 		return input;
 	}
 
-	@Override
 	public List<ItemStack> getOutputs() {
 		return output;
 	}
@@ -106,12 +104,10 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 		return catalyst;
 	}
 
-	@Override
 	public List<FluidStack> getFluidInputs() {
 		return inF;
 	}
 
-	@Override
 	public List<FluidStack> getFluidOutputs() {
 		return outF;
 	}
@@ -138,11 +134,6 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 		}
 
 		IClimate clm = ClimateAPI.register.getClimateFromParam(minT, maxH, maxA);
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
 	}
 
 	@Override

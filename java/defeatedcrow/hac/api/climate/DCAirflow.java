@@ -45,7 +45,7 @@ public enum DCAirflow {
 	}
 
 	public static DCAirflow getTypeByID(int i) {
-		MathHelper.clamp_int(i, 0, 3);
+		MathHelper.clamp(i, 0, 3);
 		for (DCAirflow e : values()) {
 			if (i == e.id)
 				return e;

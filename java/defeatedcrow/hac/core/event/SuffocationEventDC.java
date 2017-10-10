@@ -22,8 +22,8 @@ public class SuffocationEventDC {
 			boolean isTarget = target instanceof EntityPlayer || target instanceof EntityTameable;
 			double d0 = target.posY + target.getEyeHeight();
 			BlockPos pos = new BlockPos(target.posX, d0, target.posZ);
-			IBlockState state = target.worldObj.getBlockState(pos);
-			if (isTarget && ClimateAPI.calculator.getAirflow(target.worldObj, pos) == DCAirflow.TIGHT) {
+			IBlockState state = target.world.getBlockState(pos);
+			if (isTarget && ClimateAPI.calculator.getAirflow(target.world, pos) == DCAirflow.TIGHT) {
 				event.setResult(Result.ALLOW);
 			}
 		}

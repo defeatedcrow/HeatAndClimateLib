@@ -8,7 +8,6 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public class SpinningRecipeWrapper implements IRecipeWrapper {
 
@@ -30,33 +29,16 @@ public class SpinningRecipeWrapper implements IRecipeWrapper {
 		ing.setOutputs(ItemStack.class, output);
 	}
 
-	@Override
-	public List getInputs() {
+	public List<ItemStack> getInputs() {
 		return input;
 	}
 
-	@Override
-	public List getOutputs() {
+	public List<ItemStack> getOutputs() {
 		return output;
 	}
 
 	@Override
-	public List<FluidStack> getFluidInputs() {
-		return null;
-	}
-
-	@Override
-	public List<FluidStack> getFluidOutputs() {
-		return null;
-	}
-
-	@Override
 	public void drawInfo(Minecraft mc, int wid, int hei, int mouseX, int mouseY) {}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
-	}
 
 	@Override
 	public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {

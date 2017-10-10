@@ -12,28 +12,25 @@ import defeatedcrow.hac.core.event.LivingHurtDC;
 import defeatedcrow.hac.core.event.SuffocationEventDC;
 import defeatedcrow.hac.core.event.TickEventDC;
 import defeatedcrow.hac.core.packet.HaCPacket;
-import defeatedcrow.hac.core.util.DCPotion;
 import defeatedcrow.hac.core.util.PotionFreezeResistance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class CommonProxyD {
 
 	public void loadMaterial() {
-		DCPotion.init();
 		MaterialRegister.load();
 
-		DCInit.prevFreeze = new PotionFreezeResistance();
-		GameRegistry.register(DCInit.prevFreeze, new ResourceLocation(ClimateCore.MOD_ID, "dcs.potion.freeze_res"));
+		DCInit.prevFreeze = new PotionFreezeResistance().setRegistryName(ClimateCore.MOD_ID, "dcs.potion.freeze_res");
+		ForgeRegistries.POTIONS.register(DCInit.prevFreeze);
 		DCInit.prevFreezeType = new PotionType("dcs.freeze_res", new PotionEffect[] {
 				new PotionEffect(DCInit.prevFreeze, 3600, 0)
-		});
-		GameRegistry.register(DCInit.prevFreezeType, new ResourceLocation(ClimateCore.MOD_ID, "dcs.freeze_res"));
+		}).setRegistryName(ClimateCore.MOD_ID, "dcs.freeze_res");
+		ForgeRegistries.POTION_TYPES.register(DCInit.prevFreezeType);
 	}
 
 	public void loadTE() {}
@@ -45,7 +42,7 @@ public class CommonProxyD {
 	public void loadInit() {
 		OreRegister.load();
 		if (CoreConfigDC.enableVanilla) {
-			VanillaRecipeRegister.load();
+			DCRecipe.load();
 		}
 		MinecraftForge.EVENT_BUS.register(new LivingEventDC());
 		MinecraftForge.EVENT_BUS.register(new BlockUpdateDC());

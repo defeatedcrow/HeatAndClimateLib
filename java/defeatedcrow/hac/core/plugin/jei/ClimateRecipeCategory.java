@@ -3,6 +3,7 @@ package defeatedcrow.hac.core.plugin.jei;
 import java.util.Collection;
 import java.util.List;
 
+import defeatedcrow.hac.core.ClimateCore;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -43,19 +44,9 @@ public class ClimateRecipeCategory implements IRecipeCategory {
 	public void drawExtras(Minecraft mc) {}
 
 	@Override
-	public void drawAnimations(Minecraft minecraft) {
-
-	}
-
-	@Override
 	public IDrawable getIcon() {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
-	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-		setRecipe(recipeLayout, recipeWrapper, null);
 	}
 
 	@Override
@@ -76,7 +67,7 @@ public class ClimateRecipeCategory implements IRecipeCategory {
 					if (inputs.get(l) instanceof ItemStack) {
 						recipeLayout.getItemStacks().set(l, (ItemStack) inputs.get(l));
 					} else if (inputs.get(l) instanceof Collection) {
-						recipeLayout.getItemStacks().set(l, (Collection<ItemStack>) inputs.get(l));
+						recipeLayout.getItemStacks().set(l, (List<ItemStack>) inputs.get(l));
 					}
 				}
 			}
@@ -88,6 +79,11 @@ public class ClimateRecipeCategory implements IRecipeCategory {
 			recipeLayout.getItemStacks().init(10, false, 117, 48);
 			recipeLayout.getItemStacks().set(10, (ItemStack) outputs.get(1));
 		}
+	}
+
+	@Override
+	public String getModName() {
+		return ClimateCore.MOD_NAME;
 	}
 
 }

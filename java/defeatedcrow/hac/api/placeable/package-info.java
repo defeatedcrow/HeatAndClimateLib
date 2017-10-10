@@ -9,7 +9,7 @@
  * このAPIは、BlockやEntityなどの設置物を扱います。<br>
  * かつてAMT2にあった、設置可能な食べ物についてもここで定義しています。<br>
  */
-@API(apiVersion = "1.0.9", owner = "dcs_climate|lib", provides = "DCsHaCAPI|placeable")
+@API(apiVersion = "2.0.0", owner = "dcs_lib", provides = "DCsHaCAPI|placeable")
 package defeatedcrow.hac.api.placeable;
 
 import net.minecraftforge.fml.common.API;

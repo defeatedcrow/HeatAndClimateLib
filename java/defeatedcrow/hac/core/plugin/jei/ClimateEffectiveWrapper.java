@@ -12,7 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ClimateEffectiveWrapper implements IRecipeWrapper {
@@ -51,24 +50,8 @@ public class ClimateEffectiveWrapper implements IRecipeWrapper {
 		ing.setInputs(DCAirflow.class, airs);
 	}
 
-	@Override
-	public List getInputs() {
+	public List<ItemStack> getInputs() {
 		return input;
-	}
-
-	@Override
-	public List getOutputs() {
-		return null;
-	}
-
-	@Override
-	public List<FluidStack> getFluidInputs() {
-		return null;
-	}
-
-	@Override
-	public List<FluidStack> getFluidOutputs() {
-		return null;
 	}
 
 	public List<DCHeatTier> getTemps() {
@@ -104,21 +87,16 @@ public class ClimateEffectiveWrapper implements IRecipeWrapper {
 		}
 
 		String t = heat == null ? "  -" : heat.name();
-		mc.fontRendererObj.drawString("TEMP", 73, baseY, 0x993030, false);
-		mc.fontRendererObj.drawString(t, 93, baseY, 0x993030, false);
+		mc.fontRenderer.drawString("TEMP", 73, baseY, 0x993030, false);
+		mc.fontRenderer.drawString(t, 93, baseY, 0x993030, false);
 
 		String h = hum == null ? "  -" : hum.name();
-		mc.fontRendererObj.drawString("HUM", 73, baseY + 14, 0x303099, false);
-		mc.fontRendererObj.drawString(h, 93, baseY + 14, 0x303099, false);
+		mc.fontRenderer.drawString("HUM", 73, baseY + 14, 0x303099, false);
+		mc.fontRenderer.drawString(h, 93, baseY + 14, 0x303099, false);
 
 		String a = air == null ? "  -" : air.name();
-		mc.fontRendererObj.drawString("AIR", 73, baseY + 28, 0x309930, false);
-		mc.fontRendererObj.drawString(a, 93, baseY + 28, 0x309930, false);
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
+		mc.fontRenderer.drawString("AIR", 73, baseY + 28, 0x309930, false);
+		mc.fontRenderer.drawString(a, 93, baseY + 28, 0x309930, false);
 	}
 
 	@Override

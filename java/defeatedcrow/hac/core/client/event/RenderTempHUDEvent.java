@@ -17,9 +17,9 @@ import defeatedcrow.hac.core.client.DCTextures;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,9 +63,9 @@ public class RenderTempHUDEvent {
 					count = 10;
 
 					/* 10Fごとに使用データを更新 */
-					int px = MathHelper.floor_double(player.posX);
-					int py = MathHelper.floor_double(player.posY) + 1;
-					int pz = MathHelper.floor_double(player.posZ);
+					int px = MathHelper.floor(player.posX);
+					int py = MathHelper.floor(player.posY) + 1;
+					int pz = MathHelper.floor(player.posZ);
 					BlockPos pos = new BlockPos(px, py, pz);
 					if (pos != null && world.isAreaLoaded(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
 						DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos);
@@ -197,7 +197,7 @@ public class RenderTempHUDEvent {
 		float f = 0.00390625F;
 		float f1 = 0.00390625F;
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vertexbuffer = tessellator.getBuffer();
+		BufferBuilder vertexbuffer = tessellator.getBuffer();
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		vertexbuffer.pos(x + 0, y + height, -90.0F).tex((tX + 0) * f, (tY + height) * f1).endVertex();
 		vertexbuffer.pos(x + width, y + height, -90.0F).tex((tX + width) * f, (tY + height) * f1).endVertex();
@@ -210,7 +210,7 @@ public class RenderTempHUDEvent {
 		float f = 0.00390625F * 256;
 		float f1 = 0.00390625F;
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vertexbuffer = tessellator.getBuffer();
+		BufferBuilder vertexbuffer = tessellator.getBuffer();
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		vertexbuffer.pos(x + 0, y + height, -90.0F).tex(0, f).endVertex();
 		vertexbuffer.pos(x + width, y + height, -90.0F).tex(f, f).endVertex();
@@ -221,7 +221,7 @@ public class RenderTempHUDEvent {
 
 	private void drawOutlinedBoundingBox(AxisAlignedBB aabb) {
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vertexbuffer = tessellator.getBuffer();
+		BufferBuilder vertexbuffer = tessellator.getBuffer();
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		vertexbuffer.pos(aabb.minX, aabb.maxY, aabb.minZ).tex(1, 0).endVertex();
 		vertexbuffer.pos(aabb.maxX, aabb.maxY, aabb.minZ).tex(0, 0).endVertex();

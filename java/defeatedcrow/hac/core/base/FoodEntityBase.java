@@ -16,6 +16,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -91,10 +92,10 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			this.setDead();
 		}
 
-		BlockPos pos = new BlockPos(MathHelper.floor_double(this.posX),
-				MathHelper.floor_double(this.getEntityBoundingBox().minY), MathHelper.floor_double(this.posZ));
+		BlockPos pos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY),
+				MathHelper.floor(this.posZ));
 
-		if (!this.worldObj.isRemote && this.count++ == 20) {
+		if (!this.world.isRemote && this.count++ == 20) {
 			this.count = 0;
 			this.totalAge++;
 
@@ -103,7 +104,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			}
 
 			if (getRaw()) {
-				IClimate clm = ClimateAPI.calculator.getClimate(worldObj, pos);
+				IClimate clm = ClimateAPI.calculator.getClimate(world, pos);
 				if (this.canCookingClimate(clm) > 0) {
 					int age = this.getAge() + 1;
 					int add = this.canCookingClimate(clm);
@@ -116,7 +117,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 					}
 				}
 			} else if (CoreConfigDC.burntFood && !getBURNT()) {
-				IClimate clm = ClimateAPI.calculator.getClimate(worldObj, pos);
+				IClimate clm = ClimateAPI.calculator.getClimate(world, pos);
 				if (this.canCookingClimate(clm) > 2) {
 					int age = this.getAge() + 1;
 					int add = this.canCookingClimate(clm);
@@ -134,8 +135,8 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 		if ((this.getRaw() || CoreConfigDC.burntFood) && !this.getBURNT() && this.getAge() > 0
 				&& this.rand.nextInt(4) == 0) {
-			this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY + 0.5D, this.posZ, 0.0D,
-					0.0D, 0.0D, new int[0]);
+			this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D,
+					0.0D, new int[0]);
 		}
 
 		// 動作
@@ -145,7 +146,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		if (collideable())
 			this.noClip = this.pushOutOfBlocks(this.posX,
 					(this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY), this.posZ);
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 
 		if (this.isFallable()) {
 
@@ -153,13 +154,12 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			this.handleWaterMovement();
 			float f = 0.98F;
 
-			IBlockState in = worldObj.getBlockState(pos);
-			IBlockState under = worldObj.getBlockState(pos.down());
+			IBlockState in = world.getBlockState(pos);
+			IBlockState under = world.getBlockState(pos.down());
 
 			if (in.getBlock() == Blocks.HOPPER || under.getBlock() == Blocks.HOPPER) {
 				this.dropAndDeath(null);
-			} else if (worldObj.getTileEntity(pos.down()) != null
-					&& worldObj.getTileEntity(pos.down()) instanceof IHopper) {
+			} else if (world.getTileEntity(pos.down()) != null && world.getTileEntity(pos.down()) instanceof IHopper) {
 				this.dropAndDeath(null);
 			}
 
@@ -230,7 +230,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	}
 
 	protected void collideWithNearbyEntities() {
-		List<Entity> list = this.worldObj.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox(),
+		List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox(),
 				EntitySelectors.<Entity>getTeamCollisionPredicate(this));
 
 		if (!list.isEmpty()) {
@@ -247,7 +247,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		double d0 = x - blockpos.getX();
 		double d1 = y - blockpos.getY();
 		double d2 = z - blockpos.getZ();
-		List<AxisAlignedBB> list = this.worldObj.getCollisionBoxes(this.getEntityBoundingBox());
+		List<AxisAlignedBB> list = this.world.getCollisionBoxes(this, this.getEntityBoundingBox());
 
 		if (list.isEmpty()) {
 			return false;
@@ -255,27 +255,27 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			EnumFacing enumfacing = EnumFacing.UP;
 			double d3 = Double.MAX_VALUE;
 
-			if (!this.worldObj.isBlockFullCube(blockpos.west()) && d0 < d3) {
+			if (!this.world.isBlockFullCube(blockpos.west()) && d0 < d3) {
 				d3 = d0;
 				enumfacing = EnumFacing.WEST;
 			}
 
-			if (!this.worldObj.isBlockFullCube(blockpos.east()) && 1.0D - d0 < d3) {
+			if (!this.world.isBlockFullCube(blockpos.east()) && 1.0D - d0 < d3) {
 				d3 = 1.0D - d0;
 				enumfacing = EnumFacing.EAST;
 			}
 
-			if (!this.worldObj.isBlockFullCube(blockpos.north()) && d2 < d3) {
+			if (!this.world.isBlockFullCube(blockpos.north()) && d2 < d3) {
 				d3 = d2;
 				enumfacing = EnumFacing.NORTH;
 			}
 
-			if (!this.worldObj.isBlockFullCube(blockpos.south()) && 1.0D - d2 < d3) {
+			if (!this.world.isBlockFullCube(blockpos.south()) && 1.0D - d2 < d3) {
 				d3 = 1.0D - d2;
 				enumfacing = EnumFacing.SOUTH;
 			}
 
-			if (!this.worldObj.isBlockFullCube(blockpos.up()) && 1.0D - d1 < d3) {
+			if (!this.world.isBlockFullCube(blockpos.up()) && 1.0D - d1 < d3) {
 				d3 = 1.0D - d1;
 				enumfacing = EnumFacing.UP;
 			}
@@ -353,11 +353,11 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	}
 
 	protected void dropFoods(double x, double y, double z) {
-		if (!worldObj.isRemote && !DCUtil.isEmpty(getDropItem())) {
+		if (!world.isRemote && !DCUtil.isEmpty(getDropItem())) {
 			ItemStack item = this.getDropItem();
-			EntityItem drop = new EntityItem(worldObj, x, y, z, item);
+			EntityItem drop = new EntityItem(world, x, y, z, item);
 			drop.motionY = 0.025D;
-			worldObj.spawnEntityInWorld(drop);
+			world.spawnEntity(drop);
 		}
 	}
 
@@ -387,9 +387,10 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 	@Override
 	public boolean handleWaterMovement() {
-		if (this.worldObj.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.WATER, this)) {
+		if (this.world.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.WATER, this)) {
 			if (!this.inWater && !this.firstUpdate) {
-				this.resetHeight();
+				this.doWaterSplashEffect();
+				;
 			}
 
 			this.inWater = true;
@@ -446,7 +447,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 	@Override
 	protected void dealFireDamage(int amount) {
-		this.attackEntityFrom(DamageSource.inFire, amount);
+		this.attackEntityFrom(DamageSource.IN_FIRE, amount);
 	}
 
 	@Override
@@ -463,8 +464,8 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	}
 
 	@Override
-	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
-		if (worldObj.isRemote) {
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+		if (world.isRemote) {
 			return true;
 		}
 		if (player != null && !player.isSneaking()) {
@@ -500,7 +501,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 	@Override
 	public boolean doCollect(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack tool) {
-		if (!worldObj.isRemote && !DCUtil.isEmpty(getDropItem())) {
+		if (!world.isRemote && !DCUtil.isEmpty(getDropItem())) {
 			this.dropAndDeath(player.getPosition());
 			return true;
 		}

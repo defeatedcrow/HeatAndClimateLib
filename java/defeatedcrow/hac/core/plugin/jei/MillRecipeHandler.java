@@ -11,7 +11,6 @@ public class MillRecipeHandler implements IRecipeHandler<MillRecipe> {
 		return MillRecipe.class;
 	}
 
-	@Override
 	public String getRecipeCategoryUid() {
 		return "dcs_climate.mill";
 	}

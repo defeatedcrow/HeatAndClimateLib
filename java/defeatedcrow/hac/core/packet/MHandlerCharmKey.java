@@ -19,7 +19,7 @@ public class MHandlerCharmKey implements IMessageHandler<MessageCharmKey, IMessa
 	@Override
 	// IMessageHandlerのメソッド
 	public IMessage onMessage(MessageCharmKey message, MessageContext ctx) {
-		EntityPlayer player = ctx.getServerHandler().playerEntity;
+		EntityPlayer player = ctx.getServerHandler().player;
 		if (player != null) {
 			DCLogger.debugLog("packet!");
 			Map<Integer, ItemStack> charms = DCUtil.getPlayerCharm(player, CharmType.KEY);
@@ -30,7 +30,6 @@ public class MHandlerCharmKey implements IMessageHandler<MessageCharmKey, IMessa
 				if (charm.onUsing(player, entry.getValue())) {
 					if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
 						player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
-						player.inventory.setInventorySlotContents(entry.getKey(), null);
 						player.inventory.markDirty();
 						break;
 					}

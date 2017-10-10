@@ -13,7 +13,6 @@ public class ClimateRecipeHandler implements IRecipeHandler<ClimateRecipe> {
 		return ClimateRecipe.class;
 	}
 
-	@Override
 	public String getRecipeCategoryUid() {
 		return "dcs_climate.recipe";
 	}

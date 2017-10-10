@@ -3,6 +3,7 @@ package defeatedcrow.hac.core.plugin.jei;
 import java.util.List;
 
 import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -43,16 +44,6 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 
 	@Override
 	public void drawExtras(Minecraft mc) {}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft) {
-
-	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-		setRecipe(recipeLayout, recipeWrapper, null);
-	}
 
 	@Override
 	public IDrawable getIcon() {
@@ -128,6 +119,11 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 			recipeLayout.getIngredientsGroup(DCHeatTier.class).set(i, temp);
 			i++;
 		}
+	}
+
+	@Override
+	public String getModName() {
+		return ClimateCore.MOD_NAME;
 	}
 
 }

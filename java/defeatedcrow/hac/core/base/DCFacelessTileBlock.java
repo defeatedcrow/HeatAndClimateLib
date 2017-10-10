@@ -1,9 +1,6 @@
 package defeatedcrow.hac.core.base;
 
-import java.util.List;
 import java.util.Random;
-
-import javax.annotation.Nullable;
 
 import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.climate.ClimateAPI;
@@ -35,6 +32,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -70,7 +68,7 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			@Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+			EnumFacing side, float hitX, float hitY, float hitZ) {
 		return false;
 	}
 
@@ -89,10 +87,11 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-		for (int i = 0; i < maxMeta + 1; i++) {
-			list.add(new ItemStack(this, 1, i));
-		}
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+		if (DCUtil.machCreativeTab(tab, getCreativeTabToDisplayOn()))
+			for (int i = 0; i < maxMeta + 1; i++) {
+				list.add(new ItemStack(this, 1, i));
+			}
 	}
 
 	// 設置・破壊処理
@@ -133,7 +132,7 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 			entityitem.motionX = (float) this.rand.nextGaussian() * f3;
 			entityitem.motionY = (float) this.rand.nextGaussian() * f3 + 0.2F;
 			entityitem.motionZ = (float) this.rand.nextGaussian() * f3;
-			world.spawnEntityInWorld(entityitem);
+			world.spawnEntity(entityitem);
 		}
 		world.updateComparatorOutputLevel(pos, state.getBlock());
 	}
@@ -223,10 +222,10 @@ public class DCFacelessTileBlock extends BlockContainer implements IClimateObjec
 			if (recipe != null && recipe.additionalRequire(world, pos)) {
 				ItemStack output = recipe.getOutput();
 				if (!DCUtil.isEmpty(output) && output.getItem() instanceof ItemBlock) {
-					Block ret = ((ItemBlock) output.getItem()).block;
+					Block ret = ((ItemBlock) output.getItem()).getBlock();
 					IBlockState retS = ret.getStateFromMeta(output.getMetadata());
 					if (world.setBlockState(pos, retS, 2)) {
-						world.notifyBlockOfStateChange(pos, ret);
+						world.notifyNeighborsOfStateChange(pos, ret, true);
 
 						// 効果音
 						if (playSEOnChanging(meta)) {

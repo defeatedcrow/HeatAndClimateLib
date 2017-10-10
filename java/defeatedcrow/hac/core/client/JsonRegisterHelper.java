@@ -44,7 +44,7 @@ public class JsonRegisterHelper {
 	}
 
 	public static final JsonRegisterHelper INSTANCE = new JsonRegisterHelper(
-			"E:\\modding\\1.10.2\\hac_lib\\src\\main\\resources");
+			"E:\\modding\\1.12.1\\hac_lib\\src\\main\\resources");
 
 	/**
 	 * 一枚絵アイコンItemのJson生成と登録をまとめて行うメソッド。

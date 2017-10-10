@@ -13,7 +13,6 @@ public class FluidRecipeHandler implements IRecipeHandler<FluidCraftRecipe> {
 		return FluidCraftRecipe.class;
 	}
 
-	@Override
 	public String getRecipeCategoryUid() {
 		return "dcs_climate.fluidcraft";
 	}

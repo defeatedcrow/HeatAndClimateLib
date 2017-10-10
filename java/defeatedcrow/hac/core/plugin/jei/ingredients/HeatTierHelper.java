@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.core.ClimateCore;
@@ -59,13 +59,24 @@ public class HeatTierHelper implements IIngredientHelper<DCHeatTier> {
 
 	@Override
 	public String getErrorInfo(DCHeatTier ingredient) {
-		Objects.ToStringHelper toStringHelper = Objects.toStringHelper(DCHeatTier.class);
+		MoreObjects.ToStringHelper toStringHelper = MoreObjects.toStringHelper(DCHeatTier.class);
 		if (ingredient != null) {
 			toStringHelper.add("HeatTier", ingredient.name());
 		} else {
 			toStringHelper.add("HeatTier", "null");
 		}
 		return toStringHelper.toString();
+	}
+
+	@Override
+	public String getResourceId(DCHeatTier ingredient) {
+		return ingredient.name();
+	}
+
+	@Override
+	public DCHeatTier copyIngredient(DCHeatTier ingredient) {
+		int i = ingredient.getID();
+		return DCHeatTier.getTypeByID(i);
 	}
 
 }

@@ -22,7 +22,7 @@ public class MHandlerTorqueTile implements IMessageHandler<MessageTorqueTile, IM
 			float torque = message.torque;
 			float accel = message.accel;
 			float accel2 = message.accel2;
-			TileEntity tile = player.worldObj.getTileEntity(new BlockPos(x, y, z));
+			TileEntity tile = player.world.getTileEntity(new BlockPos(x, y, z));
 			if (tile != null && tile instanceof TileTorqueBase) {
 				((TileTorqueBase) tile).prevTorque = torque;
 				// ((TileTorqueBase) tile).effectiveAccel = accel;

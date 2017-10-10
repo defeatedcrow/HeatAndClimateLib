@@ -11,7 +11,6 @@ public class ReactorRecipeHandler implements IRecipeHandler<ReactorRecipe> {
 		return ReactorRecipe.class;
 	}
 
-	@Override
 	public String getRecipeCategoryUid() {
 		return "dcs_climate.reactor";
 	}

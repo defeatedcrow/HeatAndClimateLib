@@ -9,12 +9,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,10 +50,11 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-		for (int i = 0; i < getMaxMeta() + 1; i++) {
-			subItems.add(new ItemStack(itemIn, 1, i));
-		}
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		if (this.isInCreativeTab(tab))
+			for (int i = 0; i < getMaxMeta() + 1; i++) {
+				subItems.add(new ItemStack(this, 1, i));
+			}
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 					worldIn.rand.nextFloat() * 0.1F + 0.9F);
 			this.addEffects(stack, worldIn, living);
 			this.dropContainerItem(worldIn, stack, living);
-			--stack.stackSize;
+			DCUtil.reduceStackSize(stack, 1);
 		}
 
 		return stack;
@@ -77,9 +78,9 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target,
 			EnumHand hand) {
-		if (this.addEffects(stack, player.worldObj, target)) {
-			this.dropContainerItem(player.worldObj, stack, player);
-			--stack.stackSize;
+		if (this.addEffects(stack, player.world, target)) {
+			this.dropContainerItem(player.world, stack, player);
+			DCUtil.reduceStackSize(stack, 1);
 			return true;
 		}
 		return super.itemInteractionForEntity(stack, player, target, hand);
@@ -115,7 +116,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 			ItemStack stack = this.getFoodContainerItem(food);
 			if (!DCUtil.isEmpty(stack)) {
 				EntityItem drop = new EntityItem(world, living.posX, living.posY + 0.25D, living.posZ, stack);
-				world.spawnEntityInWorld(drop);
+				world.spawnEntity(drop);
 			}
 		}
 	}

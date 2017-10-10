@@ -115,7 +115,7 @@ public enum DCHeatTier {
 	}
 
 	public static DCHeatTier getTypeByID(int id) {
-		MathHelper.clamp_int(id, 0, 11);
+		MathHelper.clamp(id, 0, 11);
 		for (DCHeatTier e : values()) {
 			if (id == e.id)
 				return e;

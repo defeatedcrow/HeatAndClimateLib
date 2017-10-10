@@ -11,7 +11,6 @@ public class ClimateSmeltingHandler implements IRecipeHandler<ClimateSmelting> {
 		return ClimateSmelting.class;
 	}
 
-	@Override
 	public String getRecipeCategoryUid() {
 		return "dcs_climate.smelting";
 	}

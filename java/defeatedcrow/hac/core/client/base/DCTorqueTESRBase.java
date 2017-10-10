@@ -12,8 +12,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class DCTorqueTESRBase extends TileEntitySpecialRenderer<TileTorqueBase> {
 
 	@Override
-	public void renderTileEntityAt(TileTorqueBase te, double x, double y, double z, float partialTicks,
-			int destroyStage) {
+	public void renderTileEntityFast(TileTorqueBase te, double x, double y, double z, float partialTicks,
+			int destroyStage, float partial, net.minecraft.client.renderer.BufferBuilder buffer) {
 		DCTileModelBase model = this.getModel(te);
 		if (model == null) {
 			return;

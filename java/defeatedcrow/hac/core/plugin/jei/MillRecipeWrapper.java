@@ -9,7 +9,6 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public class MillRecipeWrapper implements IRecipeWrapper {
 
@@ -34,37 +33,20 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 		ing.setOutputs(ItemStack.class, output);
 	}
 
-	@Override
-	public List getInputs() {
+	public List<ItemStack> getInputs() {
 		return input;
 	}
 
-	@Override
-	public List getOutputs() {
+	public List<ItemStack> getOutputs() {
 		return output;
-	}
-
-	@Override
-	public List<FluidStack> getFluidInputs() {
-		return null;
-	}
-
-	@Override
-	public List<FluidStack> getFluidOutputs() {
-		return null;
 	}
 
 	@Override
 	public void drawInfo(Minecraft mc, int wid, int hei, int mouseX, int mouseY) {
 		int chance = DCUtil.isEmpty(rec.getSecondary()) ? 0 : (int) (rec.getSecondaryChance() * 100);
 		if (chance > 0) {
-			mc.fontRendererObj.drawString(chance + "%", 118, 20, 0x0099FF, false);
+			mc.fontRenderer.drawString(chance + "%", 118, 20, 0x0099FF, false);
 		}
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
 	}
 
 	@Override

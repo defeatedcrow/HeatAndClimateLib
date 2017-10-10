@@ -7,10 +7,11 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.ResourceLocation;
 
 public class HumidityRenderer implements IIngredientRenderer<DCHumidity> {
@@ -51,7 +52,7 @@ public class HumidityRenderer implements IIngredientRenderer<DCHumidity> {
 		double vMax = height / 16.0D;
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vertexBuffer = tessellator.getBuffer();
+		BufferBuilder vertexBuffer = tessellator.getBuffer();
 		vertexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		vertexBuffer.pos(x, y + height, 100).tex(uMin, vMax).endVertex();
 		vertexBuffer.pos(x + width, y + height, 100).tex(uMax, vMax).endVertex();
@@ -63,7 +64,7 @@ public class HumidityRenderer implements IIngredientRenderer<DCHumidity> {
 	}
 
 	@Override
-	public List<String> getTooltip(Minecraft minecraft, DCHumidity ingredient) {
+	public List<String> getTooltip(Minecraft minecraft, DCHumidity ingredient, ITooltipFlag tooltipFlag) {
 		List<String> tooltip = new ArrayList<String>();
 		if (ingredient != null) {
 			tooltip.add(ingredient.name());
@@ -73,7 +74,7 @@ public class HumidityRenderer implements IIngredientRenderer<DCHumidity> {
 
 	@Override
 	public FontRenderer getFontRenderer(Minecraft minecraft, DCHumidity ingredient) {
-		return minecraft.fontRendererObj;
+		return minecraft.fontRenderer;
 	}
 
 }

@@ -11,6 +11,7 @@ import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -20,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -36,42 +38,30 @@ public class DCUtil {
 	public static Random rand = new Random();
 
 	public static boolean isEmpty(ItemStack item) {
-		return item == null || item.getItem() == null;
+		return item == null || item.getItem() == null || item.isEmpty();
 	}
 
-	public static boolean reduceStackSize(ItemStack item, int i) {
-		if (!isEmpty(item)) {
-			if (item.stackSize > i) {
-				item.stackSize -= i;
-				return false;
-			} else {
-				item.stackSize = 0;
-				return true;
-			}
-		}
-		return true;
+	public static boolean isEmptyIngredient(Ingredient item) {
+		return item == null || item.getMatchingStacks().length < 1 || isEmpty(item.getMatchingStacks()[0]);
 	}
 
-	public static int addStackSize(ItemStack item, int i) {
+	public static int reduceStackSize(ItemStack item, int i) {
 		if (!isEmpty(item)) {
-			int ret = item.getMaxStackSize() - item.stackSize;
-			if (ret < i) {
-				item.stackSize += ret;
-				return ret;
-			} else {
-				item.stackSize += i;
-				return i;
-			}
+			int i1 = Math.min(i, item.getCount());
+			item.shrink(i1);
+			return i1;
 		}
 		return 0;
 	}
 
-	public static ItemStack reduceAndDeleteStack(ItemStack item, int i) {
-		if (reduceStackSize(item, i)) {
-			return null;
-		} else {
-			return item;
+	public static int addStackSize(ItemStack item, int i) {
+		if (!isEmpty(item)) {
+			int ret = item.getMaxStackSize() - item.getCount();
+			ret = Math.min(i, ret);
+			item.grow(ret);
+			return ret;
 		}
+		return 0;
 	}
 
 	/*
@@ -121,7 +111,7 @@ public class DCUtil {
 	 */
 	public static boolean isStackable(ItemStack i1, ItemStack i2) {
 		if (isSameItem(i1, i2, false)) {
-			return i1.stackSize <= (i2.getMaxStackSize() - i2.stackSize);
+			return i1.getCount() <= (i2.getMaxStackSize() - i2.getCount());
 		}
 		return false;
 	}
@@ -251,7 +241,7 @@ public class DCUtil {
 	// cloudの向き。+X方向固定っぽい
 	public static EnumFacing getWorldWind(World world) {
 		if (world != null) {
-			if (world.provider.getHasNoSky()) {
+			if (!world.provider.hasSkyLight()) {
 				return EnumFacing.UP;
 			}
 		}
@@ -280,6 +270,10 @@ public class DCUtil {
 			}
 		}
 		return p;
+	}
+
+	public static boolean machCreativeTab(CreativeTabs target, CreativeTabs tab) {
+		return tab != null && (target == CreativeTabs.SEARCH || target == tab);
 	}
 
 	// デバッグモード

@@ -181,9 +181,9 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		if (clm != null) {
 			return clm.getHeat();
 		} else if (b != null) {
-			if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.NETHER)) {
+			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
 				return DCHeatTier.OVEN;
-			} else if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.END)) {
+			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
 				return DCHeatTier.COLD;
 			} else {
 				float temp = b.getTemperature();
@@ -211,7 +211,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		if (clm != null) {
 			return clm.getAirflow();
 		}
-		if (b != null && BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.HILLS)) {
+		if (b != null && BiomeDictionary.hasType(b, BiomeDictionary.Type.HILLS)) {
 			return DCAirflow.FLOW;
 		}
 		return DCAirflow.NORMAL;
@@ -225,9 +225,9 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		if (clm != null) {
 			return clm.getHumidity();
 		} else if (b != null) {
-			if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.DRY) || !b.canRain()) {
+			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.DRY) || !b.canRain()) {
 				return DCHumidity.DRY;
-			} else if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.WET) || b.getRainfall() > 0.8F) {
+			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WET) || b.getRainfall() > 0.8F) {
 				return DCHumidity.WET;
 			}
 		}

@@ -3,21 +3,24 @@ package defeatedcrow.hac.core.recipe;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.DCRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
-import net.minecraft.block.Block;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -53,7 +56,7 @@ public class CustomizeVanillaRecipe {
 	public static void initCustomize() {
 		initializeMap();
 
-		List<IRecipe> targetRecipes = CraftingManager.getInstance().getRecipeList();
+		Iterator<IRecipe> targetRecipes = CraftingManager.REGISTRY.iterator();
 		List<IRecipe> addRecipes = new ArrayList<IRecipe>();
 		List<IRecipe> addOreRecipes = new ArrayList<IRecipe>();
 		List<IRecipe> addShapelessRecipes = new ArrayList<IRecipe>();
@@ -67,12 +70,12 @@ public class CustomizeVanillaRecipe {
 		 * やってることはOreDictionaryの処理と同様。
 		 * 違う点は、元のレシピはremoveせずに残すということ。
 		 */
-		for (IRecipe rec : targetRecipes) {
+		while (targetRecipes.hasNext()) {
+			IRecipe rec = targetRecipes.next();
 			if (rec instanceof ShapedRecipes) {
 				ShapedRecipes recipe = (ShapedRecipes) rec;
 				ItemStack output = recipe.getRecipeOutput();
-				if (!DCUtil.isEmpty(output)
-						&& containsMatch(false, exclusions.toArray(new ItemStack[exclusions.size()]), output)) {
+				if (!DCUtil.isEmpty(output) && containsMatch2(false, exclusions, output)) {
 					continue;
 				}
 
@@ -83,72 +86,57 @@ public class CustomizeVanillaRecipe {
 			} else if (rec instanceof ShapelessRecipes) {
 				ShapelessRecipes recipe = (ShapelessRecipes) rec;
 				ItemStack output = recipe.getRecipeOutput();
-				if (!DCUtil.isEmpty(output)
-						&& containsMatch(false, exclusions.toArray(new ItemStack[exclusions.size()]), output)) {
+				if (!DCUtil.isEmpty(output) && containsMatch2(false, exclusions, output)) {
 					continue;
 				}
 
-				if (containsMatch(true, recipe.recipeItems.toArray(new ItemStack[recipe.recipeItems.size()]),
-						replaces)) {
+				if (containsMatch(true, recipe.recipeItems, replaces)) {
 					addShapelessRecipes.add(recipe);
 				}
 			}
 			if (rec instanceof ShapedOreRecipe) {
 				ShapedOreRecipe recipe = (ShapedOreRecipe) rec;
 				ItemStack output = recipe.getRecipeOutput();
-				if (!DCUtil.isEmpty(output)
-						&& containsMatch(false, exclusions.toArray(new ItemStack[exclusions.size()]), output)) {
+				if (!DCUtil.isEmpty(output) && containsMatch2(false, exclusions, output)) {
 					continue;
 				}
 
 				ArrayList<ItemStack> check = new ArrayList<ItemStack>();
-				for (Object object : recipe.getInput()) {
-					ItemStack item = null;
-
-					if (object instanceof ItemStack && ((ItemStack) object).getItem() != null) {
-						item = new ItemStack(((ItemStack) object).getItem(), 1, ((ItemStack) object).getItemDamage());
-					} else if (object instanceof Item) {
-						item = new ItemStack((Item) object);
-					} else if (object instanceof Block) {
-						item = new ItemStack((Block) object, 1, 32767);
+				for (Ingredient object : recipe.getIngredients()) {
+					if (DCUtil.isEmptyIngredient(object)) {
+						continue;
 					}
+					ItemStack item = object.getMatchingStacks()[0];
 
-					if (!DCUtil.isEmpty(item)) {
+					if (object.getMatchingStacks().length == 1 && !DCUtil.isEmpty(item)) {
 						check.add(item);
 					}
 				}
 
-				if (!check.isEmpty()
-						&& !containsMatch(true, check.toArray((new ItemStack[check.size()])), shapelessOnly)
-						&& containsMatch(true, check.toArray((new ItemStack[check.size()])), replaces)) {
+				if (!check.isEmpty() && !containsMatch2(true, check, shapelessOnly)
+						&& containsMatch2(true, check, replaces)) {
 					addOreRecipes.add(recipe);
 				}
 			} else if (rec instanceof ShapelessOreRecipe) {
 				ShapelessOreRecipe recipe = (ShapelessOreRecipe) rec;
 				ItemStack output = recipe.getRecipeOutput();
-				if (!DCUtil.isEmpty(output)
-						&& containsMatch(false, exclusions.toArray(new ItemStack[exclusions.size()]), output)) {
+				if (!DCUtil.isEmpty(output) && containsMatch2(false, exclusions, output)) {
 					continue;
 				}
 
 				ArrayList<ItemStack> check = new ArrayList<ItemStack>();
-				for (Object object : recipe.getInput()) {
-					ItemStack item = null;
-
-					if (object instanceof ItemStack && ((ItemStack) object).getItem() != null) {
-						item = new ItemStack(((ItemStack) object).getItem(), 1, ((ItemStack) object).getItemDamage());
-					} else if (object instanceof Item) {
-						item = new ItemStack((Item) object);
-					} else if (object instanceof Block) {
-						item = new ItemStack((Block) object, 1, 32767);
+				for (Ingredient object : recipe.getIngredients()) {
+					if (DCUtil.isEmptyIngredient(object)) {
+						continue;
 					}
+					ItemStack item = object.getMatchingStacks()[0];
 
-					if (!DCUtil.isEmpty(item)) {
+					if (object.getMatchingStacks().length == 1 && !DCUtil.isEmpty(item)) {
 						check.add(item);
 					}
 				}
 
-				if (!check.isEmpty() && containsMatch(true, check.toArray((new ItemStack[check.size()])), replaces)) {
+				if (!check.isEmpty() && containsMatch2(true, check, replaces)) {
 					addShapelessOreRecipes.add(recipe);
 				}
 			}
@@ -190,7 +178,7 @@ public class CustomizeVanillaRecipe {
 		ItemStack output = recipe.getRecipeOutput();
 		int x = recipe.recipeWidth;
 		int y = recipe.recipeHeight;
-		ItemStack[] items = recipe.recipeItems;
+		NonNullList<Ingredient> items = recipe.recipeItems;
 
 		if (x * y == 0 || x * y > 9) {
 			DCLogger.debugLog("Failed ShapedRecipe : " + output.toString());
@@ -213,7 +201,7 @@ public class CustomizeVanillaRecipe {
 		for (int i = 1; i < y + 1; i++) {
 			String f = "";
 			for (int k = 1; k < x + 1; k++) {
-				f += items[k + ((i - 1) * x) - 1] == null ? " " : s[k + ((i - 1) * x) - 1];
+				f += DCUtil.isEmptyIngredient(items.get(k + ((i - 1) * x) - 1)) ? " " : s[k + ((i - 1) * x) - 1];
 			}
 			returnArray[i - 1] = f;
 		}
@@ -225,13 +213,13 @@ public class CustomizeVanillaRecipe {
 		// ItemStack配列部分の追加
 		// Character、ItemStack/String の順に追加していけば良い。空欄はnullのまま。
 		for (int i = 0; i < x * y; i++) {
-			if (!DCUtil.isEmpty(items[i])) {
+			if (!DCUtil.isEmptyIngredient(items.get(i))) {
 				String sign = s[i];
-				ItemStack item = items[i].copy();
+				Ingredient item = items.get(i);
 				boolean b = false;
 
 				for (Entry<ItemStack, String> entry : replaceTable.entrySet()) {
-					if (itemMatches(entry.getKey(), item, true)) {
+					if (itemMatches(entry.getKey(), item.getMatchingStacks()[0], true)) {
 						String oreName = entry.getValue();
 
 						inputArray.add(c[i]);
@@ -248,21 +236,23 @@ public class CustomizeVanillaRecipe {
 		}
 
 		Object[] newInputs = inputArray.toArray();
-		GameRegistry.addRecipe(new ShapedOreRecipe(output, newInputs));
+		DCRecipe.addShapedRecipe(
+				new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName().getResourcePath() + "_dcs"), output,
+				newInputs);
 		DCLogger.debugLog("Customized ShapdRecipe : " + inputArray.toString());
 	}
 
 	// Shapeless
 	private static void registerCustomShapelessRecipe(ShapelessRecipes recipe) {
 		ItemStack output = recipe.getRecipeOutput();
-		List<ItemStack> items = recipe.recipeItems;
+		NonNullList<Ingredient> items = recipe.recipeItems;
 		ArrayList<Object> inputs = new ArrayList<Object>();
 
-		for (ItemStack item : items) {
+		for (Ingredient item : items) {
 			boolean b = false;
-			if (!DCUtil.isEmpty(item)) {
+			if (!DCUtil.isEmptyIngredient(item)) {
 				for (Entry<ItemStack, String> entry : replaceTable.entrySet()) {
-					if (itemMatches(entry.getKey(), item, true)) {
+					if (itemMatches(entry.getKey(), item.getMatchingStacks()[0], true)) {
 						String oreName = entry.getValue();
 						inputs.add(oreName);
 						b = true;
@@ -270,13 +260,15 @@ public class CustomizeVanillaRecipe {
 				}
 
 				if (!b) {
-					inputs.add(item.copy());
+					inputs.add(item);
 				}
 			}
 		}
 
 		Object[] newInputs = inputs.toArray();
-		GameRegistry.addRecipe(new ShapelessOreRecipe(output, newInputs));
+		DCRecipe.addShapelessRecipe(
+				new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName().getResourcePath() + "_dcs"), output,
+				newInputs);
 		DCLogger.debugLog("Customized ShapelessRecipe : " + inputs.toString());
 
 	}
@@ -284,7 +276,7 @@ public class CustomizeVanillaRecipe {
 	// Shaped-Ore
 	private static void registerCustomShapedOreRecipe(ShapedOreRecipe recipe) {
 		ItemStack output = recipe.getRecipeOutput();
-		Object[] objects = recipe.getInput();
+		NonNullList<Ingredient> objects = recipe.getIngredients();
 		ArrayList<Object> inputs = new ArrayList<Object>();
 
 		int x = 0;
@@ -322,7 +314,7 @@ public class CustomizeVanillaRecipe {
 		for (int i = 1; i < y + 1; i++) {
 			String f = "";
 			for (int k = 1; k < x + 1; k++) {
-				f += objects[k + ((i - 1) * x) - 1] == null ? " " : s[k + ((i - 1) * x) - 1];
+				f += DCUtil.isEmptyIngredient(objects.get(k + ((i - 1) * x) - 1)) ? " " : s[k + ((i - 1) * x) - 1];
 			}
 			returnArray[i - 1] = f;
 		}
@@ -334,49 +326,42 @@ public class CustomizeVanillaRecipe {
 		// item
 		for (int i = 0; i < x * y; i++) {
 			boolean b = false;
-			ItemStack item = null;
-			Object obj = objects[i];
-			if (obj == null) {
+			ItemStack item = ItemStack.EMPTY;
+			Ingredient obj = objects.get(i);
+			if (DCUtil.isEmptyIngredient(obj)) {
 				continue;
 			}
 
-			if (obj instanceof ItemStack) {
-				item = new ItemStack(((ItemStack) obj).getItem(), 1, ((ItemStack) obj).getItemDamage());
-			} else if (obj instanceof Item) {
-				item = new ItemStack((Item) obj);
-			} else if (obj instanceof Block) {
-				item = new ItemStack((Block) obj, 1, OreDictionary.WILDCARD_VALUE);
-			} else if (obj instanceof List) {
-				if ((List<ItemStack>) obj != null && !((List<ItemStack>) obj).isEmpty()) {
-					List<ItemStack> list = (List<ItemStack>) obj;
-					for (ItemStack oreItem : list) {
-						if (DCUtil.isEmpty(oreItem) || OreDictionary.getOreIDs(oreItem).length == 0)
-							continue;
-						int[] id = OreDictionary.getOreIDs(oreItem);
-						if (id != null) {
-							for (int j = 0; j < id.length; j++) {
-								String str = OreDictionary.getOreName(id[j]);
-								if (str != null) {
-									inputs.add(c[i]);
-									inputs.add(str);
-									b = true;
-									break;
-								}
+			if (obj.getMatchingStacks().length == 1) {
+				item = obj.getMatchingStacks()[0];
+			} else {
+				for (ItemStack oreItem : obj.getMatchingStacks()) {
+					if (DCUtil.isEmpty(oreItem) || OreDictionary.getOreIDs(oreItem).length == 0)
+						continue;
+					int[] id = OreDictionary.getOreIDs(oreItem);
+					if (id != null) {
+						for (int j = 0; j < id.length; j++) {
+							String str = OreDictionary.getOreName(id[j]);
+							if (str != null) {
+								inputs.add(c[i]);
+								inputs.add(str);
+								b = true;
+								break;
 							}
 						}
-						if (b)
-							break;
 					}
+					if (b)
+						break;
 				}
 
 				if (!b) {
 					inputs.add(c[i]);
-					inputs.add("Unknown");
+					inputs.add(obj);
 					b = true;
 				}
 			}
 
-			if (item != null) {
+			if (!DCUtil.isEmpty(item)) {
 				for (Entry<ItemStack, String> entry : replaceTable.entrySet()) {
 					if (itemMatches(entry.getKey(), item, true)) {
 						String oreName = entry.getValue();
@@ -394,7 +379,9 @@ public class CustomizeVanillaRecipe {
 		}
 
 		Object[] newInputs = inputs.toArray();
-		GameRegistry.addRecipe(new ShapedOreRecipe(output, newInputs));
+		DCRecipe.addShapedRecipe(
+				new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName().getResourcePath() + "_dcs"), output,
+				newInputs);
 		DCLogger.debugLog("Customized ShapedOreRecipe : " + inputs.toString());
 
 	}
@@ -402,50 +389,41 @@ public class CustomizeVanillaRecipe {
 	// Shapeless-Ore
 	private static void registerCustomShapelessOreRecipe(ShapelessOreRecipe recipe) {
 		ItemStack output = recipe.getRecipeOutput();
-		ArrayList<Object> objects = recipe.getInput();
+		NonNullList<Ingredient> objects = recipe.getIngredients();
 		ArrayList<Object> inputs = new ArrayList<Object>();
 
-		for (Object obj : objects) {
+		for (Ingredient obj : objects) {
 			boolean b = false;
-			ItemStack item = null;
+			ItemStack item = ItemStack.EMPTY;
 
-			if (obj instanceof ItemStack) {
-				item = new ItemStack(((ItemStack) obj).getItem(), 1, ((ItemStack) obj).getItemDamage());
-			} else if (obj instanceof Item) {
-				item = new ItemStack((Item) obj);
-			} else if (obj instanceof Block) {
-				item = new ItemStack((Block) obj, 1, OreDictionary.WILDCARD_VALUE);
-			} else if (obj instanceof List) {
-				if ((List<ItemStack>) obj != null && !((List<ItemStack>) obj).isEmpty()) {
-					List<ItemStack> list = (List<ItemStack>) obj;
-					for (ItemStack oreItem : list) {
-						if (DCUtil.isEmpty(oreItem) || OreDictionary.getOreIDs(oreItem).length == 0)
-							continue;
-						int[] id = OreDictionary.getOreIDs(oreItem);
-						if (id != null) {
-							for (int j = 0; j < id.length; j++) {
-								String str = OreDictionary.getOreName(id[j]);
-								if (str != null) {
-									inputs.add(str);
-									b = true;
-									break;
-								}
+			if (obj.getMatchingStacks().length == 1) {
+				item = obj.getMatchingStacks()[0];
+			} else {
+				for (ItemStack oreItem : obj.getMatchingStacks()) {
+					if (DCUtil.isEmpty(oreItem) || OreDictionary.getOreIDs(oreItem).length == 0)
+						continue;
+					int[] id = OreDictionary.getOreIDs(oreItem);
+					if (id != null) {
+						for (int j = 0; j < id.length; j++) {
+							String str = OreDictionary.getOreName(id[j]);
+							if (str != null) {
+								inputs.add(str);
+								b = true;
+								break;
 							}
 						}
-						if (b)
-							break;
 					}
+					if (b)
+						break;
 				}
 
 				if (!b) {
-					inputs.add("Unknown");
+					inputs.add(obj);
 					b = true;
 				}
-			} else {
-				inputs.add("Unknown");
 			}
 
-			if (item != null) {
+			if (!DCUtil.isEmpty(item)) {
 				for (Entry<ItemStack, String> entry : replaceTable.entrySet()) {
 					if (itemMatches(entry.getKey(), item, true)) {
 						String oreName = entry.getValue();
@@ -461,12 +439,27 @@ public class CustomizeVanillaRecipe {
 		}
 
 		Object[] newInputs = inputs.toArray();
-		GameRegistry.addRecipe(new ShapelessOreRecipe(output, newInputs));
+		DCRecipe.addShapelessRecipe(
+				new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName().getResourcePath() + "_dcs"), output,
+				newInputs);
 		DCLogger.debugLog("Customized ShapelessOreRecipe : " + inputs.toString());
 
 	}
 
-	private static boolean containsMatch(boolean strict, ItemStack[] inputs, ItemStack... targets) {
+	private static boolean containsMatch(boolean strict, List<Ingredient> inputs, ItemStack... targets) {
+		for (Ingredient input : inputs) {
+			for (ItemStack item : input.getMatchingStacks()) {
+				for (ItemStack target : targets) {
+					if (itemMatches(target, item, strict)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	private static boolean containsMatch2(boolean strict, List<ItemStack> inputs, ItemStack... targets) {
 		for (ItemStack input : inputs) {
 			for (ItemStack target : targets) {
 				if (itemMatches(target, input, strict)) {

@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class DCFluidUtil {
 
@@ -43,16 +44,13 @@ public class DCFluidUtil {
 				DCTank dc_in = (DCTank) intank;
 				DCTank dc_out = (DCTank) outtank;
 
-				ItemStack ret = null;
+				ItemStack ret = ItemStack.EMPTY;
 				boolean success = false;
 				// input
 				if (f1 != null && dc_in.fill(f1, false) > 0) {
 					int f2 = dc_in.fill(f1, false);
 					FluidStack fill = dummy.drain(f2, true);
 					ret = copy;
-					if (ret.stackSize <= 0) {
-						ret = null;
-					}
 					if (fill != null && fill.amount > 0) {
 						dc_in.fill(fill, true);
 						success = true;
@@ -62,9 +60,6 @@ public class DCFluidUtil {
 				else if (f1 == null && dc_out.drain(max, false) != null) {
 					int drain = dummy.fill(dc_out.drain(max, false), true);
 					ret = copy;
-					if (ret.stackSize <= 0) {
-						ret = null;
-					}
 					if (drain > 0) {
 						dc_out.drain(drain, true);
 						success = true;
@@ -72,20 +67,33 @@ public class DCFluidUtil {
 				}
 
 				if (success) {
-					if (!player.capabilities.isCreativeMode && item.stackSize-- <= 0) {
-						item = null;
+					if (!player.capabilities.isCreativeMode) {
+						DCUtil.reduceStackSize(item, 1);
 					}
 					tile.markDirty();
 					player.inventory.markDirty();
 					if (!DCUtil.isEmpty(ret)) {
 						EntityItem drop = new EntityItem(world, player.posX, player.posY + 0.25D, player.posZ, ret);
-						world.spawnEntityInWorld(drop);
+						world.spawnEntity(drop);
 					}
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	public static ItemStack getEmptyCont(ItemStack target) {
+		if (!DCUtil.isEmpty(target)
+				&& target.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+			ItemStack copy = target.copy();
+			IFluidHandlerItem handler = copy.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+			if (handler != null) {
+				handler.drain(handler.getTankProperties()[0].getCapacity(), true);
+				return copy;
+			}
+		}
+		return ItemStack.EMPTY;
 	}
 
 }

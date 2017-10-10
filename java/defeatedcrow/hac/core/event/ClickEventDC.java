@@ -55,8 +55,8 @@ public class ClickEventDC {
 		EntityPlayer player = event.getEntityPlayer();
 		BlockPos pos = event.getPos();
 		ItemStack held = event.getItemStack();
-		if (player != null && !player.worldObj.isRemote) {
-			IBlockState state = player.worldObj.getBlockState(pos);
+		if (player != null && !player.world.isRemote) {
+			IBlockState state = player.world.getBlockState(pos);
 			if (state != null && state.getBlock() != null) {
 				// IRapidCollectables
 				if (state.getBlock() instanceof IRapidCollectables
@@ -89,17 +89,17 @@ public class ClickEventDC {
 	public void onRightClickAir(PlayerInteractEvent.RightClickItem event) {
 		EntityPlayer player = event.getEntityPlayer();
 		ItemStack held = event.getItemStack();
-		if (player != null && player.isSneaking() && !DCUtil.isEmpty(held) && !player.worldObj.isRemote) {
-			RayTraceResult ray = DCUtil.getRayTrace(player.worldObj, player);
+		if (player != null && player.isSneaking() && !DCUtil.isEmpty(held) && !player.world.isRemote) {
+			RayTraceResult ray = DCUtil.getRayTrace(player.world, player);
 			BlockPos pos = null;
 			if (ray == null) {
-				pos = DCUtil.getRayTracePos(player.worldObj, player);
+				pos = DCUtil.getRayTracePos(player.world, player);
 			} else {
 				pos = ray.getBlockPos();
 			}
 			if (pos != null) {
 				AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-2, -2, -2), pos.add(2, 2, 2));
-				List<Entity> list = player.worldObj.getEntitiesWithinAABBExcludingEntity(null, aabb);
+				List<Entity> list = player.world.getEntitiesWithinAABBExcludingEntity(null, aabb);
 				List<IRapidCollectables> list2 = new ArrayList<IRapidCollectables>();
 				boolean flag = false;
 				for (Entity get : list) {
@@ -110,7 +110,7 @@ public class ClickEventDC {
 
 				for (IRapidCollectables get2 : list2) {
 					if (get2.isCollectable(held)) {
-						if (get2.doCollect(player.worldObj, pos, player.worldObj.getBlockState(pos), player, held))
+						if (get2.doCollect(player.world, pos, player.world.getBlockState(pos), player, held))
 							flag = true;
 					}
 				}

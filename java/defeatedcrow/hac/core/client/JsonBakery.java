@@ -13,7 +13,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
@@ -25,7 +24,6 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.Attributes;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IRetexturableModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -115,9 +113,9 @@ public class JsonBakery {
 		// Item用Jsonを同じ要領で拾ってくる
 		try {
 			IModel modelS = ModelLoaderRegistry.getModel(rawSided);
-			if (modelS instanceof IRetexturableModel) {
+			if (modelS != null) {
 				// パンを焼く
-				IBakedModel bakedSided = new BakedSidedBaguette((IRetexturableModel) modelS);
+				IBakedModel bakedSided = new BakedSidedBaguette(modelS);
 				event.getModelRegistry().putObject(normalSided, bakedSided);
 			}
 		} catch (IOException e) {
@@ -128,8 +126,8 @@ public class JsonBakery {
 		ResourceLocation rawTB = new ResourceLocation("dcs_climate:block/dcs_cube_tb");
 		try {
 			IModel modelT = ModelLoaderRegistry.getModel(rawTB);
-			if (modelT instanceof IRetexturableModel) {
-				IBakedModel bakedTB = new BakedTBBaguette((IRetexturableModel) modelT);
+			if (modelT != null) {
+				IBakedModel bakedTB = new BakedTBBaguette(modelT);
 				event.getModelRegistry().putObject(normalTB, bakedTB);
 			}
 		} catch (IOException e) {
@@ -140,8 +138,8 @@ public class JsonBakery {
 		ResourceLocation rawCrop = new ResourceLocation("dcs_climate:block/dcs_cross");
 		try {
 			IModel modelT = ModelLoaderRegistry.getModel(rawCrop);
-			if (modelT instanceof IRetexturableModel) {
-				IBakedModel bakedCrop = new BakedCropBaguette((IRetexturableModel) modelT);
+			if (modelT != null) {
+				IBakedModel bakedCrop = new BakedCropBaguette(modelT);
 				event.getModelRegistry().putObject(normalCrop, bakedCrop);
 			}
 		} catch (IOException e) {
@@ -153,7 +151,7 @@ public class JsonBakery {
 	private static final String clear = "dcs_climate:blocks/clear";
 
 	private static class BakedSidedBaguette implements IBakedModel {
-		private final IRetexturableModel retexturableModel;
+		private final IModel retexturableModel;
 
 		private Function<ResourceLocation, TextureAtlasSprite> textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
 			@Override
@@ -162,7 +160,7 @@ public class JsonBakery {
 			}
 		};
 
-		public BakedSidedBaguette(IRetexturableModel model) {
+		public BakedSidedBaguette(IModel model) {
 			retexturableModel = model;
 		}
 
@@ -222,18 +220,13 @@ public class JsonBakery {
 		}
 
 		@Override
-		public ItemCameraTransforms getItemCameraTransforms() {
-			return null;
-		}
-
-		@Override
 		public ItemOverrideList getOverrides() {
 			return null;
 		}
 	}
 
 	private static class BakedTBBaguette implements IBakedModel {
-		private final IRetexturableModel retexturableModel;
+		private final IModel retexturableModel;
 		private Function<ResourceLocation, TextureAtlasSprite> textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
 			@Override
 			public TextureAtlasSprite apply(ResourceLocation location) {
@@ -241,7 +234,7 @@ public class JsonBakery {
 			}
 		};
 
-		public BakedTBBaguette(IRetexturableModel model) {
+		public BakedTBBaguette(IModel model) {
 			retexturableModel = model;
 		}
 
@@ -287,18 +280,13 @@ public class JsonBakery {
 		}
 
 		@Override
-		public ItemCameraTransforms getItemCameraTransforms() {
-			return null;
-		}
-
-		@Override
 		public ItemOverrideList getOverrides() {
 			return null;
 		}
 	}
 
 	private static class BakedCropBaguette implements IBakedModel {
-		private final IRetexturableModel retexturableModel;
+		private final IModel retexturableModel;
 		private Function<ResourceLocation, TextureAtlasSprite> textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
 			@Override
 			public TextureAtlasSprite apply(ResourceLocation location) {
@@ -306,7 +294,7 @@ public class JsonBakery {
 			}
 		};
 
-		public BakedCropBaguette(IRetexturableModel model) {
+		public BakedCropBaguette(IModel model) {
 			retexturableModel = model;
 		}
 
@@ -346,11 +334,6 @@ public class JsonBakery {
 		@Override
 		public TextureAtlasSprite getParticleTexture() {
 			return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("dcs_climate:blocks/destroy_effect");
-		}
-
-		@Override
-		public ItemCameraTransforms getItemCameraTransforms() {
-			return null;
 		}
 
 		@Override

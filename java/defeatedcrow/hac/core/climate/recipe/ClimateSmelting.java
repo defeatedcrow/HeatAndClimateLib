@@ -12,6 +12,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.placeable.IEntityItem;
 import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
+import defeatedcrow.hac.core.fluid.DCFluidUtil;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -19,7 +20,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ClimateSmelting implements IClimateSmelting {
@@ -89,7 +89,7 @@ public class ClimateSmelting implements IClimateSmelting {
 		if (!DCUtil.isEmpty(secondary)) {
 			return this.secondary.copy();
 		} else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -102,8 +102,8 @@ public class ClimateSmelting implements IClimateSmelting {
 	public ItemStack getContainerItem(ItemStack item) {
 		if (item == null) {
 			return null;
-		} else if (FluidContainerRegistry.isFilledContainer(item)) {
-			return FluidContainerRegistry.drainFluidContainer(item);
+		} else if (!DCUtil.isEmpty(DCFluidUtil.getEmptyCont(item))) {
+			return DCFluidUtil.getEmptyCont(item);
 		} else {
 			return item.getItem().getContainerItem(item);
 		}

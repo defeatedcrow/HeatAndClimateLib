@@ -1,7 +1,7 @@
 package defeatedcrow.hac.core;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -19,8 +19,8 @@ public class CreativeTabClimate extends CreativeTabs {
 	}
 
 	@Override
-	public Item getTabIconItem() {
-		return DCInit.climate_checker;
+	public ItemStack getTabIconItem() {
+		return new ItemStack(DCInit.climate_checker);
 	}
 
 }
