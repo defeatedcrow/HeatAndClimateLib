@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 public class CommonProxyD {
 
 	public void loadMaterial() {
-		MaterialRegister.load();
+		DCMaterial.load();
 
 		DCInit.prevFreeze = new PotionFreezeResistance().setRegistryName(ClimateCore.MOD_ID, "dcs.potion.freeze_res");
 		ForgeRegistries.POTIONS.register(DCInit.prevFreeze);

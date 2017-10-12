@@ -93,8 +93,8 @@ public abstract class ClimateCropBase extends Block
 
 	@Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		DCUtil.machCreativeTab(tab, getCreativeTabToDisplayOn());
-		list.add(new ItemStack(this, 1, getGrownMetadata()));
+		if (DCUtil.machCreativeTab(tab, getCreativeTabToDisplayOn()))
+			list.add(new ItemStack(this, 1, getGrownMetadata()));
 	}
 
 	public int getGrownMetadata() {
