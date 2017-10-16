@@ -84,6 +84,15 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, FluidStack outFluid1,
 			FluidStack outFluid2, DCHeatTier heat, ItemStack catalyst, FluidStack inFluid1, FluidStack inFluid2,
 			Object... input) {
+		if (output == null) {
+			output = ItemStack.EMPTY;
+		}
+		if (secondary == null) {
+			secondary = ItemStack.EMPTY;
+		}
+		if (catalyst == null) {
+			catalyst = ItemStack.EMPTY;
+		}
 		List<ReactorRecipe> list = getRecipeList(heat);
 		boolean b1 = input == null && inFluid1 == null && inFluid2 == null;
 		boolean b2 = DCUtil.isEmpty(output) && outFluid1 == null && outFluid2 == null;

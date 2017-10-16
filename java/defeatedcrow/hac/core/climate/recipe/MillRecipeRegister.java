@@ -28,6 +28,9 @@ public class MillRecipeRegister implements IMillRecipeRegister {
 
 	@Override
 	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, Object input) {
+		if (secondary == null) {
+			secondary = ItemStack.EMPTY;
+		}
 		if (input != null && !DCUtil.isEmpty(output)) {
 			list.add(new MillRecipe(output, secondary, secondaryChance, input));
 		}

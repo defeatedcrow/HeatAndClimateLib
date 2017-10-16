@@ -35,8 +35,6 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -313,19 +311,6 @@ public class LivingEventDC {
 					i++;
 				}
 
-			}
-		}
-	}
-
-	/* spawn制御 */
-	@SubscribeEvent
-	public void spawnEvent(LivingSpawnEvent.CheckSpawn event) {
-		if (CoreConfigDC.customizedSpawn && event.getEntityLiving() != null
-				&& event.getEntityLiving() instanceof IMob) {
-			float i1 = 64F - event.getY();
-			int abs = (int) Math.abs(i1);
-			if (abs < 20) {
-				event.setResult(Result.DENY);
 			}
 		}
 	}

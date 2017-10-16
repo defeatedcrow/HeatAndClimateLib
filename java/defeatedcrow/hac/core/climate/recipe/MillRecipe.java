@@ -31,7 +31,8 @@ public class MillRecipe implements IMillRecipe {
 			ret.addAll(OreDictionary.getOres((String) input));
 			processedInput.addAll(ret);
 		} else if (input instanceof ItemStack) {
-			processedInput.add(((ItemStack) input).copy());
+			if (!DCUtil.isEmpty((ItemStack) input))
+				processedInput.add(((ItemStack) input).copy());
 		} else if (input instanceof Item) {
 			processedInput.add(new ItemStack((Item) input, 1, 0));
 		} else if (input instanceof Block) {
@@ -68,7 +69,7 @@ public class MillRecipe implements IMillRecipe {
 	@Override
 	public ItemStack getContainerItem(ItemStack item) {
 		if (DCUtil.isEmpty(item)) {
-			return null;
+			return ItemStack.EMPTY;
 		} else if (!DCUtil.isEmpty(DCFluidUtil.getEmptyCont(item))) {
 			return DCFluidUtil.getEmptyCont(item);
 		} else {

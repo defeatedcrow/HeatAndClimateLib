@@ -87,6 +87,9 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	public void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air,
 			float secondaryChance, boolean cooling, Object input) {
 		if (input != null && !DCUtil.isEmpty(output) && heat != null) {
+			if (secondary == null) {
+				secondary = ItemStack.EMPTY;
+			}
 			List<ClimateSmelting> list = getRecipeList(heat);
 			list.add(new ClimateSmelting(output, secondary, heat, hum, air, secondaryChance, cooling, input));
 		}

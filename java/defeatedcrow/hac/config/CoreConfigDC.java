@@ -48,7 +48,6 @@ public class CoreConfigDC {
 	public static boolean enableFreezeDrop = true;
 	public static boolean enableDeepWater = true;
 	public static boolean enableUnderLake = true;
-	public static boolean customizedSpawn = false;
 	public static boolean enableForestLake = true;
 	public static int droughtFrequency = 60;
 	public static boolean enableSeasonEffect = true;
@@ -157,9 +156,6 @@ public class CoreConfigDC {
 			Property suffocation = cfg.get("hardmode setting", "Enable Suffocation Damage", enableSuffocation,
 					"Enable the suffocation effect when creatures or players in tight space.");
 
-			Property spawn = cfg.get("hardmode setting", "Customized Enemy Spawn Rate", customizedSpawn,
-					"Enemy increases at low altitude and decreases at high altitude.");
-
 			Property drought = cfg.get("world setting", "Drought Frequency", droughtFrequency,
 					"Set the number of days of fine weather required for drought.");
 
@@ -190,7 +186,6 @@ public class CoreConfigDC {
 			harderVanilla = vanilla_harder.getBoolean();
 			infernalInferno = inferno.getBoolean();
 			enableSuffocation = suffocation.getBoolean();
-			customizedSpawn = spawn.getBoolean();
 			tightUnderworld = tight.getBoolean();
 			enableWeatherEffect = weather.getBoolean();
 			enableSeasonEffect = season.getBoolean();

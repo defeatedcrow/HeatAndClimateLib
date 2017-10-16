@@ -38,7 +38,11 @@ public class DCUtil {
 	public static Random rand = new Random();
 
 	public static boolean isEmpty(ItemStack item) {
-		return item == null || item.getItem() == null || item.isEmpty();
+		if (item == null) {
+			item = ItemStack.EMPTY;
+			return true;
+		}
+		return item.getItem() == null || item.isEmpty();
 	}
 
 	public static boolean isEmptyIngredient(Ingredient item) {

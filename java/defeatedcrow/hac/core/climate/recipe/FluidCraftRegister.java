@@ -87,6 +87,9 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 	@Override
 	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, FluidStack outFluid,
 			DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling, FluidStack inFluid, Object... input) {
+		if (secondary == null) {
+			secondary = ItemStack.EMPTY;
+		}
 		List<FluidCraftRecipe> list = getRecipeList(heat);
 		boolean b1 = input == null && inFluid == null;
 		boolean b2 = DCUtil.isEmpty(output) && outFluid == null;

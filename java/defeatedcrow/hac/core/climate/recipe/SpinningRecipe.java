@@ -32,8 +32,10 @@ public class SpinningRecipe implements ISpinningRecipe {
 				}
 			}
 		} else if (input instanceof ItemStack) {
-			processedInput
-					.add((new ItemStack(((ItemStack) input).getItem(), count, ((ItemStack) input).getItemDamage())));
+			if (!DCUtil.isEmpty((ItemStack) input)) {
+				processedInput.add(
+						(new ItemStack(((ItemStack) input).getItem(), count, ((ItemStack) input).getItemDamage())));
+			}
 		} else if (input instanceof Item) {
 			processedInput.add(new ItemStack((Item) input, count, 0));
 		} else if (input instanceof Block) {

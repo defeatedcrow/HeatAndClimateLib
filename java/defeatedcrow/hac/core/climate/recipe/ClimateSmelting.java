@@ -64,7 +64,8 @@ public class ClimateSmelting implements IClimateSmelting {
 			ret.addAll(OreDictionary.getOres((String) input));
 			processedInput.addAll(ret);
 		} else if (input instanceof ItemStack) {
-			processedInput.add(((ItemStack) input).copy());
+			if (!DCUtil.isEmpty((ItemStack) input))
+				processedInput.add(((ItemStack) input).copy());
 		} else if (input instanceof Item) {
 			processedInput.add(new ItemStack((Item) input, 1, 0));
 		} else if (input instanceof Block) {
@@ -100,8 +101,8 @@ public class ClimateSmelting implements IClimateSmelting {
 
 	@Override
 	public ItemStack getContainerItem(ItemStack item) {
-		if (item == null) {
-			return null;
+		if (DCUtil.isEmpty(item)) {
+			return ItemStack.EMPTY;
 		} else if (!DCUtil.isEmpty(DCFluidUtil.getEmptyCont(item))) {
 			return DCFluidUtil.getEmptyCont(item);
 		} else {
