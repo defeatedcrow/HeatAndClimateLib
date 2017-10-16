@@ -1,5 +1,5 @@
 # HeatAndClimateLib
-the Mod necessary for defeatedcrow's mod in 1.9.4-1.10.2
+the Mod necessary for defeatedcrow's mod in 1.12.1
 
 ## Project Site
 Please visit my new Wiki: http://defeatedcrow.jp/modwiki/HeatAndClimate
@@ -8,12 +8,12 @@ Please visit my new Wiki: http://defeatedcrow.jp/modwiki/HeatAndClimate
 - This mod is API and core mod necessary for defeatedcrow's mod in 1.9+. Of course, you can stand-alone use this mod, or use in your modding. <br>このmodは1.9+においてdefeatedcrowが作成するmodの前提MODです。もちろん、このmodを単独で使用したり、あなたのmodの前提modとしても利用することが出来ます。
 
 ## 動作環境 Current operating environment:
-- Minecraft 1.9.4 ~ 1.10.2
-- MinecraftForge 12.17.0.1976+  
+- Minecraft 1.12.1
+- MinecraftForge 12.18.2.2478+  
    
 ## ライセンス
 - Code：MMPL-1.0  (full text is included as License.txt)
-- Resource：CC-BY-NC
+- Resource：CC-BY-NC-SA 4.0
 - About the secondary users<br> - Paid use of these mods are prohibited.<br> - You can include these mods to your ModPack.<br> - You can distribute these mods for your server user.<br>
 
 ## 注意事項
