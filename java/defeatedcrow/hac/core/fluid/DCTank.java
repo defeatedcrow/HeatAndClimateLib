@@ -6,13 +6,15 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
-public class DCTank implements IFluidTank, IFluidTankProperties, IFluidHandler {
+public class DCTank implements IFluidTank, IFluidHandler {
 
 	protected FluidStack fluid;
 	protected final int capacity;
+	protected IFluidTankProperties[] tankProperties;
 
 	public DCTank(int cap) {
 		capacity = cap;
@@ -83,7 +85,7 @@ public class DCTank implements IFluidTank, IFluidTankProperties, IFluidHandler {
 
 	@Override
 	public FluidStack getFluid() {
-		return fluid == null ? null : fluid;
+		return fluid;
 	}
 
 	@Override
@@ -136,38 +138,13 @@ public class DCTank implements IFluidTank, IFluidTankProperties, IFluidHandler {
 		return null;
 	}
 
-	/* property */
-
-	@Override
-	public FluidStack getContents() {
-		return fluid;
-	}
-
-	@Override
-	public boolean canFill() {
-		return true;
-	}
-
-	@Override
-	public boolean canDrain() {
-		return false;
-	}
-
-	@Override
-	public boolean canFillFluidType(FluidStack get) {
-		return get != null;
-	}
-
-	@Override
-	public boolean canDrainFluidType(FluidStack get) {
-		return get != null;
-	}
-
 	/* Handler */
 
 	@Override
 	public IFluidTankProperties[] getTankProperties() {
-		return new IFluidTankProperties[] { this };
+		return new IFluidTankProperties[] {
+				new FluidTankProperties(getFluid(), capacity)
+		};
 	}
 
 	@Override

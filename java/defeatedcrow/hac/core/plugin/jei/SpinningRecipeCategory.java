@@ -55,14 +55,14 @@ public class SpinningRecipeCategory implements IRecipeCategory {
 		SpinningRecipeWrapper wrapper = ((SpinningRecipeWrapper) recipeWrapper);
 		// wrapper.getIngredients(ingredients);
 
-		List inputs = wrapper.getInputs();
-		List outputs = wrapper.getOutputs();
+		List<ItemStack> inputs = wrapper.getInputs();
+		List<ItemStack> outputs = wrapper.getOutputs();
 
 		recipeLayout.getItemStacks().init(0, true, 45, 29);
 		recipeLayout.getItemStacks().set(0, inputs);
 
 		recipeLayout.getItemStacks().init(1, false, 97, 29);
-		recipeLayout.getItemStacks().set(1, (ItemStack) outputs.get(0));
+		recipeLayout.getItemStacks().set(1, outputs.get(0));
 	}
 
 	@Override

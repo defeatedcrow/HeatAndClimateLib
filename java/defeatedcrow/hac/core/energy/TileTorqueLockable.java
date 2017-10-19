@@ -198,6 +198,7 @@ public abstract class TileTorqueLockable extends TileTorqueBase
 	}
 
 	private IItemHandler itemHandler;
+	private TorqueHandlerWrapper torqueWrapper = new TorqueHandlerWrapper(this);
 
 	protected IItemHandler createUnSidedHandler() {
 		return new InvWrapper(this);
@@ -207,12 +208,16 @@ public abstract class TileTorqueLockable extends TileTorqueBase
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return (T) (itemHandler == null ? (itemHandler = createUnSidedHandler()) : itemHandler);
-		return super.getCapability(capability, facing);
+		else
+			return super.getCapability(capability, facing);
 	}
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return true;
+		} else
+			return super.hasCapability(capability, facing);
 	}
 
 	@Override

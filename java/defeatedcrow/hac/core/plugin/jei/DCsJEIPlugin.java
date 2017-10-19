@@ -3,7 +3,13 @@ package defeatedcrow.hac.core.plugin.jei;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import defeatedcrow.hac.core.DCInit;
+import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
+import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
+import defeatedcrow.hac.core.climate.recipe.MillRecipe;
+import defeatedcrow.hac.core.climate.recipe.ReactorRecipe;
+import defeatedcrow.hac.core.climate.recipe.SpinningRecipe;
 import defeatedcrow.hac.core.plugin.DCsJEIPluginLists;
 import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowHelper;
 import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowRenderer;
@@ -22,6 +28,7 @@ import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.biome.Biome;
 
 @JEIPlugin
 public class DCsJEIPlugin implements IModPlugin {
@@ -39,6 +46,15 @@ public class DCsJEIPlugin implements IModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
 		final IJeiHelpers jeiHelpers = registry.getJeiHelpers();
+
+		registry.handleRecipes(Biome.class, recipe -> new ClimateBiomeWrapper(recipe), BIOME_UID);
+		registry.handleRecipes(IClimateCrop.class, recipe -> new ClimateCropWrapper(recipe), CROP_UID);
+		registry.handleRecipes(ClimateEffectiveTile.class, recipe -> new ClimateEffectiveWrapper(recipe), CLIMATE_UID);
+		registry.handleRecipes(ClimateSmelting.class, recipe -> new ClimateSmeltingWrapper(recipe), SMELTING_UID);
+		registry.handleRecipes(MillRecipe.class, recipe -> new MillRecipeWrapper(recipe), MILL_UID);
+		registry.handleRecipes(FluidCraftRecipe.class, recipe -> new FluidRecipeWrapper(recipe), FLUID_UID);
+		registry.handleRecipes(ReactorRecipe.class, recipe -> new ReactorRecipeWrapper(recipe), REACTOR_UID);
+		registry.handleRecipes(SpinningRecipe.class, recipe -> new SpinningRecipeWrapper(recipe), SPINNING_UID);
 
 		ClimateEffectiveMaker.register(registry);
 		ClimateBiomeMaker.register(registry);

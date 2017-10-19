@@ -11,8 +11,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class DCLockableTESRBase extends TileEntitySpecialRenderer<DCLockableTE> {
 
 	@Override
-	public void renderTileEntityFast(DCLockableTE te, double x, double y, double z, float partialTicks,
-			int destroyStage, float partial, net.minecraft.client.renderer.BufferBuilder buffer) {
+	public void render(DCLockableTE te, double x, double y, double z, float partialTicks, int destroyStage,
+			float alpha) {
 		int type = 0;
 		int face = 0;
 		float f = 0.0F;

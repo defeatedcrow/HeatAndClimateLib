@@ -9,32 +9,34 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 public class DCInventory implements IInventory {
 
 	private final int size;
+	public final NonNullList<ItemStack> inv;
 
 	public DCInventory(int i) {
 		size = i;
+		inv = NonNullList.<ItemStack>withSize(size, ItemStack.EMPTY);
 	}
 
-	public ItemStack[] inv = new ItemStack[this.getSizeInventory()];
-
-	public List<ItemStack> getInputs() {
+	public List<ItemStack> getInputs(int from, int to) {
 		List<ItemStack> ret = new ArrayList<ItemStack>();
-		if (!DCUtil.isEmpty(inv[0]))
-			ret.add(inv[0]);
+		for (int i = from; i <= to; i++) {
+			if (!DCUtil.isEmpty(getStackInSlot(i)))
+				ret.add(getStackInSlot(i));
+		}
 		return ret;
 	}
 
-	public List<ItemStack> getOutputs() {
+	public List<ItemStack> getOutputs(int from, int to) {
 		List<ItemStack> ret = new ArrayList<ItemStack>();
-		for (int i = 1; i < this.getSizeInventory(); i++) {
-			if (!DCUtil.isEmpty(inv[i]))
-				ret.add(inv[i]);
+		for (int i = from; i <= to; i++) {
+			if (!DCUtil.isEmpty(getStackInSlot(i)))
+				ret.add(getStackInSlot(i));
 		}
 		return ret;
 	}
@@ -42,18 +44,15 @@ public class DCInventory implements IInventory {
 	// スロット数
 	@Override
 	public int getSizeInventory() {
-		if (size > 0)
-			return size;
-		else
-			return 1;
+		return size;
 	}
 
 	// インベントリ内の任意のスロットにあるアイテムを取得
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		if (i < getSizeInventory())
-			return this.inv[i];
-		else
+		if (i >= 0 && i < getSizeInventory()) {
+			return inv.get(i);
+		} else
 			return ItemStack.EMPTY;
 	}
 
@@ -61,9 +60,9 @@ public class DCInventory implements IInventory {
 	public ItemStack decrStackSize(int i, int num) {
 		if (i < 0 || i >= this.getSizeInventory())
 			return ItemStack.EMPTY;
-		if (!DCUtil.isEmpty(inv[i])) {
+		if (!DCUtil.isEmpty(getStackInSlot(i))) {
 			ItemStack itemstack;
-			itemstack = this.inv[i].splitStack(num);
+			itemstack = getStackInSlot(i).splitStack(num);
 			return itemstack;
 		} else
 			return ItemStack.EMPTY;
@@ -75,11 +74,17 @@ public class DCInventory implements IInventory {
 		if (i < 0 || i >= this.getSizeInventory()) {
 			return;
 		} else {
-			this.inv[i] = stack;
+			if (stack == null) {
+				stack = ItemStack.EMPTY;
+			}
+
+			inv.set(i, stack);
 
 			if (!DCUtil.isEmpty(stack) && stack.getCount() > this.getInventoryStackLimit()) {
 				stack.setCount(this.getInventoryStackLimit());
 			}
+
+			this.markDirty();
 		}
 	}
 
@@ -143,11 +148,12 @@ public class DCInventory implements IInventory {
 
 	public void incrStackInSlot(int i, ItemStack input) {
 		if (i < this.getSizeInventory() && !DCUtil.isEmpty(input)) {
-			if (!DCUtil.isEmpty(inv[i])) {
-				if (this.inv[i].getItem() == input.getItem() && this.inv[i].getMetadata() == input.getMetadata()) {
-					DCUtil.addStackSize(inv[i], input.getCount());
-					if (this.inv[i].getCount() > this.getInventoryStackLimit()) {
-						this.inv[i].setCount(this.getInventoryStackLimit());
+			if (!DCUtil.isEmpty(getStackInSlot(i))) {
+				if (this.getStackInSlot(i).getItem() == input.getItem()
+						&& this.getStackInSlot(i).getMetadata() == input.getMetadata()) {
+					DCUtil.addStackSize(getStackInSlot(i), input.getCount());
+					if (this.getStackInSlot(i).getCount() > this.getInventoryStackLimit()) {
+						this.getStackInSlot(i).setCount(this.getInventoryStackLimit());
 					}
 				}
 			} else {
@@ -158,11 +164,12 @@ public class DCInventory implements IInventory {
 
 	@Override
 	public ItemStack removeStackFromSlot(int i) {
-		i = MathHelper.clamp(i, 0, this.getSizeInventory() - 1);
-		if (i < inv.length) {
-			if (!DCUtil.isEmpty(inv[i])) {
-				ItemStack itemstack = this.inv[i];
-				this.inv[i] = ItemStack.EMPTY;
+		if (i < 0 || i >= this.getSizeInventory())
+			return ItemStack.EMPTY;
+		else {
+			if (!DCUtil.isEmpty(getStackInSlot(i))) {
+				ItemStack itemstack = this.getStackInSlot(i);
+				inv.set(i, ItemStack.EMPTY);
 				return itemstack;
 			}
 		}
@@ -184,8 +191,8 @@ public class DCInventory implements IInventory {
 
 	@Override
 	public void clear() {
-		for (int i = 0; i < this.inv.length; ++i) {
-			this.inv[i] = ItemStack.EMPTY;
+		for (int i = 0; i < this.getSizeInventory(); ++i) {
+			inv.set(i, ItemStack.EMPTY);
 		}
 	}
 
@@ -199,14 +206,13 @@ public class DCInventory implements IInventory {
 	public void readFromNBT(NBTTagCompound tag) {
 
 		NBTTagList nbttaglist = tag.getTagList("InvItems", 10);
-		this.inv = new ItemStack[this.getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
 			NBTTagCompound tag1 = nbttaglist.getCompoundTagAt(i);
 			byte b0 = tag1.getByte("Slot");
 
-			if (b0 >= 0 && b0 < this.inv.length) {
-				this.inv[b0] = new ItemStack(tag1);
+			if (b0 >= 0 && b0 < this.getSizeInventory()) {
+				inv.set(i, new ItemStack(tag1));
 			}
 		}
 	}
@@ -216,11 +222,11 @@ public class DCInventory implements IInventory {
 		// アイテムの書き込み
 		NBTTagList nbttaglist = new NBTTagList();
 
-		for (int i = 0; i < inv.length; ++i) {
-			if (!DCUtil.isEmpty(inv[i])) {
+		for (int i = 0; i < this.getSizeInventory(); ++i) {
+			if (!DCUtil.isEmpty(getStackInSlot(i))) {
 				NBTTagCompound tag1 = new NBTTagCompound();
 				tag1.setByte("Slot", (byte) i);
-				inv[i].writeToNBT(tag1);
+				getStackInSlot(i).writeToNBT(tag1);
 				nbttaglist.appendTag(tag1);
 			}
 		}

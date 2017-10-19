@@ -147,11 +147,11 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	public DCInventory inventory = new DCInventory(this.getSizeInventory());
 
 	public List<ItemStack> getInputs() {
-		return inventory.getInputs();
+		return inventory.getInputs(0, 0);
 	}
 
 	public List<ItemStack> getOutputs() {
-		return inventory.getOutputs();
+		return inventory.getOutputs(1, 2);
 	}
 
 	// スロット数
@@ -319,7 +319,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if (facing != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			if (facing == EnumFacing.DOWN)
 				return (T) handlerBottom;
 			else if (facing == EnumFacing.UP)

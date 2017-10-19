@@ -60,22 +60,22 @@ public class ClimateCropCategory implements IRecipeCategory {
 		ClimateCropWrapper wrapper = ((ClimateCropWrapper) recipeWrapper);
 		// wrapper.getIngredients(ingredients);
 
-		List inputs = ingredients.getInputs(ItemStack.class);
-		List outputs = ingredients.getOutputs(ItemStack.class);
+		List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
+		List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
 
 		if (inputs.size() < 2 || outputs.isEmpty()) {
 			return;
 		}
 
 		recipeLayout.getItemStacks().init(0, true, 39, 33);
-		recipeLayout.getItemStacks().set(0, (ItemStack) inputs.get(0));
+		recipeLayout.getItemStacks().set(0, inputs.get(0));
 
 		recipeLayout.getItemStacks().init(1, false, 80, 51);
-		recipeLayout.getItemStacks().set(1, (ItemStack) inputs.get(1));
+		recipeLayout.getItemStacks().set(1, inputs.get(1));
 
 		for (int i = 0; i < outputs.size(); i++) {
 			recipeLayout.getItemStacks().init(2 + i, false, 80 + 18 * i, 23);
-			recipeLayout.getItemStacks().set(2 + i, (ItemStack) outputs.get(i));
+			recipeLayout.getItemStacks().set(2 + i, outputs.get(i));
 		}
 
 		List<DCHeatTier> temps = wrapper.getTemps();

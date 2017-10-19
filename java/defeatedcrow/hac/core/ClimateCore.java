@@ -40,7 +40,7 @@ public class ClimateCore {
 	public static final int MOD_MINOR = 0;
 	public static final int MOD_BUILD = 0;
 	public static final String MOD_DEPENDENCIES = "before:cavern";
-	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.10,1.12.2]";
+	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.12,1.12.2]";
 	public static final String PACKAGE_BASE = "dcs";
 	public static final String PACKAGE_ID = "dcs_climate";
 

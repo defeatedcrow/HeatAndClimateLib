@@ -61,8 +61,8 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		FluidRecipeWrapper wrapper = ((FluidRecipeWrapper) recipeWrapper);
 		// wrapper.getIngredients(ingredients);
 
-		List inputs = wrapper.getInputs();
-		List outputs = wrapper.getOutputs();
+		List<List<ItemStack>> inputs = wrapper.getInputs();
+		List<ItemStack> outputs = wrapper.getOutputs();
 		List<FluidStack> inF = wrapper.getFluidInputs();
 		List<FluidStack> outF = wrapper.getFluidOutputs();
 
@@ -72,17 +72,17 @@ public class FluidRecipeCategory implements IRecipeCategory {
 				if (l < inputs.size()) {
 					recipeLayout.getItemStacks().init(l, true, 48, 13 + i * 18);
 					if (inputs.get(l) instanceof List) {
-						recipeLayout.getItemStacks().set(l, (List<ItemStack>) inputs.get(l));
+						recipeLayout.getItemStacks().set(l, inputs.get(l));
 					}
 				}
 			}
 		}
 
 		recipeLayout.getItemStacks().init(4, false, 93, 13);
-		recipeLayout.getItemStacks().set(4, (ItemStack) outputs.get(0));
+		recipeLayout.getItemStacks().set(4, outputs.get(0));
 		if (outputs.size() > 1) {
 			recipeLayout.getItemStacks().init(5, false, 93, 31);
-			recipeLayout.getItemStacks().set(5, (ItemStack) outputs.get(1));
+			recipeLayout.getItemStacks().set(5, outputs.get(1));
 		}
 
 		if (!inF.isEmpty() && inF.get(0) != null) {

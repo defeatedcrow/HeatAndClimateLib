@@ -57,7 +57,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 		ReactorRecipeWrapper wrapper = ((ReactorRecipeWrapper) recipeWrapper);
 		// wrapper.getIngredients(ingredients);
 
-		List inputs = wrapper.getInputs();
+		List<List<ItemStack>> inputs = wrapper.getInputs();
 		List<ItemStack> outputs = wrapper.getOutputs();
 		List<FluidStack> inF1 = wrapper.getFluidInputs();
 		List<FluidStack> outF1 = wrapper.getFluidOutputs();
@@ -69,7 +69,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 				if (l < inputs.size()) {
 					recipeLayout.getItemStacks().init(l, true, 7 + i * 18, 64);
 					if (inputs.get(l) instanceof List) {
-						recipeLayout.getItemStacks().set(l, (List<ItemStack>) inputs.get(l));
+						recipeLayout.getItemStacks().set(l, inputs.get(l));
 					}
 				}
 			}

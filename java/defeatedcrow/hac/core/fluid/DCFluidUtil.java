@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.fluid;
 
+import defeatedcrow.hac.core.base.DCInventory;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -25,13 +26,12 @@ public class DCFluidUtil {
 	public static boolean onActivateDCTank(TileEntity tile, ItemStack item, World world, IBlockState state,
 			EnumFacing side, EntityPlayer player) {
 		if (!DCUtil.isEmpty(item) && tile != null
-				&& item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)
+				&& item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, side)
 				&& tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
 			ItemStack copy = new ItemStack(item.getItem(), 1, item.getItemDamage());
 			if (item.getTagCompound() != null)
 				copy.setTagCompound(item.getTagCompound());
-			IFluidHandler cont = item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-			IFluidHandler dummy = copy.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+			IFluidHandlerItem dummy = copy.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 			IFluidHandler intank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP);
 			IFluidHandler outtank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,
 					EnumFacing.DOWN);
@@ -50,7 +50,7 @@ public class DCFluidUtil {
 				if (f1 != null && dc_in.fill(f1, false) > 0) {
 					int f2 = dc_in.fill(f1, false);
 					FluidStack fill = dummy.drain(f2, true);
-					ret = copy;
+					ret = dummy.getContainer();
 					if (fill != null && fill.amount > 0) {
 						dc_in.fill(fill, true);
 						success = true;
@@ -59,7 +59,7 @@ public class DCFluidUtil {
 				// output
 				else if (f1 == null && dc_out.drain(max, false) != null) {
 					int drain = dummy.fill(dc_out.drain(max, false), true);
-					ret = copy;
+					ret = dummy.getContainer();
 					if (drain > 0) {
 						dc_out.drain(drain, true);
 						success = true;
@@ -94,6 +94,113 @@ public class DCFluidUtil {
 			}
 		}
 		return ItemStack.EMPTY;
+	}
+
+	public static boolean onFillTank(DCInventory inv, DCTank tank, int slot1, int slot2) {
+		ItemStack in = inv.getStackInSlot(slot1);
+		ItemStack out = inv.getStackInSlot(slot2);
+		if (DCUtil.isEmpty(in))
+			return false;
+
+		IFluidHandlerItem dummy = null;
+		ItemStack in2 = new ItemStack(in.getItem(), 1, in.getItemDamage());
+		if (in.getTagCompound() != null) {
+			in2.setTagCompound(in.getTagCompound().copy());
+		}
+		if (in.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+			dummy = in2.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+		} else if (in.getItem() instanceof IFluidHandlerItem) {
+			dummy = (IFluidHandlerItem) in2.getItem();
+		}
+
+		if (dummy != null && dummy.getTankProperties() != null) {
+			boolean loose = false;
+			ItemStack ret = ItemStack.EMPTY;
+
+			int max = dummy.getTankProperties()[0].getCapacity();
+			FluidStack fc = dummy.drain(max, false);
+			// 流入の場合
+			if (fc != null && fc.amount > 0 && tank.canFillTarget(fc)) {
+				ret = ItemStack.EMPTY;
+				loose = false;
+				boolean b = false;
+				int rem = tank.getCapacity() - tank.getFluidAmount();
+				fc = dummy.drain(rem, false);
+				if (fc != null && fc.amount <= rem) {
+					FluidStack fill = null;
+					fill = dummy.drain(rem, true);
+					ret = dummy.getContainer();
+
+					if (fill != null
+							&& (DCUtil.isEmpty(ret) || inv.isItemStackable(ret, inv.getStackInSlot(slot2)) > 0)) {
+						loose = true;
+						tank.fill(fill, true);
+					}
+				}
+			}
+
+			if (loose) {
+				inv.decrStackSize(slot1, 1);
+				inv.incrStackInSlot(slot2, ret);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean onDrainTank(DCInventory inv, DCTank tank, int slot1, int slot2) {
+		ItemStack in = inv.getStackInSlot(slot1);
+		ItemStack out = inv.getStackInSlot(slot2);
+		if (DCUtil.isEmpty(in))
+			return false;
+
+		IFluidHandlerItem dummy = null;
+		ItemStack in2 = new ItemStack(in.getItem(), 1, in.getItemDamage());
+		if (in.getTagCompound() != null) {
+			in2.setTagCompound(in.getTagCompound().copy());
+		}
+		if (in.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+			dummy = in2.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+		} else if (in.getItem() instanceof IFluidHandlerItem) {
+			dummy = (IFluidHandlerItem) in2.getItem();
+		}
+
+		if (tank.getFluidAmount() > 0 && dummy != null && dummy.getTankProperties() != null) {
+			boolean loose = false;
+			ItemStack ret = ItemStack.EMPTY;
+
+			int max = dummy.getTankProperties()[0].getCapacity();
+			FluidStack fc = dummy.drain(max, false);
+			boolean b = false;
+			int rem = max;
+			if (fc == null || fc.amount == 0) {
+				b = true;
+			} else {
+				rem = max - fc.amount;
+				if (tank.getFluidAmount() <= rem) {
+					b = true;
+				}
+			}
+			// 排出の場合
+			if (b) {
+				FluidStack drain = tank.drain(rem, false);
+				int fill = 0;
+				fill = dummy.fill(drain, true);
+				ret = dummy.getContainer();
+
+				if (fill > 0 && (DCUtil.isEmpty(ret) || inv.isItemStackable(ret, inv.getStackInSlot(slot2)) > 0)) {
+					loose = true;
+					tank.drain(fill, true);
+				}
+			}
+
+			if (loose) {
+				inv.decrStackSize(slot1, 1);
+				inv.incrStackInSlot(slot2, ret);
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

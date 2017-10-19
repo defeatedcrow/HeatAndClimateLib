@@ -11,8 +11,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class DCTESRBase extends TileEntitySpecialRenderer<DCTileEntity> {
 
 	@Override
-	public void renderTileEntityFast(DCTileEntity te, double x, double y, double z, float partialTicks,
-			int destroyStage, float partial, net.minecraft.client.renderer.BufferBuilder buffer) {
+	public void render(DCTileEntity te, double x, double y, double z, float partialTicks, int destroyStage,
+			float alpha) {
 		int type = 0;
 		int face = 0;
 		float f = 0.0F;

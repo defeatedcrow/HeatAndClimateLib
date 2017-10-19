@@ -66,17 +66,17 @@ public class ClimateSmeltingCategory implements IRecipeCategory {
 		ClimateSmeltingWrapper wrapper = ((ClimateSmeltingWrapper) recipeWrapper);
 		// wrapper.getIngredients(ingredients);
 
-		List inputs = wrapper.getInputs();
-		List outputs = wrapper.getOutputs();
+		List<ItemStack> inputs = wrapper.getInputs();
+		List<ItemStack> outputs = wrapper.getOutputs();
 
 		recipeLayout.getItemStacks().init(0, true, 45, 13);
 		recipeLayout.getItemStacks().set(0, inputs);
 
 		recipeLayout.getItemStacks().init(1, false, 97, 13);
-		recipeLayout.getItemStacks().set(1, (ItemStack) outputs.get(0));
+		recipeLayout.getItemStacks().set(1, outputs.get(0));
 		if (outputs.size() > 1) {
 			recipeLayout.getItemStacks().init(2, false, 118, 13);
-			recipeLayout.getItemStacks().set(2, (ItemStack) outputs.get(1));
+			recipeLayout.getItemStacks().set(2, outputs.get(1));
 		}
 
 		List<DCHeatTier> temps = wrapper.getTemps();
