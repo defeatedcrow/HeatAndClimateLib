@@ -32,10 +32,10 @@ public class MobResistantRegister implements IMobHeatResistant {
 	@Override
 	public float getHeatResistant(ResourceLocation name) {
 		if (name != null) {
-			String n = name.getResourceDomain() + "." + name.getResourcePath();
-			DCLogger.debugLog("register target: " + n);
-			if (heatResistant.containsKey(n)) {
-				Class<? extends Entity> entity = EntityList.getClassFromName(n);
+			String n = name.toString();
+			DCLogger.debugLog("register target: " + name.toString());
+			Class<? extends Entity> entity = EntityList.getClass(name);
+			if (entity != null && heatResistant.containsKey(name.toString())) {
 				return heatResistant.get(entity);
 			}
 		}
@@ -45,10 +45,9 @@ public class MobResistantRegister implements IMobHeatResistant {
 	@Override
 	public float getColdResistant(ResourceLocation name) {
 		if (name != null) {
-			String n = name.getResourceDomain() + "." + name.getResourcePath();
-			DCLogger.debugLog("register target: " + n);
-			if (coldResistant.containsKey(n)) {
-				Class<? extends Entity> entity = EntityList.getClassFromName(n);
+			DCLogger.debugLog("register target: " + name.toString());
+			Class<? extends Entity> entity = EntityList.getClass(name);
+			if (entity != null && coldResistant.containsKey(name.toString())) {
 				return coldResistant.get(entity);
 			}
 		}
@@ -58,10 +57,9 @@ public class MobResistantRegister implements IMobHeatResistant {
 	@Override
 	public void registerEntityResistant(ResourceLocation name, float heat, float cold) {
 		if (name != null) {
-			String n = name.getResourceDomain() + "." + name.getResourcePath();
-			DCLogger.debugLog("register target: " + n);
-			if (EntityList.getClassFromName(n) != null) {
-				Class<? extends Entity> entity = EntityList.getClassFromName(n);
+			DCLogger.debugLog("register target: " + name);
+			if (EntityList.getClass(name) != null) {
+				Class<? extends Entity> entity = EntityList.getClass(name);
 				registerEntityResistant(entity, heat, cold);
 			}
 		}
@@ -69,9 +67,10 @@ public class MobResistantRegister implements IMobHeatResistant {
 
 	public void registerEntityResistant(String name, float heat, float cold) {
 		if (name != null) {
+			ResourceLocation res = new ResourceLocation(name);
 			DCLogger.debugLog("register target from json: " + name);
-			if (EntityList.getClassFromName(name) != null) {
-				Class<? extends Entity> entity = EntityList.getClassFromName(name);
+			if (EntityList.getClass(res) != null) {
+				Class<? extends Entity> entity = EntityList.getClass(res);
 				registerEntityResistant(entity, heat, cold);
 			}
 		}

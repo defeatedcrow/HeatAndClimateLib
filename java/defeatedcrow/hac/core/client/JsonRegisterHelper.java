@@ -14,6 +14,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 import defeatedcrow.hac.api.blockstate.DCState;
+import defeatedcrow.hac.api.placeable.ISidedTexture;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.base.ITexturePath;
@@ -381,6 +382,143 @@ public class JsonRegisterHelper {
 		}
 	}
 
+	/**
+	 * Jsonあれ 4<br>
+	 * 8/16種のTypeを持つCubeモデルJsonを生成する。既に生成済みの場合は生成処理を行わない。<br>
+	 * テクスチャの取得にISidedTextureを使用するため、登録するblockに実装する。
+	 */
+	public void checkAndBuildSidedCube(ISidedTexture block, String domein, String name, String dir, int meta,
+			boolean useMeta) {
+		if (block == null)
+			return;
+
+		String filePath = null;
+		File gj = null;
+		boolean find = false;
+		try {
+			Path path = Paths.get(basePath);
+			path.normalize();
+			filePath = path.toString() + "\\assets\\" + domein + "\\models\\block\\";
+			if (dir != null) {
+				filePath += dir + "\\";
+			}
+			// DCLogger.debugLog("dcs_climate", "current pass " + filePath.toString());
+			if (filePath != null) {
+				if (useMeta) {
+					gj = new File(filePath + name + meta + ".json");
+				} else {
+					gj = new File(filePath + name + ".json");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (gj.exists()) {
+			find = true;
+			DCLogger.debugTrace("File is found! " + gj.getName());
+		}
+
+		if (!find) {
+
+			try {
+				if (gj.getParentFile() != null) {
+					gj.getParentFile().mkdirs();
+				}
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
+				Map<String, Object> jsonMap = new HashMap<String, Object>();
+				String[] tex = new String[4];
+				tex[0] = block.getTexture(meta, 0, false);
+				tex[1] = block.getTexture(meta, 1, false);
+				tex[2] = block.getTexture(meta, 2, false);
+				tex[3] = block.getTexture(meta, 4, false);
+				BlockTexSide blocktex = new BlockTexSide(tex);
+				jsonMap.put("parent", domein + ":block/dcs_cube_sided");
+				jsonMap.put("textures", blocktex);
+
+				Gson gson = new Gson();
+				String output = gson.toJson(jsonMap);
+				pw.println(output);
+				pw.close();
+				output = "";
+				DCLogger.debugTrace("File writed! " + gj.getPath());
+
+			} catch (FileNotFoundException e) {
+				DCLogger.warnLog("File not found! " + gj.getPath());
+			} catch (IOException e) {
+				DCLogger.warnLog("fail");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * Jsonあれ 5<br>
+	 * 全面同テクスチャのcrossモデルのJsonを生成する。既に生成済みの場合は生成処理を行わない。<br>
+	 * テクスチャの取得にISidedTexturehを使用するため、登録するblockに実装する。
+	 */
+	public void checkAndBuildJsonCross(ISidedTexture block, String domein, String name, String dir, int meta,
+			boolean useMeta) {
+		if (block == null)
+			return;
+
+		String filePath = null;
+		File gj = null;
+		boolean find = false;
+		try {
+			Path path = Paths.get(basePath);
+			path.normalize();
+			filePath = path.toString() + "\\assets\\" + domein + "\\models\\block\\";
+			if (dir != null) {
+				filePath += dir + "\\";
+			}
+			// DCLogger.debugLog("dcs_climate", "current pass " + filePath.toString());
+			if (filePath != null) {
+				if (useMeta) {
+					gj = new File(filePath + name + meta + ".json");
+				} else {
+					gj = new File(filePath + name + ".json");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (gj.exists()) {
+			find = true;
+			DCLogger.debugTrace("File is found! " + gj.getName());
+		}
+
+		if (!find) {
+
+			try {
+				if (gj.getParentFile() != null) {
+					gj.getParentFile().mkdirs();
+				}
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(gj.getPath())));
+				Map<String, Object> jsonMap = new HashMap<String, Object>();
+				BlockCrossTex textures = new BlockCrossTex(block.getTexture(meta, 0, false));
+				jsonMap.put("parent", domein + ":block/dcs_cross");
+				jsonMap.put("textures", textures);
+
+				Gson gson = new Gson();
+				String output = gson.toJson(jsonMap);
+				pw.println(output);
+				pw.close();
+				output = "";
+				DCLogger.debugTrace("File writed! " + gj.getPath());
+
+			} catch (FileNotFoundException e) {
+				DCLogger.warnLog("File not found! " + gj.getPath());
+			} catch (IOException e) {
+				DCLogger.warnLog("fail");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	private class Textures {
 		String layer0;
 
@@ -394,6 +532,28 @@ public class JsonRegisterHelper {
 
 		private BlockTex(String tex) {
 			all = tex;
+		}
+	}
+
+	private class BlockCrossTex {
+		String crop;
+
+		private BlockCrossTex(String tex) {
+			crop = tex;
+		}
+	}
+
+	private class BlockTexSide {
+		String down;
+		String up;
+		String ns;
+		String we;
+
+		private BlockTexSide(String[] tex) {
+			up = tex[0];
+			down = tex[1];
+			ns = tex[2];
+			we = tex[3];
 		}
 	}
 

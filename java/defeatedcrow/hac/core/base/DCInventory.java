@@ -149,11 +149,11 @@ public class DCInventory implements IInventory {
 	public void incrStackInSlot(int i, ItemStack input) {
 		if (i < this.getSizeInventory() && !DCUtil.isEmpty(input)) {
 			if (!DCUtil.isEmpty(getStackInSlot(i))) {
-				if (this.getStackInSlot(i).getItem() == input.getItem()
-						&& this.getStackInSlot(i).getMetadata() == input.getMetadata()) {
-					DCUtil.addStackSize(getStackInSlot(i), input.getCount());
-					if (this.getStackInSlot(i).getCount() > this.getInventoryStackLimit()) {
-						this.getStackInSlot(i).setCount(this.getInventoryStackLimit());
+				ItemStack stack = getStackInSlot(i);
+				if (stack.getItem() == input.getItem() && stack.getMetadata() == input.getMetadata()) {
+					DCUtil.addStackSize(stack, input.getCount());
+					if (stack.getCount() > this.getInventoryStackLimit()) {
+						stack.setCount(this.getInventoryStackLimit());
 					}
 				}
 			} else {
@@ -212,7 +212,7 @@ public class DCInventory implements IInventory {
 			byte b0 = tag1.getByte("Slot");
 
 			if (b0 >= 0 && b0 < this.getSizeInventory()) {
-				inv.set(i, new ItemStack(tag1));
+				inv.set(b0, new ItemStack(tag1));
 			}
 		}
 	}

@@ -8,6 +8,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 
 import defeatedcrow.hac.api.placeable.ISidedTexture;
+import defeatedcrow.hac.core.DCLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -98,6 +99,7 @@ public class JsonBakery {
 
 	@SubscribeEvent
 	public void textureStitch(TextureStitchEvent.Pre event) {
+		DCLogger.infoLog("dcs_lib : texture event");
 		TextureMap textureMap = event.getMap();
 		for (String s : TEX) {
 			ResourceLocation ret = new ResourceLocation(s);
