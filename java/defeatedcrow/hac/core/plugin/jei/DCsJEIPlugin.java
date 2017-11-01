@@ -48,9 +48,9 @@ public class DCsJEIPlugin implements IModPlugin {
 				new FluidRecipeCategory(helper.getGuiHelper()), new ReactorRecipeCategory(helper.getGuiHelper()),
 				new ClimateCropCategory(helper.getGuiHelper()));
 		registry.addRecipeHandlers(new ShapedNBTHandler(helper), new ClimateBiomeHandler(),
-				new ClimateEffectiveHandler(), new ClimateSmeltingHandler(), new ClimateRecipeHandler(),
-				new SpinningRecipeHandler(), new MillRecipeHandler(), new FluidRecipeHandler(),
-				new ReactorRecipeHandler(), new ClimateCropHandler());
+				new ClimateEffectiveHandler(), new ClimateSmeltingHandler(), new SpinningRecipeHandler(),
+				new MillRecipeHandler(), new FluidRecipeHandler(), new ReactorRecipeHandler(),
+				new ClimateCropHandler());
 
 		registry.addRecipes(DCsJEIPluginLists.climate);
 		List<Biome> biomes = Lists.newArrayList(Biome.REGISTRY.iterator());

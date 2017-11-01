@@ -21,6 +21,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidBlock;
 
 /**
  * BlockPosの走査方法を変更したバージョン
@@ -150,6 +152,11 @@ public class ClimateAltCalculator implements IClimateCalculator {
 						current = ((IHeatTile) block).getHeatTier(world, pos, p2);
 					} else if (ClimateAPI.registerBlock.isRegisteredHeat(block, m)) {
 						current = ClimateAPI.registerBlock.getHeatTier(block, m);
+					} else if (block instanceof IFluidBlock) {
+						Fluid type = ((IFluidBlock) block).getFluid();
+						if (type != null) {
+							current = DCHeatTier.getTypeByTemperature(type.getTemperature());
+						}
 					}
 
 					if (current == null) {
@@ -287,6 +294,11 @@ public class ClimateAltCalculator implements IClimateCalculator {
 						current = ((IHeatTile) block).getHeatTier(world, pos, p2);
 					} else if (ClimateAPI.registerBlock.isRegisteredHeat(block, m)) {
 						current = ClimateAPI.registerBlock.getHeatTier(block, m);
+					} else if (block instanceof IFluidBlock) {
+						Fluid type = ((IFluidBlock) block).getFluid();
+						if (type != null) {
+							current = DCHeatTier.getTypeByTemperature(type.getTemperature());
+						}
 					}
 
 					if (current == null) {

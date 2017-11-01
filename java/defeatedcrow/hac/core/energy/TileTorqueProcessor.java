@@ -1,11 +1,11 @@
 package defeatedcrow.hac.core.energy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.core.base.DCInventory;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -13,11 +13,9 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.capabilities.Capability;
@@ -117,8 +115,8 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 				return item.stackSize;
 			} else {
 				int size = this.isItemStackable(item, this.getStackInSlot(i));
-				if (this.isItemStackable(item, this.getStackInSlot(i)) > 0) {
-					this.getStackInSlot(i).stackSize += size;
+				if (size > 0) {
+					DCUtil.addStackSize(this.getStackInSlot(i), size);
 					return size;
 				}
 			}
@@ -146,22 +144,14 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 		};
 	};
 
-	public ItemStack[] inv = new ItemStack[this.getSizeInventory()];
+	public DCInventory inventory = new DCInventory(this.getSizeInventory());
 
 	public List<ItemStack> getInputs() {
-		List<ItemStack> ret = new ArrayList<ItemStack>();
-		if (!DCUtil.isEmpty(inv[0]))
-			ret.add(inv[0]);
-		return ret;
+		return inventory.getInputs(0, 0);
 	}
 
 	public List<ItemStack> getOutputs() {
-		List<ItemStack> ret = new ArrayList<ItemStack>();
-		for (int i = 1; i < this.getSizeInventory(); i++) {
-			if (!DCUtil.isEmpty(inv[i]))
-				ret.add(inv[i]);
-		}
-		return ret;
+		return inventory.getOutputs(1, 2);
 	}
 
 	// スロット数
@@ -173,46 +163,18 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	// インベントリ内の任意のスロットにあるアイテムを取得
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		if (i < getSizeInventory())
-			return this.inv[i];
-		else
-			return null;
+		return inventory.getStackInSlot(i);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int num) {
-		if (i < 0 || i >= this.getSizeInventory())
-			return null;
-		if (!DCUtil.isEmpty(inv[i])) {
-			ItemStack itemstack;
-
-			if (this.inv[i].stackSize <= num) {
-				itemstack = this.inv[i];
-				this.inv[i] = null;
-				return itemstack;
-			} else {
-				itemstack = this.inv[i].splitStack(num);
-				if (this.inv[i].stackSize == 0) {
-					this.inv[i] = null;
-				}
-				return itemstack;
-			}
-		} else
-			return null;
+		return inventory.decrStackSize(i, num);
 	}
 
 	// インベントリ内のスロットにアイテムを入れる
 	@Override
 	public void setInventorySlotContents(int i, ItemStack stack) {
-		if (i < 0 || i >= this.getSizeInventory()) {
-			return;
-		} else {
-			this.inv[i] = stack;
-
-			if (!DCUtil.isEmpty(stack) && stack.stackSize > this.getInventoryStackLimit()) {
-				stack.stackSize = this.getInventoryStackLimit();
-			}
-		}
+		inventory.setInventorySlotContents(i, stack);
 	}
 
 	// インベントリの名前
@@ -300,31 +262,12 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	}
 
 	public void incrStackInSlot(int i, ItemStack input) {
-		if (i < this.getSizeInventory() && !DCUtil.isEmpty(input)) {
-			if (!DCUtil.isEmpty(inv[i])) {
-				if (this.inv[i].getItem() == input.getItem() && this.inv[i].getMetadata() == input.getMetadata()) {
-					this.inv[i].stackSize += input.stackSize;
-					if (this.inv[i].stackSize > this.getInventoryStackLimit()) {
-						this.inv[i].stackSize = this.getInventoryStackLimit();
-					}
-				}
-			} else {
-				this.setInventorySlotContents(i, input);
-			}
-		}
+		inventory.incrStackInSlot(i, input);
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int i) {
-		i = MathHelper.clamp_int(i, 0, this.getSizeInventory() - 1);
-		if (i < inv.length) {
-			if (!DCUtil.isEmpty(inv[i])) {
-				ItemStack itemstack = this.inv[i];
-				this.inv[i] = null;
-				return itemstack;
-			}
-		}
-		return null;
+		return inventory.removeStackFromSlot(i);
 	}
 
 	@Override
@@ -362,9 +305,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	@Override
 	public void clear() {
-		for (int i = 0; i < this.inv.length; ++i) {
-			this.inv[i] = null;
-		}
+		inventory.clear();
 	}
 
 	@Override
@@ -378,7 +319,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if (facing != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			if (facing == EnumFacing.DOWN)
 				return (T) handlerBottom;
 			else if (facing == EnumFacing.UP)
@@ -400,17 +341,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 
-		NBTTagList nbttaglist = tag.getTagList("InvItems", 10);
-		this.inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-			NBTTagCompound tag1 = nbttaglist.getCompoundTagAt(i);
-			byte b0 = tag1.getByte("Slot");
-
-			if (b0 >= 0 && b0 < this.inv.length) {
-				this.inv[b0] = ItemStack.loadItemStackFromNBT(tag1);
-			}
-		}
+		inventory.readFromNBT(tag);
 
 		this.currentBurnTime = tag.getInteger("BurnTime");
 		this.maxBurnTime = tag.getInteger("MaxTime");
@@ -424,17 +355,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 		tag.setInteger("MaxTime", this.maxBurnTime);
 
 		// アイテムの書き込み
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; ++i) {
-			if (!DCUtil.isEmpty(inv[i])) {
-				NBTTagCompound tag1 = new NBTTagCompound();
-				tag1.setByte("Slot", (byte) i);
-				inv[i].writeToNBT(tag1);
-				nbttaglist.appendTag(tag1);
-			}
-		}
-		tag.setTag("InvItems", nbttaglist);
+		inventory.writeToNBT(tag);
 		return tag;
 	}
 
@@ -446,17 +367,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 		tag.setInteger("MaxTime", this.maxBurnTime);
 
 		// アイテムの書き込み
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < inv.length; ++i) {
-			if (!DCUtil.isEmpty(inv[i])) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				inv[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
-			}
-		}
-		tag.setTag("InvItems", nbttaglist);
+		inventory.writeToNBT(tag);
 		return tag;
 	}
 
@@ -464,17 +375,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	public void setNBT(NBTTagCompound tag) {
 		super.setNBT(tag);
 
-		NBTTagList nbttaglist = tag.getTagList("InvItems", 10);
-		this.inv = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			byte b0 = nbttagcompound1.getByte("Slot");
-
-			if (b0 >= 0 && b0 < this.inv.length) {
-				this.inv[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
-			}
-		}
+		inventory.readFromNBT(tag);
 
 		this.currentBurnTime = tag.getInteger("BurnTime");
 		this.maxBurnTime = tag.getInteger("MaxTime");

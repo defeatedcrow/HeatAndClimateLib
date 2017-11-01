@@ -1,6 +1,7 @@
 package defeatedcrow.hac.core.base;
 
 import defeatedcrow.hac.api.placeable.IEntityItem;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -22,9 +23,10 @@ public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
 
 	/* 設置動作 */
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
+	public EnumActionResult onItemUse(ItemStack stackIn, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player != null && player.isSneaking()) {
+			ItemStack stack = player.getHeldItem(hand);
 			if (!world.isRemote && pos.getY() > 0 && pos.getY() < 255 && player.canPlayerEdit(pos, facing, stack)) {
 				IBlockState state = world.getBlockState(pos);
 				Block block = state.getBlock();
@@ -37,7 +39,7 @@ public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
 								pos.getY() + hitY + fY, pos.getZ() + hitZ + fZ, stack);
 						if (entity != null) {
 							if (this.spawnPlacementEntity(world, entity)) {
-								--stack.stackSize;
+								DCUtil.reduceStackSize(stack, 1);
 								return EnumActionResult.SUCCESS;
 							}
 						}
@@ -45,7 +47,7 @@ public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
 				}
 			}
 		} else {
-			this.onItemRightClick(stack, world, player, hand);
+			this.onItemRightClick(stackIn, world, player, hand);
 			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.SUCCESS;

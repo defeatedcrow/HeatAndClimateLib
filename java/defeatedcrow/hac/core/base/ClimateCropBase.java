@@ -231,8 +231,10 @@ public abstract class ClimateCropBase extends Block
 				return GrowingStage.GROWN;
 			} else if (i == 2) {
 				return GrowingStage.FLOWER;
-			} else {
+			} else if (i == 1) {
 				return GrowingStage.YOUNG;
+			} else {
+				return GrowingStage.GROUND;
 			}
 		}
 	}

@@ -2,31 +2,18 @@
     "parent": "block/block",
     "ambientocclusion": true,
     "textures": {
-        "particle": "dcs_climate:blocks/clear",
-        "down1": "dcs_climate:blocks/cont/logbox_s_charcoal",
-        "up1": "dcs_climate:blocks/cont/logbox_s_charcoal",
-        "ns1": "dcs_climate:blocks/cont/logbox_s_charcoal",
-        "we1": "dcs_climate:blocks/cont/logbox_f_charcoal",
-        "down2": "dcs_climate:blocks/clear",
-        "up2": "dcs_climate:blocks/clear"
+        "particle": "#up"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],
             "to": [ 16, 16, 16 ],
             "faces": {
-                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#down1", "cullface": "down" },
-                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#up1", "cullface": "up" },
-                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#ns1", "cullface": "north" },
-                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#ns1", "cullface": "south" },
-                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#we1", "cullface": "west" },
-                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#we1", "cullface": "east" }
-            }
-        },
-        {   "from": [ 0, 0, 0 ],
-            "to": [ 16, 16, 16 ],
-            "faces": {
-                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#down2", "cullface": "down", "rotation": 270 },
-                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#up2", "cullface": "up", "rotation": 90 }
+                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#down", "cullface": "down" },
+                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#up", "cullface": "up" },
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#ns", "cullface": "north" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#ns", "cullface": "south" },
+                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#we", "cullface": "west" },
+                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#we", "cullface": "east" }
             }
         }
     ]

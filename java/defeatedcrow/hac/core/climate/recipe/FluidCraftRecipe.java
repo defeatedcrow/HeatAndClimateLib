@@ -11,6 +11,7 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IFluidRecipe;
 import defeatedcrow.hac.api.recipe.IRecipePanel;
+import defeatedcrow.hac.core.fluid.DCFluidUtil;
 import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
@@ -18,7 +19,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -145,7 +145,7 @@ public class FluidCraftRecipe implements IFluidRecipe {
 					if (!DCUtil.isEmpty(cont)) {
 						list.add(cont);
 					} else {
-						cont = FluidContainerRegistry.drainFluidContainer(next);
+						cont = DCFluidUtil.getEmptyCont(next);
 						if (!DCUtil.isEmpty(cont)) {
 							list.add(cont);
 						}

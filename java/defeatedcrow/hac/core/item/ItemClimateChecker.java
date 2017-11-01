@@ -12,6 +12,7 @@ import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.base.DCItem;
 import defeatedcrow.hac.core.climate.WeatherChecker;
 import defeatedcrow.hac.core.util.DCTimeHelper;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -96,7 +97,7 @@ public class ItemClimateChecker extends DCItem {
 										new ItemStack(block, 1, meta));
 								if (recipe != null && recipe.matchClimate(clm) && recipe.additionalRequire(world, pos)
 										&& recipe.hasPlaceableOutput() == 1) {
-									if (recipe.getOutput() != null
+									if (!DCUtil.isEmpty(recipe.getOutput())
 											&& recipe.getOutput().getItem() instanceof ItemBlock) {
 										Block retB = Block.getBlockFromItem(recipe.getOutput().getItem());
 										int retM = recipe.getOutput().getMetadata();

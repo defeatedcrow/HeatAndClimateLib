@@ -11,6 +11,7 @@ import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -39,17 +40,13 @@ public class DCUtil {
 		return item == null || item.getItem() == null;
 	}
 
-	public static boolean reduceStackSize(ItemStack item, int i) {
+	public static int reduceStackSize(ItemStack item, int i) {
 		if (!isEmpty(item)) {
-			if (item.stackSize > i) {
-				item.stackSize -= i;
-				return false;
-			} else {
-				item.stackSize = 0;
-				return true;
-			}
+			int i1 = Math.min(i, item.stackSize);
+			item.splitStack(i1);
+			return i1;
 		}
-		return true;
+		return 0;
 	}
 
 	public static int addStackSize(ItemStack item, int i) {
@@ -67,7 +64,9 @@ public class DCUtil {
 	}
 
 	public static ItemStack reduceAndDeleteStack(ItemStack item, int i) {
-		if (reduceStackSize(item, i)) {
+		reduceStackSize(item, i);
+		if (isEmpty(item) || item.stackSize <= 0) {
+			item = null;
 			return null;
 		} else {
 			return item;
@@ -280,6 +279,10 @@ public class DCUtil {
 			}
 		}
 		return p;
+	}
+
+	public static boolean machCreativeTab(CreativeTabs target, CreativeTabs tab) {
+		return tab != null && (target == CreativeTabs.SEARCH || target == tab);
 	}
 
 	// デバッグモード

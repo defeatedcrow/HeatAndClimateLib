@@ -37,6 +37,10 @@ public abstract class DCItem extends Item implements ITexturePath {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+		if (player != null) {
+			ItemStack ret = player.getHeldItem(hand);
+			return new ActionResult(EnumActionResult.PASS, ret);
+		}
 		return new ActionResult(EnumActionResult.PASS, stack);
 	}
 
@@ -48,8 +52,8 @@ public abstract class DCItem extends Item implements ITexturePath {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		int j = Math.min(stack.getMetadata(), getMaxMeta());
-		return getNameSuffix() != null && j < getNameSuffix().length ? super.getUnlocalizedName() + "_"
-				+ getNameSuffix()[j] : super.getUnlocalizedName();
+		return getNameSuffix() != null && j < getNameSuffix().length
+				? super.getUnlocalizedName() + "_" + getNameSuffix()[j] : super.getUnlocalizedName();
 	}
 
 	public int getMaxMeta() {

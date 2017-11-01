@@ -145,15 +145,6 @@ public class CoreConfigDC {
 					"Set key number for sneaking. Default key is same as the vanilla setting." + BR
 							+ "If you want to use the default setting, set -1.");
 
-			Property range_t = cfg.get("setting", "HeatTier Cheking Rnage", heatRange,
-					"Set the range of cheking the climate. 1-16");
-
-			Property range_h = cfg.get("setting", "Humidity Cheking Rnage", humRange,
-					"Set the range of cheking the climate. 1-16");
-
-			Property range_a = cfg.get("setting", "Airflow Cheking Rnage", airRange,
-					"Set the range of cheking the climate. 1-16");
-
 			Property enableWall = cfg.get("setting", "Thermal Insulation Wall", wall,
 					"Some of stone blocks enable to have a thermal insulation property.");
 
@@ -231,23 +222,6 @@ public class CoreConfigDC {
 
 			altJumpKey = jump_key.getInt();
 			altSneakKey = sneak_key.getInt();
-
-			int tr = range_t.getInt();
-			if (tr < 0 || tr > 16)
-				tr = 16;
-			heatRange = tr;
-			int th = range_h.getInt();
-			if (th < 0 || th > 16)
-				th = 16;
-			humRange = th;
-			int ta = range_a.getInt();
-			if (ta < 0 || ta > 16)
-				ta = 16;
-			airRange = ta;
-
-			ranges[0] = tr;
-			ranges[1] = th;
-			ranges[2] = ta;
 
 		} catch (Exception e) {
 			e.printStackTrace();

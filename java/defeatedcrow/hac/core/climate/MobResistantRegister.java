@@ -32,10 +32,10 @@ public class MobResistantRegister implements IMobHeatResistant {
 	@Override
 	public float getHeatResistant(ResourceLocation name) {
 		if (name != null) {
-			String n = name.getResourceDomain() + "." + name.getResourcePath();
+			String n = name.toString();
 			DCLogger.debugLog("register target: " + n);
-			if (heatResistant.containsKey(n)) {
-				Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(n);
+			Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(n);
+			if (heatResistant.containsKey(entity)) {
 				return heatResistant.get(entity);
 			}
 		}
@@ -45,10 +45,10 @@ public class MobResistantRegister implements IMobHeatResistant {
 	@Override
 	public float getColdResistant(ResourceLocation name) {
 		if (name != null) {
-			String n = name.getResourceDomain() + "." + name.getResourcePath();
+			String n = name.toString();
 			DCLogger.debugLog("register target: " + n);
-			if (coldResistant.containsKey(n)) {
-				Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(n);
+			Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(n);
+			if (coldResistant.containsKey(entity)) {
 				return coldResistant.get(entity);
 			}
 		}
@@ -58,7 +58,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 	@Override
 	public void registerEntityResistant(ResourceLocation name, float heat, float cold) {
 		if (name != null) {
-			String n = name.getResourceDomain() + "." + name.getResourcePath();
+			String n = name.toString();
 			DCLogger.debugLog("register target: " + n);
 			if (EntityList.NAME_TO_CLASS.containsKey(n)) {
 				Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(n);
