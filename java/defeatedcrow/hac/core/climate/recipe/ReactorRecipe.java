@@ -7,6 +7,7 @@ import java.util.List;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.recipe.IReactorRecipe;
 import defeatedcrow.hac.api.recipe.IRecipePanel;
+import defeatedcrow.hac.core.fluid.DCFluidUtil;
 import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
@@ -14,7 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -96,7 +96,7 @@ public class ReactorRecipe implements IReactorRecipe {
 
 	@Override
 	public ItemStack getOutput() {
-		return output == null ? null : output.copy();
+		return DCUtil.isEmpty(output) ? null : output.copy();
 	}
 
 	@Override
@@ -154,7 +154,7 @@ public class ReactorRecipe implements IReactorRecipe {
 					if (!DCUtil.isEmpty(cont)) {
 						list.add(cont);
 					} else {
-						cont = FluidContainerRegistry.drainFluidContainer(next);
+						cont = DCFluidUtil.getEmptyCont(next);
 						if (!DCUtil.isEmpty(cont)) {
 							list.add(cont);
 						}

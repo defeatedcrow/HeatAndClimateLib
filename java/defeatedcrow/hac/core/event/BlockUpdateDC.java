@@ -71,12 +71,14 @@ public class BlockUpdateDC {
 						}
 					}
 				} else if (block == Blocks.GRASS) {
-					// DRYかつ高温すぎると枯れてしまう
-					IGrowable grow = (IGrowable) block;
-					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
-						if (clm.getHumidity() == DCHumidity.DRY
-								&& clm.getHeat().getTier() > DCHeatTier.OVEN.getTier()) {
-							event.setCanceled(true);
+					if (CoreConfigDC.enableVanilla && CoreConfigDC.harderVanilla) {
+						// DRYかつ高温すぎると枯れてしまう
+						IGrowable grow = (IGrowable) block;
+						if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
+							if (clm.getHumidity() == DCHumidity.DRY
+									&& clm.getHeat().getTier() > DCHeatTier.OVEN.getTier()) {
+								event.setCanceled(true);
+							}
 						}
 					}
 				} else if (block instanceof IClimateCrop) {
@@ -159,8 +161,8 @@ public class BlockUpdateDC {
 			}
 
 			// ハードモード
-			if (CoreConfigDC.harderVanilla) {
-				if (clm.getHeat().getTier() >= DCHeatTier.SMELTING.getTier()) {
+			if (CoreConfigDC.enableVanilla && CoreConfigDC.harderVanilla) {
+				if (clm.getHeat().getTier() > DCHeatTier.SMELTING.getTier()) {
 
 					if (clm.getHeat() == DCHeatTier.INFERNO) {
 						// 融解
@@ -190,13 +192,13 @@ public class BlockUpdateDC {
 				}
 			}
 
-			if (f2) {
-
+			if (f2 && CoreConfigDC.enableVanilla && CoreConfigDC.updateFrequency > 0) {
+				int i = 1200 / CoreConfigDC.updateFrequency;
 				for (BlockPos p3 : BlockPos.getAllInBox(p.east().north(), p.west().south())) {
 					if (!world.isAirBlock(p3)) {
 						Block target = world.getBlockState(p3).getBlock();
 						if (!world.isUpdateScheduled(p3, target) && world.rand.nextBoolean())
-							world.scheduleUpdate(p3, target, 600 + world.rand.nextInt(600));
+							world.scheduleUpdate(p3, target, i + world.rand.nextInt(i));
 					}
 				}
 			}

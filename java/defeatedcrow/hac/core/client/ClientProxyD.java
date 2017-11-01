@@ -29,6 +29,7 @@ public class ClientProxyD extends CommonProxyD {
 
 	@Override
 	public void loadMaterial() {
+		MinecraftForge.EVENT_BUS.register(JsonBakery.instance);
 		super.loadMaterial();
 		JsonRegisterHelper.INSTANCE.regSimpleItem(DCInit.climate_checker, ClimateCore.PACKAGE_ID, "checker", "tool", 0);
 	}
@@ -60,7 +61,6 @@ public class ClientProxyD extends CommonProxyD {
 	@Override
 	public void loadInit() {
 		super.loadInit();
-		MinecraftForge.EVENT_BUS.register(JsonBakery.instance);
 		MinecraftForge.EVENT_BUS.register(RenderTempHUDEvent.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new WaterFogEvent());
 	}

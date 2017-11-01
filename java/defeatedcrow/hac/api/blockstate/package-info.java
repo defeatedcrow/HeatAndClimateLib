@@ -8,7 +8,7 @@
 /**
  * 当MODのBlockに含まれているBlockStateへのアクセス用APIです。<br>
  */
-@API(apiVersion = "1.0.9", owner = "dcs_climate|lib", provides = "DCsHaCAPI|blockstate")
+@API(apiVersion = "1.1.0", owner = "dcs_climate|lib", provides = "DCsHaCAPI|blockstate")
 package defeatedcrow.hac.api.blockstate;
 
 import net.minecraftforge.fml.common.API;

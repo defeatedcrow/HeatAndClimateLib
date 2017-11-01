@@ -5,11 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import defeatedcrow.hac.api.recipe.IMillRecipe;
+import defeatedcrow.hac.core.fluid.DCFluidUtil;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class MillRecipe implements IMillRecipe {
@@ -69,8 +69,8 @@ public class MillRecipe implements IMillRecipe {
 	public ItemStack getContainerItem(ItemStack item) {
 		if (DCUtil.isEmpty(item)) {
 			return null;
-		} else if (FluidContainerRegistry.isFilledContainer(item)) {
-			return FluidContainerRegistry.drainFluidContainer(item);
+		} else if (!DCUtil.isEmpty(DCFluidUtil.getEmptyCont(item))) {
+			return DCFluidUtil.getEmptyCont(item);
 		} else {
 			return item.getItem().getContainerItem(item);
 		}

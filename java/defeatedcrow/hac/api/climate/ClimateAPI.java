@@ -12,5 +12,6 @@ public class ClimateAPI {
 	public static IBiomeClimateRegister register;
 	public static IHeatBlockRegister registerBlock;
 	public static IClimateCalculator calculator;
+	public static IClimateHelper helper;
 
 }

@@ -68,7 +68,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 					worldIn.rand.nextFloat() * 0.1F + 0.9F);
 			this.addEffects(stack, worldIn, living);
 			this.dropContainerItem(worldIn, stack, living);
-			--stack.stackSize;
+			DCUtil.reduceStackSize(stack, 1);
 		}
 
 		return stack;
@@ -79,7 +79,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 			EnumHand hand) {
 		if (this.addEffects(stack, player.worldObj, target)) {
 			this.dropContainerItem(player.worldObj, stack, player);
-			--stack.stackSize;
+			DCUtil.reduceStackSize(stack, 1);
 			return true;
 		}
 		return super.itemInteractionForEntity(stack, player, target, hand);

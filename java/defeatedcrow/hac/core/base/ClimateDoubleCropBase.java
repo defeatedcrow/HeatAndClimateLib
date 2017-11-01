@@ -255,6 +255,8 @@ public abstract class ClimateDoubleCropBase extends Block
 				return GrowingStage.GROWN;
 			} else if (i > 4) {
 				return GrowingStage.FLOWER;
+			} else if (i == 0) {
+				return GrowingStage.GROUND;
 			} else {
 				return GrowingStage.YOUNG;
 			}
@@ -278,6 +280,7 @@ public abstract class ClimateDoubleCropBase extends Block
 						// 4段階目で2段になる
 						world.setBlockState(pos.up(),
 								thisState.withProperty(DCState.STAGE8, 4).withProperty(DCState.DOUBLE, false), 2);
+						world.setBlockState(pos, thisState.withProperty(DCState.DOUBLE, true), 2);
 					}
 					IBlockState next = thisState.withProperty(DCState.STAGE8, age);
 					boolean db = this.isDouble(next, world, pos);

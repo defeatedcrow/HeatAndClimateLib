@@ -64,4 +64,26 @@ public class FluidDictionaryDC {
 		return false;
 	}
 
+	public static boolean matchFluidName(Fluid target, String name) {
+		if (target == null || name == null)
+			return false;
+
+		if (nameMap.containsKey(name)) {
+			Integer id = nameMap.get(name);
+			Integer id2 = fluidMap.get(target);
+			if (id != null) {
+				if (id2 != null) {
+					return id.intValue() == id2.intValue();
+				}
+			}
+		}
+
+		String targetName = target.getName();
+		if (targetName.contains(name)) {
+			return true;
+		}
+
+		return false;
+	}
+
 }

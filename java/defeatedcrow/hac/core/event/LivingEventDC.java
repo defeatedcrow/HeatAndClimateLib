@@ -26,6 +26,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -35,8 +36,6 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -103,7 +102,7 @@ public class LivingEventDC {
 
 						Potion potion = effect.getPotion();
 
-						if (potion != null && potion == DCPotion.jump) {
+						if (potion != null && potion == MobEffects.JUMP_BOOST) {
 							living.fallDistance = 0.0F;
 						}
 
@@ -230,12 +229,6 @@ public class LivingEventDC {
 
 		if ((entity instanceof EntityPlayer)) {
 			EntityPlayer player = (EntityPlayer) event.getEntity();
-			// 装備
-			ItemStack[] equip = player.inventory.armorInventory;
-			ItemStack[] inside = new ItemStack[9];
-			for (int i = 0; i < 9; i++) {
-				inside[i] = player.inventory.getStackInSlot(i + 9);
-			}
 
 			// charm
 			if (!player.worldObj.isRemote) {
@@ -319,19 +312,6 @@ public class LivingEventDC {
 					i++;
 				}
 
-			}
-		}
-	}
-
-	/* spawn制御 */
-	@SubscribeEvent
-	public void spawnEvent(LivingSpawnEvent.CheckSpawn event) {
-		if (CoreConfigDC.customizedSpawn && event.getEntityLiving() != null
-				&& event.getEntityLiving() instanceof IMob) {
-			float i1 = 64F - event.getY();
-			int abs = (int) Math.abs(i1);
-			if (abs < 20) {
-				event.setResult(Result.DENY);
 			}
 		}
 	}

@@ -26,10 +26,11 @@ public class DCFluidUtil {
 		if (!DCUtil.isEmpty(item) && tile != null
 				&& item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)
 				&& tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
-			ItemStack copy = new ItemStack(item.getItem(), 1, item.getItemDamage());
-			if (item.getTagCompound() != null)
-				copy.setTagCompound(item.getTagCompound());
-			IFluidHandler cont = item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+			ItemStack copy = item.copy();
+			if (item.stackSize > 1) {
+				copy.stackSize = 1;
+			}
+			// IFluidHandler cont = item.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 			IFluidHandler dummy = copy.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 			IFluidHandler intank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP);
 			IFluidHandler outtank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,
@@ -49,11 +50,14 @@ public class DCFluidUtil {
 				if (f1 != null && dc_in.fill(f1, false) > 0) {
 					int f2 = dc_in.fill(f1, false);
 					FluidStack fill = dummy.drain(f2, true);
-					ret = copy;
-					if (ret.stackSize <= 0) {
-						ret = null;
-					}
+
 					if (fill != null && fill.amount > 0) {
+						dummy.drain(f2, true);
+						ret = copy;
+						if (ret.stackSize <= 0) {
+							ret = null;
+						}
+
 						dc_in.fill(fill, true);
 						success = true;
 					}
@@ -61,18 +65,20 @@ public class DCFluidUtil {
 				// output
 				else if (f1 == null && dc_out.drain(max, false) != null) {
 					int drain = dummy.fill(dc_out.drain(max, false), true);
-					ret = copy;
-					if (ret.stackSize <= 0) {
-						ret = null;
-					}
 					if (drain > 0) {
+						dummy.fill(dc_out.drain(max, false), true);
+						ret = copy;
+						if (ret.stackSize <= 0) {
+							ret = null;
+						}
+
 						dc_out.drain(drain, true);
 						success = true;
 					}
 				}
 
 				if (success) {
-					if (!player.capabilities.isCreativeMode && item.stackSize-- <= 0) {
+					if (!player.capabilities.isCreativeMode && DCUtil.reduceStackSize(item, 1) <= 0) {
 						item = null;
 					}
 					tile.markDirty();
@@ -86,6 +92,18 @@ public class DCFluidUtil {
 			}
 		}
 		return false;
+	}
+
+	public static ItemStack getEmptyCont(ItemStack target) {
+		if (!DCUtil.isEmpty(target) && target.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+			ItemStack copy = target.copy();
+			IFluidHandler handler = copy.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+			if (handler != null) {
+				handler.drain(handler.getTankProperties()[0].getCapacity(), true);
+				return copy;
+			}
+		}
+		return null;
 	}
 
 }

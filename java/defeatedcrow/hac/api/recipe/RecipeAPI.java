@@ -9,7 +9,6 @@ public class RecipeAPI {
 
 	public static boolean isLoaded;
 
-	public static IClimateRecipeRegister registerRecipes;
 	public static IClimateSmeltingRegister registerSmelting;
 
 	public static IMillRecipeRegister registerMills;

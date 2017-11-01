@@ -11,12 +11,12 @@ import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.ArmorMaterialRegister;
 import defeatedcrow.hac.core.climate.ArmorResistantRegister;
 import defeatedcrow.hac.core.climate.ClimateAltCalculator;
+import defeatedcrow.hac.core.climate.ClimateHelper;
 import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
 import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.climate.ThermalInsulationUtil;
 import defeatedcrow.hac.core.climate.recipe.ClimateCropRegister;
-import defeatedcrow.hac.core.climate.recipe.ClimateRecipeRegister;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmeltingRegister;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRegister;
 import defeatedcrow.hac.core.climate.recipe.MillRecipeRegister;
@@ -43,9 +43,9 @@ public class APILoader {
 		ClimateAPI.register = new ClimateRegister();
 		ClimateAPI.calculator = new ClimateAltCalculator();
 		ClimateAPI.registerBlock = new HeatBlockRegister();
+		ClimateAPI.helper = new ClimateHelper();
 		ClimateAPI.isLoaded = true;
 
-		RecipeAPI.registerRecipes = new ClimateRecipeRegister();
 		RecipeAPI.registerSmelting = new ClimateSmeltingRegister();
 		RecipeAPI.registerFluidRecipes = new FluidCraftRegister();
 		RecipeAPI.registerMills = new MillRecipeRegister();

@@ -15,11 +15,11 @@ public class CoreAnvilEvent {
 		ItemStack ret = event.getOutput();
 		/* Plating */
 		if (!DCUtil.isEmpty(right) && !DCUtil.isEmpty(left)) {
-			if (right.getItem() instanceof IPlatingTool && ret == null) {
+			if (right.getItem() instanceof IPlatingTool && DCUtil.isEmpty(ret)) {
 				IPlatingTool tool = (IPlatingTool) right.copy().getItem();
 				if (tool.canEnchant(left, right)) {
 					ItemStack result = tool.getEnchantedItem(left, right);
-					if (result != null) {
+					if (!DCUtil.isEmpty(result)) {
 						event.setOutput(result);
 						event.setMaterialCost(1);
 						event.setCost(3);

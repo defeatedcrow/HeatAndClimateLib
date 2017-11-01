@@ -145,4 +145,31 @@ public enum DCHeatTier {
 
 		return tiers;
 	}
+
+	public static DCHeatTier getTypeByTemperature(int temp) {
+		if (temp >= 7300)
+			return DCHeatTier.INFERNO;
+		else if (temp >= 3300)
+			return DCHeatTier.UHT;
+		else if (temp >= 1800)
+			return DCHeatTier.SMELTING;
+		else if (temp >= 1000)
+			return DCHeatTier.KILN;
+		else if (temp >= 500)
+			return DCHeatTier.OVEN;
+		else if (temp >= 350)
+			return DCHeatTier.HOT;
+		else if (temp >= 320)
+			return DCHeatTier.WARM;
+		else if (temp >= 290)
+			return DCHeatTier.NORMAL;
+		else if (temp >= 250)
+			return DCHeatTier.COOL;
+		else if (temp >= 200)
+			return DCHeatTier.COLD;
+		else if (temp >= 70)
+			return DCHeatTier.FROSTBITE;
+		else
+			return DCHeatTier.ABSOLUTE;
+	}
 }

@@ -18,7 +18,8 @@ public class DCASMCore extends DummyModContainer {
 		meta.version = "1.1.1";
 		// 以下は省略可
 		meta.authorList = Arrays.asList(new String[] {
-				"defeatedcrow" });
+				"defeatedcrow"
+		});
 		meta.credits = "defeatedcrow";
 		meta.description = "Method transformar for the climate.";
 	}
