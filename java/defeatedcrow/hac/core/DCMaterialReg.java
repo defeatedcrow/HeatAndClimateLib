@@ -6,8 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public class DCMaterial {
-	private DCMaterial() {}
+public class DCMaterialReg {
+	private DCMaterialReg() {}
 
 	public static void load() {
 		registerBlock();
@@ -32,6 +32,16 @@ public class DCMaterial {
 	}
 
 	public static void registerItem(Item item, String name, String modid) {
+		ForgeRegistries.ITEMS.register(item.setRegistryName(modid, name));
+	}
+
+	public static void registerBlock(String modid, Block block, String name) {
+		Block reg = block.setRegistryName(modid, name);
+		ForgeRegistries.BLOCKS.register(reg);
+		ForgeRegistries.ITEMS.register(new DCItemBlock(reg));
+	}
+
+	public static void registerItem(String modid, Item item, String name) {
 		ForgeRegistries.ITEMS.register(item.setRegistryName(modid, name));
 	}
 }

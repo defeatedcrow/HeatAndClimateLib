@@ -1,8 +1,11 @@
 package defeatedcrow.hac.core.plugin.jei;
 
+import java.util.ArrayList;
+
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import net.minecraft.item.ItemStack;
 
 public class ClimateSmeltingHandler implements IRecipeHandler<ClimateSmelting> {
 
@@ -22,7 +25,12 @@ public class ClimateSmeltingHandler implements IRecipeHandler<ClimateSmelting> {
 
 	@Override
 	public boolean isRecipeValid(ClimateSmelting recipe) {
-		return recipe.getProcessedInput() != null;
+		ArrayList<ItemStack> inputs = new ArrayList<ItemStack>();
+		if (recipe.getProcessedInput() != null) {
+			inputs.addAll(recipe.getProcessedInput());
+			return !inputs.isEmpty();
+		}
+		return false;
 	}
 
 	@Override
