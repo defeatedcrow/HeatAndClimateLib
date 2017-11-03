@@ -78,7 +78,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	}
 
 	private boolean isAlreadyRegistered(int id, int dim) {
-		int i = dim << 8 + id;
+		int i = dim << 9 + id;
 		return recipes.containsKey(Integer.valueOf(i));
 	}
 
@@ -96,7 +96,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		if (dim == 0) {
 			return Biome.getIdForBiome(biome);
 		} else {
-			int i = dim << 8;
+			int i = dim << 9;
 			i += Biome.getIdForBiome(biome);
 			return i;
 		}
@@ -176,7 +176,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	@Override
 	public DCHeatTier getHeatTier(int biome) {
 		IClimate clm = getClimateFromList(biome);
-		int id = biome & 127;
+		int id = biome & 255;
 		Biome b = Biome.getBiome(id);
 		if (clm != null) {
 			return clm.getHeat();
@@ -206,12 +206,13 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	@Override
 	public DCAirflow getAirflow(int biome) {
 		IClimate clm = getClimateFromList(biome);
-		int id = biome & 127;
+		int id = biome & 255;
 		Biome b = Biome.getBiome(id);
 		if (clm != null) {
 			return clm.getAirflow();
 		}
-		if (b != null && BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.HILLS)) {
+		if (b != null && (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.MOUNTAIN)
+				|| BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.HILLS))) {
 			return DCAirflow.FLOW;
 		}
 		return DCAirflow.NORMAL;
@@ -220,7 +221,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	@Override
 	public DCHumidity getHumidity(int biome) {
 		IClimate clm = getClimateFromList(biome);
-		int id = biome & 127;
+		int id = biome & 255;
 		Biome b = Biome.getBiome(id);
 		if (clm != null) {
 			return clm.getHumidity();
