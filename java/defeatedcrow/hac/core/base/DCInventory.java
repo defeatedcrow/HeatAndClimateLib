@@ -62,6 +62,9 @@ public class DCInventory implements IInventory {
 		if (!DCUtil.isEmpty(getStackInSlot(i))) {
 			ItemStack itemstack;
 			itemstack = getStackInSlot(i).splitStack(num);
+			if (getStackInSlot(i).stackSize <= 0) {
+				setInventorySlotContents(i, null);
+			}
 			return itemstack;
 		} else
 			return null;
