@@ -24,7 +24,9 @@ public class CoreConfigDC {
 	public static int humRange = 1;
 	public static int airRange = 1;
 
-	public static int[] ranges = new int[3];
+	public static int[] ranges = {
+			2, 1, 1
+	};
 
 	public static boolean wall = true;
 
