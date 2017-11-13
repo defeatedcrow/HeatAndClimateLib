@@ -97,6 +97,7 @@ public class DCFluidUtil {
 	public static ItemStack getEmptyCont(ItemStack target) {
 		if (!DCUtil.isEmpty(target) && target.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
 			ItemStack copy = target.copy();
+			copy.stackSize = 1;
 			IFluidHandler handler = copy.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 			if (handler != null) {
 				handler.drain(handler.getTankProperties()[0].getCapacity(), true);
