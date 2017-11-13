@@ -63,7 +63,7 @@ public class DCInventory implements IInventory {
 			ItemStack itemstack;
 			itemstack = getStackInSlot(i).splitStack(num);
 			if (getStackInSlot(i).stackSize <= 0) {
-				setInventorySlotContents(i, null);
+				inv[i] = null;
 			}
 			return itemstack;
 		} else
@@ -76,15 +76,13 @@ public class DCInventory implements IInventory {
 		if (i < 0 || i >= this.getSizeInventory()) {
 			return;
 		} else {
-			if (stack == null) {
+			if (DCUtil.isEmpty(stack)) {
 				stack = null;
+			} else if (stack.stackSize > this.getInventoryStackLimit()) {
+				stack.stackSize = getInventoryStackLimit();
 			}
 
 			inv[i] = stack;
-
-			if (!DCUtil.isEmpty(stack) && stack.stackSize > this.getInventoryStackLimit()) {
-				stack.stackSize = getInventoryStackLimit();
-			}
 
 			this.markDirty();
 		}
@@ -207,6 +205,8 @@ public class DCInventory implements IInventory {
 
 	public void readFromNBT(NBTTagCompound tag) {
 
+		ItemStack[] inv2 = new ItemStack[getSizeInventory()];
+
 		NBTTagList nbttaglist = tag.getTagList("InvItems", 10);
 
 		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
@@ -214,8 +214,12 @@ public class DCInventory implements IInventory {
 			byte b0 = tag1.getByte("Slot");
 
 			if (b0 >= 0 && b0 < this.getSizeInventory()) {
-				inv[b0] = ItemStack.loadItemStackFromNBT(tag1);
+				inv2[b0] = ItemStack.loadItemStackFromNBT(tag1);
 			}
+		}
+
+		for (int i1 = 0; i1 < getSizeInventory(); i1++) {
+			inv[i1] = inv2[i1];
 		}
 	}
 
