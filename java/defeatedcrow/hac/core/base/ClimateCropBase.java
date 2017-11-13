@@ -204,6 +204,11 @@ public abstract class ClimateCropBase extends Block
 	}
 
 	@Override
+	public IBlockState setGroundState(IBlockState state) {
+		return state.withProperty(DCState.STAGE4, 0);
+	}
+
+	@Override
 	public boolean isSuitableClimate(IClimate climate, IBlockState thisState) {
 		if (climate == null || thisState == null || !(thisState.getBlock() instanceof ClimateCropBase))
 			return false;
