@@ -24,7 +24,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -181,27 +180,20 @@ public class LivingEventDC {
 					}
 
 					// 防具の計算
-					Iterable<ItemStack> items = living.getArmorInventoryList();
-					if (items != null) {
-						for (ItemStack item : items) {
-							if (DCUtil.isEmpty(item))
-								continue;
-
-							float p = DCUtil.getItemResistantData(item, isCold);
-							prev += p;
-						}
-					}
-
-					if (living instanceof EntityHorse) {
+					if (living.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
 						IItemHandler handler = living.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
 								null);
 						if (handler != null) {
-							float p = DCUtil.getItemResistantData(handler.getStackInSlot(1), isCold);
-							prev += p;
+							for (int s = 0; s < handler.getSlots(); s++) {
+								ItemStack item = handler.getStackInSlot(s);
+								if (DCUtil.isEmpty(item))
+									continue;
+
+								float p = DCUtil.getItemResistantData(item, isCold);
+								prev += p;
+							}
 						}
 					}
-
-					items = null;
 
 					dam -= prev;
 

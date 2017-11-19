@@ -9,7 +9,7 @@
  * このAPIは、このmodで扱われるエネルギーをCapabilityシステムで扱うためのAPIです｡<br>
  * 。
  */
-@API(apiVersion = "1.0.9", owner = "dcs_climate|lib", provides = "DCsHaCAPI|capability")
+@API(apiVersion = "1.1.1", owner = "dcs_climate|lib", provides = "DCsHaCAPI|capability")
 package defeatedcrow.hac.api.energy.capability;
 
 import net.minecraftforge.fml.common.API;

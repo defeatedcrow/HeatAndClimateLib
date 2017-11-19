@@ -8,11 +8,13 @@ import java.util.Random;
 
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.magic.CharmType;
+import defeatedcrow.hac.api.magic.IJewelAmulet;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Enchantments;
@@ -29,6 +31,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 // 色々不足しているもの
@@ -202,6 +206,20 @@ public class DCUtil {
 			}
 		}
 		return false;
+	}
+
+	public static Map<Integer, ItemStack> getAmulets(EntityLivingBase living) {
+		Map<Integer, ItemStack> ret = new HashMap<Integer, ItemStack>();
+		IItemHandler handler = living.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		if (living == null || handler == null)
+			return ret;
+		for (int i = 0; i < handler.getSlots(); i++) {
+			ItemStack check = handler.getStackInSlot(i);
+			if (!isEmpty(check) && check.getItem() instanceof IJewelAmulet) {
+				ret.put(i, check);
+			}
+		}
+		return ret;
 	}
 
 	// Itemクラスのやつがprotectedだった
