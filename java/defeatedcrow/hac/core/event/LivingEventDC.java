@@ -9,6 +9,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.damage.ClimateDamageEvent;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.damage.DamageSourceClimate;
+import defeatedcrow.hac.api.magic.IJewelAmulet;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
@@ -23,7 +24,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -117,6 +117,16 @@ public class LivingEventDC {
 					iterator = null;
 				}
 
+				/* Amulet */
+
+				Map<Integer, ItemStack> charms = DCUtil.getAmulets(living);
+				for (ItemStack item2 : charms.values()) {
+					int m = item2.getMetadata();
+					IJewelAmulet amu = (IJewelAmulet) item2.getItem();
+					amu.constantEffect(living, item2);
+				}
+				charms.clear();
+
 				/* climate damage */
 
 				if (!living.world.isRemote && DCTimeHelper.getCount(living.world) == 0 && CoreConfigDC.climateDam) {
@@ -131,6 +141,8 @@ public class LivingEventDC {
 					}
 					float dam = Math.abs(heat.getTier()) * 1.0F; // hot 0F ~ 7.0F / cold 0F ~ 4.0F
 					boolean isCold = heat.getTier() < 0;
+					DamageSourceClimate source = isCold ? DamageSourceClimate.climateColdDamage
+							: DamageSourceClimate.climateHeatDamage;
 
 					// 基礎ダメージ
 					if (isCold) {
@@ -180,32 +192,23 @@ public class LivingEventDC {
 					}
 
 					// 防具の計算
-					Iterable<ItemStack> items = living.getArmorInventoryList();
-					if (items != null) {
-						for (ItemStack item : items) {
-							if (DCUtil.isEmpty(item))
-								continue;
-
-							float p = DCUtil.getItemResistantData(item, isCold);
-							prev += p;
-						}
-					}
-
-					if (living instanceof EntityHorse) {
+					if (living.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
 						IItemHandler handler = living.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
 								null);
 						if (handler != null) {
-							float p = DCUtil.getItemResistantData(handler.getStackInSlot(1), isCold);
-							prev += p;
+							for (int s = 0; s < handler.getSlots(); s++) {
+								ItemStack item = handler.getStackInSlot(s);
+								if (DCUtil.isEmpty(item))
+									continue;
+
+								float p = DCUtil.getItemResistantData(item, isCold);
+								prev += p;
+							}
 						}
 					}
 
-					items = null;
-
 					dam -= prev;
 
-					DamageSourceClimate source = isCold ? DamageSourceClimate.climateColdDamage
-							: DamageSourceClimate.climateHeatDamage;
 					ClimateDamageEvent fireEvent = new ClimateDamageEvent(living, source, heat, dam);
 					float result = fireEvent.result();
 					dam = result;

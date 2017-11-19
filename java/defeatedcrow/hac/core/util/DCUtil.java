@@ -8,15 +8,20 @@ import java.util.Random;
 
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.magic.CharmType;
+import defeatedcrow.hac.api.magic.IJewelAmulet;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.plugin.ChastMobPlugin;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -30,6 +35,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 // 色々不足しているもの
@@ -181,6 +189,37 @@ public class DCUtil {
 				int m = check.getItemDamage();
 				if (type == null || charm.getType(m) == type)
 					ret.put(i, check);
+			}
+		}
+		return ret;
+	}
+
+	public static Map<Integer, ItemStack> getAmulets(EntityLivingBase living) {
+		Map<Integer, ItemStack> ret = new HashMap<Integer, ItemStack>();
+		if (living == null) {
+			return ret;
+		} else {
+			if (Loader.isModLoaded("schr0chastmob") && ChastMobPlugin.isChastMob(living)) {
+				ret.putAll(ChastMobPlugin.getAmulet(living));
+				return ret;
+			}
+
+			IItemHandler handler = living.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+			if (handler != null) {
+				for (int i = 0; i < handler.getSlots(); i++) {
+					ItemStack check = handler.getStackInSlot(i);
+					if (!isEmpty(check) && check.getItem() instanceof IJewelAmulet) {
+						ret.put(i, check);
+					}
+				}
+			} else if (living instanceof EntityVillager) {
+				IInventory inv = ((EntityVillager) living).getVillagerInventory();
+				for (int i = 0; i < inv.getSizeInventory(); i++) {
+					ItemStack check = inv.getStackInSlot(i);
+					if (!isEmpty(check) && check.getItem() instanceof IJewelAmulet) {
+						ret.put(i, check);
+					}
+				}
 			}
 		}
 		return ret;

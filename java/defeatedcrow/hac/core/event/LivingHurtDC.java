@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import defeatedcrow.hac.api.magic.CharmType;
+import defeatedcrow.hac.api.magic.IJewelAmulet;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.util.DCUtil;
@@ -47,24 +48,51 @@ public class LivingHurtDC {
 				charms.clear();
 			}
 
-			// ATTACK側のチャーム判定
-			if (source instanceof EntityDamageSource && source.getTrueSource() != null
-					&& source.getTrueSource() instanceof EntityPlayer) {
-				EntityPlayer attacker = (EntityPlayer) source.getTrueSource();
-
-				Map<Integer, ItemStack> charms2 = DCUtil.getPlayerCharm(attacker, CharmType.ATTACK);
-				for (Entry<Integer, ItemStack> entry : charms2.entrySet()) {
-					DCLogger.debugLog("attack charm");
-					IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
-					add *= charm.increaceDamage(living, entry.getValue());
-					if (charm.onAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
-						if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
-							attacker.inventory.markDirty();
-							attacker.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
-						}
+			Map<Integer, ItemStack> amulets = DCUtil.getAmulets(living);
+			for (Entry<Integer, ItemStack> entry : amulets.entrySet()) {
+				IJewelAmulet amu = (IJewelAmulet) entry.getValue().getItem();
+				prev += amu.reduceDamage(source, entry.getValue());
+				if (amu.onDiffence(source, living, newDam, entry.getValue())) {
+					if (DCUtil.isEmpty(amu.consumeCharmItem(entry.getValue()))) {
+						living.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 					}
 				}
-				charms2.clear();
+			}
+			amulets.clear();
+
+			// ATTACK側のチャーム判定
+			if (source instanceof EntityDamageSource && source.getTrueSource() != null) {
+				if (source.getTrueSource() instanceof EntityPlayer) {
+					EntityPlayer attacker = (EntityPlayer) source.getTrueSource();
+
+					Map<Integer, ItemStack> charms2 = DCUtil.getPlayerCharm(attacker, CharmType.ATTACK);
+					for (Entry<Integer, ItemStack> entry : charms2.entrySet()) {
+						DCLogger.debugLog("attack charm");
+						IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
+						add *= charm.increaceDamage(living, entry.getValue());
+						if (charm.onAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
+							if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
+								attacker.inventory.markDirty();
+								attacker.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
+							}
+						}
+					}
+					charms2.clear();
+				}
+				if (source.getTrueSource() instanceof EntityLivingBase) {
+					EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
+					Map<Integer, ItemStack> amulets2 = DCUtil.getAmulets(attacker);
+					for (Entry<Integer, ItemStack> entry : amulets2.entrySet()) {
+						IJewelAmulet amu = (IJewelAmulet) entry.getValue().getItem();
+						add *= amu.increaceDamage(living, entry.getValue());
+						if (amu.onAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
+							if (DCUtil.isEmpty(amu.consumeCharmItem(entry.getValue()))) {
+								attacker.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
+							}
+						}
+					}
+					amulets2.clear();
+				}
 			}
 
 			// 最終的なダメージ
