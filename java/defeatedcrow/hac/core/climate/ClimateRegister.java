@@ -186,7 +186,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
 				return DCHeatTier.COLD;
 			} else {
-				float temp = b.getTemperature();
+				float temp = b.getDefaultTemperature();
 				if (temp > 1.1F) {
 					return DCHeatTier.HOT;
 				} else if (temp > 0.8F) {

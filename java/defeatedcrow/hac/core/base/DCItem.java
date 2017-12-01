@@ -30,14 +30,18 @@ public abstract class DCItem extends Item implements ITexturePath {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state) {
+	public float getDestroySpeed(ItemStack stack, IBlockState state) {
 		return 1.0F;
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		ItemStack ret = player.getHeldItem(hand);
-		return new ActionResult(EnumActionResult.PASS, ret);
+		if (player != null) {
+			ItemStack ret = player.getHeldItem(hand);
+			return new ActionResult(EnumActionResult.PASS, ret);
+		} else {
+			return new ActionResult(EnumActionResult.PASS, ItemStack.EMPTY);
+		}
 	}
 
 	@Override

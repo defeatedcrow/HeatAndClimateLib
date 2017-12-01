@@ -1,6 +1,10 @@
 package defeatedcrow.hac.core;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
+
+import com.google.common.collect.Lists;
 
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -15,10 +19,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -204,6 +210,19 @@ public class DCRecipe {
 	}
 
 	public static void addShapelessRecipe(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
+		List<Object> imputs = Lists.newArrayList(recipe);
+		for (int i = imputs.size(); 0 < i--;) {
+			Object target = imputs.get(i);
+			if (target instanceof String) {
+				Ingredient ing = new OreIngredient((String) target) {
+					@Override
+					public boolean isSimple() {
+						return false;
+					}
+				};
+				imputs.set(i, ing);
+			}
+		}
 		ForgeRegistries.RECIPES.register(new ShapelessOreRecipe(name, result, recipe).setRegistryName(name));
 	}
 

@@ -457,7 +457,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		} else if (source.isFireDamage() || source.isMagicDamage()) {
 			return false;
 		} else {
-			this.setBeenAttacked();
+			this.markVelocityChanged();
 			this.dropAndDeath(null);
 			return false;
 		}

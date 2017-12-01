@@ -27,7 +27,9 @@ import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityPolarBear;
+import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.entity.monster.EntitySnowman;
+import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
@@ -132,6 +134,8 @@ public class APILoader {
 		DamageAPI.resistantData.registerEntityResistant(EntityRabbit.class, 2.0F, 3.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityPolarBear.class, 1.0F, 4.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 0.0F, 4.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityShulker.class, 0.0F, 4.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityLlama.class, 2.0F, 4.0F);
 	}
 
 }

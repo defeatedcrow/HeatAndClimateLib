@@ -19,7 +19,6 @@ import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
 import defeatedcrow.hac.core.util.DCWaterOpaque;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -37,8 +36,8 @@ public class ClimateCore {
 	public static final String MOD_ID = "dcs_lib";
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 2;
-	public static final int MOD_MINOR = 0;
-	public static final int MOD_BUILD = 4;
+	public static final int MOD_MINOR = 1;
+	public static final int MOD_BUILD = 0;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.12,1.12.2]";
 	public static final String PACKAGE_BASE = "dcs";
@@ -92,8 +91,6 @@ public class ClimateCore {
 		FluidIDRegisterDC.post();
 		MobResistantRegister.post();
 		ArmorResistantRegister.post();
-
-		FMLCommonHandler.instance().resetClientRecipeBook();
 	}
 
 	@EventHandler

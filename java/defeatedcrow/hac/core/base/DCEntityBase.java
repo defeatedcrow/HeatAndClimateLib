@@ -378,7 +378,7 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 		} else if (source.isFireDamage() || source.isMagicDamage()) {
 			return false;
 		} else {
-			this.setBeenAttacked();
+			this.markVelocityChanged();
 			this.dropAndDeath(null);
 			return false;
 		}

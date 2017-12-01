@@ -98,7 +98,7 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 
 		String t = heat.name();
 		int heatColor = heat.getTier() < 0 ? 0x5050FF : 0xFF5050;
-		mc.fontRenderer.drawString("TEMP : " + biome.getTemperature(), 17, baseY + 14, heatColor, false);
+		mc.fontRenderer.drawString("TEMP : " + biome.getDefaultTemperature(), 17, baseY + 14, heatColor, false);
 		mc.fontRenderer.drawString(t, 70, baseY + 22, heatColor, false);
 
 		String h = hum == null ? "  -" : hum.name();
