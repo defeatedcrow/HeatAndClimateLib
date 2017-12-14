@@ -8,9 +8,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
 public class DCFluidUtil {
 
@@ -95,13 +97,24 @@ public class DCFluidUtil {
 	}
 
 	public static ItemStack getEmptyCont(ItemStack target) {
-		if (!DCUtil.isEmpty(target) && target.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+		if (FluidContainerRegistry.isFilledContainer(target)) {
+			return FluidContainerRegistry.drainFluidContainer(target);
+		} else if (!DCUtil.isEmpty(target)
+				&& target.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
 			ItemStack copy = target.copy();
 			copy.stackSize = 1;
+			ItemStack ret = null;
 			IFluidHandler handler = copy.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 			if (handler != null) {
-				handler.drain(handler.getTankProperties()[0].getCapacity(), true);
-				return copy;
+				if (handler instanceof FluidHandlerItemStack) {
+					FluidHandlerItemStack container = (FluidHandlerItemStack) handler;
+					FluidStack fill = container.drain(container.getFluid(), true);
+					ret = copy;
+				} else {
+					FluidStack fill = handler.drain(handler.getTankProperties()[0].getCapacity(), true);
+					ret = copy;
+				}
+				return ret;
 			}
 		}
 		return null;

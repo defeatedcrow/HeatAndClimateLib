@@ -69,10 +69,12 @@ public class MillRecipe implements IMillRecipe {
 	public ItemStack getContainerItem(ItemStack item) {
 		if (DCUtil.isEmpty(item)) {
 			return null;
+		} else if (item.getItem().hasContainerItem(item)) {
+			return item.getItem().getContainerItem(item);
 		} else if (!DCUtil.isEmpty(DCFluidUtil.getEmptyCont(item))) {
 			return DCFluidUtil.getEmptyCont(item);
 		} else {
-			return item.getItem().getContainerItem(item);
+			return null;
 		}
 	}
 

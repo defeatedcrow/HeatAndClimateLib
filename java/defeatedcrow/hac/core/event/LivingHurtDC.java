@@ -26,6 +26,7 @@ public class LivingHurtDC {
 		float newDam = event.getAmount();
 		float prev = 0.0F;
 		float add = 1.0F;
+		float add2 = 0.0F;
 		if (living != null) {
 
 			// DIFFENCE優先
@@ -86,7 +87,7 @@ public class LivingHurtDC {
 					Map<Integer, ItemStack> amulets2 = DCUtil.getAmulets(attacker);
 					for (Entry<Integer, ItemStack> entry : amulets2.entrySet()) {
 						IJewelAmulet amu = (IJewelAmulet) entry.getValue().getItem();
-						add *= amu.increaceDamage(living, entry.getValue());
+						add2 += amu.increaceDamage(living, entry.getValue());
 						if (amu.onAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
 							if (DCUtil.isEmpty(amu.consumeCharmItem(entry.getValue()))) {
 								attacker.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
@@ -99,6 +100,7 @@ public class LivingHurtDC {
 
 			// 最終的なダメージ
 			newDam *= add;
+			newDam += add2;
 			newDam -= prev;
 
 			// 最終的に

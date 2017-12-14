@@ -132,7 +132,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 		} else {
 			int i = clm.getHeat().getTier() < 0 ? 1 : -1;
 			DCHeatTier next = clm.getHeat().addTier(i);
-			list.addAll(getRecipeList(next));
+			list.addAll(getRecipeList(clm.getHeat().addTier(i)));
 		}
 		IClimateSmelting ret = null;
 		if (list.isEmpty()) {} else {
