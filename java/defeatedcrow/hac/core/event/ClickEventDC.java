@@ -39,7 +39,7 @@ public class ClickEventDC {
 				IJewelCharm charm = ((IJewelCharm) entry.getValue().getItem());
 				if (charm.onToolUsing(event.getPlayer(), event.getPos(), event.getState(), entry.getValue())) {
 					if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
-						event.getPlayer().inventory.setInventorySlotContents(entry.getKey(), null);
+						event.getPlayer().inventory.setInventorySlotContents(entry.getKey(), ItemStack.EMPTY);
 						event.getPlayer().inventory.markDirty();
 						event.getPlayer().playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 					}

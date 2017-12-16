@@ -29,6 +29,7 @@ public class MHandlerCharmKey implements IMessageHandler<MessageCharmKey, IMessa
 				IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
 				if (charm.onUsing(player, entry.getValue())) {
 					if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
+						player.inventory.setInventorySlotContents(entry.getKey(), ItemStack.EMPTY);
 						player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 						player.inventory.markDirty();
 						break;

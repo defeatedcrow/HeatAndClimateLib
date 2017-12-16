@@ -41,6 +41,7 @@ public class LivingHurtDC {
 					prev += charm.reduceDamage(source, entry.getValue());
 					if (charm.onDiffence(source, player, newDam, entry.getValue())) {
 						if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
+							player.inventory.setInventorySlotContents(entry.getKey(), ItemStack.EMPTY);
 							player.inventory.markDirty();
 							player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 						}
@@ -73,6 +74,7 @@ public class LivingHurtDC {
 						add *= charm.increaceDamage(living, entry.getValue());
 						if (charm.onAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
 							if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
+								attacker.inventory.setInventorySlotContents(entry.getKey(), ItemStack.EMPTY);
 								attacker.inventory.markDirty();
 								attacker.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 							}
