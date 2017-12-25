@@ -24,7 +24,7 @@ public class FluidRecipeHandler implements IRecipeHandler<FluidCraftRecipe> {
 
 	@Override
 	public boolean isRecipeValid(FluidCraftRecipe recipe) {
-		if (recipe.getProcessedInput() != null) {
+		if (recipe.getProcessedInput() != null && !recipe.getProcessedInput().isEmpty()) {
 			if (recipe.getProcessedInput().size() > 3) {
 				return false;
 			}

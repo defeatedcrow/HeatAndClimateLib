@@ -17,6 +17,8 @@ import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierHelper;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityHelper;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityRenderer;
+import defeatedcrow.hac.core.recipe.ShapedNBTRecipe;
+import defeatedcrow.hac.core.recipe.ShapelessNBTRecipe;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IJeiRuntime;
@@ -26,6 +28,7 @@ import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.Biome;
@@ -65,8 +68,10 @@ public class DCsJEIPlugin implements IModPlugin {
 		MillRecipeMaker.register(registry);
 		SpinningRecipeMaker.register(registry);
 
-		// registry.handleRecipes(ShapedNBTRecipe.class, recipe -> new ShapedNBTWrapper(jeiHelpers, recipe),
-		// VanillaRecipeCategoryUid.CRAFTING);
+		registry.handleRecipes(ShapedNBTRecipe.class, recipe -> new ShapedNBTWrapper(jeiHelpers, recipe),
+				VanillaRecipeCategoryUid.CRAFTING);
+		registry.handleRecipes(ShapelessNBTRecipe.class, recipe -> new ShapelessNBTWrapper(jeiHelpers, recipe),
+				VanillaRecipeCategoryUid.CRAFTING);
 
 		if (!DCsJEIPluginLists.climateIcons.isEmpty()) {
 			for (ItemStack item : DCsJEIPluginLists.climateIcons) {

@@ -24,7 +24,7 @@ public class ReactorRecipeHandler implements IRecipeHandler<ReactorRecipe> {
 
 	@Override
 	public boolean isRecipeValid(ReactorRecipe recipe) {
-		if (recipe.getProcessedInput() != null) {
+		if (recipe.getProcessedInput() != null && !recipe.getProcessedInput().isEmpty()) {
 			if (recipe.getProcessedInput().size() > 4) {
 				return false;
 			}

@@ -1,10 +1,6 @@
 package defeatedcrow.hac.core;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
-
-import com.google.common.collect.Lists;
 
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -12,6 +8,8 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
+import defeatedcrow.hac.core.recipe.ShapedNBTRecipe;
+import defeatedcrow.hac.core.recipe.ShapelessNBTRecipe;
 import defeatedcrow.hac.core.util.RecipeResources;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockGrass;
@@ -206,24 +204,47 @@ public class DCRecipe {
 	}
 
 	public static void addShapedRecipe(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
-		ForgeRegistries.RECIPES.register(new ShapedOreRecipe(name, result, recipe).setRegistryName(name));
+		ShapedOreRecipe ret = new ShapedOreRecipe(name, result, recipe);
+		ret.setRegistryName(name);
+		for (Ingredient ing : ret.getIngredients()) {
+			if (ing instanceof OreIngredient && ing.getMatchingStacks().length < 1) {
+				return;
+			}
+		}
+		ForgeRegistries.RECIPES.register(ret);
 	}
 
 	public static void addShapelessRecipe(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
-		List<Object> imputs = Lists.newArrayList(recipe);
-		for (int i = imputs.size(); 0 < i--;) {
-			Object target = imputs.get(i);
-			if (target instanceof String) {
-				Ingredient ing = new OreIngredient((String) target) {
-					@Override
-					public boolean isSimple() {
-						return false;
-					}
-				};
-				imputs.set(i, ing);
+		ShapelessOreRecipe ret = new ShapelessOreRecipe(name, result, recipe);
+		ret.setRegistryName(name);
+		for (Ingredient ing : ret.getIngredients()) {
+			if (ing instanceof OreIngredient && ing.getMatchingStacks().length < 1) {
+				return;
 			}
 		}
-		ForgeRegistries.RECIPES.register(new ShapelessOreRecipe(name, result, recipe).setRegistryName(name));
+		ForgeRegistries.RECIPES.register(ret);
+	}
+
+	public static void addShapedNBTRecipe(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
+		ShapedNBTRecipe ret = new ShapedNBTRecipe(name, result, recipe);
+		ret.setRegistryName(name);
+		for (Ingredient ing : ret.getIngredients()) {
+			if (ing instanceof OreIngredient && ing.getMatchingStacks().length < 1) {
+				return;
+			}
+		}
+		ForgeRegistries.RECIPES.register(ret);
+	}
+
+	public static void addShapelessNBTRecipe(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
+		ShapelessNBTRecipe ret = new ShapelessNBTRecipe(name, result, recipe);
+		ret.setRegistryName(name);
+		for (Ingredient ing : ret.getIngredients()) {
+			if (ing instanceof OreIngredient && ing.getMatchingStacks().length < 1) {
+				return;
+			}
+		}
+		ForgeRegistries.RECIPES.register(ret);
 	}
 
 }

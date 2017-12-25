@@ -1,8 +1,5 @@
 package defeatedcrow.hac.core.recipe;
 
-import java.util.Iterator;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import defeatedcrow.hac.core.util.DCUtil;
@@ -18,23 +15,23 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
+import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 /**
  * OreRecipeに加えて、アイテムのNBTタグや液体情報の一致を要求する。
  */
-public class ShapedNBTRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
+public class ShapedNBTRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IShapedRecipe {
 
 	public static final int MAX_CRAFT_GRID_WIDTH = 3;
 	public static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
 	protected ItemStack output = ItemStack.EMPTY;
-	protected NonNullList<Ingredient> input = null;
+	protected NonNullList<Ingredient> input = NonNullList.create();
 	protected int width = 0;
 	protected int height = 0;
 	protected boolean mirrored = true;
@@ -89,10 +86,9 @@ public class ShapedNBTRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	protected boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror) {
-		for (int x = 0; x < MAX_CRAFT_GRID_WIDTH; x++) {
-			for (int y = 0; y < MAX_CRAFT_GRID_HEIGHT; y++) {
+		for (int x = 0; x < inv.getWidth(); x++) {
+			for (int y = 0; y < inv.getHeight(); y++) {
 				int subX = x - startX;
 				int subY = y - startY;
 				Ingredient target = Ingredient.EMPTY;
@@ -107,50 +103,36 @@ public class ShapedNBTRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
 
 				ItemStack slot = inv.getStackInRowAndColumn(x, y);
 
-				if (target.getMatchingStacks().length == 1) {
-					ItemStack stack = target.getMatchingStacks()[0];
-					boolean check = false;
-					if (!DCUtil.isEmpty(stack) && !DCUtil.isEmpty(slot)
-							&& stack.getItem() == ForgeModContainer.getInstance().universalBucket) {
-						if (slot.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-							IFluidHandler handler = slot.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,
-									null);
-							FluidStack f = handler.drain(Fluid.BUCKET_VOLUME, false);
-							IFluidHandler handler2 = stack
-									.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-							FluidStack f2 = handler2.drain(Fluid.BUCKET_VOLUME, false);
-							if (f != null && f2 != null && f.getFluid() == f2.getFluid()) {
-								check = !sensitive || f.amount == Fluid.BUCKET_VOLUME;
+				if (target.apply(slot)) {
+					if (target != Ingredient.EMPTY && target.getMatchingStacks().length == 1) {
+						ItemStack stack = target.getMatchingStacks()[0];
+						if (!DCUtil.isEmpty(stack) && !DCUtil.isEmpty(slot)) {
+							if (stack.getItem() == ForgeModContainer.getInstance().universalBucket
+									&& slot.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+								IFluidHandler handler = slot
+										.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+								FluidStack f = handler.drain(Fluid.BUCKET_VOLUME, false);
+								IFluidHandler handler2 = stack
+										.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+								FluidStack f2 = handler2.drain(Fluid.BUCKET_VOLUME, false);
+								if (f != null && f2 != null && f.getFluid() == f2.getFluid()) {
+									return !sensitive || f.amount == f2.amount;
+								}
+							}
+							if (stack.hasTagCompound()) {
+								if (!slot.hasTagCompound()) {
+									return false;
+								}
+								NBTTagCompound tag = stack.getTagCompound();
+								NBTTagCompound slotTag = slot.getTagCompound();
+								if (!tag.equals(slotTag)) {
+									return false;
+								}
 							}
 						}
-						if (!check) {
-							return false;
-						}
-					} else if (OreDictionary.itemMatches(target.getMatchingStacks()[0], slot, false)) {
-						if (stack.hasTagCompound()) {
-							if (!slot.hasTagCompound()) {
-								return false;
-							}
-							NBTTagCompound tag = stack.getTagCompound();
-							NBTTagCompound slotTag = slot.getTagCompound();
-							if (tag.equals(slotTag)) {
-								return false;
-							}
-						}
-					} else {
-						return false;
 					}
 				} else {
-					boolean matched = false;
-
-					Iterator<ItemStack> itr = ((List<ItemStack>) target).iterator();
-					while (itr.hasNext() && !matched) {
-						matched = OreDictionary.itemMatches(itr.next(), slot, false);
-					}
-
-					if (!matched) {
-						return false;
-					}
+					return false;
 				}
 			}
 		}
@@ -165,6 +147,18 @@ public class ShapedNBTRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
 
 	public NonNullList<Ingredient> getInput() {
 		return this.input;
+	}
+
+	@Override
+	@Nonnull
+	public NonNullList<Ingredient> getIngredients() {
+		return this.input;
+	}
+
+	@Override
+	@Nonnull
+	public String getGroup() {
+		return this.group == null ? "" : this.group.toString();
 	}
 
 	public int getWidth() {
@@ -184,6 +178,16 @@ public class ShapedNBTRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
 	@Override
 	public boolean canFit(int w, int h) {
 		return w >= width && h >= height;
+	}
+
+	@Override
+	public int getRecipeWidth() {
+		return this.width;
+	}
+
+	@Override
+	public int getRecipeHeight() {
+		return this.height;
 	}
 
 }
