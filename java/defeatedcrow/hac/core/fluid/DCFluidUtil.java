@@ -117,7 +117,7 @@ public class DCFluidUtil {
 			boolean loose = false;
 			ItemStack ret = ItemStack.EMPTY;
 
-			int max = dummy.getTankProperties()[0].getCapacity();
+			int max = Math.min(dummy.getTankProperties()[0].getCapacity(), tank.getCapacity());
 			FluidStack fc = dummy.drain(max, false);
 			// 流入の場合
 			if (fc != null && fc.amount > 0 && tank.canFillTarget(fc)) {
@@ -126,13 +126,13 @@ public class DCFluidUtil {
 				boolean b = false;
 				int rem = tank.getCapacity() - tank.getFluidAmount();
 				fc = dummy.drain(rem, false);
-				if (fc != null && fc.amount <= rem) {
+				if (fc != null) {
 					FluidStack fill = null;
 					fill = dummy.drain(rem, true);
 					ret = dummy.getContainer();
 
 					if (fill != null
-							&& (DCUtil.isEmpty(ret) || inv.isItemStackable(ret, inv.getStackInSlot(slot2)) > 0)) {
+							&& (DCUtil.isEmpty(ret) || DCUtil.isEmpty(out) || inv.isItemStackable(ret, out) > 0)) {
 						loose = true;
 						tank.fill(fill, true);
 					}
@@ -174,7 +174,7 @@ public class DCFluidUtil {
 			int rem = max;
 			if (fc == null || fc.amount == 0) {
 				b = true;
-			} else {
+			} else if (tank.getFluidType() == fc.getFluid()) {
 				rem = max - fc.amount;
 				if (tank.getFluidAmount() <= rem) {
 					b = true;
@@ -187,7 +187,7 @@ public class DCFluidUtil {
 				fill = dummy.fill(drain, true);
 				ret = dummy.getContainer();
 
-				if (fill > 0 && (DCUtil.isEmpty(ret) || inv.isItemStackable(ret, inv.getStackInSlot(slot2)) > 0)) {
+				if (fill > 0 && (DCUtil.isEmpty(ret) || DCUtil.isEmpty(out) || inv.isItemStackable(ret, out) > 0)) {
 					loose = true;
 					tank.drain(fill, true);
 				}
