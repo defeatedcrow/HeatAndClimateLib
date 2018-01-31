@@ -164,9 +164,7 @@ public class LivingEventDC {
 					// mobごとの特性
 					if (isCold) {
 						float adj = DamageAPI.resistantData.getColdResistant(living);
-						if (adj != 0F) {
-							prev += adj;
-						}
+						prev += adj;
 						if (living.isPotionActive(DCInit.prevFreeze)) {
 							prev += 4.0F;
 						}
@@ -178,9 +176,7 @@ public class LivingEventDC {
 						}
 					} else {
 						float adj = DamageAPI.resistantData.getHeatResistant(living);
-						if (adj != 0F) {
-							prev += adj;
-						}
+						prev += adj;
 						if (living.isPotionActive(MobEffects.FIRE_RESISTANCE)) {
 							prev += 2.0F;
 						}

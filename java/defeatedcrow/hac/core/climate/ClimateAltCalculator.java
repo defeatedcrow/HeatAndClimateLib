@@ -470,7 +470,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		boolean hasBlow = false;
 
 		// biomeベース通気 -> 屋内ではNORMALになる
-		if (!hasRoof(world, pos)) {
+		if (!hasRoof2(world, pos)) {
 			if (pos.getY() > 135) {
 				air = DCAirflow.WIND;
 				hasWind = true;
@@ -560,5 +560,43 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			pos2 = pos2.up();
 		}
 		return false;
+	}
+
+	boolean hasRoof2(World world, BlockPos pos) {
+		int count = 0;
+		int lim = 16;
+		if (!world.provider.hasSkyLight()) {
+			lim = 8;
+		}
+		boolean end = false;
+		for (int i = 1; i <= lim; i++) {
+			if (pos.getY() + i > 254)
+				break;
+
+			BlockPos p2 = pos.up(i);
+			IBlockState state = world.getBlockState(p2);
+			Block block = world.getBlockState(p2).getBlock();
+			if (!world.isAirBlock(p2) && (block.getLightOpacity(state, world, p2) > 0.0F
+					|| state.getMobilityFlag() == EnumPushReaction.BLOCK)) {
+				break;
+			} else {
+				count++;
+			}
+		}
+		for (int i = 0; i <= lim; i++) {
+			if (pos.getY() - i < 1)
+				break;
+
+			BlockPos p2 = pos.down(i);
+			IBlockState state = world.getBlockState(p2);
+			Block block = world.getBlockState(p2).getBlock();
+			if (!world.isAirBlock(p2) && (block.getLightOpacity(state, world, p2) > 0.0F
+					|| state.getMobilityFlag() == EnumPushReaction.BLOCK)) {
+				break;
+			} else {
+				count++;
+			}
+		}
+		return count < lim;
 	}
 }
