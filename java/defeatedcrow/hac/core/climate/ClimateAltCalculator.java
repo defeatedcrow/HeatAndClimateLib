@@ -577,7 +577,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			IBlockState state = world.getBlockState(p2);
 			Block block = world.getBlockState(p2).getBlock();
 			if (!world.isAirBlock(p2) && (block.getLightOpacity(state, world, p2) > 0.0F
-					|| state.getMobilityFlag() == EnumPushReaction.BLOCK)) {
+					|| state.getMobilityFlag() == EnumPushReaction.NORMAL)) {
 				break;
 			} else {
 				count++;
@@ -591,7 +591,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			IBlockState state = world.getBlockState(p2);
 			Block block = world.getBlockState(p2).getBlock();
 			if (!world.isAirBlock(p2) && (block.getLightOpacity(state, world, p2) > 0.0F
-					|| state.getMobilityFlag() == EnumPushReaction.BLOCK)) {
+					|| state.getMobilityFlag() == EnumPushReaction.NORMAL)) {
 				break;
 			} else {
 				count++;
