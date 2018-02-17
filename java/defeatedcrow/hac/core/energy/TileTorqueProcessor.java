@@ -36,11 +36,15 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	private int lastBurn = 0;
 	private int tickCount = 5;
 
+	public int getMaxTickCount() {
+		return 5;
+	}
+
 	@Override
 	protected void onServerUpdate() {
 		super.onServerUpdate();
 		if (tickCount <= 0) {
-			tickCount = 5;
+			tickCount = getMaxTickCount();
 			// 完了処理
 			if (this.maxBurnTime > 0) {
 				if (this.currentBurnTime >= this.maxBurnTime) {

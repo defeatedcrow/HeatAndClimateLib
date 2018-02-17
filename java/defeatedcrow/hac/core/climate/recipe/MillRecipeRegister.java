@@ -38,6 +38,10 @@ public class MillRecipeRegister implements IMillRecipeRegister {
 				DCLogger.infoLog("MillRecipe Accepted empty input: " + input);
 				return;
 			}
+			if (input instanceof List && ((List) input).isEmpty()) {
+				DCLogger.infoLog("MillRecipe Accepted empty input list");
+				return;
+			}
 			list.add(new MillRecipe(output, secondary, secondaryChance, input));
 		}
 	}

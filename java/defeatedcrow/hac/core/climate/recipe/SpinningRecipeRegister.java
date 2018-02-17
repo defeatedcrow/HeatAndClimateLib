@@ -36,6 +36,10 @@ public class SpinningRecipeRegister implements ISpinningRecipeRegister {
 				DCLogger.infoLog("SpinningRecipe Accepted empty input: " + input);
 				return;
 			}
+			if (input instanceof List && ((List) input).isEmpty()) {
+				DCLogger.infoLog("SpinningRecipe Accepted empty input list");
+				return;
+			}
 			list.add(new SpinningRecipe(output, count, input));
 		}
 	}

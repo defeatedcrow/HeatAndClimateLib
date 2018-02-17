@@ -93,6 +93,10 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 				DCLogger.infoLog("ClimateSmelting Accepted empty input: " + input);
 				return;
 			}
+			if (input instanceof List && ((List) input).isEmpty()) {
+				DCLogger.infoLog("ClimateSmelting Accepted empty input list");
+				return;
+			}
 			if (secondary == null) {
 				secondary = ItemStack.EMPTY;
 			}

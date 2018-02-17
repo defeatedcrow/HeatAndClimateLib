@@ -34,6 +34,8 @@ public interface ICrusherRecipe {
 	@Nullable
 	FluidStack getOutputFluid();
 
+	float getChance();
+
 	float getSecondaryChance();
 
 	float getTertialyChance();

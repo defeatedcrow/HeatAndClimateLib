@@ -161,7 +161,7 @@ public class BlockUpdateDC {
 
 			// ハードモード
 			if (CoreConfigDC.harderVanilla) {
-				if (clm.getHeat().getTier() >= DCHeatTier.SMELTING.getTier()) {
+				if (clm.getHeat().getTier() > DCHeatTier.SMELTING.getTier()) {
 
 					if (clm.getHeat() == DCHeatTier.INFERNO) {
 						// 融解

@@ -49,25 +49,31 @@ public class CrusherRecipeRegister implements ICrusherRecipeRegister {
 				DCLogger.infoLog("CrusherRecipe Accepted empty input: " + input);
 				return;
 			}
-			list.add(new CrusherRecipe(output, secondary, secondaryChance, tertialy, tertialyChance, outputFluid,
+			if (input instanceof List && ((List) input).isEmpty()) {
+				DCLogger.infoLog("CrusherRecipe Accepted empty input list");
+				return;
+			}
+			list.add(new CrusherRecipe(output, 1F, secondary, secondaryChance, tertialy, tertialyChance, outputFluid,
 					catalyst, input));
 		}
 	}
 
 	@Override
-	public void addRecipe(ItemStack output, ItemStack secondary, ItemStack tertialy, ItemStack catalyst, Object input) {
-		addRecipe(output, secondary, 1.0F, tertialy, 1.0F, null, catalyst, input);
+	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, ItemStack tertialy,
+			float tertialyChance, ItemStack catalyst, Object input) {
+		addRecipe(output, secondary, secondaryChance, tertialy, tertialyChance, null, catalyst, input);
 	}
 
 	@Override
-	public void addRecipe(ItemStack output, ItemStack secondary, FluidStack outputFluid, ItemStack catalyst,
+	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, FluidStack outputFluid,
+			ItemStack catalyst, Object input) {
+		addRecipe(output, secondary, secondaryChance, ItemStack.EMPTY, 0.0F, outputFluid, catalyst, input);
+	}
+
+	@Override
+	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, ItemStack catalyst,
 			Object input) {
-		addRecipe(output, secondary, 1.0F, ItemStack.EMPTY, 0.0F, outputFluid, catalyst, input);
-	}
-
-	@Override
-	public void addRecipe(ItemStack output, ItemStack secondary, ItemStack catalyst, Object input) {
-		addRecipe(output, secondary, 1.0F, ItemStack.EMPTY, 0.0F, null, catalyst, input);
+		addRecipe(output, secondary, secondaryChance, ItemStack.EMPTY, 0.0F, null, catalyst, input);
 	}
 
 	@Override

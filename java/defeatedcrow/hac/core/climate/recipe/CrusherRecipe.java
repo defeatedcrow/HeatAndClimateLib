@@ -21,13 +21,15 @@ public class CrusherRecipe implements ICrusherRecipe {
 	private final ItemStack tertialy;
 	private final ItemStack catalyst;
 	private final FluidStack outputF;
+	private final float chance0;
 	private final float chance1;
 	private final float chance2;
 
-	public CrusherRecipe(ItemStack o, ItemStack s, float c1, ItemStack t, float c2, FluidStack oF, ItemStack cat,
-			Object i) {
+	public CrusherRecipe(ItemStack o, float c0, ItemStack s, float c1, ItemStack t, float c2, FluidStack oF,
+			ItemStack cat, Object i) {
 		input = i;
 		output = o;
+		chance0 = c0;
 		secondary = s;
 		chance1 = c1;
 		tertialy = t;
@@ -82,6 +84,11 @@ public class CrusherRecipe implements ICrusherRecipe {
 	@Override
 	public FluidStack getOutputFluid() {
 		return outputF;
+	}
+
+	@Override
+	public float getChance() {
+		return chance0;
 	}
 
 	@Override

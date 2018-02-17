@@ -35,11 +35,13 @@ public interface ICrusherRecipeRegister {
 	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, ItemStack tertialy,
 			float tertialyChance, FluidStack outputFluid, ItemStack catalyst, Object input);
 
-	void addRecipe(ItemStack output, ItemStack secondary, ItemStack tertialy, ItemStack catalyst, Object input);
+	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, ItemStack tertialy,
+			float tertialyChance, ItemStack catalyst, Object input);
 
-	void addRecipe(ItemStack output, ItemStack secondary, FluidStack outputFluid, ItemStack catalyst, Object input);
+	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, FluidStack outputFluid,
+			ItemStack catalyst, Object input);
 
-	void addRecipe(ItemStack output, ItemStack secondary, ItemStack catalyst, Object input);
+	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, ItemStack catalyst, Object input);
 
 	void addRecipe(ItemStack output, ItemStack catalyst, Object input);
 
