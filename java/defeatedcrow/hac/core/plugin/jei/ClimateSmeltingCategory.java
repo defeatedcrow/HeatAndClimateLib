@@ -55,7 +55,6 @@ public class ClimateSmeltingCategory implements IRecipeCategory {
 
 	@Override
 	public IDrawable getIcon() {
-		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 

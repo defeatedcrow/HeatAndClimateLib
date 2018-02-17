@@ -291,10 +291,10 @@ public class ReactorRecipe implements IReactorRecipe {
 				boolean b4 = false;
 				boolean b3 = false;
 				for (ItemStack get : items) {
-					if (!DCUtil.isEmpty(getOutput()) || DCUtil.isStackable(getOutput(), get)) {
+					if (DCUtil.isEmpty(getOutput()) || DCUtil.isStackable(getOutput(), get)) {
 						b4 = true;
 					}
-					if (!DCUtil.isEmpty(getSecondary()) || DCUtil.isStackable(getSecondary(), get)) {
+					if (DCUtil.isEmpty(getSecondary()) || DCUtil.isStackable(getSecondary(), get)) {
 						b3 = true;
 					}
 				}

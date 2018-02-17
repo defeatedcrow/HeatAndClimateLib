@@ -6,8 +6,10 @@ import java.util.List;
 import defeatedcrow.hac.api.recipe.IMillRecipe;
 import defeatedcrow.hac.api.recipe.IMillRecipeRegister;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class MillRecipeRegister implements IMillRecipeRegister {
 
@@ -32,6 +34,10 @@ public class MillRecipeRegister implements IMillRecipeRegister {
 			secondary = ItemStack.EMPTY;
 		}
 		if (input != null && !DCUtil.isEmpty(output)) {
+			if (input instanceof String && OreDictionary.getOres((String) input).isEmpty()) {
+				DCLogger.infoLog("MillRecipe Accepted empty input: " + input);
+				return;
+			}
 			list.add(new MillRecipe(output, secondary, secondaryChance, input));
 		}
 	}

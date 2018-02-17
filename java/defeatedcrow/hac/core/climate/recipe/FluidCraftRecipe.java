@@ -263,10 +263,10 @@ public class FluidCraftRecipe implements IFluidRecipe {
 				boolean b2 = false;
 				boolean b3 = false;
 				for (ItemStack get : items) {
-					if (!DCUtil.isEmpty(getOutput()) || DCUtil.isStackable(getOutput(), get)) {
+					if (DCUtil.isEmpty(getOutput()) || DCUtil.isStackable(getOutput(), get)) {
 						b2 = true;
 					}
-					if (!DCUtil.isEmpty(getSecondary()) || DCUtil.isStackable(getSecondary(), get)) {
+					if (DCUtil.isEmpty(getSecondary()) || DCUtil.isStackable(getSecondary(), get)) {
 						b3 = true;
 					}
 				}

@@ -45,7 +45,7 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 	public void drawInfo(Minecraft mc, int wid, int hei, int mouseX, int mouseY) {
 		int chance = DCUtil.isEmpty(rec.getSecondary()) ? 0 : (int) (rec.getSecondaryChance() * 100);
 		if (chance > 0) {
-			mc.fontRenderer.drawString(chance + "%", 118, 20, 0x0099FF, false);
+			mc.fontRenderer.drawString(chance + "%", 118, 2, 0x0099FF, false);
 		}
 	}
 
@@ -54,7 +54,7 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 		List<String> s = new ArrayList<String>();
 
 		if (x > 118 && x < 132) {
-			if (y > 14 && y < 30) {
+			if (y > 10 && y < 28) {
 				int i = (int) (rec.getSecondaryChance() * 100);
 				if (DCUtil.isEmpty(rec.getSecondary()) || i == 0) {
 					s.add("NO SECONDARY OUTPUT");

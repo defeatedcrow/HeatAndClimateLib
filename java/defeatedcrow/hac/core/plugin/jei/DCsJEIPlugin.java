@@ -6,6 +6,7 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
+import defeatedcrow.hac.core.climate.recipe.CrusherRecipe;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
 import defeatedcrow.hac.core.climate.recipe.MillRecipe;
 import defeatedcrow.hac.core.climate.recipe.ReactorRecipe;
@@ -43,7 +44,8 @@ public class DCsJEIPlugin implements IModPlugin {
 		registry.addRecipeCategories(new ClimateBiomeCategory(guiHelper), new ClimateEffectiveCategory(guiHelper),
 				new ClimateSmeltingCategory(guiHelper), new SpinningRecipeCategory(guiHelper),
 				new MillRecipeCategory(guiHelper), new FluidRecipeCategory(guiHelper),
-				new ReactorRecipeCategory(guiHelper), new ClimateCropCategory(guiHelper));
+				new ReactorRecipeCategory(guiHelper), new ClimateCropCategory(guiHelper),
+				new CrusherRecipeCategory(guiHelper));
 	}
 
 	@Override
@@ -58,6 +60,7 @@ public class DCsJEIPlugin implements IModPlugin {
 		registry.handleRecipes(FluidCraftRecipe.class, recipe -> new FluidRecipeWrapper(recipe), FLUID_UID);
 		registry.handleRecipes(ReactorRecipe.class, recipe -> new ReactorRecipeWrapper(recipe), REACTOR_UID);
 		registry.handleRecipes(SpinningRecipe.class, recipe -> new SpinningRecipeWrapper(recipe), SPINNING_UID);
+		registry.handleRecipes(CrusherRecipe.class, recipe -> new CrusherRecipeWrapper(recipe), CRUSHER_UID);
 
 		ClimateEffectiveMaker.register(registry);
 		ClimateBiomeMaker.register(registry);
@@ -67,6 +70,7 @@ public class DCsJEIPlugin implements IModPlugin {
 		ReactorRecipeMaker.register(registry);
 		MillRecipeMaker.register(registry);
 		SpinningRecipeMaker.register(registry);
+		CrusherRecipeMaker.register(registry);
 
 		registry.handleRecipes(ShapedNBTRecipe.class, recipe -> new ShapedNBTWrapper(jeiHelpers, recipe),
 				VanillaRecipeCategoryUid.CRAFTING);
@@ -105,6 +109,11 @@ public class DCsJEIPlugin implements IModPlugin {
 				registry.addRecipeCatalyst(item, CROP_UID);
 			}
 		}
+		if (!DCsJEIPluginLists.crusher.isEmpty()) {
+			for (ItemStack item : DCsJEIPluginLists.crusher) {
+				registry.addRecipeCatalyst(item, CRUSHER_UID);
+			}
+		}
 
 		if (!DCsJEIPluginLists.excluder.isEmpty()) {
 			for (ItemStack item : DCsJEIPluginLists.excluder) {
@@ -135,6 +144,7 @@ public class DCsJEIPlugin implements IModPlugin {
 	public static final String REACTOR_UID = "dcs_climate.reactor";
 	public static final String SPINNING_UID = "dcs_climate.spinning";
 	public static final String CROP_UID = "dcs_climate.crop";
+	public static final String CRUSHER_UID = "dcs_climate.crusher";
 	public static final String NBT_UID = "dcs_climate.nbt";
 
 }

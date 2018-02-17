@@ -20,6 +20,7 @@ dcs_climate.crop=気候利用作物
 dcs_climate.effective=気候に影響するブロック
 dcs_climate.spinning=紡績機
 dcs_climate.biome=バイオーム気候情報
+dcs_climate.crusher=破砕機レシピ
 
 death.attack.dcs_heat=%1$sはこんがり焼き上がった。
 death.attack.dcs_cold=%1$sはシャーベットになった。

@@ -31,6 +31,9 @@ public class SpinningRecipe implements ISpinningRecipe {
 					processedInput.add(new ItemStack(r.getItem(), count, r.getItemDamage()));
 				}
 			}
+		} else if (input instanceof List && !((List) input).isEmpty()) {
+			List<ItemStack> ret = (List<ItemStack>) input;
+			processedInput.addAll(ret);
 		} else if (input instanceof ItemStack) {
 			if (!DCUtil.isEmpty((ItemStack) input)) {
 				processedInput.add(
