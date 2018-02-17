@@ -23,7 +23,7 @@ public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
 
 	/* 設置動作 */
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+	public EnumActionResult onItemUse2(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
 			float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
 		if (player != null && player.isSneaking()) {

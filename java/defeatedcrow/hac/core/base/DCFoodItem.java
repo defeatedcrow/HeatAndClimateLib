@@ -3,7 +3,12 @@ package defeatedcrow.hac.core.base;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import com.google.common.collect.Lists;
+
 import defeatedcrow.hac.core.util.DCUtil;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -13,9 +18,13 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -47,15 +56,6 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	}
 
 	public abstract String[] getNameSuffix();
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab))
-			for (int i = 0; i < getMaxMeta() + 1; i++) {
-				subItems.add(new ItemStack(this, 1, i));
-			}
-	}
 
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase living) {
@@ -152,5 +152,61 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	public ItemStack getFoodContainerItem(ItemStack item) {
 		ItemStack ret = this.getContainerItem(item);
 		return ret;
+	}
+
+	/**
+	 * 移植補助
+	 */
+
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+			float hitX, float hitY, float hitZ) {
+		return this.onItemUse2(player, world, pos, hand, facing, hitX, hitY, hitZ);
+	}
+
+	public EnumActionResult onItemUse2(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+			float hitX, float hitY, float hitZ) {
+		return EnumActionResult.PASS;
+	}
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		return this.onItemRightClick2(world, player, hand);
+	}
+
+	public ActionResult<ItemStack> onItemRightClick2(World world, EntityPlayer player, EnumHand hand) {
+		if (player != null) {
+			ItemStack ret = player.getHeldItem(hand);
+			return new ActionResult(EnumActionResult.PASS, ret);
+		} else {
+			return new ActionResult(EnumActionResult.PASS, ItemStack.EMPTY);
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		if (this.isInCreativeTab(tab)) {
+			List<ItemStack> itms = getSubItemList();
+			subItems.addAll(itms);
+		}
+	}
+
+	public List<ItemStack> getSubItemList() {
+		List<ItemStack> list = Lists.newArrayList();
+		for (int i = 0; i < getMaxMeta() + 1; i++) {
+			list.add(new ItemStack(this, 1, i));
+		}
+		return list;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+		this.addInformation2(stack, world, tooltip);
+	}
+
+	public void addInformation2(ItemStack stack, @Nullable World world, List<String> tooltip) {
+		super.addInformation(stack, world, tooltip, ITooltipFlag.TooltipFlags.NORMAL);
 	}
 }

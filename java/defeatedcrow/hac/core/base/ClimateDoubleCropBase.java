@@ -23,7 +23,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -38,7 +37,6 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -51,7 +49,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * IGrowableによる骨粉イベント対応、右クリック収穫機能を持つ。
  * 8段階、2ブロック作物版
  */
-public abstract class ClimateDoubleCropBase extends Block
+public abstract class ClimateDoubleCropBase extends BlockDC
 		implements ISidedTexture, INameSuffix, IClimateCrop, IRapidCollectables, IGrowable {
 
 	protected static final AxisAlignedBB CROP_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
@@ -60,8 +58,7 @@ public abstract class ClimateDoubleCropBase extends Block
 	public static final String CL_TEX = "dcs_climate:blocks/clear";
 
 	public ClimateDoubleCropBase(Material material, String s, int max) {
-		super(material);
-		this.setUnlocalizedName(s);
+		super(material, s);
 		this.setTickRandomly(true);
 		this.setDefaultState(
 				this.blockState.getBaseState().withProperty(DCState.STAGE8, 0).withProperty(DCState.DOUBLE, false));
@@ -94,9 +91,10 @@ public abstract class ClimateDoubleCropBase extends Block
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		if (DCUtil.machCreativeTab(tab, getCreativeTabToDisplayOn()))
-			list.add(new ItemStack(this, 1, getGrownMetadata()));
+	public List<ItemStack> getSubItemList() {
+		List<ItemStack> list = super.getSubItemList();
+		list.add(new ItemStack(this, 1, getGrownMetadata()));
+		return list;
 	}
 
 	public int getGrownMetadata() {
@@ -106,7 +104,7 @@ public abstract class ClimateDoubleCropBase extends Block
 	/* Block動作 */
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
+	public boolean onRightClick(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (player != null) {
 			IBlockState crop = world.getBlockState(pos);
@@ -184,7 +182,7 @@ public abstract class ClimateDoubleCropBase extends Block
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos from) {
+	public void onNeighborChange(IBlockState state, World world, BlockPos pos, Block block, BlockPos from) {
 		if (!this.canBlockStay(world, pos, state)) {
 			world.destroyBlock(pos, true);
 		} else {
@@ -195,9 +193,9 @@ public abstract class ClimateDoubleCropBase extends Block
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-			float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		IBlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
+	public IBlockState getPlaceState(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
+			int meta, EntityLivingBase placer, EnumHand hand) {
+		IBlockState state = super.getPlaceState(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
 		boolean db = this.isDouble(state, world, pos);
 		state = state.withProperty(DCState.DOUBLE, db);
 		return state;

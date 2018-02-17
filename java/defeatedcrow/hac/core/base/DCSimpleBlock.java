@@ -1,23 +1,18 @@
 package defeatedcrow.hac.core.base;
 
+import java.util.List;
 import java.util.Random;
 
 import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.placeable.ISidedTexture;
-import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -37,8 +32,7 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 	public final boolean forceUpdate;
 
 	public DCSimpleBlock(Material m, String s, int max, boolean force) {
-		super(m, force);
-		this.setUnlocalizedName(s);
+		super(m, s, force);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.TYPE16, 0));
@@ -66,15 +60,6 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		return false;
-	}
-
-	@Override
-	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED;
@@ -86,11 +71,12 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		if (DCUtil.machCreativeTab(tab, getCreativeTabToDisplayOn()))
-			for (int i = 0; i < maxMeta + 1; i++) {
-				list.add(new ItemStack(this, 1, i));
-			}
+	public List<ItemStack> getSubItemList() {
+		List<ItemStack> list = super.getSubItemList();
+		for (int i = 0; i < maxMeta + 1; i++) {
+			list.add(new ItemStack(this, 1, i));
+		}
+		return list;
 	}
 
 	// 設置・破壊処理
