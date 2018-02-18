@@ -134,20 +134,20 @@ public class CrusherRecipe implements ICrusherRecipe {
 
 		if (b1) {
 			if (target != null && !target.isEmpty()) {
-				int b2 = DCUtil.isEmpty(getOutput()) ? 0 : -1;
-				int b3 = DCUtil.isEmpty(getSecondary()) ? 0 : -1;
-				int b4 = DCUtil.isEmpty(getTertialy()) ? 0 : -1;
+				int b2 = DCUtil.isEmpty(getOutput()) ? -1 : -2;
+				int b3 = DCUtil.isEmpty(getSecondary()) ? -1 : -2;
+				int b4 = DCUtil.isEmpty(getTertialy()) ? -1 : -2;
 				for (int i = 0; i < target.size(); i++) {
 					ItemStack get = target.get(i);
-					if (DCUtil.isStackable(getOutput(), get)) {
+					if (b2 < -1 && DCUtil.isStackable(getOutput(), get)) {
 						b2 = i;
 						continue;
 					}
-					if (DCUtil.isStackable(getSecondary(), get)) {
+					if (b3 < -1 && DCUtil.isStackable(getSecondary(), get)) {
 						b3 = i;
 						continue;
 					}
-					if (DCUtil.isStackable(getTertialy(), get)) {
+					if (b4 < -1 && DCUtil.isStackable(getTertialy(), get)) {
 						b3 = i;
 						continue;
 					}
@@ -155,22 +155,22 @@ public class CrusherRecipe implements ICrusherRecipe {
 				if (target.size() < slotsize - 2) {
 					return true;
 				} else if (target.size() == slotsize - 2) {
-					return b2 >= 0 || b3 >= 0 || b4 >= 0;
+					return b2 > -2 || b3 > -2 || b4 > -2;
 				} else {
-					if (b2 >= 0 && b3 >= 0 && b4 >= 0) {
-						boolean b5 = b2 == 0 || (b2 != b3 && b2 != b4);
-						boolean b6 = b3 == 0 || (b3 != b2 && b3 != b4);
-						boolean b7 = b4 == 0 || (b4 != b3 && b4 != b2);
+					if (b2 > -2 || b3 > -2 || b4 > -2) {
+						boolean b5 = b2 == -1 || (b2 != b3 && b2 != b4);
+						boolean b6 = b3 == -1 || (b3 != b2 && b3 != b4);
+						boolean b7 = b4 == -1 || (b4 != b3 && b4 != b2);
 						return b5 && b6 && b7;
 					}
 				}
 			} else {
 				if (slotsize > 2) {
 					return true;
-				} else if (slotsize > 0) {
+				} else if (slotsize > 1) {
 					return DCUtil.isEmpty(getOutput()) || DCUtil.isEmpty(getSecondary());
 				} else {
-					return DCUtil.isEmpty(getOutput()) && DCUtil.isEmpty(getSecondary());
+					return false;
 				}
 			}
 		}
