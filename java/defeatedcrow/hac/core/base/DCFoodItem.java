@@ -161,26 +161,21 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
 			float hitX, float hitY, float hitZ) {
-		return this.onItemUse2(player, world, pos, hand, facing, hitX, hitY, hitZ);
+		return onItemUse2(player, world, pos, hand, facing, hitX, hitY, hitZ);
 	}
 
 	public EnumActionResult onItemUse2(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
 			float hitX, float hitY, float hitZ) {
-		return EnumActionResult.PASS;
+		return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		return this.onItemRightClick2(world, player, hand);
+		return onItemRightClick2(world, player, hand);
 	}
 
 	public ActionResult<ItemStack> onItemRightClick2(World world, EntityPlayer player, EnumHand hand) {
-		if (player != null) {
-			ItemStack ret = player.getHeldItem(hand);
-			return new ActionResult(EnumActionResult.PASS, ret);
-		} else {
-			return new ActionResult(EnumActionResult.PASS, ItemStack.EMPTY);
-		}
+		return super.onItemRightClick(world, player, hand);
 	}
 
 	@Override
@@ -203,7 +198,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-		this.addInformation2(stack, world, tooltip);
+		addInformation2(stack, world, tooltip);
 	}
 
 	public void addInformation2(ItemStack stack, @Nullable World world, List<String> tooltip) {
