@@ -3,15 +3,13 @@ package defeatedcrow.hac.core.base;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
+import defeatedcrow.hac.api.blockstate.DCState;
+import defeatedcrow.hac.api.placeable.ISidedTexture;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
@@ -23,8 +21,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import defeatedcrow.hac.api.blockstate.DCState;
-import defeatedcrow.hac.api.placeable.ISidedTexture;
 
 /*
  * 方向用のメタを一つだけ持つ。
@@ -40,12 +36,11 @@ public class DCSidedBlock extends ClimateBlock implements ISidedTexture, INameSu
 	public final boolean forceUpdate;
 
 	public DCSidedBlock(Material m, String s, int max, boolean force) {
-		super(m, force);
-		this.setUnlocalizedName(s);
+		super(m, s, force);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.FLAG, false)
-				.withProperty(DCState.TYPE8, 0));
+		this.setDefaultState(
+				this.blockState.getBaseState().withProperty(DCState.FLAG, false).withProperty(DCState.TYPE8, 0));
 		if (max < 0 || max > 7)
 			max = 7;
 		this.maxMeta = max;
@@ -72,16 +67,6 @@ public class DCSidedBlock extends ClimateBlock implements ISidedTexture, INameSu
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		return false;
-	}
-
-	@Override
-	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED;
@@ -93,17 +78,19 @@ public class DCSidedBlock extends ClimateBlock implements ISidedTexture, INameSu
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public List<ItemStack> getSubItemList() {
+		List<ItemStack> list = super.getSubItemList();
 		for (int i = 0; i < maxMeta + 1; i++) {
 			list.add(new ItemStack(this, 1, i));
 		}
+		return list;
 	}
 
 	// 設置・破壊処理
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
-			int meta, EntityLivingBase placer) {
-		IBlockState state = super.onBlockPlaced(world, pos, facing, hitX, hitY, hitZ, meta, placer);
+	public IBlockState getPlaceState(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
+			int meta, EntityLivingBase placer, EnumHand hand) {
+		IBlockState state = super.getPlaceState(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
 		boolean face = placer.getHorizontalFacing() == EnumFacing.NORTH
 				|| placer.getHorizontalFacing() == EnumFacing.SOUTH;
 		state = state.withProperty(DCState.FLAG, face);
@@ -157,8 +144,8 @@ public class DCSidedBlock extends ClimateBlock implements ISidedTexture, INameSu
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {
-				DCState.FLAG,
-				DCState.TYPE8 });
+				DCState.FLAG, DCState.TYPE8
+		});
 	}
 
 	/** T, B, N, S, W, E */

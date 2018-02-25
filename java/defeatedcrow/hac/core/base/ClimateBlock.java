@@ -28,12 +28,12 @@ import net.minecraft.world.World;
 /**
  * ClimateSmeltingレシピを持つBlockのテンプレート
  */
-public class ClimateBlock extends Block implements IClimateObject {
+public class ClimateBlock extends BlockDC implements IClimateObject {
 
 	public final boolean forceUpdate;
 
-	public ClimateBlock(Material m, boolean f) {
-		super(m);
+	public ClimateBlock(Material m, String s, boolean f) {
+		super(m, s);
 		forceUpdate = f;
 	}
 
@@ -82,7 +82,7 @@ public class ClimateBlock extends Block implements IClimateObject {
 			if (recipe != null && recipe.additionalRequire(world, pos)) {
 				ItemStack output = recipe.getOutput();
 				if (!DCUtil.isEmpty(output) && output.getItem() instanceof ItemBlock) {
-					Block ret = ((ItemBlock) output.getItem()).block;
+					Block ret = ((ItemBlock) output.getItem()).getBlock();
 					IBlockState retS = ret.getStateFromMeta(output.getMetadata());
 					if (world.setBlockState(pos, retS, 2)) {
 						world.notifyBlockOfStateChange(pos, ret);

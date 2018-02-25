@@ -93,7 +93,7 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 	}
 
 	@Override
-	public List getInputs() {
+	public List<List<ItemStack>> getInputs() {
 		return input;
 	}
 
@@ -141,11 +141,6 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 	}
 
 	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
-	}
-
-	@Override
 	public List<String> getTooltipStrings(int x, int y) {
 		int baseY = 102;
 		List<String> s = new ArrayList<String>();
@@ -183,6 +178,11 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 	@Override
 	public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
 		return false;
+	}
+
+	@Override
+	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
+
 	}
 
 }

@@ -20,6 +20,7 @@ dcs_climate.crop=Climate Crops
 dcs_climate.effective=Climate Effective Tiles
 dcs_climate.spinning=Spinning Machine
 dcs_climate.biome=Biome Climate Data
+dcs_climate.crusher=Crusher Recipe
 
 death.attack.dcs_heat=%1$s was burnt browned.
 death.attack.dcs_cold=%1$s became a sherbet.

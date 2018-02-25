@@ -11,8 +11,10 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.IClimateSmeltingRegister;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 
@@ -87,6 +89,14 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	public void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air,
 			float secondaryChance, boolean cooling, Object input) {
 		if (input != null && !DCUtil.isEmpty(output) && heat != null) {
+			if (input instanceof String && OreDictionary.getOres((String) input).isEmpty()) {
+				DCLogger.infoLog("ClimateSmelting Accepted empty input: " + input);
+				return;
+			}
+			if (input instanceof List && ((List) input).isEmpty()) {
+				DCLogger.infoLog("ClimateSmelting Accepted empty input list");
+				return;
+			}
 			List<ClimateSmelting> list = getRecipeList(heat);
 			list.add(new ClimateSmelting(output, secondary, heat, hum, air, secondaryChance, cooling, input));
 		}
@@ -132,7 +142,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 		} else {
 			int i = clm.getHeat().getTier() < 0 ? 1 : -1;
 			DCHeatTier next = clm.getHeat().addTier(i);
-			list.addAll(getRecipeList(clm.getHeat().addTier(i)));
+			list.addAll(getRecipeList(next));
 		}
 		IClimateSmelting ret = null;
 		if (list.isEmpty()) {} else {

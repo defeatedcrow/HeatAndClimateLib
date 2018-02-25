@@ -159,11 +159,6 @@ public class ClimateSmeltingWrapper implements IRecipeWrapper {
 	}
 
 	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
-	}
-
-	@Override
 	public List<String> getTooltipStrings(int x, int y) {
 		List<String> s = new ArrayList<String>();
 		if (y > 40 && y < 48) {
@@ -202,6 +197,11 @@ public class ClimateSmeltingWrapper implements IRecipeWrapper {
 	@Override
 	public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
 		return false;
+	}
+
+	@Override
+	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
+
 	}
 
 }

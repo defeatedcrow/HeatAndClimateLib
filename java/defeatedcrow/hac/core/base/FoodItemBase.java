@@ -23,10 +23,10 @@ public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
 
 	/* 設置動作 */
 	@Override
-	public EnumActionResult onItemUse(ItemStack stackIn, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse2(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+			float hitX, float hitY, float hitZ) {
+		ItemStack stack = player.getHeldItem(hand);
 		if (player != null && player.isSneaking()) {
-			ItemStack stack = player.getHeldItem(hand);
 			if (!world.isRemote && pos.getY() > 0 && pos.getY() < 255 && player.canPlayerEdit(pos, facing, stack)) {
 				IBlockState state = world.getBlockState(pos);
 				Block block = state.getBlock();
@@ -47,7 +47,7 @@ public abstract class FoodItemBase extends DCFoodItem implements IEntityItem {
 				}
 			}
 		} else {
-			this.onItemRightClick(stackIn, world, player, hand);
+			this.onItemRightClick2(world, player, hand);
 			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.SUCCESS;

@@ -35,12 +35,12 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 	}
 
 	@Override
-	public List getInputs() {
+	public List<ItemStack> getInputs() {
 		return input;
 	}
 
 	@Override
-	public List getOutputs() {
+	public List<ItemStack> getOutputs() {
 		return output;
 	}
 
@@ -58,13 +58,8 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 	public void drawInfo(Minecraft mc, int wid, int hei, int mouseX, int mouseY) {
 		int chance = DCUtil.isEmpty(rec.getSecondary()) ? 0 : (int) (rec.getSecondaryChance() * 100);
 		if (chance > 0) {
-			mc.fontRendererObj.drawString(chance + "%", 118, 20, 0x0099FF, false);
+			mc.fontRendererObj.drawString(chance + "%", 118, 2, 0x0099FF, false);
 		}
-	}
-
-	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
 	}
 
 	@Override
@@ -72,7 +67,7 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 		List<String> s = new ArrayList<String>();
 
 		if (x > 118 && x < 132) {
-			if (y > 14 && y < 30) {
+			if (y > 10 && y < 28) {
 				int i = (int) (rec.getSecondaryChance() * 100);
 				if (DCUtil.isEmpty(rec.getSecondary()) || i == 0) {
 					s.add("NO SECONDARY OUTPUT");
@@ -87,6 +82,11 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 	@Override
 	public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
 		return false;
+	}
+
+	@Override
+	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
+
 	}
 
 }

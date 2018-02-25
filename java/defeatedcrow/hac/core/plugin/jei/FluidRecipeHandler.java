@@ -13,7 +13,6 @@ public class FluidRecipeHandler implements IRecipeHandler<FluidCraftRecipe> {
 		return FluidCraftRecipe.class;
 	}
 
-	@Override
 	public String getRecipeCategoryUid() {
 		return "dcs_climate.fluidcraft";
 	}
@@ -25,7 +24,7 @@ public class FluidRecipeHandler implements IRecipeHandler<FluidCraftRecipe> {
 
 	@Override
 	public boolean isRecipeValid(FluidCraftRecipe recipe) {
-		if (recipe.getProcessedInput() != null) {
+		if (recipe.getProcessedInput() != null && !recipe.getProcessedInput().isEmpty()) {
 			if (recipe.getProcessedInput().size() > 3) {
 				return false;
 			}

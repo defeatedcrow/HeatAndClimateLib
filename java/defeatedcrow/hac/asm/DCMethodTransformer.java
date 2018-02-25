@@ -42,7 +42,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 			try {
 				return hookOnEntitySetAir(name, basicClass);
 			} catch (Exception e) {
-				throw new RuntimeException("failed : DCMethodTransformer loading: Entity#setAir", e);
+				throw new RuntimeException("failed : DCMethodTransformer loading: Entity#isInsideOfMaterial", e);
 			}
 		} else {
 			return basicClass;

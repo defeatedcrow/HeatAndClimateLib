@@ -68,9 +68,11 @@ public class ReactorRecipe implements IReactorRecipe {
 					processedInput.add(ret);
 					inputList.add(inputs[i]);
 				} else if (inputs[i] instanceof ItemStack) {
-					ItemStack ret = ((ItemStack) inputs[i]).copy();
-					processedInput.add(ret);
-					inputList.add(ret);
+					if (!DCUtil.isEmpty((ItemStack) inputs[i])) {
+						ItemStack ret = ((ItemStack) inputs[i]).copy();
+						processedInput.add(ret);
+						inputList.add(ret);
+					}
 				} else if (inputs[i] instanceof Item) {
 					ItemStack ret = new ItemStack((Item) inputs[i], 1, 0);
 					processedInput.add(ret);
@@ -213,7 +215,7 @@ public class ReactorRecipe implements IReactorRecipe {
 			for (int x = 0; x < items.size(); x++) {
 				ItemStack slot = items.get(x);
 
-				if (slot != null) {
+				if (!DCUtil.isEmpty(slot)) {
 					boolean inRecipe = false;
 					Iterator<Object> req = required.iterator();
 
@@ -289,10 +291,10 @@ public class ReactorRecipe implements IReactorRecipe {
 				boolean b4 = false;
 				boolean b3 = false;
 				for (ItemStack get : items) {
-					if (!DCUtil.isEmpty(getOutput()) || DCUtil.isStackable(getOutput(), get)) {
+					if (DCUtil.isEmpty(getOutput()) || DCUtil.isStackable(getOutput(), get)) {
 						b4 = true;
 					}
-					if (!DCUtil.isEmpty(getSecondary()) || DCUtil.isStackable(getSecondary(), get)) {
+					if (DCUtil.isEmpty(getSecondary()) || DCUtil.isStackable(getSecondary(), get)) {
 						b3 = true;
 					}
 				}

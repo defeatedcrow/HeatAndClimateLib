@@ -11,6 +11,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IFluidRecipe;
 import defeatedcrow.hac.api.recipe.IFluidRecipeRegister;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -88,7 +89,7 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 			DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling, FluidStack inFluid, Object... input) {
 		List<FluidCraftRecipe> list = getRecipeList(heat);
 		boolean b1 = input == null && inFluid == null;
-		boolean b2 = output == null && outFluid == null;
+		boolean b2 = DCUtil.isEmpty(output) && outFluid == null;
 		if (!b1 && !b2) {
 			list.add(new FluidCraftRecipe(output, secondary, outFluid, heat, hum, air, secondaryChance, needCooling,
 					inFluid, input));

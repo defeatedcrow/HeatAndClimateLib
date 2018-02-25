@@ -17,6 +17,11 @@ public class ClimateBiomeHandler implements IRecipeHandler<Biome> {
 	}
 
 	@Override
+	public String getRecipeCategoryUid(Biome recipe) {
+		return "dcs_climate.biome";
+	}
+
+	@Override
 	public IRecipeWrapper getRecipeWrapper(Biome recipe) {
 		return new ClimateBiomeWrapper(recipe);
 	}
@@ -24,11 +29,6 @@ public class ClimateBiomeHandler implements IRecipeHandler<Biome> {
 	@Override
 	public boolean isRecipeValid(Biome recipe) {
 		return recipe != null;
-	}
-
-	@Override
-	public String getRecipeCategoryUid(Biome recipe) {
-		return getRecipeCategoryUid();
 	}
 
 }

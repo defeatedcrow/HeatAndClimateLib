@@ -247,7 +247,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		double d0 = x - blockpos.getX();
 		double d1 = y - blockpos.getY();
 		double d2 = z - blockpos.getZ();
-		List<AxisAlignedBB> list = this.worldObj.getCollisionBoxes(this.getEntityBoundingBox());
+		List<AxisAlignedBB> list = this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox());
 
 		if (list.isEmpty()) {
 			return false;
@@ -500,7 +500,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 	@Override
 	public boolean doCollect(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack tool) {
-		if (!worldObj.isRemote && !DCUtil.isEmpty(getDropItem())) {
+		if (!world.isRemote && !DCUtil.isEmpty(getDropItem())) {
 			this.dropAndDeath(player.getPosition());
 			return true;
 		}

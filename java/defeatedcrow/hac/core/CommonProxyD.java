@@ -12,7 +12,6 @@ import defeatedcrow.hac.core.event.LivingHurtDC;
 import defeatedcrow.hac.core.event.SuffocationEventDC;
 import defeatedcrow.hac.core.event.TickEventDC;
 import defeatedcrow.hac.core.packet.HaCPacket;
-import defeatedcrow.hac.core.util.DCPotion;
 import defeatedcrow.hac.core.util.PotionFreezeResistance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
@@ -24,7 +23,6 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 public class CommonProxyD {
 
 	public void loadMaterial() {
-		DCPotion.init();
 		DCMaterialReg.load();
 
 		DCInit.prevFreeze = new PotionFreezeResistance().setRegistryName(ClimateCore.MOD_ID, "dcs.potion.freeze_res");

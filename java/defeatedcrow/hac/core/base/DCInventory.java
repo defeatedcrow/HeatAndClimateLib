@@ -62,9 +62,6 @@ public class DCInventory implements IInventory {
 		if (!DCUtil.isEmpty(getStackInSlot(i))) {
 			ItemStack itemstack;
 			itemstack = getStackInSlot(i).splitStack(num);
-			if (getStackInSlot(i).stackSize <= 0) {
-				inv[i] = null;
-			}
 			return itemstack;
 		} else
 			return null;
@@ -76,13 +73,12 @@ public class DCInventory implements IInventory {
 		if (i < 0 || i >= this.getSizeInventory()) {
 			return;
 		} else {
-			if (DCUtil.isEmpty(stack)) {
-				stack = null;
-			} else if (stack.stackSize > this.getInventoryStackLimit()) {
-				stack.stackSize = getInventoryStackLimit();
-			}
 
 			inv[i] = stack;
+
+			if (!DCUtil.isEmpty(stack) && stack.stackSize > this.getInventoryStackLimit()) {
+				stack.stackSize = getInventoryStackLimit();
+			}
 
 			this.markDirty();
 		}
@@ -238,6 +234,15 @@ public class DCInventory implements IInventory {
 		}
 		tag.setTag("InvItems", nbttaglist);
 		return tag;
+	}
+
+	public boolean isEmpty() {
+		boolean flag = true;
+		for (ItemStack item : inv) {
+			if (!DCUtil.isEmpty(item))
+				flag = false;
+		}
+		return flag;
 	}
 
 }

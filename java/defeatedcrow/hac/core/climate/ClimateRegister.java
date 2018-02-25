@@ -211,7 +211,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		if (clm != null) {
 			return clm.getAirflow();
 		}
-		if (b != null && (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.MOUNTAIN)
+		if (b != null && (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.HILLS)
 				|| BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.HILLS))) {
 			return DCAirflow.FLOW;
 		}

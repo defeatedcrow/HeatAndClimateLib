@@ -20,7 +20,7 @@ public class MillRecipeCategory implements IRecipeCategory {
 
 	public MillRecipeCategory(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_mill_gui_jei.png");
-		background = guiHelper.createDrawable(location, 8, 5, 160, 66, 3, 0, 0, 0);
+		background = guiHelper.createDrawable(location, 10, 20, 150, 40, 0, 0, 0, 0);
 	}
 
 	@Override
@@ -42,18 +42,7 @@ public class MillRecipeCategory implements IRecipeCategory {
 	public void drawExtras(Minecraft mc) {}
 
 	@Override
-	public void drawAnimations(Minecraft minecraft) {
-
-	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-		setRecipe(recipeLayout, recipeWrapper, null);
-	}
-
-	@Override
 	public IDrawable getIcon() {
-		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 
@@ -64,18 +53,28 @@ public class MillRecipeCategory implements IRecipeCategory {
 		MillRecipeWrapper wrapper = ((MillRecipeWrapper) recipeWrapper);
 		// wrapper.getIngredients(ingredients);
 
-		List inputs = wrapper.getInputs();
-		List outputs = wrapper.getOutputs();
+		List<ItemStack> inputs = wrapper.getInputs();
+		List<ItemStack> outputs = wrapper.getOutputs();
 
-		recipeLayout.getItemStacks().init(0, true, 45, 29);
+		recipeLayout.getItemStacks().init(0, true, 43, 11);
 		recipeLayout.getItemStacks().set(0, inputs);
 
-		recipeLayout.getItemStacks().init(1, false, 97, 29);
-		recipeLayout.getItemStacks().set(1, (ItemStack) outputs.get(0));
+		recipeLayout.getItemStacks().init(1, false, 95, 11);
+		recipeLayout.getItemStacks().set(1, outputs.get(0));
 		if (outputs.size() > 1) {
-			recipeLayout.getItemStacks().init(2, false, 117, 29);
-			recipeLayout.getItemStacks().set(2, (ItemStack) outputs.get(1));
+			recipeLayout.getItemStacks().init(2, false, 115, 11);
+			recipeLayout.getItemStacks().set(2, outputs.get(1));
 		}
+	}
+
+	@Override
+	public void drawAnimations(Minecraft minecraft) {
+
+	}
+
+	@Override
+	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
+		setRecipe(recipeLayout, recipeWrapper, null);
 	}
 
 }

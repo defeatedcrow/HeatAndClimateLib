@@ -30,8 +30,12 @@ public class MillRecipe implements IMillRecipe {
 			List<ItemStack> ret = new ArrayList<ItemStack>();
 			ret.addAll(OreDictionary.getOres((String) input));
 			processedInput.addAll(ret);
+		} else if (input instanceof List && !((List) input).isEmpty()) {
+			List<ItemStack> ret = (List<ItemStack>) input;
+			processedInput.addAll(ret);
 		} else if (input instanceof ItemStack) {
-			processedInput.add(((ItemStack) input).copy());
+			if (!DCUtil.isEmpty((ItemStack) input))
+				processedInput.add(((ItemStack) input).copy());
 		} else if (input instanceof Item) {
 			processedInput.add(new ItemStack((Item) input, 1, 0));
 		} else if (input instanceof Block) {
@@ -69,12 +73,10 @@ public class MillRecipe implements IMillRecipe {
 	public ItemStack getContainerItem(ItemStack item) {
 		if (DCUtil.isEmpty(item)) {
 			return null;
-		} else if (item.getItem().hasContainerItem(item)) {
-			return item.getItem().getContainerItem(item);
 		} else if (!DCUtil.isEmpty(DCFluidUtil.getEmptyCont(item))) {
 			return DCFluidUtil.getEmptyCont(item);
 		} else {
-			return null;
+			return item.getItem().getContainerItem(item);
 		}
 	}
 
@@ -103,30 +105,40 @@ public class MillRecipe implements IMillRecipe {
 	}
 
 	@Override
-	public boolean matchOutput(List<ItemStack> items, ItemStack in, int slotsize) {
+	public boolean matchOutput(List<ItemStack> target, ItemStack in, int slotsize) {
 		// DCLogger.debugLog("in stonemill debug 2");
-		if (items != null && !items.isEmpty()) {
-			int req = 3;
-			for (ItemStack get : items) {
-				if (DCUtil.isEmpty(getOutput()) || DCUtil.isStackable(getOutput(), get)) {
-					req--;
+		if (target != null && !target.isEmpty()) {
+			int b2 = DCUtil.isEmpty(getOutput()) ? -1 : -2;
+			int b3 = DCUtil.isEmpty(getSecondary()) ? -1 : -2;
+			for (int i = 0; i < target.size(); i++) {
+				ItemStack get = target.get(i);
+				if (b2 < -1 && DCUtil.isStackable(getOutput(), get)) {
+					b2 = i;
+					continue;
 				}
-				if (DCUtil.isEmpty(getSecondary()) || DCUtil.isStackable(getSecondary(), get)) {
-					req--;
-				}
-				if (DCUtil.isEmpty(getContainerItem(in)) || DCUtil.isStackable(getContainerItem(in), get)) {
-					req--;
+				if (b3 < -1 && DCUtil.isStackable(getSecondary(), get)) {
+					b3 = i;
+					continue;
 				}
 			}
-			if (items.size() <= slotsize - req) {
-				// DCLogger.debugLog("clear 2");
+			if (target.size() < slotsize - 1) {
 				return true;
+			} else if (target.size() == slotsize - 1) {
+				return b2 > -2 || b3 > -2;
+			} else {
+				if (b2 > -2 && b3 > -2) {
+					return true;
+				}
+			}
+		} else {
+			if (slotsize > 1) {
+				return true;
+			} else if (slotsize > 0) {
+				return DCUtil.isEmpty(getOutput()) || DCUtil.isEmpty(getSecondary());
 			} else {
 				return false;
 			}
-		} else {
-			// DCLogger.debugLog("clear 2");
-			return true;
 		}
+		return false;
 	}
 }

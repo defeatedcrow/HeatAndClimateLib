@@ -47,18 +47,13 @@ public class ClimateBiomeCategory implements IRecipeCategory {
 	public void drawExtras(Minecraft mc) {}
 
 	@Override
-	public void drawAnimations(Minecraft minecraft) {
-
+	public IDrawable getIcon() {
+		return null;
 	}
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
 		setRecipe(recipeLayout, recipeWrapper, null);
-	}
-
-	@Override
-	public IDrawable getIcon() {
-		return null;
 	}
 
 	@Override
@@ -79,6 +74,11 @@ public class ClimateBiomeCategory implements IRecipeCategory {
 		List<DCAirflow> airs = wrapper.getAirs();
 		recipeLayout.getIngredientsGroup(DCAirflow.class).init(0, true, new AirflowRenderer(), 17, 81, 40, 5, 0, 0);
 		recipeLayout.getIngredientsGroup(DCAirflow.class).set(0, airs.get(0));
+
+	}
+
+	@Override
+	public void drawAnimations(Minecraft minecraft) {
 
 	}
 

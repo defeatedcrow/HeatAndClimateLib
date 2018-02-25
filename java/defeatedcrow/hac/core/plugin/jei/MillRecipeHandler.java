@@ -1,8 +1,11 @@
 package defeatedcrow.hac.core.plugin.jei;
 
+import java.util.ArrayList;
+
 import defeatedcrow.hac.core.climate.recipe.MillRecipe;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import net.minecraft.item.ItemStack;
 
 public class MillRecipeHandler implements IRecipeHandler<MillRecipe> {
 
@@ -11,7 +14,6 @@ public class MillRecipeHandler implements IRecipeHandler<MillRecipe> {
 		return MillRecipe.class;
 	}
 
-	@Override
 	public String getRecipeCategoryUid() {
 		return "dcs_climate.mill";
 	}
@@ -23,7 +25,12 @@ public class MillRecipeHandler implements IRecipeHandler<MillRecipe> {
 
 	@Override
 	public boolean isRecipeValid(MillRecipe recipe) {
-		return recipe.getProcessedInput() != null;
+		ArrayList<ItemStack> inputs = new ArrayList<ItemStack>();
+		if (recipe.getProcessedInput() != null) {
+			inputs.addAll(recipe.getProcessedInput());
+			return !inputs.isEmpty();
+		}
+		return false;
 	}
 
 	@Override

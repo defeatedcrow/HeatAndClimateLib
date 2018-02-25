@@ -9,13 +9,13 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.damage.ClimateDamageEvent;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.damage.DamageSourceClimate;
+import defeatedcrow.hac.api.magic.IJewelAmulet;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.packet.MessageCharmKey;
-import defeatedcrow.hac.core.util.DCPotion;
 import defeatedcrow.hac.core.util.DCTimeHelper;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
@@ -51,6 +51,7 @@ public class LivingEventDC {
 	public void onEvent(LivingEvent.LivingUpdateEvent event) {
 		EntityLivingBase living = event.getEntityLiving();
 		if (living != null) {
+
 			if (count == 0) {
 				if (living instanceof EntityPlayer) {
 					this.onPlayerUpdate(event);
@@ -116,6 +117,16 @@ public class LivingEventDC {
 					iterator = null;
 				}
 
+				/* Amulet */
+
+				Map<Integer, ItemStack> charms = DCUtil.getAmulets(living);
+				for (ItemStack item2 : charms.values()) {
+					int m = item2.getMetadata();
+					IJewelAmulet amu = (IJewelAmulet) item2.getItem();
+					amu.constantEffect(living, item2);
+				}
+				charms.clear();
+
 				/* climate damage */
 
 				if (!living.worldObj.isRemote && DCTimeHelper.getCount(living.worldObj) == 0
@@ -131,6 +142,8 @@ public class LivingEventDC {
 					}
 					float dam = Math.abs(heat.getTier()) * 1.0F; // hot 0F ~ 7.0F / cold 0F ~ 4.0F
 					boolean isCold = heat.getTier() < 0;
+					DamageSourceClimate source = isCold ? DamageSourceClimate.climateColdDamage
+							: DamageSourceClimate.climateHeatDamage;
 
 					// 基礎ダメージ
 					if (isCold) {
@@ -152,9 +165,7 @@ public class LivingEventDC {
 					// mobごとの特性
 					if (isCold) {
 						float adj = DamageAPI.resistantData.getColdResistant(living);
-						if (adj != 0F) {
-							prev += adj;
-						}
+						prev += adj;
 						if (living.isPotionActive(DCInit.prevFreeze)) {
 							prev += 4.0F;
 						}
@@ -166,10 +177,8 @@ public class LivingEventDC {
 						}
 					} else {
 						float adj = DamageAPI.resistantData.getHeatResistant(living);
-						if (adj != 0F) {
-							prev += adj;
-						}
-						if (living.isPotionActive(DCPotion.fire_reg)) {
+						prev += adj;
+						if (living.isPotionActive(MobEffects.FIRE_RESISTANCE)) {
 							prev += 2.0F;
 						}
 						if (living.isImmuneToFire()) {
@@ -197,8 +206,6 @@ public class LivingEventDC {
 
 					dam -= prev;
 
-					DamageSourceClimate source = isCold ? DamageSourceClimate.climateColdDamage
-							: DamageSourceClimate.climateHeatDamage;
 					ClimateDamageEvent fireEvent = new ClimateDamageEvent(living, source, heat, dam);
 					float result = fireEvent.result();
 					dam = result;

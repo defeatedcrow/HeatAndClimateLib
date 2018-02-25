@@ -61,6 +61,7 @@ public class ClientProxyD extends CommonProxyD {
 	@Override
 	public void loadInit() {
 		super.loadInit();
+
 		MinecraftForge.EVENT_BUS.register(RenderTempHUDEvent.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new WaterFogEvent());
 	}

@@ -8,6 +8,8 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
+import defeatedcrow.hac.core.recipe.ShapedNBTRecipe;
+import defeatedcrow.hac.core.recipe.ShapelessNBTRecipe;
 import defeatedcrow.hac.core.util.RecipeResources;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockGrass;
@@ -200,11 +202,23 @@ public class DCRecipe {
 	}
 
 	public static void addShapedRecipe(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(result, recipe));
+		ShapedOreRecipe ret = new ShapedOreRecipe(result, recipe);
+		GameRegistry.addRecipe(ret);
 	}
 
 	public static void addShapelessRecipe(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
-		GameRegistry.addRecipe(new ShapelessOreRecipe(result, recipe));
+		ShapelessOreRecipe ret = new ShapelessOreRecipe(result, recipe);
+		GameRegistry.addRecipe(ret);
+	}
+
+	public static void addShapedNBTRecipe(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
+		ShapedNBTRecipe ret = new ShapedNBTRecipe(result, recipe);
+		GameRegistry.addRecipe(ret);
+	}
+
+	public static void addShapelessNBTRecipe(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
+		ShapelessNBTRecipe ret = new ShapelessNBTRecipe(name, result, recipe);
+		GameRegistry.addRecipe(ret);
 	}
 
 }

@@ -18,6 +18,16 @@ dcs_climate.fluidcraft=流体合成
 dcs_climate.reactor=化学反应器
 dcs_climate.crop=气候作物
 dcs_climate.effective=气候效果
+dcs_climate.spinning=纺织机
+dcs_climate.biome=生物群系气候信息
 
 death.attack.dcs_heat=%1$s 被烤的焦黄。
 death.attack.dcs_cold=%1$s 变成了冰冻果子露。
+
+dcs.potion.freeze_resistance=严寒耐性
+dcs.freeze_resistance=严寒耐性
+
+dcs.potion.freeze_res=严寒耐性
+potion.effect.dcs.freeze_res=严寒耐性药水
+splash_potion.effect.dcs.freeze_res=喷溅型严寒耐性药水
+lingering_potion.effect.dcs.freeze_res=滞留型严寒耐性药水

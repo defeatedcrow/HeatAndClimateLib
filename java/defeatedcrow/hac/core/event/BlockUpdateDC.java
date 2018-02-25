@@ -35,6 +35,7 @@ public class BlockUpdateDC {
 			BlockPos p = event.pos;
 			IBlockState st = event.state;
 			Block block = st.getBlock();
+
 			boolean f = true;
 
 			if (block == null || st.getMaterial() == Material.AIR)
@@ -71,14 +72,12 @@ public class BlockUpdateDC {
 						}
 					}
 				} else if (block == Blocks.GRASS) {
-					if (CoreConfigDC.enableVanilla && CoreConfigDC.harderVanilla) {
-						// DRYかつ高温すぎると枯れてしまう
-						IGrowable grow = (IGrowable) block;
-						if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
-							if (clm.getHumidity() == DCHumidity.DRY
-									&& clm.getHeat().getTier() > DCHeatTier.OVEN.getTier()) {
-								event.setCanceled(true);
-							}
+					// DRYかつ高温すぎると枯れてしまう
+					IGrowable grow = (IGrowable) block;
+					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
+						if (clm.getHumidity() == DCHumidity.DRY
+								&& clm.getHeat().getTier() > DCHeatTier.OVEN.getTier()) {
+							event.setCanceled(true);
 						}
 					}
 				} else if (block instanceof IClimateCrop) {
@@ -116,14 +115,14 @@ public class BlockUpdateDC {
 					int r1 = world.rand.nextInt(4);
 					if (clm.getHeat().getTier() == DCHeatTier.ABSOLUTE.getTier()) {
 						world.setBlockState(p, Blocks.PACKED_ICE.getDefaultState(), 2);
-						world.notifyBlockOfStateChange(p, Blocks.PACKED_ICE);
+						world.notifyNeighborsOfStateChange(p, Blocks.PACKED_ICE);
 						event.setCanceled(true);
 						// DCLogger.debugLog("Freeze!!");
 					}
 					event.setCanceled(true);
 				} else if (clm.getHeat().getTier() > 0) {
 					world.setBlockState(p, Blocks.WATER.getDefaultState(), 2);
-					world.notifyBlockOfStateChange(p, Blocks.WATER);
+					world.notifyNeighborsOfStateChange(p, Blocks.WATER);
 					event.setCanceled(true);
 					// DCLogger.debugLog("Melted");
 				}
@@ -152,7 +151,7 @@ public class BlockUpdateDC {
 						int retM = recipe.getOutput().getMetadata();
 						IBlockState ret = retB.getStateFromMeta(retM);
 						world.setBlockState(p, ret, 2);
-						world.notifyBlockOfStateChange(p, ret.getBlock());
+						world.notifyNeighborsOfStateChange(p, ret.getBlock());
 						event.setCanceled(true);
 						f2 = true;
 						// DCLogger.debugLog("Update climate change!");
@@ -161,7 +160,7 @@ public class BlockUpdateDC {
 			}
 
 			// ハードモード
-			if (CoreConfigDC.enableVanilla && CoreConfigDC.harderVanilla) {
+			if (CoreConfigDC.harderVanilla) {
 				if (clm.getHeat().getTier() > DCHeatTier.SMELTING.getTier()) {
 
 					if (clm.getHeat() == DCHeatTier.INFERNO) {
@@ -171,7 +170,7 @@ public class BlockUpdateDC {
 							if (st.getBlock() != Blocks.OBSIDIAN
 									&& !ThermalInsulationUtil.BLOCK_MAP.containsKey(block)) {
 								world.setBlockState(p, Blocks.LAVA.getDefaultState(), 2);
-								world.notifyBlockOfStateChange(p, Blocks.LAVA);
+								world.notifyNeighborsOfStateChange(p, Blocks.LAVA);
 							}
 						}
 					}
@@ -179,26 +178,26 @@ public class BlockUpdateDC {
 					if (st.getMaterial().getCanBurn() && world.isAirBlock(p.up())
 							&& block.isFlammable(world, p, EnumFacing.UP)) {
 						world.setBlockState(p.up(), Blocks.FIRE.getDefaultState(), 2);
-						world.notifyBlockOfStateChange(p.up(), Blocks.FIRE);
+						world.notifyNeighborsOfStateChange(p.up(), Blocks.FIRE);
 					} else if (st.getMaterial() == Material.GRASS) {
 						world.setBlockState(p, Blocks.DIRT.getDefaultState(), 2);
-						world.notifyBlockOfStateChange(p, Blocks.DIRT);
+						world.notifyNeighborsOfStateChange(p, Blocks.DIRT);
 						f2 = true;
 					} else if (block instanceof BlockDirt) {
 						world.setBlockState(p, Blocks.SAND.getDefaultState(), 2);
-						world.notifyBlockOfStateChange(p, Blocks.SAND);
+						world.notifyNeighborsOfStateChange(p, Blocks.SAND);
 						f2 = true;
 					}
 				}
 			}
 
-			if (f2 && CoreConfigDC.enableVanilla && CoreConfigDC.updateFrequency > 0) {
-				int i = 1200 / CoreConfigDC.updateFrequency;
+			if (f2) {
+
 				for (BlockPos p3 : BlockPos.getAllInBox(p.east().north(), p.west().south())) {
 					if (!world.isAirBlock(p3)) {
 						Block target = world.getBlockState(p3).getBlock();
 						if (!world.isUpdateScheduled(p3, target) && world.rand.nextBoolean())
-							world.scheduleUpdate(p3, target, i + world.rand.nextInt(i));
+							world.scheduleUpdate(p3, target, 600 + world.rand.nextInt(600));
 					}
 				}
 			}
@@ -214,7 +213,7 @@ public class BlockUpdateDC {
 
 			if (st.getMaterial() == Material.WATER && world.isAirBlock(pos.up()) && canFreezePos(world, pos)) {
 				world.setBlockState(pos, Blocks.ICE.getDefaultState(), 2);
-				world.notifyBlockOfStateChange(pos, Blocks.ICE);
+				world.notifyNeighborsOfStateChange(pos, Blocks.ICE);
 				event.setResult(Result.ALLOW);
 				// DCLogger.debugLog("Success to freeze!!");
 			}

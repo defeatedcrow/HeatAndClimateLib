@@ -7,8 +7,10 @@ import defeatedcrow.hac.api.recipe.IMillRecipeRegister;
 import defeatedcrow.hac.api.recipe.ISpinningRecipe;
 import defeatedcrow.hac.api.recipe.ISpinningRecipeRegister;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class SpinningRecipeRegister implements ISpinningRecipeRegister {
 
@@ -30,6 +32,14 @@ public class SpinningRecipeRegister implements ISpinningRecipeRegister {
 	@Override
 	public void addRecipe(ItemStack output, int count, Object input) {
 		if (input != null && !DCUtil.isEmpty(output)) {
+			if (input instanceof String && OreDictionary.getOres((String) input).isEmpty()) {
+				DCLogger.infoLog("SpinningRecipe Accepted empty input: " + input);
+				return;
+			}
+			if (input instanceof List && ((List) input).isEmpty()) {
+				DCLogger.infoLog("SpinningRecipe Accepted empty input list");
+				return;
+			}
 			list.add(new SpinningRecipe(output, count, input));
 		}
 	}

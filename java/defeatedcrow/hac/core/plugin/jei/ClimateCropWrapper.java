@@ -73,15 +73,6 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 	}
 
 	@Override
-	public void getIngredients(IIngredients ing) {
-		ing.setInputs(ItemStack.class, input);
-		ing.setOutputs(ItemStack.class, output);
-		ing.setInputs(DCHeatTier.class, temps);
-		ing.setInputs(DCHumidity.class, hums);
-		ing.setInputs(DCAirflow.class, airs);
-	}
-
-	@Override
 	public List getInputs() {
 		return input;
 	}
@@ -99,6 +90,15 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 	@Override
 	public List<FluidStack> getFluidOutputs() {
 		return null;
+	}
+
+	@Override
+	public void getIngredients(IIngredients ing) {
+		ing.setInputs(ItemStack.class, input);
+		ing.setOutputs(ItemStack.class, output);
+		ing.setInputs(DCHeatTier.class, temps);
+		ing.setInputs(DCHumidity.class, hums);
+		ing.setInputs(DCAirflow.class, airs);
 	}
 
 	@Override
@@ -153,11 +153,6 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 	}
 
 	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
-	}
-
-	@Override
 	public List<String> getTooltipStrings(int x, int y) {
 		int baseY = 72;
 		List<String> s = new ArrayList<String>();
@@ -188,6 +183,11 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 	@Override
 	public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
 		return false;
+	}
+
+	@Override
+	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
+
 	}
 
 }

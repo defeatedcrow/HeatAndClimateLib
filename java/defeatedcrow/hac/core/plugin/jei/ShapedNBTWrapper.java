@@ -72,5 +72,4 @@ public class ShapedNBTWrapper extends BlankRecipeWrapper implements IShapedCraft
 	public int getHeight() {
 		return height;
 	}
-
 }

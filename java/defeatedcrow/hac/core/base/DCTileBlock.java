@@ -3,7 +3,7 @@ package defeatedcrow.hac.core.base;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
+import com.google.common.collect.Lists;
 
 import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.climate.ClimateAPI;
@@ -17,15 +17,12 @@ import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -42,7 +39,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 // TESR持ちブロックのベース
-public abstract class DCTileBlock extends BlockContainer implements IClimateObject {
+public abstract class DCTileBlock extends BlockContainerDC implements IClimateObject {
 
 	protected Random rand = new Random();
 
@@ -50,8 +47,7 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 	public final int maxMeta;
 
 	public DCTileBlock(Material m, String s, int max) {
-		super(m);
-		this.setUnlocalizedName(s);
+		super(m, s);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.FACING, EnumFacing.SOUTH)
@@ -76,31 +72,22 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		return false;
-	}
-
-	@Override
-	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {}
-
-	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-		for (int i = 0; i < maxMeta + 1; i++) {
-			list.add(new ItemStack(this, 1, i));
-		}
+	public List<ItemStack> getSubItemList() {
+		List<ItemStack> list = Lists.newArrayList();
+		list.add(new ItemStack(this, 1, 0));
+		return list;
 	}
 
 	// 設置・破壊処理
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
-			int meta, EntityLivingBase placer) {
-		IBlockState state = super.onBlockPlaced(world, pos, facing, hitX, hitY, hitZ, meta, placer);
+	public IBlockState getPlaceState(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
+			int meta, EntityLivingBase placer, EnumHand hand) {
+		IBlockState state = super.getPlaceState(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
 		state = state.withProperty(DCState.FACING, placer.getHorizontalFacing());
 		return state;
 	}
@@ -234,7 +221,7 @@ public abstract class DCTileBlock extends BlockContainer implements IClimateObje
 			if (recipe != null && recipe.additionalRequire(world, pos)) {
 				ItemStack output = recipe.getOutput();
 				if (!DCUtil.isEmpty(output) && output.getItem() instanceof ItemBlock) {
-					Block ret = ((ItemBlock) output.getItem()).block;
+					Block ret = ((ItemBlock) output.getItem()).getBlock();
 					IBlockState retS = ret.getStateFromMeta(output.getMetadata());
 					if (world.setBlockState(pos, retS, 2)) {
 						world.notifyBlockOfStateChange(pos, ret);
