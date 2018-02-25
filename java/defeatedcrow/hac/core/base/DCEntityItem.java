@@ -23,10 +23,10 @@ public abstract class DCEntityItem extends DCItem implements IEntityItem {
 
 	/* 設置動作 */
 	@Override
-	public EnumActionResult onItemUse(ItemStack stackIn, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse2(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+			float hitX, float hitY, float hitZ) {
+		ItemStack stack = player.getHeldItem(hand);
 		if (player != null && player.isSneaking()) {
-			ItemStack stack = player.getHeldItem(hand);
 			if (!world.isRemote && pos.getY() > 0 && pos.getY() < 255 && player.canPlayerEdit(pos, facing, stack)) {
 				IBlockState state = world.getBlockState(pos);
 				Block block = state.getBlock();
@@ -48,7 +48,7 @@ public abstract class DCEntityItem extends DCItem implements IEntityItem {
 			}
 			return EnumActionResult.SUCCESS;
 		} else {
-			return super.onItemUse(stackIn, player, world, pos, hand, facing, hitX, hitY, hitZ);
+			return super.onItemUse2(player, world, pos, hand, facing, hitX, hitY, hitZ);
 		}
 	}
 

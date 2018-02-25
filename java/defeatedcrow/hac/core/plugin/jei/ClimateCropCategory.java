@@ -48,6 +48,11 @@ public class ClimateCropCategory implements IRecipeCategory {
 	public void drawExtras(Minecraft mc) {}
 
 	@Override
+	public IDrawable getIcon() {
+		return null;
+	}
+
+	@Override
 	public void drawAnimations(Minecraft minecraft) {
 
 	}
@@ -58,18 +63,13 @@ public class ClimateCropCategory implements IRecipeCategory {
 	}
 
 	@Override
-	public IDrawable getIcon() {
-		return null;
-	}
-
-	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		if (!(recipeWrapper instanceof ClimateCropWrapper))
 			return;
 		ClimateCropWrapper wrapper = ((ClimateCropWrapper) recipeWrapper);
 		// wrapper.getIngredients(ingredients);
 
-		List inputs = wrapper.getInputs();
+		List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
 		List outputs = wrapper.getOutputs();
 
 		if (inputs.size() < 2 || outputs.isEmpty()) {
@@ -77,14 +77,14 @@ public class ClimateCropCategory implements IRecipeCategory {
 		}
 
 		recipeLayout.getItemStacks().init(0, true, 39, 33);
-		recipeLayout.getItemStacks().set(0, (ItemStack) inputs.get(0));
+		recipeLayout.getItemStacks().set(0, inputs.get(0));
 
 		recipeLayout.getItemStacks().init(1, false, 80, 51);
-		recipeLayout.getItemStacks().set(1, (ItemStack) inputs.get(1));
+		recipeLayout.getItemStacks().set(1, inputs.get(1));
 
 		for (int i = 0; i < outputs.size(); i++) {
 			recipeLayout.getItemStacks().init(2 + i, false, 80 + 18 * i, 23);
-			recipeLayout.getItemStacks().set(2 + i, (ItemStack) outputs.get(i));
+			recipeLayout.getItemStacks().set(2 + i, outputs);
 		}
 
 		List<DCHeatTier> temps = wrapper.getTemps();

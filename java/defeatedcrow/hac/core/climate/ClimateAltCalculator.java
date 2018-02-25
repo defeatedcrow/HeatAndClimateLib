@@ -32,31 +32,31 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	@Override
 	public IClimate getClimate(World world, BlockPos pos) {
 		int[] r = new int[] {
-				CoreConfigDC.heatRange, CoreConfigDC.humRange, CoreConfigDC.airRange
+				2, 1, 1
 		};
 		return getClimate(world, pos, r);
 	}
 
 	@Override
 	public DCHeatTier getAverageTemp(World world, BlockPos pos) {
-		return getAverageTemp(world, pos, CoreConfigDC.heatRange, false);
+		return getAverageTemp(world, pos, 2, false);
 	}
 
 	@Override
 	public DCHumidity getHumidity(World world, BlockPos pos) {
-		return getHumidity(world, pos, CoreConfigDC.humRange, false);
+		return getHumidity(world, pos, 1, false);
 	}
 
 	@Override
 	public DCAirflow getAirflow(World world, BlockPos pos) {
-		return getAirflow(world, pos, CoreConfigDC.airRange, false);
+		return getAirflow(world, pos, 1, false);
 	}
 
 	@Override
 	public IClimate getClimate(World world, BlockPos pos, int[] r) {
 		if (r == null || r.length < 3)
 			r = new int[] {
-					CoreConfigDC.heatRange, CoreConfigDC.humRange, CoreConfigDC.airRange
+					2, 1, 1
 			};
 		DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos, r[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, r[1], false);
@@ -470,7 +470,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		boolean hasBlow = false;
 
 		// biomeベース通気 -> 屋内ではNORMALになる
-		if (!hasRoof(world, pos)) {
+		if (!hasRoof2(world, pos)) {
 			if (pos.getY() > 135) {
 				air = DCAirflow.WIND;
 				hasWind = true;
@@ -560,5 +560,43 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			pos2 = pos2.up();
 		}
 		return false;
+	}
+
+	boolean hasRoof2(World world, BlockPos pos) {
+		int count = 0;
+		int lim = 16;
+		if (world.provider.getHasNoSky()) {
+			lim = 8;
+		}
+		boolean end = false;
+		for (int i = 1; i <= lim; i++) {
+			if (pos.getY() + i > 254)
+				break;
+
+			BlockPos p2 = pos.up(i);
+			IBlockState state = world.getBlockState(p2);
+			Block block = world.getBlockState(p2).getBlock();
+			if (!world.isAirBlock(p2) && (block.getLightOpacity(state, world, p2) > 0.0F
+					|| state.getMobilityFlag() == EnumPushReaction.NORMAL)) {
+				break;
+			} else {
+				count++;
+			}
+		}
+		for (int i = 0; i <= lim; i++) {
+			if (pos.getY() - i < 1)
+				break;
+
+			BlockPos p2 = pos.down(i);
+			IBlockState state = world.getBlockState(p2);
+			Block block = world.getBlockState(p2).getBlock();
+			if (!world.isAirBlock(p2) && (block.getLightOpacity(state, world, p2) > 0.0F
+					|| state.getMobilityFlag() == EnumPushReaction.NORMAL)) {
+				break;
+			} else {
+				count++;
+			}
+		}
+		return count < lim;
 	}
 }

@@ -3,6 +3,13 @@ package defeatedcrow.hac.core.energy;
 import java.util.ArrayList;
 import java.util.List;
 
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.climate.IClimateTileEntity;
+import defeatedcrow.hac.core.base.ITagGetter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -19,16 +26,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCAirflow;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.climate.IClimateTileEntity;
-import defeatedcrow.hac.core.base.ITagGetter;
 
-public abstract class TileTorqueLockable extends TileTorqueBase implements IInteractionObject, ILockableContainer,
-		ITagGetter {
+public abstract class TileTorqueLockable extends TileTorqueBase
+		implements IInteractionObject, ILockableContainer, ITagGetter {
 
 	protected final List<BlockPos> effectiveTiles = new ArrayList<BlockPos>();
 	protected IClimate current = null;
@@ -198,6 +198,7 @@ public abstract class TileTorqueLockable extends TileTorqueBase implements IInte
 	}
 
 	private IItemHandler itemHandler;
+	private TorqueHandlerWrapper torqueWrapper = new TorqueHandlerWrapper(this);
 
 	protected IItemHandler createUnSidedHandler() {
 		return new InvWrapper(this);
@@ -207,12 +208,16 @@ public abstract class TileTorqueLockable extends TileTorqueBase implements IInte
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return (T) (itemHandler == null ? (itemHandler = createUnSidedHandler()) : itemHandler);
-		return super.getCapability(capability, facing);
+		else
+			return super.getCapability(capability, facing);
 	}
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return true;
+		} else
+			return super.hasCapability(capability, facing);
 	}
 
 	@Override

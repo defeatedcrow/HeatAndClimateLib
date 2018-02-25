@@ -2,6 +2,8 @@ package defeatedcrow.hac.core.item;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateObject;
@@ -12,7 +14,6 @@ import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.base.DCItem;
 import defeatedcrow.hac.core.climate.WeatherChecker;
 import defeatedcrow.hac.core.util.DCTimeHelper;
-import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -37,8 +38,8 @@ public class ItemClimateChecker extends DCItem {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse2(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+			float hitX, float hitY, float hitZ) {
 		if (!world.isAirBlock(pos)) {
 			if (!world.isRemote) {
 				IBlockState state = world.getBlockState(pos);
@@ -97,13 +98,13 @@ public class ItemClimateChecker extends DCItem {
 										new ItemStack(block, 1, meta));
 								if (recipe != null && recipe.matchClimate(clm) && recipe.additionalRequire(world, pos)
 										&& recipe.hasPlaceableOutput() == 1) {
-									if (!DCUtil.isEmpty(recipe.getOutput())
+									if (recipe.getOutput() != null
 											&& recipe.getOutput().getItem() instanceof ItemBlock) {
 										Block retB = Block.getBlockFromItem(recipe.getOutput().getItem());
 										int retM = recipe.getOutput().getMetadata();
 										IBlockState ret = retB.getStateFromMeta(retM);
 										world.setBlockState(pos, ret, 2);
-										world.notifyBlockOfStateChange(pos, ret.getBlock());
+										world.notifyNeighborsOfStateChange(pos, ret.getBlock());
 										DCLogger.debugLog("after: " + ret.getBlock().getLocalizedName() + " " + retM);
 									}
 								}
@@ -119,7 +120,7 @@ public class ItemClimateChecker extends DCItem {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+	public void addInformation2(ItemStack stack, @Nullable World world, List<String> tooltip) {
 		tooltip.add(I18n.translateToLocal("dcs.climate.tip.checker"));
 	}
 

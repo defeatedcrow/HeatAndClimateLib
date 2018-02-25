@@ -111,14 +111,11 @@ public abstract class DCLockableTE extends TileEntity
 		}
 	}
 
-	public void onTickUpdate() {
-	}
+	public void onTickUpdate() {}
 
-	protected void onServerUpdate() {
-	}
+	protected void onServerUpdate() {}
 
-	public void updateTile() {
-	}
+	public void updateTile() {}
 
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {

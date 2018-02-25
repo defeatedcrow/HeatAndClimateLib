@@ -2,6 +2,11 @@ package defeatedcrow.hac.core.base;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import com.google.common.collect.Lists;
+
+import defeatedcrow.hac.core.ClimateCore;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,23 +30,8 @@ public abstract class DCItem extends Item implements ITexturePath {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
-		return EnumActionResult.PASS;
-	}
-
-	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state) {
 		return 1.0F;
-	}
-
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-		if (player != null) {
-			ItemStack ret = player.getHeldItem(hand);
-			return new ActionResult(EnumActionResult.PASS, ret);
-		}
-		return new ActionResult(EnumActionResult.PASS, stack);
 	}
 
 	@Override
@@ -62,11 +52,58 @@ public abstract class DCItem extends Item implements ITexturePath {
 
 	public abstract String[] getNameSuffix();
 
+	/**
+	 * 移植補助
+	 */
+
+	@Override
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
+			EnumFacing facing, float hitX, float hitY, float hitZ) {
+		return this.onItemUse2(player, world, pos, hand, facing, hitX, hitY, hitZ);
+	}
+
+	public EnumActionResult onItemUse2(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
+			float hitX, float hitY, float hitZ) {
+		return EnumActionResult.PASS;
+	}
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World world, EntityPlayer player,
+			EnumHand hand) {
+		return this.onItemRightClick2(world, player, hand);
+	}
+
+	public ActionResult<ItemStack> onItemRightClick2(World world, EntityPlayer player, EnumHand hand) {
+		if (player != null) {
+			ItemStack ret = player.getHeldItem(hand);
+			return new ActionResult(EnumActionResult.PASS, ret);
+		} else {
+			return new ActionResult(EnumActionResult.PASS, null);
+		}
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> subItems) {
+		List<ItemStack> itms = getSubItemList();
+		subItems.addAll(itms);
+	}
+
+	public List<ItemStack> getSubItemList() {
+		List<ItemStack> list = Lists.newArrayList();
 		for (int i = 0; i < getMaxMeta() + 1; i++) {
-			subItems.add(new ItemStack(itemIn, 1, i));
+			list.add(new ItemStack(this, 1, i));
 		}
+		return list;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+		this.addInformation2(stack, player == null ? null : player.worldObj, tooltip);
+	}
+
+	public void addInformation2(ItemStack stack, @Nullable World world, List<String> tooltip) {
+		super.addInformation(stack, ClimateCore.proxy.getPlayer(), tooltip, false);
 	}
 }

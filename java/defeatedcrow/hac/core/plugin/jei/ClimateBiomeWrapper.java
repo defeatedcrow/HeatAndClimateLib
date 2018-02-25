@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fluids.FluidStack;
 
 public class ClimateBiomeWrapper implements IRecipeWrapper {
@@ -23,7 +24,7 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 	private final List<DCAirflow> airs;
 	private IClimate climate;
 	private final Biome biome;
-	private final BiomeDictionary.Type[] types;
+	private final Type[] types;
 	private final boolean hasSeason;
 
 	@SuppressWarnings("unchecked")
@@ -150,11 +151,6 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 	}
 
 	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
-	}
-
-	@Override
 	public List<String> getTooltipStrings(int x, int y) {
 		List<String> s = new ArrayList<String>();
 		return null;
@@ -163,6 +159,11 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 	@Override
 	public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
 		return false;
+	}
+
+	@Override
+	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
+
 	}
 
 }

@@ -15,10 +15,12 @@ import defeatedcrow.hac.core.DCLogger;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -41,14 +43,17 @@ public class DCUtil {
 	public static Random rand = new Random();
 
 	public static boolean isEmpty(ItemStack item) {
-		return item == null || item.getItem() == null;
+		if (item == null) {
+			return true;
+		}
+		return item.getItem() == null || item.stackSize <= 0;
 	}
 
 	public static int reduceStackSize(ItemStack item, int i) {
 		if (!isEmpty(item)) {
-			int i1 = Math.min(i, item.stackSize);
-			item.splitStack(i1);
-			return i1;
+			int ret = Math.min(i, item.stackSize);
+			item.stackSize -= ret;
+			return ret;
 		}
 		return 0;
 	}
@@ -56,25 +61,11 @@ public class DCUtil {
 	public static int addStackSize(ItemStack item, int i) {
 		if (!isEmpty(item)) {
 			int ret = item.getMaxStackSize() - item.stackSize;
-			if (ret < i) {
-				item.stackSize += ret;
-				return ret;
-			} else {
-				item.stackSize += i;
-				return i;
-			}
+			ret = Math.min(i, ret);
+			item.stackSize += ret;
+			return ret;
 		}
 		return 0;
-	}
-
-	public static ItemStack reduceAndDeleteStack(ItemStack item, int i) {
-		reduceStackSize(item, i);
-		if (isEmpty(item) || item.stackSize <= 0) {
-			item = null;
-			return null;
-		} else {
-			return item;
-		}
 	}
 
 	/*
@@ -195,6 +186,32 @@ public class DCUtil {
 		return ret;
 	}
 
+	public static Map<Integer, ItemStack> getAmulets(EntityLivingBase living) {
+		Map<Integer, ItemStack> ret = new HashMap<Integer, ItemStack>();
+		if (living == null) {
+			return ret;
+		} else {
+			IItemHandler handler = living.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+			if (handler != null) {
+				for (int i = 0; i < handler.getSlots(); i++) {
+					ItemStack check = handler.getStackInSlot(i);
+					if (!isEmpty(check) && check.getItem() instanceof IJewelAmulet) {
+						ret.put(i, check);
+					}
+				}
+			} else if (living instanceof EntityVillager) {
+				IInventory inv = ((EntityVillager) living).getVillagerInventory();
+				for (int i = 0; i < inv.getSizeInventory(); i++) {
+					ItemStack check = inv.getStackInSlot(i);
+					if (!isEmpty(check) && check.getItem() instanceof IJewelAmulet) {
+						ret.put(i, check);
+					}
+				}
+			}
+		}
+		return ret;
+	}
+
 	// チャームを保持しているかのチェック2
 	public static boolean hasItemInTopSlots(EntityPlayer player, ItemStack item) {
 		if (player == null || isEmpty(item))
@@ -206,20 +223,6 @@ public class DCUtil {
 			}
 		}
 		return false;
-	}
-
-	public static Map<Integer, ItemStack> getAmulets(EntityLivingBase living) {
-		Map<Integer, ItemStack> ret = new HashMap<Integer, ItemStack>();
-		IItemHandler handler = living.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-		if (living == null || handler == null)
-			return ret;
-		for (int i = 0; i < handler.getSlots(); i++) {
-			ItemStack check = handler.getStackInSlot(i);
-			if (!isEmpty(check) && check.getItem() instanceof IJewelAmulet) {
-				ret.put(i, check);
-			}
-		}
-		return ret;
 	}
 
 	// Itemクラスのやつがprotectedだった

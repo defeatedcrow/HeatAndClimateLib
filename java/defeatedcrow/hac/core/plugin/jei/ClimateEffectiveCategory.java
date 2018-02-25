@@ -16,6 +16,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 
@@ -47,6 +48,11 @@ public class ClimateEffectiveCategory implements IRecipeCategory {
 	public void drawExtras(Minecraft mc) {}
 
 	@Override
+	public IDrawable getIcon() {
+		return null;
+	}
+
+	@Override
 	public void drawAnimations(Minecraft minecraft) {
 
 	}
@@ -57,18 +63,13 @@ public class ClimateEffectiveCategory implements IRecipeCategory {
 	}
 
 	@Override
-	public IDrawable getIcon() {
-		return null;
-	}
-
-	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		if (!(recipeWrapper instanceof ClimateEffectiveWrapper))
 			return;
 		ClimateEffectiveWrapper wrapper = ((ClimateEffectiveWrapper) recipeWrapper);
 		// wrapper.getIngredients(ingredients);
 
-		List inputs = wrapper.getInputs();
+		List<ItemStack> inputs = wrapper.getInputs();
 
 		recipeLayout.getItemStacks().init(0, true, 44, 24);
 		recipeLayout.getItemStacks().set(0, inputs);

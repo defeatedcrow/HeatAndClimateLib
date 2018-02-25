@@ -33,9 +33,9 @@ public class MobResistantRegister implements IMobHeatResistant {
 	public float getHeatResistant(ResourceLocation name) {
 		if (name != null) {
 			String n = name.toString();
-			DCLogger.debugLog("register target: " + n);
+			DCLogger.debugLog("register target: " + name.toString());
 			Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(n);
-			if (heatResistant.containsKey(entity)) {
+			if (entity != null && heatResistant.containsKey(name.toString())) {
 				return heatResistant.get(entity);
 			}
 		}
@@ -45,10 +45,9 @@ public class MobResistantRegister implements IMobHeatResistant {
 	@Override
 	public float getColdResistant(ResourceLocation name) {
 		if (name != null) {
-			String n = name.toString();
-			DCLogger.debugLog("register target: " + n);
-			Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(n);
-			if (coldResistant.containsKey(entity)) {
+			DCLogger.debugLog("register target: " + name.toString());
+			Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(name);
+			if (entity != null && coldResistant.containsKey(name.toString())) {
 				return coldResistant.get(entity);
 			}
 		}
@@ -58,10 +57,9 @@ public class MobResistantRegister implements IMobHeatResistant {
 	@Override
 	public void registerEntityResistant(ResourceLocation name, float heat, float cold) {
 		if (name != null) {
-			String n = name.toString();
-			DCLogger.debugLog("register target: " + n);
-			if (EntityList.NAME_TO_CLASS.containsKey(n)) {
-				Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(n);
+			DCLogger.debugLog("register target: " + name);
+			if (EntityList.NAME_TO_CLASS.get(name) != null) {
+				Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(name);
 				registerEntityResistant(entity, heat, cold);
 			}
 		}
@@ -69,9 +67,10 @@ public class MobResistantRegister implements IMobHeatResistant {
 
 	public void registerEntityResistant(String name, float heat, float cold) {
 		if (name != null) {
+			ResourceLocation res = new ResourceLocation(name);
 			DCLogger.debugLog("register target from json: " + name);
-			if (EntityList.NAME_TO_CLASS.containsKey(name)) {
-				Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(name);
+			if (EntityList.NAME_TO_CLASS.get(res) != null) {
+				Class<? extends Entity> entity = EntityList.NAME_TO_CLASS.get(res);
 				registerEntityResistant(entity, heat, cold);
 			}
 		}
@@ -93,7 +92,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 				coldResistant.put(entityClass, cold);
 			}
 			DCLogger.debugLog("success registering : " + entityClass.getSimpleName() + " " + heat + "/" + cold);
-			String name = EntityList.CLASS_TO_NAME.get(entityClass);
+			String name = EntityList.CLASS_TO_NAME.get(entityClass).toString();
 			if (name != null && !name.equalsIgnoreCase("Null")) {
 				Map<String, Float> res = new HashMap<String, Float>();
 				res.put("heat", heat);

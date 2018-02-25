@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 public class PotionFreezeResistance extends Potion {
 
 	public PotionFreezeResistance() {
-		super(true, 0x5050FF);
+		super(false, 0x5050FF);
 		this.setPotionName("dcs.potion.freeze_res");
 		this.setIconIndex(1, 1);
 	}

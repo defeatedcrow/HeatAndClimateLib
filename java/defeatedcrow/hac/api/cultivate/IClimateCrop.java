@@ -2,15 +2,15 @@ package defeatedcrow.hac.api.cultivate;
 
 import java.util.List;
 
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IClimate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import defeatedcrow.hac.api.climate.DCAirflow;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.IClimate;
 
 /**
  * Climate利用作物<br>
@@ -35,6 +35,9 @@ public interface IClimateCrop {
 
 	// 成長後のステート
 	IBlockState getGrownState();
+
+	// 基底のステート
+	IBlockState setGroundState(IBlockState state);
 
 	// 成長させる
 	boolean grow(World world, BlockPos pos, IBlockState thisState);

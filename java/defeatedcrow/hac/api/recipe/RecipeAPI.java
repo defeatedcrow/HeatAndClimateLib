@@ -15,4 +15,5 @@ public class RecipeAPI {
 	public static IFluidRecipeRegister registerFluidRecipes;
 	public static IReactorRecipeRegister registerReactorRecipes;
 	public static ISpinningRecipeRegister registerSpinningRecipes;
+	public static ICrusherRecipeRegister registerCrushers;
 }

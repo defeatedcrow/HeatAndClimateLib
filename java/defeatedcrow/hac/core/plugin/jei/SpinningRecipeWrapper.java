@@ -31,12 +31,12 @@ public class SpinningRecipeWrapper implements IRecipeWrapper {
 	}
 
 	@Override
-	public List getInputs() {
+	public List<ItemStack> getInputs() {
 		return input;
 	}
 
 	@Override
-	public List getOutputs() {
+	public List<ItemStack> getOutputs() {
 		return output;
 	}
 
@@ -54,11 +54,6 @@ public class SpinningRecipeWrapper implements IRecipeWrapper {
 	public void drawInfo(Minecraft mc, int wid, int hei, int mouseX, int mouseY) {}
 
 	@Override
-	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
-	}
-
-	@Override
 	public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
 		return false;
 	}
@@ -66,6 +61,11 @@ public class SpinningRecipeWrapper implements IRecipeWrapper {
 	@Override
 	public List<String> getTooltipStrings(int mouseX, int mouseY) {
 		return null;
+	}
+
+	@Override
+	public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
+
 	}
 
 }

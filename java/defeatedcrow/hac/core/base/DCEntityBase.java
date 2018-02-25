@@ -138,8 +138,8 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 			this.doBlockCollisions();
 
 			// 進路方向の接触チェック
-			// Vec3d checkX = new Vec3d(MathHelper.floor_double(this.posX + this.motionX),
-			// MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+			// Vec3d checkX = new Vec3d(MathHelper.floor_double_double(this.posX + this.motionX),
+			// MathHelper.floor_double_double(this.posY), MathHelper.floor_double_double(this.posZ));
 			// BlockPos posX = new BlockPos(checkX);
 			// IBlockState stateX = worldObj.getBlockState(posX);
 			// if (stateX.getMaterial() != Material.AIR) {
@@ -150,9 +150,9 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 			// }
 			// }
 
-			// Vec3d checkZ = new Vec3d(MathHelper.floor_double(this.posX),
-			// MathHelper.floor_double(this.posY),
-			// MathHelper.floor_double(this.posZ + this.motionZ));
+			// Vec3d checkZ = new Vec3d(MathHelper.floor_double_double(this.posX),
+			// MathHelper.floor_double_double(this.posY),
+			// MathHelper.floor_double_double(this.posZ + this.motionZ));
 			// BlockPos posZ = new BlockPos(checkZ);
 			// IBlockState stateZ = worldObj.getBlockState(posZ);
 			// if (stateZ.getMaterial() != Material.AIR) {
@@ -196,7 +196,7 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 		double d0 = x - blockpos.getX();
 		double d1 = y - blockpos.getY();
 		double d2 = z - blockpos.getZ();
-		List<AxisAlignedBB> list = this.worldObj.getCollisionBoxes(this.getEntityBoundingBox());
+		List<AxisAlignedBB> list = this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox());
 
 		if (list.isEmpty()) {
 			return false;
@@ -411,7 +411,7 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 
 	@Override
 	public boolean doCollect(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack tool) {
-		if (!worldObj.isRemote && !DCUtil.isEmpty(getDropItem())) {
+		if (!world.isRemote && !DCUtil.isEmpty(getDropItem())) {
 			this.dropAndDeath(player.getPosition());
 			return true;
 		}
