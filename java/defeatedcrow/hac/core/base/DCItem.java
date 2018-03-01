@@ -103,6 +103,7 @@ public abstract class DCItem extends Item implements ITexturePath {
 		this.addInformation2(stack, player == null ? null : player.worldObj, tooltip);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void addInformation2(ItemStack stack, @Nullable World world, List<String> tooltip) {
 		super.addInformation(stack, ClimateCore.proxy.getPlayer(), tooltip, false);
 	}

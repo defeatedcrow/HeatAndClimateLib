@@ -37,7 +37,7 @@ public class ClimateCore {
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 2;
 	public static final int MOD_MINOR = 2;
-	public static final int MOD_BUILD = 2;
+	public static final int MOD_BUILD = 3;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.10, 1.11]";
 	public static final String PACKAGE_BASE = "dcs";
@@ -46,7 +46,7 @@ public class ClimateCore {
 	@SidedProxy(clientSide = "defeatedcrow.hac.core.client.ClientProxyD", serverSide = "defeatedcrow.hac.core.CommonProxyD")
 	public static CommonProxyD proxy;
 
-	@Instance("dcs_climate|lib")
+	@Instance("dcs_lib")
 	public static ClimateCore instance;
 
 	public static final Logger LOGGER = LogManager.getLogger(PACKAGE_ID);
