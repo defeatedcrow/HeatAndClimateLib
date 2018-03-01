@@ -105,6 +105,7 @@ public abstract class DCItem extends Item implements ITexturePath {
 		this.addInformation2(stack, world, tooltip);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void addInformation2(ItemStack stack, @Nullable World world, List<String> tooltip) {
 		super.addInformation(stack, world, tooltip, ITooltipFlag.TooltipFlags.NORMAL);
 	}

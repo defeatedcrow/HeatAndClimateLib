@@ -22,6 +22,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * 移植時に苦労するので代替レシピへの置き換えを作成
@@ -81,6 +83,7 @@ public class BlockDC extends Block {
 	 */
 	@Deprecated
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		if (DCUtil.machCreativeTab(tab, getCreativeTabToDisplayOn())) {
 			List<ItemStack> itms = getSubItemList();
