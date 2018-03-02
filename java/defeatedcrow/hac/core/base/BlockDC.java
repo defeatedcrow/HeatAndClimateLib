@@ -47,7 +47,8 @@ public class BlockDC extends Block {
 
 	public boolean onRightClick(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
-		return super.onBlockActivated(world, pos, state, player, hand, null, side, hitX, hitY, hitZ);
+		return super.onBlockActivated(world, pos, state, player, hand, player == null ? null : player.getHeldItem(hand),
+				side, hitX, hitY, hitZ);
 	}
 
 	/**

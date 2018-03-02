@@ -166,7 +166,8 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 
 	public EnumActionResult onItemUse2(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
 			float hitX, float hitY, float hitZ) {
-		return super.onItemUse(null, player, world, pos, hand, facing, hitX, hitY, hitZ);
+		return super.onItemUse(player == null ? null : player.getHeldItem(hand), player, world, pos, hand, facing, hitX,
+				hitY, hitZ);
 	}
 
 	@Override
@@ -175,7 +176,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	}
 
 	public ActionResult<ItemStack> onItemRightClick2(World world, EntityPlayer player, EnumHand hand) {
-		return super.onItemRightClick(null, world, player, hand);
+		return super.onItemRightClick(player == null ? null : player.getHeldItem(hand), world, player, hand);
 	}
 
 	@Override
