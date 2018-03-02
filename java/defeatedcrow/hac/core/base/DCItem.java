@@ -57,29 +57,24 @@ public abstract class DCItem extends Item implements ITexturePath {
 	 */
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
+	public EnumActionResult onItemUse(ItemStack item, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
 		return this.onItemUse2(player, world, pos, hand, facing, hitX, hitY, hitZ);
 	}
 
 	public EnumActionResult onItemUse2(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
 			float hitX, float hitY, float hitZ) {
-		return EnumActionResult.PASS;
+		return super.onItemUse(player == null ? null : player.getHeldItem(hand), player, world, pos, hand, facing, hitX,
+				hitY, hitZ);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World world, EntityPlayer player,
-			EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack item, World world, EntityPlayer player, EnumHand hand) {
 		return this.onItemRightClick2(world, player, hand);
 	}
 
 	public ActionResult<ItemStack> onItemRightClick2(World world, EntityPlayer player, EnumHand hand) {
-		if (player != null) {
-			ItemStack ret = player.getHeldItem(hand);
-			return new ActionResult(EnumActionResult.PASS, ret);
-		} else {
-			return new ActionResult(EnumActionResult.PASS, null);
-		}
+		return super.onItemRightClick(player == null ? null : player.getHeldItem(hand), world, player, hand);
 	}
 
 	@Override
