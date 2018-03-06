@@ -60,7 +60,11 @@ public class DCInventory implements IInventory {
 		if (i < 0 || i >= this.getSizeInventory())
 			return null;
 		if (!DCUtil.isEmpty(getStackInSlot(i))) {
-			return DCUtil.redAndDel(getStackInSlot(i), num);
+			ItemStack itemstack = getStackInSlot(i).splitStack(num);
+			if (getStackInSlot(i).stackSize <= 0) {
+				inv[i] = null;
+			}
+			return itemstack;
 		} else
 			return null;
 	}
@@ -74,7 +78,9 @@ public class DCInventory implements IInventory {
 
 			inv[i] = stack;
 
-			if (!DCUtil.isEmpty(stack) && DCUtil.getSize(stack) > this.getInventoryStackLimit()) {
+			if (DCUtil.isEmpty(stack)) {
+				stack = null;
+			} else if (!DCUtil.isEmpty(stack) && DCUtil.getSize(stack) > this.getInventoryStackLimit()) {
 				stack.stackSize = getInventoryStackLimit();
 			}
 
@@ -211,12 +217,8 @@ public class DCInventory implements IInventory {
 			byte b0 = tag1.getByte("Slot");
 
 			if (b0 >= 0 && b0 < this.getSizeInventory()) {
-				inv2[b0] = ItemStack.loadItemStackFromNBT(tag1);
+				inv[b0] = ItemStack.loadItemStackFromNBT(tag1);
 			}
-		}
-
-		for (int i1 = 0; i1 < getSizeInventory(); i1++) {
-			inv[i1] = inv2[i1];
 		}
 	}
 

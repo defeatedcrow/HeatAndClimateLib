@@ -72,12 +72,12 @@ public class DCUtil {
 
 	public static ItemStack redAndDel(ItemStack item, int i) {
 		if (!isEmpty(item)) {
-			if (i >= item.stackSize) {
-				return null;
-			} else {
-				item.stackSize -= i;
-				return item;
+			int ret = Math.min(i, item.stackSize);
+			item.splitStack(ret);
+			if (item.stackSize <= 0) {
+				item = null;
 			}
+			return item;
 		}
 		return null;
 	}
