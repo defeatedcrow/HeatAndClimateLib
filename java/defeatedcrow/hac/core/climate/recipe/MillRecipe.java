@@ -7,10 +7,7 @@ import java.util.List;
 import defeatedcrow.hac.api.recipe.IMillRecipe;
 import defeatedcrow.hac.core.fluid.DCFluidUtil;
 import defeatedcrow.hac.core.util.DCUtil;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class MillRecipe implements IMillRecipe {
 
@@ -25,24 +22,7 @@ public class MillRecipe implements IMillRecipe {
 		output = o;
 		secondary = s;
 		chance = c;
-		processedInput = new ArrayList<ItemStack>();
-		if (input instanceof String) {
-			List<ItemStack> ret = new ArrayList<ItemStack>();
-			ret.addAll(OreDictionary.getOres((String) input));
-			processedInput.addAll(ret);
-		} else if (input instanceof List && !((List) input).isEmpty()) {
-			List<ItemStack> ret = (List<ItemStack>) input;
-			processedInput.addAll(ret);
-		} else if (input instanceof ItemStack) {
-			if (!DCUtil.isEmpty((ItemStack) input))
-				processedInput.add(((ItemStack) input).copy());
-		} else if (input instanceof Item) {
-			processedInput.add(new ItemStack((Item) input, 1, 0));
-		} else if (input instanceof Block) {
-			processedInput.add(new ItemStack((Block) input, 1, 0));
-		} else {
-			throw new IllegalArgumentException("Unknown Object passed to recipe!");
-		}
+		processedInput = DCUtil.getProcessedList(input);
 	}
 
 	@Override

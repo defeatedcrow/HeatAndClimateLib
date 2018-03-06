@@ -118,7 +118,7 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 				this.incrStackInSlot(i, item.copy());
 				return item.stackSize;
 			} else {
-				int size = this.isItemStackable(item, this.getStackInSlot(i));
+				int size = inventory.isItemStackable(item, this.getStackInSlot(i));
 				if (size > 0) {
 					DCUtil.addStackSize(this.getStackInSlot(i), size);
 					return size;
@@ -248,25 +248,9 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	}
 
 	// 追加メソッド
-	public static int isItemStackable(ItemStack target, ItemStack current) {
-		if (DCUtil.isEmpty(target) || DCUtil.isEmpty(current))
-			return 0;
 
-		if (target.getItem() == current.getItem() && target.getMetadata() == current.getMetadata()
-				&& ItemStack.areItemStackTagsEqual(target, current)) {
-			int i = current.stackSize + target.stackSize;
-			if (i > current.getMaxStackSize()) {
-				i = current.getMaxStackSize() - current.stackSize;
-				return i;
-			}
-			return target.stackSize;
-		}
-
-		return 0;
-	}
-
-	public void incrStackInSlot(int i, ItemStack input) {
-		inventory.incrStackInSlot(i, input);
+	public int incrStackInSlot(int i, ItemStack input) {
+		return inventory.incrStackInSlot(i, input);
 	}
 
 	@Override

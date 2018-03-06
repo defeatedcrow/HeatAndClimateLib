@@ -2,9 +2,13 @@ package defeatedcrow.hac.core.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import com.google.common.collect.Lists;
 
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.magic.CharmType;
@@ -12,6 +16,7 @@ import defeatedcrow.hac.api.magic.IJewelAmulet;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -49,6 +54,13 @@ public class DCUtil {
 		return item.getItem() == null || item.stackSize <= 0;
 	}
 
+	public static int getSize(ItemStack item) {
+		if (isEmpty(item)) {
+			return 0;
+		}
+		return item.stackSize;
+	}
+
 	public static int reduceStackSize(ItemStack item, int i) {
 		if (!isEmpty(item)) {
 			int ret = Math.min(i, item.stackSize);
@@ -56,6 +68,18 @@ public class DCUtil {
 			return ret;
 		}
 		return 0;
+	}
+
+	public static ItemStack redAndDel(ItemStack item, int i) {
+		if (!isEmpty(item)) {
+			if (i >= item.stackSize) {
+				return null;
+			} else {
+				item.stackSize -= i;
+				return item;
+			}
+		}
+		return null;
 	}
 
 	public static int addStackSize(ItemStack item, int i) {
@@ -68,12 +92,42 @@ public class DCUtil {
 		return 0;
 	}
 
+	public static ItemStack setSize(ItemStack item, int i) {
+		if (!isEmpty(item)) {
+			item.stackSize = i;
+			return item;
+		}
+		return null;
+	}
+
 	/*
 	 * stacksize以外の比較
 	 */
 	public static boolean isSameItem(ItemStack i1, ItemStack i2, boolean nullable) {
 		if (isEmpty(i1) || isEmpty(i2)) {
 			return nullable;
+		} else {
+			if (i1.getItem() == i2.getItem() && i1.getItemDamage() == i2.getItemDamage()) {
+				NBTTagCompound t1 = i1.getTagCompound();
+				NBTTagCompound t2 = i2.getTagCompound();
+				if (t1 == null && t2 == null) {
+					return true;
+				} else {
+					return t1.equals(t2);
+				}
+			}
+			return false;
+		}
+	}
+
+	/*
+	 * nullも含め比較
+	 */
+	public static boolean isSameItem2(ItemStack i1, ItemStack i2) {
+		if (isEmpty(i1) && isEmpty(i2)) {
+			return true;
+		} else if (isEmpty(i1) || isEmpty(i2)) {
+			return false;
 		} else {
 			if (i1.getItem() == i2.getItem() && i1.getItemDamage() == i2.getItemDamage()) {
 				NBTTagCompound t1 = i1.getTagCompound();
@@ -118,6 +172,47 @@ public class DCUtil {
 			return i1.stackSize <= (i2.getMaxStackSize() - i2.stackSize);
 		}
 		return false;
+	}
+
+	/*
+	 * 辞書チェック
+	 */
+	public static boolean matchDicName(String name, ItemStack item) {
+		if (name == null || isEmpty(item)) {
+			return false;
+		} else {
+			List<ItemStack> ores = OreDictionary.getOres(name);
+			if (ores != null && !ores.isEmpty()) {
+				for (ItemStack check : ores) {
+					if (isIntegratedItem(item, check, false)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public static ArrayList<ItemStack> getProcessedList(Object obj) {
+		ArrayList<ItemStack> ret = Lists.newArrayList();
+		if (obj == null) {
+			return ret;
+		}
+		if (obj instanceof String) {
+			ret.addAll(OreDictionary.getOres((String) obj));
+		} else if (obj instanceof List && !((List) obj).isEmpty()) {
+			ret.addAll((List<ItemStack>) obj);
+		} else if (obj instanceof ItemStack) {
+			if (!DCUtil.isEmpty((ItemStack) obj))
+				ret.add(((ItemStack) obj).copy());
+		} else if (obj instanceof Item) {
+			ret.add(new ItemStack((Item) obj, 1, 0));
+		} else if (obj instanceof Block) {
+			ret.add(new ItemStack((Block) obj, 1, 0));
+		} else {
+			throw new IllegalArgumentException("Unknown Object passed to recipe!");
+		}
+		return ret;
 	}
 
 	/* Playerの所持チェック */

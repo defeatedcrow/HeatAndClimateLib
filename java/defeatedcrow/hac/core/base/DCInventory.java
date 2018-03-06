@@ -60,9 +60,7 @@ public class DCInventory implements IInventory {
 		if (i < 0 || i >= this.getSizeInventory())
 			return null;
 		if (!DCUtil.isEmpty(getStackInSlot(i))) {
-			ItemStack itemstack;
-			itemstack = getStackInSlot(i).splitStack(num);
-			return itemstack;
+			return DCUtil.redAndDel(getStackInSlot(i), num);
 		} else
 			return null;
 	}
@@ -76,7 +74,7 @@ public class DCInventory implements IInventory {
 
 			inv[i] = stack;
 
-			if (!DCUtil.isEmpty(stack) && stack.stackSize > this.getInventoryStackLimit()) {
+			if (!DCUtil.isEmpty(stack) && DCUtil.getSize(stack) > this.getInventoryStackLimit()) {
 				stack.stackSize = getInventoryStackLimit();
 			}
 
@@ -126,36 +124,39 @@ public class DCInventory implements IInventory {
 
 	// 追加メソッド
 	public static int isItemStackable(ItemStack target, ItemStack current) {
-		if (DCUtil.isEmpty(target) || DCUtil.isEmpty(current))
-			return 0;
-
-		if (target.getItem() == current.getItem() && target.getMetadata() == current.getMetadata()
-				&& ItemStack.areItemStackTagsEqual(target, current)) {
-			int i = current.stackSize + target.stackSize;
-			if (i > current.getMaxStackSize()) {
-				i = current.getMaxStackSize() - current.stackSize;
-				return i;
+		if (DCUtil.isSameItem(target, current, false)) {
+			int i1 = DCUtil.getSize(current) + DCUtil.getSize(target);
+			if (!DCUtil.isEmpty(current) && i1 > current.getMaxStackSize()) {
+				return current.getMaxStackSize() - DCUtil.getSize(current);
+			} else {
+				return DCUtil.getSize(target);
 			}
-			return target.stackSize;
 		}
-
 		return 0;
 	}
 
-	public void incrStackInSlot(int i, ItemStack input) {
-		if (i < this.getSizeInventory() && !DCUtil.isEmpty(input)) {
+	public int canIncr(int i, ItemStack get) {
+		if (i < 0 || i >= this.getSizeInventory() || DCUtil.isEmpty(get))
+			return 0;
+		else if (DCUtil.isEmpty(getStackInSlot(i)))
+			return DCUtil.getSize(get);
+		else {
+			return isItemStackable(get, getStackInSlot(i));
+		}
+	}
+
+	public int incrStackInSlot(int i, ItemStack input) {
+		if (i >= 0 || i < this.getSizeInventory() && !DCUtil.isEmpty(input)) {
 			if (!DCUtil.isEmpty(getStackInSlot(i))) {
-				ItemStack stack = getStackInSlot(i);
-				if (stack.getItem() == input.getItem() && stack.getMetadata() == input.getMetadata()) {
-					DCUtil.addStackSize(stack, input.stackSize);
-					if (stack.stackSize > this.getInventoryStackLimit()) {
-						stack.stackSize = getInventoryStackLimit();
-					}
-				}
+				int add = isItemStackable(input, getStackInSlot(i));
+				DCUtil.addStackSize(getStackInSlot(i), add);
+				return add;
 			} else {
 				this.setInventorySlotContents(i, input);
+				return DCUtil.getSize(input);
 			}
 		}
+		return 0;
 	}
 
 	@Override
@@ -163,13 +164,13 @@ public class DCInventory implements IInventory {
 		if (i < 0 || i >= this.getSizeInventory())
 			return null;
 		else {
+			ItemStack itemstack = null;
 			if (!DCUtil.isEmpty(getStackInSlot(i))) {
-				ItemStack itemstack = this.getStackInSlot(i);
-				inv[i] = null;
-				return itemstack;
+				itemstack = this.getStackInSlot(i).copy();
 			}
+			inv[i] = null;
+			return itemstack;
 		}
-		return null;
 	}
 
 	@Override
