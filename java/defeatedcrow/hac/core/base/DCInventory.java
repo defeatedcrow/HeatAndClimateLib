@@ -61,9 +61,11 @@ public class DCInventory implements IInventory {
 		if (i < 0 || i >= this.getSizeInventory())
 			return ItemStack.EMPTY;
 		if (!DCUtil.isEmpty(getStackInSlot(i))) {
-			ItemStack itemstack;
-			itemstack = getStackInSlot(i).splitStack(num);
-			return itemstack;
+			ItemStack item = getStackInSlot(i).splitStack(num);
+			if (item.getCount() <= 0) {
+				item = ItemStack.EMPTY;
+			}
+			return item;
 		} else
 			return ItemStack.EMPTY;
 	}
@@ -130,36 +132,39 @@ public class DCInventory implements IInventory {
 
 	// 追加メソッド
 	public static int isItemStackable(ItemStack target, ItemStack current) {
-		if (DCUtil.isEmpty(target) || DCUtil.isEmpty(current))
-			return 0;
-
-		if (target.getItem() == current.getItem() && target.getMetadata() == current.getMetadata()
-				&& ItemStack.areItemStackTagsEqual(target, current)) {
-			int i = current.getCount() + target.getCount();
-			if (i > current.getMaxStackSize()) {
-				i = current.getMaxStackSize() - current.getCount();
-				return i;
+		if (DCUtil.isSameItem(target, current, false)) {
+			int i1 = DCUtil.getSize(current) + DCUtil.getSize(target);
+			if (!DCUtil.isEmpty(current) && i1 > current.getMaxStackSize()) {
+				return current.getMaxStackSize() - DCUtil.getSize(current);
+			} else {
+				return DCUtil.getSize(target);
 			}
-			return target.getCount();
 		}
-
 		return 0;
 	}
 
-	public void incrStackInSlot(int i, ItemStack input) {
-		if (i < this.getSizeInventory() && !DCUtil.isEmpty(input)) {
+	public int canIncr(int i, ItemStack get) {
+		if (i < 0 || i >= this.getSizeInventory() || DCUtil.isEmpty(get))
+			return 0;
+		else if (DCUtil.isEmpty(getStackInSlot(i)))
+			return DCUtil.getSize(get);
+		else {
+			return isItemStackable(get, getStackInSlot(i));
+		}
+	}
+
+	public int incrStackInSlot(int i, ItemStack input) {
+		if (i >= 0 || i < this.getSizeInventory() && !DCUtil.isEmpty(input)) {
 			if (!DCUtil.isEmpty(getStackInSlot(i))) {
-				ItemStack stack = getStackInSlot(i);
-				if (stack.getItem() == input.getItem() && stack.getMetadata() == input.getMetadata()) {
-					DCUtil.addStackSize(stack, input.getCount());
-					if (stack.getCount() > this.getInventoryStackLimit()) {
-						stack.setCount(this.getInventoryStackLimit());
-					}
-				}
+				int add = isItemStackable(input, getStackInSlot(i));
+				DCUtil.addStackSize(getStackInSlot(i), add);
+				return add;
 			} else {
 				this.setInventorySlotContents(i, input);
+				return DCUtil.getSize(input);
 			}
 		}
+		return 0;
 	}
 
 	@Override
