@@ -30,6 +30,16 @@ public class SidedEnergyStorage implements ISidedEnergyStorage {
 		receive[6] = !forcedSide;
 	}
 
+	public SidedEnergyStorage setExtract(boolean[] bools) {
+		extract = bools;
+		return this;
+	}
+
+	public SidedEnergyStorage setReceive(boolean[] bools) {
+		receive = bools;
+		return this;
+	}
+
 	@Override
 	public int receiveEnergy(int maxReceive, boolean simulate) {
 		return receiveEnergy(maxReceive, simulate, null);
