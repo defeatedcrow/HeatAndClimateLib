@@ -143,9 +143,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		if (collideable())
-			this.noClip = this.pushOutOfBlocks(this.posX,
-					(this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY), this.posZ);
+
 		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 
 		if (this.isFallable()) {
@@ -186,34 +184,6 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 			this.doBlockCollisions();
 
-			// 進路方向の接触チェック
-			// Vec3d checkX = new Vec3d(MathHelper.floor_double(this.posX + this.motionX),
-			// MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
-			// BlockPos posX = new BlockPos(checkX);
-			// IBlockState stateX = worldObj.getBlockState(posX);
-			// if (stateX.getMaterial() != Material.AIR) {
-			// AxisAlignedBB aabbX = stateX.getCollisionBoundingBox(this.worldObj, posX);
-			//
-			// if (aabbX != null && aabbX != Block.NULL_AABB &&
-			// aabbX.offset(posX).isVecInside(checkX)) {
-			// this.motionX *= -0.5D;
-			// }
-			// }
-
-			// Vec3d checkZ = new Vec3d(MathHelper.floor_double(this.posX),
-			// MathHelper.floor_double(this.posY),
-			// MathHelper.floor_double(this.posZ + this.motionZ));
-			// BlockPos posZ = new BlockPos(checkZ);
-			// IBlockState stateZ = worldObj.getBlockState(posZ);
-			// if (stateZ.getMaterial() != Material.AIR) {
-			// AxisAlignedBB aabbZ = stateZ.getCollisionBoundingBox(this.worldObj, posZ);
-			//
-			// if (aabbZ != null && aabbZ != Block.NULL_AABB &&
-			// aabbZ.offset(posZ).isVecInside(checkZ)) {
-			// this.motionZ *= -0.5D;
-			// }
-			// }
-
 			if (this.motionX * this.motionX < 0.0005D) {
 				this.motionX = 0.0D;
 			}
@@ -231,7 +201,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 	protected void collideWithNearbyEntities() {
 		List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox(),
-				EntitySelectors.<Entity>getTeamCollisionPredicate(this));
+				EntitySelectors.IS_STANDALONE);
 
 		if (!list.isEmpty()) {
 			for (int i = 0; i < list.size(); ++i) {
