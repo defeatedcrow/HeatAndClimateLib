@@ -336,9 +336,9 @@ public abstract class ClimateDoubleCropBase extends BlockDC
 	@Override
 	public List<DCHeatTier> getSuitableTemp(IBlockState thisState) {
 		List<DCHeatTier> ret = new ArrayList<DCHeatTier>();
-		ret.add(DCHeatTier.COLD);
+		ret.add(DCHeatTier.COOL);
 		ret.add(DCHeatTier.NORMAL);
-		ret.add(DCHeatTier.HOT);
+		ret.add(DCHeatTier.WARM);
 		return ret;
 	}
 

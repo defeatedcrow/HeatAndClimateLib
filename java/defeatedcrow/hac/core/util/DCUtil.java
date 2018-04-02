@@ -86,6 +86,18 @@ public class DCUtil {
 		return 0;
 	}
 
+	public static ItemStack redAndDel(ItemStack item, int i) {
+		if (!isEmpty(item)) {
+			int ret = Math.min(i, item.getCount());
+			item.splitStack(ret);
+			if (item.getCount() <= 0) {
+				item = ItemStack.EMPTY;
+			}
+			return item;
+		}
+		return ItemStack.EMPTY;
+	}
+
 	public static int addStackSize(ItemStack item, int i) {
 		if (!isEmpty(item)) {
 			int ret = item.getMaxStackSize() - item.getCount();
