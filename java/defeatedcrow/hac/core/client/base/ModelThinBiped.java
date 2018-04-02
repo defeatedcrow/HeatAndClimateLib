@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -118,6 +119,22 @@ public class ModelThinBiped extends ModelBiped {
 		setAngle(leftArm, this.bipedLeftArm);
 		setAngle(rightLeg, this.bipedRightLeg);
 		setAngle(leftLeg, this.bipedLeftLeg);
+
+		if (this.swingProgress > 0.0F) {
+			EnumHandSide side = this.getMainHand(entity);
+			ModelRenderer arm = this.getArmForSide(side);
+			float f1 = this.swingProgress;
+			f1 = 1.0F - this.swingProgress;
+			f1 = f1 * f1;
+			f1 = f1 * f1;
+			f1 = 1.0F - f1;
+			float f2 = MathHelper.sin(f1 * (float) Math.PI);
+			float f3 = MathHelper.sin(this.swingProgress * (float) Math.PI) * -(this.bipedHead.rotateAngleX - 0.7F)
+					* 0.75F;
+			arm.rotateAngleX = (float) (arm.rotateAngleX - (f2 * 1.2D + f3));
+			arm.rotateAngleY += this.bipedBody.rotateAngleY * 2.0F;
+			arm.rotateAngleZ += MathHelper.sin(this.swingProgress * (float) Math.PI) * -0.4F;
+		}
 	}
 
 	protected void setAngle(ModelRenderer m1, ModelRenderer m2) {
