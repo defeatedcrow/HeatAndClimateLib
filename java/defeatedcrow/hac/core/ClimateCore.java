@@ -16,6 +16,8 @@ import defeatedcrow.hac.core.climate.ArmorResistantRegister;
 import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.fluid.FluidIDRegisterDC;
 import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
+import defeatedcrow.hac.core.recipe.ShapedNBTRecipe;
+import defeatedcrow.hac.core.recipe.ShapelessNBTRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
 import defeatedcrow.hac.core.util.DCWaterOpaque;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,6 +29,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.oredict.RecipeSorter.Category;
 
 // @SortingIndex(1102)
 @Mod(modid = ClimateCore.MOD_ID, name = ClimateCore.MOD_NAME, version = ClimateCore.MOD_MEJOR + "."
@@ -71,9 +75,16 @@ public class ClimateCore {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+
+		RecipeSorter.INSTANCE.register("dcs_lib:recipeclass.shaped_nbt", ShapedNBTRecipe.class, Category.SHAPED,
+				"after:minecraft:shaped before:minecraft:shapeless");
+		RecipeSorter.INSTANCE.register("dcs_lib:recipeclass.shapeless_nbt", ShapelessNBTRecipe.class,
+				Category.SHAPELESS, "after:minecraft:shapeless");
+
 		proxy.loadInit();
 		proxy.loadTE();
 		proxy.loadWorldGen();
+
 		if (!CoreConfigDC.disableCustomRecipe) {
 			CustomizeVanillaRecipe.initCustomize();
 		}
