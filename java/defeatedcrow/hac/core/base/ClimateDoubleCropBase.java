@@ -226,7 +226,7 @@ public abstract class ClimateDoubleCropBase extends BlockDC
 
 	@Override
 	public IBlockState setGroundState(IBlockState state) {
-		return state.withProperty(DCState.STAGE8, 0);
+		return state.withProperty(DCState.STAGE8, 4);
 	}
 
 	@Override

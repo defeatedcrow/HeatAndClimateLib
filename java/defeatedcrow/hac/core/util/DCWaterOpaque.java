@@ -7,12 +7,11 @@ import net.minecraft.init.Blocks;
 
 public class DCWaterOpaque {
 
-	private DCWaterOpaque() {
-	}
+	private DCWaterOpaque() {}
 
 	// waterの透過度をいじってみる
 	public static void load() {
-		if (CoreConfigDC.waterFix) {
+		if (CoreConfigDC.waterFix > 0D) {
 			DCLogger.debugLog("#####");
 			Block water = Blocks.WATER;
 			Block flow = Blocks.FLOWING_WATER;

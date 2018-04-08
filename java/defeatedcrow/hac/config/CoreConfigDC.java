@@ -30,7 +30,8 @@ public class CoreConfigDC {
 	public static boolean showDamageIcon = true;
 	public static int iconX = 0;
 	public static int iconY = 0;
-	public static boolean waterFix = true;
+	public static double waterFix = 0.01D;
+	public static double lavaFix = 0.01D;
 	public static boolean hudEffect = true;
 
 	// difficulty
@@ -52,6 +53,7 @@ public class CoreConfigDC {
 	public static int droughtFrequency = 60;
 	public static boolean enableSeasonEffect = true;
 	public static boolean enableWeatherEffect = true;
+	public static boolean enableSubmergedCave = false;
 
 	// hardmode
 	public static boolean harderVanilla = false;
@@ -122,8 +124,8 @@ public class CoreConfigDC {
 			Property hud_y = cfg.get("render setting", "Thermal Damage Icon Offset Y", iconY,
 					"Set the amount of Yoffset of the thermal damage icon.");
 
-			Property water = cfg.get("render setting", "Enable Water Fix", waterFix,
-					"Enable fix the vanilla light-opacity and fog density in water");
+			Property water = cfg.get("render setting", "Density of Water Fog Fix", waterFix,
+					"Set fog density in water");
 
 			Property warp_key = cfg.get("key setting", "Charm Use Key", charmWarpKey,
 					"Set key number for using jewel charm effects. Default key is X(45)." + BR
@@ -168,6 +170,11 @@ public class CoreConfigDC {
 			Property season = cfg.get("world setting", "Enable Season Effect", enableSeasonEffect,
 					"Enable temperature change due to the season.");
 
+			Property lava = cfg.get("render setting", "Density of Lava Fog Fix", lavaFix, "Set fog density in lava");
+
+			Property submerged = cfg.get("world setting", "Enable Submerged Ocean Cave", enableSubmergedCave,
+					"Enable the submerged cave in ocean biomes.");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
@@ -180,7 +187,6 @@ public class CoreConfigDC {
 			enableUnderLake = under_lake.getBoolean();
 			enableForestLake = forest_lake.getBoolean();
 			enableFreezeDrop = freeze_drop.getBoolean();
-			waterFix = water.getBoolean();
 			wall = enableWall.getBoolean();
 			disableCustomRecipe = disableCustom.getBoolean();
 			harderVanilla = vanilla_harder.getBoolean();
@@ -190,6 +196,7 @@ public class CoreConfigDC {
 			enableWeatherEffect = weather.getBoolean();
 			enableSeasonEffect = season.getBoolean();
 			hudEffect = hud_effect.getBoolean();
+			enableSubmergedCave = submerged.getBoolean();
 
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)
@@ -214,6 +221,18 @@ public class CoreConfigDC {
 
 			altJumpKey = jump_key.getInt();
 			altSneakKey = sneak_key.getInt();
+
+			double d1 = water.getDouble();
+			if (d1 < 0D || d1 > 10D) {
+				d1 = 0.0D;
+			}
+			waterFix = d1;
+
+			double d2 = lava.getDouble();
+			if (d2 < 0D || d2 > 10D) {
+				d2 = 0.0D;
+			}
+			lavaFix = d2;
 
 		} catch (Exception e) {
 			e.printStackTrace();
