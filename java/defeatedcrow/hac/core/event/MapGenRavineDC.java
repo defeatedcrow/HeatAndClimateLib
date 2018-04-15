@@ -23,7 +23,7 @@ public class MapGenRavineDC extends MapGenRavine {
 
 	@Override
 	protected boolean isOceanBlock(ChunkPrimer data, int x, int y, int z, int chunkX, int chunkZ) {
-		return y > 10 && super.isOceanBlock(data, x, y, z, chunkX, chunkZ);
+		return y > 40 && super.isOceanBlock(data, x, y, z, chunkX, chunkZ);
 	}
 
 	@Override

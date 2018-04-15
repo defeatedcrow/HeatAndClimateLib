@@ -465,4 +465,9 @@ public abstract class ClimateDoubleCropBase extends BlockDC
 		this.grow(world, pos, state);
 	}
 
+	@Override
+	public boolean isSolidFace(IBlockState state, BlockPos pos, EnumFacing face) {
+		return false;
+	}
+
 }
