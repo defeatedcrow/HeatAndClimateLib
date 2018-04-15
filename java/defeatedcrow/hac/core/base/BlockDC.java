@@ -127,4 +127,14 @@ public class BlockDC extends Block {
 		return blockState.getBoundingBox(worldIn, pos);
 	}
 
+	/** solid side */
+	public boolean isSolidFace(IBlockState state, BlockPos pos, EnumFacing face) {
+		return state.getMaterial().isSolid();
+	}
+
+	@Override
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return isSolidFace(state, pos, side) ? true : false;
+	}
+
 }
