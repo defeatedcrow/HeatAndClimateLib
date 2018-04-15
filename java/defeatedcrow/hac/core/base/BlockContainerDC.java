@@ -9,7 +9,9 @@ import com.google.common.collect.Lists;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -106,6 +108,21 @@ public abstract class BlockContainerDC extends BlockContainer {
 
 	public AxisAlignedBB getCollisionBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return blockState.getBoundingBox(worldIn, pos);
+	}
+
+	@Override
+	public EnumPushReaction getMobilityFlag(IBlockState state) {
+		return EnumPushReaction.BLOCK;
+	}
+
+	/** solid side */
+	public boolean isSolidFace(IBlockState state, BlockPos pos, EnumFacing face) {
+		return state.getMaterial().isSolid();
+	}
+
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
+		return isSolidFace(state, pos, face) ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
 	}
 
 }
