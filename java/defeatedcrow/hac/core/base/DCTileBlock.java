@@ -32,6 +32,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -186,6 +188,17 @@ public abstract class DCTileBlock extends BlockContainerDC implements IClimateOb
 		return new BlockStateContainer(this, new IProperty[] {
 				DCState.FACING, DCState.TYPE4
 		});
+	}
+
+	@Override
+	public IBlockState withRotation(IBlockState state, Rotation rot) {
+		return state.withProperty(DCState.FACING, rot.rotate(state.getValue(DCState.FACING)));
+	}
+
+	@Override
+	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+		return mirrorIn == Mirror.NONE ? state
+				: state.withRotation(mirrorIn.toRotation(state.getValue(DCState.FACING)));
 	}
 
 	/* climate */

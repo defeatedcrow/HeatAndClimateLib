@@ -16,6 +16,8 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -146,6 +148,17 @@ public class DCSidedBlock extends ClimateBlock implements ISidedTexture, INameSu
 		return new BlockStateContainer(this, new IProperty[] {
 				DCState.FLAG, DCState.TYPE8
 		});
+	}
+
+	@Override
+	public IBlockState withRotation(IBlockState state, Rotation rot) {
+		boolean f = state.getValue(DCState.FLAG);
+		return state.withProperty(DCState.FLAG, !f);
+	}
+
+	@Override
+	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+		return state;
 	}
 
 	/** T, B, N, S, W, E */

@@ -137,14 +137,12 @@ public class DCRecipe {
 		RecipeAPI.registerSmelting.addRecipe(silverfish1, DCHeatTier.KILN);
 
 		// grassとsandの風化
-		ClimateSmelting sand = new ClimateSmelting(new ItemStack(Blocks.SAND, 1, 0), null, DCHeatTier.OVEN,
+		ClimateSmelting sand = new ClimateSmelting(new ItemStack(Blocks.SAND, 1, 0), null, DCHeatTier.SMELTING,
 				DCHumidity.DRY, null, 0, false, new ItemStack(Blocks.DIRT, 1, 0));
-		sand.requiredHeat().add(DCHeatTier.SMELTING);
-		sand.requiredHeat().add(DCHeatTier.UHT);
 		sand.requiredHeat().add(DCHeatTier.INFERNO);
 		RecipeAPI.registerSmelting.addRecipe(sand, DCHeatTier.OVEN);
 
-		ClimateSmelting sand2 = new ClimateSmelting(new ItemStack(Blocks.DIRT, 1, 0), null, DCHeatTier.OVEN,
+		ClimateSmelting sand2 = new ClimateSmelting(new ItemStack(Blocks.DIRT, 1, 0), null, DCHeatTier.SMELTING,
 				DCHumidity.DRY, null, 0, false, new ItemStack(Blocks.GRASS, 1, 0)) {
 			@Override
 			public boolean additionalRequire(World world, BlockPos pos) {
@@ -153,8 +151,6 @@ public class DCRecipe {
 				return false;
 			}
 		};
-		sand2.requiredHeat().add(DCHeatTier.SMELTING);
-		sand2.requiredHeat().add(DCHeatTier.UHT);
 		sand2.requiredHeat().add(DCHeatTier.INFERNO);
 		RecipeAPI.registerSmelting.addRecipe(sand2, DCHeatTier.OVEN);
 
