@@ -180,7 +180,7 @@ public class CustomizeVanillaRecipe {
 		int y = recipe.recipeHeight;
 		NonNullList<Ingredient> items = recipe.recipeItems;
 
-		if (x * y == 0 || x * y > 9) {
+		if (x * y == 0 || x > 3 || y > 3) {
 			DCLogger.debugLog("Failed ShapedRecipe : " + output.toString());
 			return;
 		}
@@ -248,6 +248,11 @@ public class CustomizeVanillaRecipe {
 		NonNullList<Ingredient> items = recipe.recipeItems;
 		ArrayList<Object> inputs = new ArrayList<Object>();
 
+		if (items == null || items.isEmpty() || items.size() > 9) {
+			DCLogger.debugLog("Failed ShapelessRecipe : " + output.toString());
+			return;
+		}
+
 		for (Ingredient item : items) {
 			boolean b = false;
 			if (!DCUtil.isEmptyIngredient(item)) {
@@ -295,7 +300,7 @@ public class CustomizeVanillaRecipe {
 			return;
 		}
 
-		if (x * y == 0 || x * y > 9) {
+		if (x * y == 0 || x > 3 || y > 3) {
 			DCLogger.debugLog("Failed ShapedOreRecipe : " + output.toString());
 			return;
 		}
@@ -391,6 +396,11 @@ public class CustomizeVanillaRecipe {
 		ItemStack output = recipe.getRecipeOutput();
 		NonNullList<Ingredient> objects = recipe.getIngredients();
 		ArrayList<Object> inputs = new ArrayList<Object>();
+
+		if (objects == null || objects.isEmpty() || objects.size() > 9) {
+			DCLogger.debugLog("Failed ShapelessOreRecipe : " + output.toString());
+			return;
+		}
 
 		for (Ingredient obj : objects) {
 			boolean b = false;

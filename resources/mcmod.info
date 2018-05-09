@@ -14,7 +14,7 @@
     "name":"HeatAndClimateLib",
     "url":"http://defeatedcrow.jp/modwiki/HeatAndClimate",
     "updateUrl":"",
-    "version":"2.4.5",
+    "version":"2.4.6",
     "requiredMods":[
       "Minecraft Forge1.12.2-14.23.1.2555+"
     ]
