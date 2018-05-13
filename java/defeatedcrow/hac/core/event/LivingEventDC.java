@@ -29,6 +29,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
@@ -188,9 +189,9 @@ public class LivingEventDC {
 					}
 
 					// 防具の計算
-					if (living.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
+					if (living.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) {
 						IItemHandler handler = living.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
-								null);
+								EnumFacing.NORTH);
 						if (handler != null) {
 							for (int s = 0; s < handler.getSlots(); s++) {
 								ItemStack item = handler.getStackInSlot(s);
