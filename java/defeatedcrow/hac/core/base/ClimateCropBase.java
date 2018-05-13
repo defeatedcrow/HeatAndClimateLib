@@ -40,6 +40,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -49,7 +51,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * 4段階版
  */
 public abstract class ClimateCropBase extends BlockDC
-		implements ISidedTexture, INameSuffix, IClimateCrop, IRapidCollectables, IGrowable {
+		implements ISidedTexture, INameSuffix, IClimateCrop, IRapidCollectables, IGrowable, IPlantable {
 
 	protected static final AxisAlignedBB CROP_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.875D, 0.875D);
 
@@ -434,6 +436,21 @@ public abstract class ClimateCropBase extends BlockDC
 	@Override
 	public boolean isSolidFace(IBlockState state, BlockPos pos, EnumFacing face) {
 		return false;
+	}
+
+	/* IPlantable */
+
+	@Override
+	public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
+		return EnumPlantType.Crop;
+	}
+
+	@Override
+	public IBlockState getPlant(IBlockAccess world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		if (state.getBlock() != this)
+			return getDefaultState();
+		return state;
 	}
 
 }
