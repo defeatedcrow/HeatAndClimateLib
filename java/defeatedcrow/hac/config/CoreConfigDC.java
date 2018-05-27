@@ -54,6 +54,7 @@ public class CoreConfigDC {
 	public static boolean enableSeasonEffect = true;
 	public static boolean enableWeatherEffect = true;
 	public static boolean enableSubmergedCave = false;
+	public static int seasonFrequency = 60;
 
 	// hardmode
 	public static boolean harderVanilla = false;
@@ -161,6 +162,9 @@ public class CoreConfigDC {
 			Property drought = cfg.get("world setting", "Drought Frequency", droughtFrequency,
 					"Set the number of days of fine weather required for drought.");
 
+			Property seasonF = cfg.get("world setting", "Seasob Frequency", seasonFrequency,
+					"Set the number of days of season's length.");
+
 			Property tight = cfg.get("hardmode setting", "Anaerobic Underworld", tightUnderworld,
 					"Set the indoor underground (<Y30) airflow to tight.");
 
@@ -212,6 +216,11 @@ public class CoreConfigDC {
 			if (dr < 2 || dr > 1000)
 				dr = 120;
 			droughtFrequency = dr;
+
+			int sf = seasonF.getInt();
+			if (sf < 2 || sf > 1000)
+				sf = 90;
+			seasonFrequency = sf;
 
 			iconX = hud_x.getInt();
 			iconY = hud_y.getInt();

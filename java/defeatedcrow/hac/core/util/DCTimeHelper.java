@@ -34,7 +34,7 @@ public class DCTimeHelper {
 	 */
 	public static int getSeason(World world) {
 		int day = getDay(world);
-		int season = ((day - 1) / 30) & 3;
+		int season = ((day - 1) / CoreConfigDC.seasonFrequency) & 3;
 		return season;
 	}
 
