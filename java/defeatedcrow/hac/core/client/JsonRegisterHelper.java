@@ -245,7 +245,7 @@ public class JsonRegisterHelper {
 			} catch (FileNotFoundException e) {
 				DCLogger.warnLog("File not found! " + gj.getPath());
 			} catch (IOException e) {
-				DCLogger.warnLog("fail");
+				DCLogger.warnLog("Failed to register model.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -309,7 +309,7 @@ public class JsonRegisterHelper {
 			} catch (FileNotFoundException e) {
 				DCLogger.warnLog("File not found! " + gj.getPath());
 			} catch (IOException e) {
-				DCLogger.warnLog("fail");
+				DCLogger.warnLog("Failed to register model.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -375,7 +375,7 @@ public class JsonRegisterHelper {
 			} catch (FileNotFoundException e) {
 				DCLogger.warnLog("File not found! " + gj.getPath());
 			} catch (IOException e) {
-				DCLogger.warnLog("fail");
+				DCLogger.warnLog("Failed to register model.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -446,7 +446,7 @@ public class JsonRegisterHelper {
 			} catch (FileNotFoundException e) {
 				DCLogger.warnLog("File not found! " + gj.getPath());
 			} catch (IOException e) {
-				DCLogger.warnLog("fail");
+				DCLogger.warnLog("Failed to register model.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -512,7 +512,7 @@ public class JsonRegisterHelper {
 			} catch (FileNotFoundException e) {
 				DCLogger.warnLog("File not found! " + gj.getPath());
 			} catch (IOException e) {
-				DCLogger.warnLog("fail");
+				DCLogger.warnLog("Failed to register model.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -12,7 +12,7 @@
  * BiomeやBlockを追加したい場合はDCsClimateAPI.register、<br>
  * 座標のClimateを確認したい場合はDCsClimateAPI.calculatorを使用して下さい。
  */
-@API(apiVersion = "2.0.1", owner = "dcs_lib", provides = "DCsHaCAPI|climate")
+@API(apiVersion = "2.0.3", owner = "dcs_lib", provides = "DCsHaCAPI|climate")
 package defeatedcrow.hac.api.climate;
 
 import net.minecraftforge.fml.common.API;

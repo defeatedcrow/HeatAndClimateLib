@@ -198,6 +198,26 @@ public class DCUtil {
 		return false;
 	}
 
+	public static boolean hasSameDic(ItemStack item, ItemStack check) {
+		if (!DCUtil.isEmpty(item) && !DCUtil.isEmpty(check)) {
+			int[] ids = OreDictionary.getOreIDs(check);
+			int[] ids2 = OreDictionary.getOreIDs(item);
+			if (ids.length < 1 || ids2.length < 1) {
+				return false;
+			}
+			for (int id : ids) {
+				for (int id2 : ids2) {
+					if (id == id2) {
+						String s = OreDictionary.getOreName(id);
+						if (!s.contains("All") && !s.contains("dye") && !s.contains("list"))
+							return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	public static ArrayList<ItemStack> getProcessedList(Object obj) {
 		ArrayList<ItemStack> ret = Lists.newArrayList();
 		if (obj == null) {

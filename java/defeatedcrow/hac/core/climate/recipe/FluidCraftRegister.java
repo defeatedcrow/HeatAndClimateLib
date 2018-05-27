@@ -14,6 +14,7 @@ import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class FluidCraftRegister implements IFluidRecipeRegister {
 
@@ -93,7 +94,8 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 		List<FluidCraftRecipe> list = getRecipeList(heat);
 		boolean b1 = input == null && inFluid == null;
 		boolean b2 = DCUtil.isEmpty(output) && outFluid == null;
-		if (!b1 && !b2) {
+		boolean b3 = hasEmptyInput(input);
+		if (!b1 && !b2 && !b3) {
 			list.add(new FluidCraftRecipe(output, secondary, outFluid, heat, hum, air, secondaryChance, needCooling,
 					inFluid, input));
 		}
@@ -102,8 +104,34 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 	@Override
 	public void addRecipe(IFluidRecipe recipe, DCHeatTier heat) {
 		List<FluidCraftRecipe> list = getRecipeList(heat);
-		if (recipe instanceof FluidCraftRecipe)
+		if (recipe instanceof FluidCraftRecipe && !hasEmptyInput(recipe.getInput()))
 			list.add((FluidCraftRecipe) recipe);
+	}
+
+	private boolean hasEmptyInput(Object... inputs) {
+		if (inputs != null && inputs.length > 0) {
+			for (Object in : inputs) {
+				if (in instanceof String) {
+					boolean ret = true;
+					if (OreDictionary.doesOreNameExist((String) in)) {
+						List l = OreDictionary.getOres((String) in);
+						if (!l.isEmpty() && l.size() > 0) {
+							ret = false;
+						}
+					}
+
+					if (ret) {
+						return true;
+					}
+				} else if (in == null) {
+					return true;
+				}
+			}
+
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	@Override

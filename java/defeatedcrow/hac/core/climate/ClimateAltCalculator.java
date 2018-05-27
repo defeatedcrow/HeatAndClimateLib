@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.climate;
 
+import defeatedcrow.hac.api.climate.BlockHeatTierEvent;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.ClimateCalculateEvent;
 import defeatedcrow.hac.api.climate.DCAirflow;
@@ -190,6 +191,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 							wall = true;
 						}
 
+						BlockHeatTierEvent event = new BlockHeatTierEvent(world, p2, current, true);
+						current = event.result();
+
 						if (current.getTier() > hot.getTier()) {
 							if (wall) {
 								int pre = ThermalInsulationUtil.getInsulation(world, new BlockPos(xi, yi, zi));
@@ -331,6 +335,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 							zi = z + 1;
 							wall = true;
 						}
+
+						BlockHeatTierEvent event = new BlockHeatTierEvent(world, p2, current, false);
+						current = event.result();
 
 						if (current.getTier() < cold.getTier()) {
 							if (wall) {

@@ -121,7 +121,9 @@ public class ShapelessNBTRecipe extends IForgeRegistryEntry.Impl<IRecipe> implem
 								.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 						FluidStack f2 = handler2.drain(Fluid.BUCKET_VOLUME, false);
 						if (f != null && f2 != null && f.getFluid() == f2.getFluid()) {
-							return !sensitive || f.amount == f2.amount;
+							if (sensitive && f.amount != f2.amount) {
+								return false;
+							}
 						}
 					}
 					if (stack.hasTagCompound()) {

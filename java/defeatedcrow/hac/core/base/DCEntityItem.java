@@ -2,10 +2,12 @@ package defeatedcrow.hac.core.base;
 
 import defeatedcrow.hac.api.placeable.IEntityItem;
 import defeatedcrow.hac.core.util.DCUtil;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -39,6 +41,9 @@ public abstract class DCEntityItem extends DCItem implements IEntityItem {
 								pos.getY() + hitY + fY, pos.getZ() + hitZ + fZ, stack);
 						if (entity != null) {
 							if (this.spawnPlacementEntity(world, entity)) {
+								if (player instanceof EntityPlayerMP) {
+									CriteriaTriggers.SUMMONED_ENTITY.trigger((EntityPlayerMP) player, entity);
+								}
 								DCUtil.reduceStackSize(stack, 1);
 								return EnumActionResult.SUCCESS;
 							}

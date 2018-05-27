@@ -10,6 +10,7 @@ import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ReactorRecipeRegister implements IReactorRecipeRegister {
 
@@ -96,7 +97,8 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 		List<ReactorRecipe> list = getRecipeList(heat);
 		boolean b1 = input == null && inFluid1 == null && inFluid2 == null;
 		boolean b2 = DCUtil.isEmpty(output) && outFluid1 == null && outFluid2 == null;
-		if (!b1 && !b2) {
+		boolean b3 = hasEmptyInput(input);
+		if (!b1 && !b2 && !b3) {
 			list.add(new ReactorRecipe(output, secondary, outFluid1, outFluid2, heat, secondaryChance, catalyst,
 					inFluid1, inFluid2, input));
 		}
@@ -105,8 +107,34 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 	@Override
 	public void addRecipe(IReactorRecipe recipe, DCHeatTier heat) {
 		List<ReactorRecipe> list = getRecipeList(heat);
-		if (recipe instanceof ReactorRecipe)
+		if (recipe instanceof ReactorRecipe && !hasEmptyInput(recipe.getInput()))
 			list.add((ReactorRecipe) recipe);
+	}
+
+	private boolean hasEmptyInput(Object... inputs) {
+		if (inputs != null && inputs.length > 0) {
+			for (Object in : inputs) {
+				if (in instanceof String) {
+					boolean ret = true;
+					if (OreDictionary.doesOreNameExist((String) in)) {
+						List l = OreDictionary.getOres((String) in);
+						if (!l.isEmpty() && l.size() > 0) {
+							ret = false;
+						}
+					}
+
+					if (ret) {
+						return true;
+					}
+				} else if (in == null) {
+					return true;
+				}
+			}
+
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	@Override

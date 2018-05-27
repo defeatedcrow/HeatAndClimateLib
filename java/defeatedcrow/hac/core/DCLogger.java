@@ -14,9 +14,9 @@ public class DCLogger {
 		}
 	}
 
-	public static void debugLog(String id, String s) {
+	public static void debugInfoLog(String s) {
 		if (ClimateCore.isDebug) {
-			ClimateCore.LOGGER.debug(id + ": " + s);
+			ClimateCore.LOGGER.info(s);
 		}
 	}
 

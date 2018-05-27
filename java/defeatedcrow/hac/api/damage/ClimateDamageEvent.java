@@ -44,6 +44,10 @@ public class ClimateDamageEvent extends LivingEvent {
 		return amount;
 	}
 
+	public DCHeatTier getHeatTier() {
+		return heatTier;
+	}
+
 	public void setAmount(float amount) {
 		this.amount = amount;
 	}

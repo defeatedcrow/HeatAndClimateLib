@@ -71,6 +71,10 @@ public class ShapedNBTRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
 
 	@Override
 	public boolean matches(InventoryCrafting inv, World world) {
+		if (inv.getWidth() < width || inv.getHeight() < height) {
+			return false;
+		}
+
 		for (int x = 0; x <= MAX_CRAFT_GRID_WIDTH - width; x++) {
 			for (int y = 0; y <= MAX_CRAFT_GRID_HEIGHT - height; ++y) {
 				if (checkMatch(inv, x, y, false)) {
@@ -116,7 +120,9 @@ public class ShapedNBTRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
 										.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 								FluidStack f2 = handler2.drain(Fluid.BUCKET_VOLUME, false);
 								if (f != null && f2 != null && f.getFluid() == f2.getFluid()) {
-									return !sensitive || f.amount == f2.amount;
+									if (sensitive && f.amount != f2.amount) {
+										return false;
+									}
 								}
 							}
 							if (stack.hasTagCompound()) {

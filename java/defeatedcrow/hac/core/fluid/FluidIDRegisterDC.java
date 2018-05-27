@@ -107,7 +107,7 @@ public class FluidIDRegisterDC {
 					String s = ent.getKey();
 					int i = Integer.parseInt(s);
 					String name = ent.getValue().toString();
-					DCLogger.infoLog("dcs_climate|lib", "get fluid from json: " + i + ", " + name);
+					DCLogger.debugTrace("get fluid from json: " + i + ", " + name);
 					fluidMap.put(i, name);
 					maxID++;
 				}
