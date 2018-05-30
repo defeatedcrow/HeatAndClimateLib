@@ -31,7 +31,7 @@ public class DCRecipe {
 	public static void load() {
 		/* Smelting */
 		// ABS
-		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.PACKED_ICE, 1, 0), DCHeatTier.ABSOLUTE, null,
+		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.PACKED_ICE, 1, 0), DCHeatTier.CRYOGENIC, null,
 				DCAirflow.FLOW, false, new ItemStack(Blocks.ICE, 1, 0));
 
 		// COLD
@@ -140,7 +140,7 @@ public class DCRecipe {
 		ClimateSmelting sand = new ClimateSmelting(new ItemStack(Blocks.SAND, 1, 0), null, DCHeatTier.SMELTING,
 				DCHumidity.DRY, null, 0, false, new ItemStack(Blocks.DIRT, 1, 0));
 		sand.requiredHeat().add(DCHeatTier.INFERNO);
-		RecipeAPI.registerSmelting.addRecipe(sand, DCHeatTier.OVEN);
+		RecipeAPI.registerSmelting.addRecipe(sand, DCHeatTier.SMELTING);
 
 		ClimateSmelting sand2 = new ClimateSmelting(new ItemStack(Blocks.DIRT, 1, 0), null, DCHeatTier.SMELTING,
 				DCHumidity.DRY, null, 0, false, new ItemStack(Blocks.GRASS, 1, 0)) {
@@ -152,7 +152,7 @@ public class DCRecipe {
 			}
 		};
 		sand2.requiredHeat().add(DCHeatTier.INFERNO);
-		RecipeAPI.registerSmelting.addRecipe(sand2, DCHeatTier.OVEN);
+		RecipeAPI.registerSmelting.addRecipe(sand2, DCHeatTier.SMELTING);
 
 		ClimateSmelting dirt2 = new ClimateSmelting(new ItemStack(Blocks.DIRT, 1, 0), null, DCHeatTier.WARM,
 				DCHumidity.WET, null, 0, false, new ItemStack(Blocks.SAND, 1, 0)) {

@@ -24,7 +24,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 
 	public ReactorRecipeCategory(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_reactor_gui_jei.png");
-		background = guiHelper.createDrawable(location, 4, 4, 168, 130, 2, 0, 0, 0);
+		background = guiHelper.createDrawable(location, 4, 4, 168, 125, 2, 0, 0, 0);
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 		int i = 0;
 		for (DCHeatTier temp : temps) {
 			recipeLayout.getIngredientsGroup(DCHeatTier.class).init(i, true, new HeatTierRenderer(),
-					6 + temp.getID() * 6, 103, 6, 5, 0, 0);
+					2 + temp.getID() * 6, 103, 6, 5, 0, 0);
 			recipeLayout.getIngredientsGroup(DCHeatTier.class).set(i, temp);
 			i++;
 		}

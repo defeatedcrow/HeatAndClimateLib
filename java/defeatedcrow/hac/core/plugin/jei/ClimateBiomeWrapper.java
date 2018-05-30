@@ -86,14 +86,19 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 		ResourceLocation res = new ResourceLocation("dcs_climate", "textures/gui/c_biome_gui.png");
 		mc.getTextureManager().bindTexture(res);
 		if (heat != null) {
-			mc.currentScreen.drawTexturedModalRect(17, baseY + 26, heat.getID() * 20, 170, 20, 3);
-			mc.currentScreen.drawTexturedModalRect(37, baseY + 26, heat.getID() * 20, 170, 20, 3);
+			if (heat.getID() > 6) {
+				mc.currentScreen.drawTexturedModalRect(17, baseY + 26, heat.getID() * 20 - 140, 174, 20, 3);
+				mc.currentScreen.drawTexturedModalRect(37, baseY + 26, heat.getID() * 20 - 140, 174, 20, 3);
+			} else {
+				mc.currentScreen.drawTexturedModalRect(17, baseY + 26, heat.getID() * 20, 170, 20, 3);
+				mc.currentScreen.drawTexturedModalRect(37, baseY + 26, heat.getID() * 20, 170, 20, 3);
+			}
 		}
 		if (hum != null) {
-			mc.currentScreen.drawTexturedModalRect(17, baseY + 48, hum.getID() * 40, 174, 40, 3);
+			mc.currentScreen.drawTexturedModalRect(17, baseY + 48, hum.getID() * 40, 178, 40, 3);
 		}
 		if (air != null) {
-			mc.currentScreen.drawTexturedModalRect(17, baseY + 70, air.getID() * 40, 178, 40, 3);
+			mc.currentScreen.drawTexturedModalRect(17, baseY + 70, air.getID() * 40, 182, 40, 3);
 		}
 
 		String t = heat.name();

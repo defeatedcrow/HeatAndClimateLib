@@ -6,6 +6,7 @@ import java.util.Map;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.damage.ClimateDamageEvent;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.damage.DamageSourceClimate;
@@ -140,7 +141,7 @@ public class LivingEventDC {
 					if (living instanceof EntityPlayer) {
 						prev = 1.0F * (3 - CoreConfigDC.damageDifficulty); // 1.0F ~ 3.0F
 					}
-					float dam = Math.abs(heat.getTier()) * 1.0F; // hot 0F ~ 7.0F / cold 0F ~ 4.0F
+					float dam = Math.abs(heat.getTier()) * 1.0F; // hot 0F ~ 8.0F / cold 0F ~ 10.0F
 					boolean isCold = heat.getTier() < 0;
 					DamageSourceClimate source = isCold ? DamageSourceClimate.climateColdDamage
 							: DamageSourceClimate.climateHeatDamage;
@@ -182,7 +183,7 @@ public class LivingEventDC {
 							prev += 2.0F;
 						}
 						if (living.isImmuneToFire()) {
-							prev += CoreConfigDC.infernalInferno ? 6.0F : 2.0F;
+							prev += CoreConfigDC.infernalInferno ? 8.0F : 2.0F;
 						} else if (heat.getTier() > DCHeatTier.OVEN.getTier() && living.isEntityUndead()) {
 							prev -= 2.0F;
 						}
@@ -320,10 +321,10 @@ public class LivingEventDC {
 	public void livingDropItemEvent(ItemExpireEvent event) {
 		EntityItem item = event.getEntityItem();
 		int life = event.getExtraLife();
-		if (CoreConfigDC.enableFreezeDrop && item != null && !item.world.isRemote) {
+		if (item != null && !item.world.isRemote) {
 			BlockPos pos = item.getPosition();
-			DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(item.world, pos);
-			if (heat.getTier() < DCHeatTier.COLD.getTier()) {
+			IClimate clm = ClimateAPI.calculator.getClimate(item.world, pos);
+			if (CoreConfigDC.enableFreezeDrop && clm.getHeat().getTier() < DCHeatTier.COLD.getTier()) {
 				// frostbite以下
 				life += 6000;
 				event.setExtraLife(life);

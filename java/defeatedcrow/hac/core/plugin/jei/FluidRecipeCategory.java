@@ -100,7 +100,7 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		int i = 0;
 		for (DCHeatTier temp : temps) {
 			recipeLayout.getIngredientsGroup(DCHeatTier.class).init(i, true, new HeatTierRenderer(),
-					44 + temp.getID() * 6, 74, 6, 5, 0, 0);
+					38 + temp.getID() * 6, 74, 6, 5, 0, 0);
 			recipeLayout.getIngredientsGroup(DCHeatTier.class).set(i, temp);
 			i++;
 		}
@@ -109,7 +109,7 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		int j = 0;
 		for (DCHumidity hum : hums) {
 			recipeLayout.getIngredientsGroup(DCHumidity.class).init(j, true, new HumidityRenderer(),
-					44 + hum.getID() * 18, 84, 18, 5, 0, 0);
+					38 + hum.getID() * 21, 84, 21, 5, 0, 0);
 			recipeLayout.getIngredientsGroup(DCHumidity.class).set(j, hum);
 			j++;
 		}
@@ -118,7 +118,7 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		int k = 0;
 		for (DCAirflow air : airs) {
 			recipeLayout.getIngredientsGroup(DCAirflow.class).init(k, true, new AirflowRenderer(),
-					44 + air.getID() * 18, 94, 18, 5, 0, 0);
+					38 + air.getID() * 21, 94, 21, 5, 0, 0);
 			recipeLayout.getIngredientsGroup(DCAirflow.class).set(k, air);
 			k++;
 		}

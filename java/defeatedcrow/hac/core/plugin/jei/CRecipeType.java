@@ -22,34 +22,41 @@ public enum CRecipeType {
 		case 0:
 		case 1:
 		case 2:
-			return FLEEZING;
 		case 3:
+			return FLEEZING;
+
 		case 4:
+		case 5:
 			if (h > 1)
 				return CULTIVATION;
+			if (h < 0)
+				return DRYING;
 			else
 				return STANDARD_STATE;
-		case 5:
+
 		case 6:
+		case 7:
 			if (h > 1)
 				return FERMENTATION;
 			else
 				return DRYING;
-		case 7:
+		case 8:
+		case 9:
 			if (h > 2)
 				return STEAMING;
 			else
 				return h == 0 ? DRYING : COOKING;
-		case 8:
+		case 10:
 			if (a < 1)
 				return PYROLYSIS;
 			else if (h > 1)
 				return STEAMING;
 			else
 				return COMBUSTION;
-		case 9:
-		case 10:
+
 		case 11:
+		case 12:
+		case 13:
 			if (a < 1)
 				return SMELTING;
 			else

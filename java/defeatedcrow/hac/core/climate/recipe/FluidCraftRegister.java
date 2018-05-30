@@ -20,12 +20,14 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 
 	public FluidCraftRegister() {
 		this.absList = new ArrayList<FluidCraftRecipe>();
+		this.cryoList = new ArrayList<FluidCraftRecipe>();
 		this.frostList = new ArrayList<FluidCraftRecipe>();
 		this.coldList = new ArrayList<FluidCraftRecipe>();
 		this.coolList = new ArrayList<FluidCraftRecipe>();
 		this.normalList = new ArrayList<FluidCraftRecipe>();
 		this.warmList = new ArrayList<FluidCraftRecipe>();
 		this.hotList = new ArrayList<FluidCraftRecipe>();
+		this.boilList = new ArrayList<FluidCraftRecipe>();
 		this.ovenList = new ArrayList<FluidCraftRecipe>();
 		this.kilnList = new ArrayList<FluidCraftRecipe>();
 		this.smeltList = new ArrayList<FluidCraftRecipe>();
@@ -41,12 +43,14 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 	 * RecipeListは温度ごとに別になっている。
 	 */
 	private static List<FluidCraftRecipe> absList;
+	private static List<FluidCraftRecipe> cryoList;
 	private static List<FluidCraftRecipe> frostList;
 	private static List<FluidCraftRecipe> coldList;
 	private static List<FluidCraftRecipe> coolList;
 	private static List<FluidCraftRecipe> normalList;
 	private static List<FluidCraftRecipe> warmList;
 	private static List<FluidCraftRecipe> hotList;
+	private static List<FluidCraftRecipe> boilList;
 	private static List<FluidCraftRecipe> ovenList;
 	private static List<FluidCraftRecipe> kilnList;
 	private static List<FluidCraftRecipe> smeltList;
@@ -58,6 +62,8 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 		switch (tier) {
 		case ABSOLUTE:
 			return absList;
+		case CRYOGENIC:
+			return cryoList;
 		case FROSTBITE:
 			return frostList;
 		case COLD:
@@ -70,6 +76,8 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 			return warmList;
 		case HOT:
 			return hotList;
+		case BOIL:
+			return boilList;
 		case OVEN:
 			return ovenList;
 		case KILN:
@@ -130,7 +138,7 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 
 			return false;
 		} else {
-			return true;
+			return false;
 		}
 	}
 

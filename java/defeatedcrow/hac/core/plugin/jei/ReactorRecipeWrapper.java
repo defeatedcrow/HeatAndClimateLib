@@ -123,11 +123,11 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 		ResourceLocation res = new ResourceLocation("dcs_climate", "textures/gui/c_reactor_gui_jei.png");
 		mc.getTextureManager().bindTexture(res);
 		if (heats.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(6, baseY, 0, 170, 72, 3);
+			mc.currentScreen.drawTexturedModalRect(2, baseY, 0, 170, 84, 3);
 			minT = DCHeatTier.NORMAL;
 		} else {
 			for (DCHeatTier h : heats) {
-				mc.currentScreen.drawTexturedModalRect(6 + h.getID() * 6, baseY, h.getID() * 6, 170, 6, 3);
+				mc.currentScreen.drawTexturedModalRect(2 + h.getID() * 6, baseY, h.getID() * 6, 170, 6, 3);
 				if (h.getID() < minT.getID())
 					minT = h;
 			}
@@ -141,8 +141,8 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 		int baseY = 102;
 		List<String> s = new ArrayList<String>();
 		if (y > baseY && y < baseY + 8) {
-			if (x > 6 && x < 78) {
-				int i = (x - 10) / 6;
+			if (x > 2 && x < 86) {
+				int i = (x - 3) / 6;
 				s.add(DCHeatTier.getTypeByID(i).name() + " " + DCHeatTier.getTypeByID(i).getTemp());
 			}
 		}

@@ -16,12 +16,14 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 
 	public ReactorRecipeRegister() {
 		this.absList = new ArrayList<ReactorRecipe>();
+		this.cryoList = new ArrayList<ReactorRecipe>();
 		this.frostList = new ArrayList<ReactorRecipe>();
 		this.coldList = new ArrayList<ReactorRecipe>();
 		this.coolList = new ArrayList<ReactorRecipe>();
 		this.normalList = new ArrayList<ReactorRecipe>();
 		this.warmList = new ArrayList<ReactorRecipe>();
 		this.hotList = new ArrayList<ReactorRecipe>();
+		this.boilList = new ArrayList<ReactorRecipe>();
 		this.ovenList = new ArrayList<ReactorRecipe>();
 		this.kilnList = new ArrayList<ReactorRecipe>();
 		this.smeltList = new ArrayList<ReactorRecipe>();
@@ -37,12 +39,14 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 	 * RecipeListは温度ごとに別になっている。
 	 */
 	private static List<ReactorRecipe> absList;
+	private static List<ReactorRecipe> cryoList;
 	private static List<ReactorRecipe> frostList;
 	private static List<ReactorRecipe> coldList;
 	private static List<ReactorRecipe> coolList;
 	private static List<ReactorRecipe> normalList;
 	private static List<ReactorRecipe> warmList;
 	private static List<ReactorRecipe> hotList;
+	private static List<ReactorRecipe> boilList;
 	private static List<ReactorRecipe> ovenList;
 	private static List<ReactorRecipe> kilnList;
 	private static List<ReactorRecipe> smeltList;
@@ -54,6 +58,8 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 		switch (tier) {
 		case ABSOLUTE:
 			return absList;
+		case CRYOGENIC:
+			return cryoList;
 		case FROSTBITE:
 			return frostList;
 		case COLD:
@@ -66,6 +72,8 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 			return warmList;
 		case HOT:
 			return hotList;
+		case BOIL:
+			return boilList;
 		case OVEN:
 			return ovenList;
 		case KILN:
@@ -133,7 +141,7 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 
 			return false;
 		} else {
-			return true;
+			return false;
 		}
 	}
 

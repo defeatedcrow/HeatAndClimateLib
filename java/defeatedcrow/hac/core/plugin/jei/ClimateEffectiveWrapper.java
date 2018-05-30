@@ -76,14 +76,19 @@ public class ClimateEffectiveWrapper implements IRecipeWrapper {
 		ResourceLocation res = new ResourceLocation("dcs_climate", "textures/gui/c_effective_gui.png");
 		mc.getTextureManager().bindTexture(res);
 		if (heat != null) {
-			mc.currentScreen.drawTexturedModalRect(73, baseY + 9, heat.getID() * 20, 170, 20, 3);
-			mc.currentScreen.drawTexturedModalRect(93, baseY + 9, heat.getID() * 20, 170, 20, 3);
+			if (heat.getID() > 6) {
+				mc.currentScreen.drawTexturedModalRect(73, baseY + 9, heat.getID() * 20 - 140, 174, 20, 3);
+				mc.currentScreen.drawTexturedModalRect(93, baseY + 9, heat.getID() * 20 - 140, 174, 20, 3);
+			} else {
+				mc.currentScreen.drawTexturedModalRect(73, baseY + 9, heat.getID() * 20, 170, 20, 3);
+				mc.currentScreen.drawTexturedModalRect(93, baseY + 9, heat.getID() * 20, 170, 20, 3);
+			}
 		}
 		if (hum != null) {
-			mc.currentScreen.drawTexturedModalRect(73, baseY + 23, hum.getID() * 40, 174, 40, 3);
+			mc.currentScreen.drawTexturedModalRect(73, baseY + 23, hum.getID() * 40, 178, 40, 3);
 		}
 		if (air != null) {
-			mc.currentScreen.drawTexturedModalRect(73, baseY + 37, air.getID() * 40, 178, 40, 3);
+			mc.currentScreen.drawTexturedModalRect(73, baseY + 37, air.getID() * 40, 182, 40, 3);
 		}
 
 		String t = heat == null ? "  -" : heat.name();

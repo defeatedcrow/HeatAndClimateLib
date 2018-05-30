@@ -118,7 +118,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		} else {
 			int offset = WeatherChecker.getTempOffset(world.provider.getDimension(),
 					world.provider.doesWaterVaporize());
-			if (offset < 0 || DCTimeHelper.isDayTime(world)) {
+			if (offset < 0 || (offset > 0 && DCTimeHelper.isDayTime(world))) {
 				hot = temp.addTier(offset);
 			}
 		}
@@ -267,8 +267,8 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			cold = cold.addTier(-1);
 		}
 
-		if (cold == DCHeatTier.ABSOLUTE) {
-			// ABSOLUTEは自然発生しない
+		if (cold == DCHeatTier.ABSOLUTE || cold == DCHeatTier.CRYOGENIC) {
+			// 自然発生しない
 			cold = DCHeatTier.FROSTBITE;
 		}
 

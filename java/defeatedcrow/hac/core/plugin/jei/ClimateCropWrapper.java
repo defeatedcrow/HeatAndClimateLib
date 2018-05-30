@@ -93,31 +93,31 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 		ResourceLocation res = new ResourceLocation("dcs_climate", "textures/gui/c_crops_gui_jei.png");
 		mc.getTextureManager().bindTexture(res);
 		if (heats.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(44, baseY, 0, 170, 72, 3);
+			mc.currentScreen.drawTexturedModalRect(38, baseY, 0, 170, 84, 3);
 			minT = DCHeatTier.NORMAL;
 		} else {
 			for (DCHeatTier h : heats) {
-				mc.currentScreen.drawTexturedModalRect(44 + h.getID() * 6, baseY, h.getID() * 6, 170, 6, 3);
+				mc.currentScreen.drawTexturedModalRect(38 + h.getID() * 6, baseY, h.getID() * 6, 170, 6, 3);
 				if (h.getID() < minT.getID())
 					minT = h;
 			}
 		}
 		if (hums.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(44, baseY + 10, 0, 174, 72, 3);
+			mc.currentScreen.drawTexturedModalRect(38, baseY + 10, 0, 174, 84, 3);
 			maxH = DCHumidity.NORMAL;
 		} else {
 			for (DCHumidity h : hums) {
-				mc.currentScreen.drawTexturedModalRect(44 + h.getID() * 18, baseY + 10, h.getID() * 18, 174, 18, 3);
+				mc.currentScreen.drawTexturedModalRect(38 + h.getID() * 21, baseY + 10, h.getID() * 21, 174, 21, 3);
 				if (maxH.getID() < h.getID())
 					maxH = h;
 			}
 		}
 		if (airs.isEmpty()) {
-			mc.currentScreen.drawTexturedModalRect(44, baseY + 20, 0, 178, 72, 3);
+			mc.currentScreen.drawTexturedModalRect(38, baseY + 20, 0, 178, 84, 3);
 			maxA = DCAirflow.NORMAL;
 		} else {
 			for (DCAirflow a : airs) {
-				mc.currentScreen.drawTexturedModalRect(44 + a.getID() * 18, baseY + 20, a.getID() * 18, 178, 18, 3);
+				mc.currentScreen.drawTexturedModalRect(38 + a.getID() * 21, baseY + 20, a.getID() * 21, 178, 21, 3);
 				if (maxA.getID() < a.getID())
 					maxA = a;
 			}
@@ -136,20 +136,20 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 		int baseY = 72;
 		List<String> s = new ArrayList<String>();
 		if (y > baseY && y < baseY + 8) {
-			if (x > 44 && x < 116) {
-				int i = (x - 44) / 6;
+			if (x > 38 && x < 122) {
+				int i = (x - 38) / 6;
 				s.add(DCHeatTier.getTypeByID(i).name() + " " + DCHeatTier.getTypeByID(i).getTemp());
 			}
 		}
 		if (y > baseY + 10 && y < baseY + 18) {
-			if (x > 44 && x < 116) {
-				int i = (x - 44) / 18;
+			if (x > 38 && x < 122) {
+				int i = (x - 38) / 21;
 				s.add(DCHumidity.getTypeByID(i).name());
 			}
 		}
 		if (y > baseY + 20 && y < baseY + 28) {
-			if (x > 44 && x < 116) {
-				int i = (x - 44) / 18;
+			if (x > 38 && x < 122) {
+				int i = (x - 38) / 21;
 				s.add(DCAirflow.getTypeByID(i).name());
 			}
 		}

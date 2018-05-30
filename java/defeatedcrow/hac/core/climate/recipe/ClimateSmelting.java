@@ -29,6 +29,7 @@ public class ClimateSmelting implements IClimateSmelting {
 	private final ItemStack secondary;
 	private final float chance;
 	private final boolean needCooling;
+	private boolean dropItem = false;
 	private List<DCHeatTier> heat = new ArrayList<DCHeatTier>();
 	private List<DCHumidity> hum = new ArrayList<DCHumidity>();
 	private List<DCAirflow> air = new ArrayList<DCAirflow>();
@@ -42,13 +43,13 @@ public class ClimateSmelting implements IClimateSmelting {
 		needCooling = cooling;
 		if (t != null) {
 			heat.add(t);
-			if (t.getID() < 11) {
-				if (t.getID() == 4 || t.getID() == 5) {
+			if (t.getID() < DCHeatTier.INFERNO.getID()) {
+				if (t.getID() == DCHeatTier.NORMAL.getID() || t.getID() == DCHeatTier.WARM.getID()) {
 					heat.add(t.addTier(1));
 					heat.add(t.addTier(-1));
-				} else if (t.getID() > 0 && t.getID() < 4) {
+				} else if (t.getID() > 0 && t.getID() < DCHeatTier.NORMAL.getID()) {
 					heat.add(t.addTier(-1));
-				} else if (t.getID() > 0) {
+				} else if (t.getID() > DCHeatTier.WARM.getID()) {
 					heat.add(t.addTier(1));
 				}
 			}
@@ -58,6 +59,11 @@ public class ClimateSmelting implements IClimateSmelting {
 		if (a != null)
 			air.add(a);
 		processedInput = DCUtil.getProcessedList(input);
+	}
+
+	public ClimateSmelting setProceedAsDropItem() {
+		dropItem = true;
+		return this;
 	}
 
 	@Override
@@ -168,6 +174,11 @@ public class ClimateSmelting implements IClimateSmelting {
 	}
 
 	@Override
+	public boolean canProceedAsDropItem() {
+		return dropItem;
+	}
+
+	@Override
 	public int recipeFrequency() {
 		if (processedInput.isEmpty() || DCUtil.isEmpty(processedInput.get(0)))
 			return 2;
@@ -179,6 +190,8 @@ public class ClimateSmelting implements IClimateSmelting {
 			IClimateObject c = (IClimateObject) Block.getBlockFromItem(i.getItem());
 			return c.isForcedTickUpdate() ? 0 : 1;
 		} else if (i.getItem() instanceof IEntityItem) {
+			return 0;
+		} else if (dropItem) {
 			return 0;
 		}
 		return 2;

@@ -20,12 +20,14 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 
 	public ClimateSmeltingRegister() {
 		this.absList = new ArrayList<ClimateSmelting>();
+		this.cryoList = new ArrayList<ClimateSmelting>();
 		this.frostList = new ArrayList<ClimateSmelting>();
 		this.coldList = new ArrayList<ClimateSmelting>();
 		this.coolList = new ArrayList<ClimateSmelting>();
 		this.normalList = new ArrayList<ClimateSmelting>();
 		this.warmList = new ArrayList<ClimateSmelting>();
 		this.hotList = new ArrayList<ClimateSmelting>();
+		this.boilList = new ArrayList<ClimateSmelting>();
 		this.ovenList = new ArrayList<ClimateSmelting>();
 		this.kilnList = new ArrayList<ClimateSmelting>();
 		this.smeltList = new ArrayList<ClimateSmelting>();
@@ -41,12 +43,14 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	 * RecipeListは温度ごとに別になっている。
 	 */
 	private static List<ClimateSmelting> absList;
+	private static List<ClimateSmelting> cryoList;
 	private static List<ClimateSmelting> frostList;
 	private static List<ClimateSmelting> coldList;
 	private static List<ClimateSmelting> coolList;
 	private static List<ClimateSmelting> normalList;
 	private static List<ClimateSmelting> warmList;
 	private static List<ClimateSmelting> hotList;
+	private static List<ClimateSmelting> boilList;
 	private static List<ClimateSmelting> ovenList;
 	private static List<ClimateSmelting> kilnList;
 	private static List<ClimateSmelting> smeltList;
@@ -58,6 +62,8 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 		switch (tier) {
 		case ABSOLUTE:
 			return absList;
+		case CRYOGENIC:
+			return cryoList;
 		case FROSTBITE:
 			return frostList;
 		case COLD:
@@ -70,6 +76,8 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 			return warmList;
 		case HOT:
 			return hotList;
+		case BOIL:
+			return boilList;
 		case OVEN:
 			return ovenList;
 		case KILN:

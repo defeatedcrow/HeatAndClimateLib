@@ -82,7 +82,7 @@ public class ClimateSmeltingCategory implements IRecipeCategory {
 		int i = 0;
 		for (DCHeatTier temp : temps) {
 			recipeLayout.getIngredientsGroup(DCHeatTier.class).init(i, true, new HeatTierRenderer(),
-					44 + temp.getID() * 6, 42, 6, 5, 0, 0);
+					38 + temp.getID() * 6, 42, 6, 5, 0, 0);
 			recipeLayout.getIngredientsGroup(DCHeatTier.class).set(i, temp);
 			i++;
 		}
@@ -91,7 +91,7 @@ public class ClimateSmeltingCategory implements IRecipeCategory {
 		int j = 0;
 		for (DCHumidity hum : hums) {
 			recipeLayout.getIngredientsGroup(DCHumidity.class).init(j, true, new HumidityRenderer(),
-					44 + hum.getID() * 18, 52, 18, 5, 0, 0);
+					38 + hum.getID() * 21, 52, 21, 5, 0, 0);
 			recipeLayout.getIngredientsGroup(DCHumidity.class).set(j, hum);
 			j++;
 		}
@@ -100,7 +100,7 @@ public class ClimateSmeltingCategory implements IRecipeCategory {
 		int k = 0;
 		for (DCAirflow air : airs) {
 			recipeLayout.getIngredientsGroup(DCAirflow.class).init(k, true, new AirflowRenderer(),
-					44 + air.getID() * 18, 62, 18, 5, 0, 0);
+					38 + air.getID() * 21, 62, 21, 5, 0, 0);
 			recipeLayout.getIngredientsGroup(DCAirflow.class).set(k, air);
 			k++;
 		}

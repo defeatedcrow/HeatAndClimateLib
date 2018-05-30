@@ -63,7 +63,13 @@ public interface IClimateSmelting {
 	boolean isNeedCooling();
 
 	/**
-	 * 0: 設置不可, 1: Block, 2: Entity
+	 * BlockでもEntityでもないアイテムの場合、<br>
+	 * trueのレシピのみドロップアイテム状態でレシピが進行する
+	 */
+	boolean canProceedAsDropItem();
+
+	/**
+	 * 0: 設置不可, 1: Block, 2: Entity, 3:DropItem
 	 */
 	int hasPlaceableOutput();
 

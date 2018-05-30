@@ -13,7 +13,6 @@ import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.ThermalInsulationUtil;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirt;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -72,14 +71,7 @@ public class BlockUpdateDC {
 						}
 					}
 				} else if (block == Blocks.GRASS) {
-					// DRYかつ高温すぎると枯れてしまう
-					IGrowable grow = (IGrowable) block;
-					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
-						if (clm.getHumidity() == DCHumidity.DRY
-								&& clm.getHeat().getTier() > DCHeatTier.OVEN.getTier()) {
-							event.setCanceled(true);
-						}
-					}
+
 				} else if (block instanceof IClimateCrop) {
 					// WARMかつWETの場合に成長が促進されるが、バニラ植物ほど加速はしない
 					IGrowable grow = (IGrowable) block;
@@ -179,14 +171,6 @@ public class BlockUpdateDC {
 							&& block.isFlammable(world, p, EnumFacing.UP)) {
 						world.setBlockState(p.up(), Blocks.FIRE.getDefaultState(), 2);
 						world.notifyNeighborsOfStateChange(p.up(), Blocks.FIRE, false);
-					} else if (st.getMaterial() == Material.GRASS) {
-						world.setBlockState(p, Blocks.DIRT.getDefaultState(), 2);
-						world.notifyNeighborsOfStateChange(p, Blocks.DIRT, false);
-						f2 = true;
-					} else if (block instanceof BlockDirt) {
-						world.setBlockState(p, Blocks.SAND.getDefaultState(), 2);
-						world.notifyNeighborsOfStateChange(p, Blocks.SAND, false);
-						f2 = true;
 					}
 				}
 			}

@@ -127,17 +127,17 @@ public class APILoader {
 	}
 
 	static void registerMobResistant() {
-		DamageAPI.resistantData.registerEntityResistant(EntityVillager.class, 2.0F, 2.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityIronGolem.class, 4.0F, 4.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntitySnowman.class, 0.0F, 6.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityWither.class, 2.0F, 2.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityDragon.class, 2.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityVillager.class, 3.0F, 4.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityIronGolem.class, 4.0F, 8.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntitySnowman.class, 0.0F, 8.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityWither.class, 6.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityDragon.class, 2.0F, 6.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntitySheep.class, 1.0F, 3.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityRabbit.class, 2.0F, 3.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityPolarBear.class, 1.0F, 4.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 0.0F, 4.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityShulker.class, 0.0F, 4.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityLlama.class, 2.0F, 4.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityRabbit.class, 2.0F, 4.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityPolarBear.class, 1.0F, 6.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 0.0F, 6.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityShulker.class, 0.0F, 6.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityLlama.class, 2.0F, 6.0F);
 	}
 
 }

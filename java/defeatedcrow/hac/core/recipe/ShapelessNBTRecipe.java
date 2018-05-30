@@ -90,6 +90,10 @@ public class ShapelessNBTRecipe extends IForgeRegistryEntry.Impl<IRecipe> implem
 	public boolean matches(InventoryCrafting inv, World world) {
 		int count = 0;
 
+		if (inv.getSizeInventory() < input.size()) {
+			return false;
+		}
+
 		for (Ingredient ing : this.input) {
 			for (int i = 0; i < inv.getSizeInventory(); ++i) {
 				ItemStack item = inv.getStackInSlot(i);
