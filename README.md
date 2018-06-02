@@ -12,9 +12,13 @@ Please visit my new Wiki: http://defeatedcrow.jp/modwiki/HeatAndClimate
 - MinecraftForge 12.17.0.1976+  
    
 ## ライセンス
-- Code：MMPL-1.0  (full text is included as License.txt)
-- Resource：CC-BY-NC
-- About the secondary users<br> - Paid use of these mods are prohibited.<br> - You can include these mods to your ModPack.<br> - You can distribute these mods for your server user.<br>
+- This mod is distributed under the following license: CC-BY-NC-SA 4.0
+ https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+
+The SA clause of the license is excluded in the following cases:
+- When used to creating add-ons or plugins for this mod (as your MinecraftJE mod).
+- When this mod is bundled with modpack for MinecraftJE.
+- When you take the game playing videos of MinecraftJE that introduced this mod.
 
 ## 注意事項
 1. Now this mod is still WIP. The correct operation cannot be expected. Please be careful! <br> 当modは開発途中です。正常に動作しない場合がありますので、ご了承の上でご利用下さい。<br>
