@@ -13,6 +13,7 @@ import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.ThermalInsulationUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -53,7 +54,8 @@ public class BlockUpdateDC {
 				DCHumidity hum2 = ClimateAPI.calculator.getHumidity(world, p);
 				// 耕地はWET以上の湿度では湿る
 				if (hum.getID() > 1 || hum2.getID() > 1) {
-					world.setBlockState(p, block.getStateFromMeta(7), 2);
+					IBlockState next = Blocks.FARMLAND.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7);
+					world.setBlockState(p, next, 2);
 					// DCLogger.debugLog("farmland update");
 					event.setCanceled(true);
 					return;

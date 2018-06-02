@@ -4,7 +4,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import net.minecraftforge.fluids.FluidStack;
 
 public enum FRecipeType {
-	FLEEZING,
+	FREEZING,
 	STANDARD_STATE,
 	DRYING,
 	FERMENTATION,
@@ -22,7 +22,7 @@ public enum FRecipeType {
 		case 1:
 		case 2:
 		case 3:
-			return FLEEZING;
+			return FREEZING;
 
 		case 4:
 		case 5:

@@ -47,9 +47,9 @@ public class ClimateSmeltingCategory implements IRecipeCategory {
 
 	@Override
 	public void drawExtras(Minecraft mc) {
-		mc.fontRenderer.drawString("TEMP", 23, 39, 0xFF0000, false);
-		mc.fontRenderer.drawString("HUM", 121, 49, 0x0000FF, false);
-		mc.fontRenderer.drawString("AIR", 27, 59, 0x00FF00, false);
+		mc.fontRenderer.drawString("TEMP", 18, 39, 0xFF0000, false);
+		mc.fontRenderer.drawString("HUM", 126, 49, 0x0000FF, false);
+		mc.fontRenderer.drawString("AIR", 22, 59, 0x00FF00, false);
 		mc.fontRenderer.drawString("", 0, 0, 0xFFFFFF, false);
 	}
 

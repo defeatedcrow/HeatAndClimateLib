@@ -394,6 +394,23 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		boolean hasAir = false;
 
 		// さきに水没判定をやる
+		// 中心
+		Block target = world.getBlockState(pos).getBlock();
+		int meta = target.getMetaFromState(world.getBlockState(pos));
+		boolean flag = false;
+		if (target instanceof IHumidityTile) {
+			DCHumidity current = ((IHumidityTile) target).getHumdiity(world, pos, pos);
+			if (current == DCHumidity.UNDERWATER)
+				return DCHumidity.UNDERWATER;
+		} else if (ClimateAPI.registerBlock.isRegisteredHum(target, meta)) {
+			DCHumidity cur = ClimateAPI.registerBlock.getHumidity(target, meta);
+			if (cur == DCHumidity.UNDERWATER)
+				return DCHumidity.UNDERWATER;
+		} else if (world.getBlockState(pos).getMaterial() == Material.WATER) {
+			return DCHumidity.UNDERWATER;
+		}
+
+		// 周囲
 		for (EnumFacing face : EnumFacing.VALUES) {
 			BlockPos p1 = new BlockPos(pos.getX() + face.getFrontOffsetX(), pos.getY() + face.getFrontOffsetY(),
 					pos.getZ() + face.getFrontOffsetZ());

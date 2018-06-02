@@ -152,13 +152,13 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 		/*
 		 * 現在環境の1つ下の温度帯のレシピも条件にあてまはる
 		 */
-		if (tier == DCHeatTier.NORMAL) {
-			list.addAll(getRecipeList(DCHeatTier.WARM));
-			list.addAll(getRecipeList(DCHeatTier.COOL));
-		} else {
-			int i = tier.getTier() < 0 ? 1 : -1;
-			DCHeatTier next = tier.addTier(i);
-			list.addAll(getRecipeList(next));
+		if (tier != DCHeatTier.ABSOLUTE) {
+			DCHeatTier d = tier.addTier(-1);
+			list.addAll(getRecipeList(d));
+		}
+		if (tier != DCHeatTier.INFERNO) {
+			DCHeatTier u = tier.addTier(1);
+			list.addAll(getRecipeList(u));
 		}
 		IReactorRecipe ret = null;
 		if (list.isEmpty()) {} else {

@@ -31,6 +31,8 @@ public class DCRecipe {
 	public static void load() {
 		/* Smelting */
 		// ABS
+
+		// CRYOGENIC
 		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.PACKED_ICE, 1, 0), DCHeatTier.CRYOGENIC, null,
 				DCAirflow.FLOW, false, new ItemStack(Blocks.ICE, 1, 0));
 
@@ -44,6 +46,8 @@ public class DCRecipe {
 				null, false, new ItemStack(Blocks.STONEBRICK, 1, 0));
 
 		// HOT
+
+		// BOIL
 
 		// OVEN
 

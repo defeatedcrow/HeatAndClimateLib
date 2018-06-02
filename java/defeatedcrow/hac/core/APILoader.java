@@ -96,11 +96,11 @@ public class APILoader {
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.TORCH, 32767, DCHeatTier.HOT);
 
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LIT_FURNACE, 32767, DCHeatTier.OVEN);
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.MAGMA, 0, DCHeatTier.OVEN);
 
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.FIRE, 32767, DCHeatTier.KILN);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.FLOWING_LAVA, 32767, DCHeatTier.KILN);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.LAVA, 32767, DCHeatTier.KILN);
-		ClimateAPI.registerBlock.registerHeatBlock(Blocks.MAGMA, 0, DCHeatTier.KILN);
 
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.WATER, 32767, DCHeatTier.NORMAL);
 

@@ -21,6 +21,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 	private static final String TARGET_PACKAGE_1 = "net.minecraft.block.";
 	private static final String TARGET_PACKAGE_2 = "net.minecraft.world.World";
 	private static final String TARGET_PACKAGE_3 = "net.minecraft.entity.Entity";
+	private static final String TARGET_PACKAGE_4 = "net.minecraft.item.Item";
 	private static final String TARGET_IGNORE1 = "net.minecraft.block.Block";
 
 	@Override
@@ -43,6 +44,12 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 				return hookOnEntitySetAir(name, basicClass);
 			} catch (Exception e) {
 				throw new RuntimeException("failed : DCMethodTransformer loading: Entity#isInsideOfMaterial", e);
+			}
+		} else if (transformedName.contains(TARGET_PACKAGE_4)) {
+			try {
+				return hookOnItemUpdate(name, basicClass);
+			} catch (Exception e) {
+				throw new RuntimeException("failed : DCMethodTransformer loading: Item#onEntityItemUpdate", e);
 			}
 		} else {
 			return basicClass;
@@ -249,6 +256,75 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 					"(Lnet/minecraft/entity/Entity;Lnet/minecraft/block/material/Material;)V", false));
 			overrideList.add(new MethodInsnNode(INVOKEVIRTUAL,
 					"defeatedcrow/hac/api/damage/CamouflageInsideMaterialEvent", "result", "()Z", false));
+			overrideList.add(new JumpInsnNode(IFEQ, lavel));
+			overrideList.add(new InsnNode(ICONST_1));
+			overrideList.add(new InsnNode(IRETURN));
+			overrideList.add(lavel);
+
+			mnode.instructions.insert(overrideList);
+
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+			cnode.accept(cw);
+			bytes = cw.toByteArray();
+		}
+
+		return bytes;
+	}
+
+	private byte[] hookOnItemUpdate(String className, byte[] bytes) {
+		// ASMで、bytesに格納されたクラスファイルを解析します。
+		ClassNode cnode = new ClassNode();
+		ClassReader reader = new ClassReader(bytes);
+		reader.accept(cnode, 0);
+
+		// 改変対象のメソッド名です
+		String targetMethodName = "onEntityItemUpdate";
+		String targetMethodNameSRG = "onEntityItemUpdate";
+
+		// 改変対象メソッドの戻り値型および、引数型をあらわします
+		String targetMethoddesc = "(Lnet/minecraft/entity/item/EntityItem;)Z";
+		String targetMethoddescSRG = "(Lnet/minecraft/entity/item/EntityItem;)Z";
+
+		// 対象のメソッドを検索取得します。
+		MethodNode mnode = null;
+		String mdesc = null;
+
+		for (MethodNode curMnode : cnode.methods) {
+
+			String mName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(className, curMnode.name, curMnode.desc);
+			String mdName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(curMnode.desc);
+			// System.out.println("[ " + mName + " : " + curMnode.name + " ] [ " + mdName + " : " +
+			// curMnode.desc);
+			if ((targetMethodName.equals(curMnode.name) && targetMethoddesc.equals(curMnode.desc))
+					|| (targetMethodNameSRG.equals(mName) && targetMethoddescSRG.equals(mdName))) {
+				mnode = curMnode;
+				mdesc = curMnode.desc;
+				// System.out.println("target found: " + className);
+				break;
+			}
+		}
+
+		if (mnode != null) {
+
+			// System.out.println("try start!");
+			InsnList overrideList = new InsnList();
+			final LabelNode lavel = new LabelNode();
+			final LabelNode lavel2 = new LabelNode();
+
+			/*
+			 * eventをよぶ
+			 * if (new DCEntityItemUpdateEvent(entityItem).result()){
+			 * return true;
+			 * }
+			 * resultはResult == ARROW時のみtrueを返す。
+			 */
+			overrideList.add(new TypeInsnNode(NEW, "defeatedcrow/hac/api/recipe/DCEntityItemUpdateEvent"));
+			overrideList.add(new InsnNode(DUP));
+			overrideList.add(new VarInsnNode(ALOAD, 1));
+			overrideList.add(new MethodInsnNode(INVOKESPECIAL, "defeatedcrow/hac/api/recipe/DCEntityItemUpdateEvent",
+					"<init>", "(Lnet/minecraft/entity/item/EntityItem;)V", false));
+			overrideList.add(new MethodInsnNode(INVOKEVIRTUAL, "defeatedcrow/hac/api/recipe/DCEntityItemUpdateEvent",
+					"result", "()Z", false));
 			overrideList.add(new JumpInsnNode(IFEQ, lavel));
 			overrideList.add(new InsnNode(ICONST_1));
 			overrideList.add(new InsnNode(IRETURN));

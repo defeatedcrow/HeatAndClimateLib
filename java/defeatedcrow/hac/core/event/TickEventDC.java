@@ -30,15 +30,19 @@ public class TickEventDC {
 					c--;
 					counter.put(dim, c);
 				} else {
+					// update every 200 tick
 					counter.put(dim, 200);
 					int time = DCTimeHelper.currentTime(event.world);
 					if (prev != time) {
 						prevTime.put(dim, time);
+
 						WeatherChecker.INSTANCE.setWeather(event.world);
 						WeatherChecker.INSTANCE.sendPacket(event.world);
+
 					}
 				}
 			}
 		}
 	}
+
 }

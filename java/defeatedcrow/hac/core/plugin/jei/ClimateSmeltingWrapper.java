@@ -117,7 +117,7 @@ public class ClimateSmeltingWrapper implements IRecipeWrapper {
 		}
 		if (airs.isEmpty()) {
 			mc.currentScreen.drawTexturedModalRect(38, baseY + 20, 0, 178, 84, 3);
-			maxA = DCAirflow.NORMAL;
+			maxA = DCAirflow.FLOW;
 		} else {
 			for (DCAirflow a : airs) {
 				mc.currentScreen.drawTexturedModalRect(38 + a.getID() * 21, baseY + 20, a.getID() * 21, 178, 21, 3);
@@ -135,7 +135,7 @@ public class ClimateSmeltingWrapper implements IRecipeWrapper {
 			place = "Proceeds as a placed object.";
 		}
 		if (rec.canProceedAsDropItem()) {
-			place = "Proceeds as q drop item entity.";
+			place = "Proceeds as a drop item entity.";
 		}
 		mc.fontRenderer.drawString(place, 32, 69, 0x0099FF, false);
 

@@ -149,13 +149,13 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 		/*
 		 * 現在環境の1つ下の温度帯のレシピも条件にあてまはる
 		 */
-		if (clm.getHeat() == DCHeatTier.NORMAL) {
-			list.addAll(getRecipeList(DCHeatTier.WARM));
-			list.addAll(getRecipeList(DCHeatTier.COOL));
-		} else {
-			int i = clm.getHeat().getTier() < 0 ? 1 : -1;
-			DCHeatTier next = clm.getHeat().addTier(i);
-			list.addAll(getRecipeList(next));
+		if (clm.getHeat() != DCHeatTier.ABSOLUTE) {
+			DCHeatTier d = clm.getHeat().addTier(-1);
+			list.addAll(getRecipeList(d));
+		}
+		if (clm.getHeat() != DCHeatTier.INFERNO) {
+			DCHeatTier u = clm.getHeat().addTier(1);
+			list.addAll(getRecipeList(u));
 		}
 		IFluidRecipe ret = null;
 		if (list.isEmpty()) {} else {

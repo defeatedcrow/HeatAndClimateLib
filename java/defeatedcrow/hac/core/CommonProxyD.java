@@ -7,6 +7,7 @@ import defeatedcrow.hac.core.event.BlockUpdateDC;
 import defeatedcrow.hac.core.event.CaveGenLavaDC;
 import defeatedcrow.hac.core.event.ClickEventDC;
 import defeatedcrow.hac.core.event.CoreAnvilEvent;
+import defeatedcrow.hac.core.event.DropItemUpdateEvent;
 import defeatedcrow.hac.core.event.LivingEventDC;
 import defeatedcrow.hac.core.event.LivingHurtDC;
 import defeatedcrow.hac.core.event.SuffocationEventDC;
@@ -54,6 +55,7 @@ public class CommonProxyD {
 			MinecraftForge.EVENT_BUS.register(new SuffocationEventDC());
 		}
 		MinecraftForge.EVENT_BUS.register(new CoreAnvilEvent());
+		MinecraftForge.EVENT_BUS.register(new DropItemUpdateEvent());
 
 		HaCPacket.init();
 	}
