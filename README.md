@@ -12,7 +12,8 @@ Please visit my new Wiki: http://defeatedcrow.jp/modwiki/HeatAndClimate
 - MinecraftForge 14.23.3.2655+  
    
 ## ライセンス
-- This mod is distributed under the following license: CC-BY-NC-SA 4.0
+- このmodは以下のライセンスの元で公開されます。
+- This mod is distributed under the following license: CC-BY-NC-SA 4.0 <br>
  https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
 The SA clause of the license is excluded in the following cases:
