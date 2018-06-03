@@ -5,8 +5,9 @@ import java.util.Map;
 
 import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 
-// @SortingIndex(1101)
+@MCVersion("1.12.2")
 public class DCASMPlugin implements IFMLLoadingPlugin, IFMLCallHook {
 
 	static File file;
@@ -14,7 +15,8 @@ public class DCASMPlugin implements IFMLLoadingPlugin, IFMLCallHook {
 	@Override
 	public String[] getASMTransformerClass() {
 		return new String[] {
-				"defeatedcrow.hac.asm.DCMethodTransformer" };
+				"defeatedcrow.hac.asm.DCMethodTransformer"
+		};
 	}
 
 	@Override

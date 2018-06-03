@@ -15,12 +15,13 @@ public class DCASMCore extends DummyModContainer {
 		ModMetadata meta = super.getMetadata();
 		meta.modId = "dcs_asm";
 		meta.name = "HeatAndClimateASM";
-		meta.version = "2.0.0";
+		meta.version = "2.0.1";
 		// 以下は省略可
 		meta.authorList = Arrays.asList(new String[] {
 				"defeatedcrow"
 		});
 		meta.credits = "defeatedcrow";
+		meta.url = "http://defeatedcrow.jp/modwiki/HeatAndClimate";
 		meta.description = "Method transformar for the climate.";
 	}
 

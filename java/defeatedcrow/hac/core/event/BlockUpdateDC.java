@@ -73,7 +73,7 @@ public class BlockUpdateDC {
 						}
 					}
 				} else if (block == Blocks.GRASS) {
-
+					// なにもしない
 				} else if (block instanceof IClimateCrop) {
 					// WARMかつWETの場合に成長が促進されるが、バニラ植物ほど加速はしない
 					IGrowable grow = (IGrowable) block;
