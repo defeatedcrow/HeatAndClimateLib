@@ -49,7 +49,7 @@ public class BlockUpdateDC {
 			boolean roof = hasRoof(world, p);
 
 			// 直接指定の仕様
-			if (block == Blocks.FARMLAND) {
+			if (BlockFarmland.class.isInstance(block)) {
 				DCHumidity hum = ClimateAPI.calculator.getHumidity(world, p, 4, true);
 				DCHumidity hum2 = ClimateAPI.calculator.getHumidity(world, p);
 				// 耕地はWET以上の湿度では湿る
