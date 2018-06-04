@@ -11,17 +11,26 @@ This mod is API and core mod necessary for defeatedcrow's mod in 1.9+. Of course
 - Minecraft 1.12.2
 - MinecraftForge 14.23.3.2655+  
    
-## ライセンス
+## ライセンス Licenses
 このmodは以下のライセンスの元で公開されます。 <br>
- This mod is distributed under the following license: CC-BY-NC-SA 4.0 <br>
+This mod is distributed under the following license:
+### Code: All Rights Reserved
+#### Permissions
+- ソースコードを改変したり、あなたのmodプロジェクトに利用することができます。<br>You can fork, modify, or use the code in your project.
+- このmodの非改変パッケージをmodpackに同梱したり、マルチプレイサーバー内で再配布することができます。<br>You can redistribute this mod's unmodified package to modpack or multiplayer server.
+
+#### Conditions
+- 著作権者の表示 Copyright notice
+- 商用利用禁止 Commercial use prohibition
+
+#### Limitations
+- このmodは「現状のまま」提供され、一切の動作を保証しません。<br>This mod is provided "as is" without warranty of any kind.
+- 作者および著作権者は、いかなる場合でも、このmodの使用その他によって生じる責任を負いません。<br>In any case, the author or copyright holder is not responsible for any claims, damages or other liabilities arising out of this mod or its use.
+
+### Assets: CC-BY-NC-SA 4.0 <br>
  https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
-The SA clause of the license is excluded in the following cases:
-- When used to creating add-ons or plugins for this mod (as your MinecraftJE mod).
-- When this mod is bundled with modpack for MinecraftJE.
-- When you take the game playing videos of MinecraftJE that introduced this mod.
-
-## 注意事項
+## 注意事項 Caution!
 1. Now this mod is still WIP. The correct operation cannot be expected. Please be careful! <br> 当modは開発途中です。正常に動作しない場合がありますので、ご了承の上でご利用下さい。<br>
 2. About PR  This mod is authored only by defeatedcrow. PR contributor is treated as contributor, but the contributors do not have a licensing rights of this mod.  In addition, for lang file PR, please use child repository. <br> 当modへPRする場合、当modのContributorとして扱われ、当modのライセンス権を持たないことにご了承下さい。また、langファイルへのPRはこのリポジトリではなく、langファイル管理用の子リポジトリをご利用下さい。  <br>
 
@@ -37,4 +46,4 @@ The SA clause of the license is excluded in the following cases:
 <br>
 3. Climate damage and prevent material. <br>Too high or low temp will hurt player and mobs. It can prevent easily by armors or charms.<br> 極度の高温・低温でプレイヤーやMOBがダメージを受けるようになります。ダメージは防具やアクセサリーで簡単に防ぐことができます。(防具を身につける動機付けです。)<br><br>
 
-(c) defeatedcrow 2016
+Copyright (c) defeatedcrow 2016
