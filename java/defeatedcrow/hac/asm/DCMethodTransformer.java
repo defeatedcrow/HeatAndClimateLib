@@ -23,11 +23,13 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 	private static final String TARGET_PACKAGE_3 = "net.minecraft.entity.Entity";
 	private static final String TARGET_PACKAGE_4 = "net.minecraft.item.Item";
 	private static final String TARGET_IGNORE1 = "net.minecraft.block.Block";
+	// experimental
+	private static final String TARGET_PACKAGE_PLUGIN1 = "biomesoplenty.common.block.BlockBOPFarmland";
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
 
-		if (transformedName.contains(TARGET_PACKAGE_1)) {
+		if (transformedName.contains(TARGET_PACKAGE_1) || transformedName.contains(TARGET_PACKAGE_PLUGIN1)) {
 			try {
 				return hookOnUpdateTick(name, basicClass);
 			} catch (Exception e) {
