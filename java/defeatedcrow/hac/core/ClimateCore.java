@@ -1,7 +1,6 @@
 /**
  * Copyright (c) defeatedcrow, 2016
  * URL:http://defeatedcrow.jp/modwiki/Mainpage
- * defeatedcrow's mods are distributed under the terms of the Minecraft Mod Public License 1.0, or MMPL.
  * Please check the License.txt included in the package file of this Mod.
  */
 
@@ -37,7 +36,7 @@ public class ClimateCore {
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 2;
 	public static final int MOD_MINOR = 5;
-	public static final int MOD_BUILD = 0;
+	public static final int MOD_BUILD = 1;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.12,1.12.2]";
 	public static final String PACKAGE_BASE = "dcs";

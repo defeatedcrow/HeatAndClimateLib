@@ -1,6 +1,7 @@
 package defeatedcrow.hac.core.base;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -134,6 +135,11 @@ public class BlockDC extends Block {
 	@Override
 	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
 		return isSolidFace(state, pos, face) ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+	}
+
+	@Override
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		super.updateTick(world, pos, state, rand);
 	}
 
 }

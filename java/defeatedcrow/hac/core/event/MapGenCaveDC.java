@@ -1,6 +1,7 @@
 package defeatedcrow.hac.core.event;
 
 import defeatedcrow.hac.config.CoreConfigDC;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +29,7 @@ public class MapGenCaveDC extends MapGenCaves {
 		IBlockState filler = biome.fillerBlock;
 
 		if (this.canReplaceBlock(state, up) || state.getBlock() == top.getBlock()
-				|| state.getBlock() == filler.getBlock()) {
+				|| state.getBlock() == filler.getBlock() || state.getMaterial() == Material.WATER) {
 			if (y - 1 < 10) {
 				if (biome.getRainfall() >= 0.85F) {
 					data.setBlockState(x, y, z, BLK_WATER);
@@ -37,7 +38,7 @@ public class MapGenCaveDC extends MapGenCaves {
 				}
 			} else {
 				if (y < 40 && BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN)
-						&& CoreConfigDC.enableSubmergedCave) {
+						&& CoreConfigDC.enableSubmergedCave && state.getBlock() != BLK_AIR) {
 					data.setBlockState(x, y, z, BLK_WATER);
 				} else {
 					data.setBlockState(x, y, z, BLK_AIR);
