@@ -196,7 +196,7 @@ public class ArmorResistantRegister implements IArmorItemRegister {
 				if (!dir.exists() && !dir.createNewFile()) {
 					return;
 				} else if (!jsonMap.isEmpty()) {
-					DCLogger.debugLog("item resistant data json is already exists.");
+					DCLogger.infoLog("item resistant data json is already exists.");
 					return;
 				}
 

@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import defeatedcrow.hac.config.ClimateConfig;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.ArmorResistantRegister;
+import defeatedcrow.hac.core.climate.HeatBlockRegister;
 import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.fluid.FluidIDRegisterDC;
 import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
@@ -82,10 +83,12 @@ public class ClimateCore {
 	public void postInit(FMLPostInitializationEvent event) {
 		MobResistantRegister.pre();
 		ArmorResistantRegister.pre();
+		HeatBlockRegister.pre();
 
 		FluidIDRegisterDC.post();
 		MobResistantRegister.post();
 		ArmorResistantRegister.post();
+		HeatBlockRegister.post();
 	}
 
 	@EventHandler

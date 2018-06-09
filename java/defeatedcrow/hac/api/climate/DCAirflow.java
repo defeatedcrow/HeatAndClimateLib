@@ -63,4 +63,14 @@ public enum DCAirflow {
 		return tiers;
 	}
 
+	public static DCAirflow getFromName(String name) {
+		if (name != null)
+			for (DCAirflow t : DCAirflow.values()) {
+				if (t.name().equalsIgnoreCase(name)) {
+					return t;
+				}
+			}
+		return TIGHT;
+	}
+
 }
