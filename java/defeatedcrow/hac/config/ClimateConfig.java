@@ -3,6 +3,7 @@ package defeatedcrow.hac.config;
 import java.io.File;
 
 import defeatedcrow.hac.core.climate.ArmorResistantRegister;
+import defeatedcrow.hac.core.climate.HeatBlockRegister;
 import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.fluid.FluidIDRegisterDC;
 import net.minecraftforge.common.config.Configuration;
@@ -25,6 +26,7 @@ public class ClimateConfig {
 		// resistant data
 		MobResistantRegister.setDir(file);
 		ArmorResistantRegister.setDir(file);
+		HeatBlockRegister.setDir(file);
 	}
 
 }

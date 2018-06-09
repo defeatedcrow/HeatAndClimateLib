@@ -63,4 +63,14 @@ public enum DCHumidity {
 		return tiers;
 	}
 
+	public static DCHumidity getFromName(String name) {
+		if (name != null)
+			for (DCHumidity t : DCHumidity.values()) {
+				if (t.name().equalsIgnoreCase(name)) {
+					return t;
+				}
+			}
+		return NORMAL;
+	}
+
 }

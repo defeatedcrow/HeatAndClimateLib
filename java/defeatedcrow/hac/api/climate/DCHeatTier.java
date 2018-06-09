@@ -186,4 +186,14 @@ public enum DCHeatTier {
 		else
 			return DCHeatTier.ABSOLUTE;
 	}
+
+	public static DCHeatTier getFromName(String name) {
+		if (name != null)
+			for (DCHeatTier t : DCHeatTier.values()) {
+				if (t.name().equalsIgnoreCase(name)) {
+					return t;
+				}
+			}
+		return NORMAL;
+	}
 }
