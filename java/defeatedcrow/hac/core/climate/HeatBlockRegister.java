@@ -341,9 +341,9 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 
 				if (jsonMap.isEmpty()) {
 					Map<String, String> map = Maps.newHashMap();
-					map.put("temperature", "HOT (If you set NORMAL, it'll ignored.)");
-					map.put("humidity", "WET (If you set NORMAL, it'll ignored.)");
-					map.put("airflow", "NORMAL (If you set TIGHT, it'll ignored.)");
+					map.put("temperature", "HOT (If you set NORMAL, it will be ignored.)");
+					map.put("humidity", "WET (If you set NORMAL, it will be ignored.)");
+					map.put("airflow", "NORMAL (If you set TIGHT, it will be ignored.)");
 					jsonMap.put("sampleModID:sampleBlockName:0", map);
 				}
 

@@ -44,6 +44,7 @@ public class CoreConfigDC {
 	public static boolean enableVanilla = true;
 	public static int updateFrequency = 5;
 	public static boolean disableCustomRecipe = false;
+	public static boolean enableDropItemSmelting = false;
 
 	// world
 	public static boolean enableFreezeDrop = true;
@@ -179,6 +180,9 @@ public class CoreConfigDC {
 			Property submerged = cfg.get("world setting", "Enable Submerged Ocean Cave", enableSubmergedCave,
 					"Enable the submerged cave in ocean biomes.");
 
+			Property dropSmelting = cfg.get("setting", "Emnable DropItem Recipe", enableDropItemSmelting,
+					"Enable all climate smelting and vanilla smelting in drop item state.");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
@@ -201,6 +205,7 @@ public class CoreConfigDC {
 			enableSeasonEffect = season.getBoolean();
 			hudEffect = hud_effect.getBoolean();
 			enableSubmergedCave = submerged.getBoolean();
+			enableDropItemSmelting = dropSmelting.getBoolean();
 
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)
