@@ -163,7 +163,7 @@ public class CoreConfigDC {
 			Property drought = cfg.get("world setting", "Drought Frequency", droughtFrequency,
 					"Set the number of days of fine weather required for drought.");
 
-			Property seasonF = cfg.get("world setting", "Seasob Frequency", seasonFrequency,
+			Property seasonF = cfg.get("world setting", "Season Frequency", seasonFrequency,
 					"Set the number of days of season's length.");
 
 			Property tight = cfg.get("hardmode setting", "Anaerobic Underworld", tightUnderworld,
@@ -180,7 +180,7 @@ public class CoreConfigDC {
 			Property submerged = cfg.get("world setting", "Enable Submerged Ocean Cave", enableSubmergedCave,
 					"Enable the submerged cave in ocean biomes.");
 
-			Property dropSmelting = cfg.get("setting", "Emnable DropItem Recipe", enableDropItemSmelting,
+			Property dropSmelting = cfg.get("setting", "Enable DropItem Recipe", enableDropItemSmelting,
 					"Enable all climate smelting and vanilla smelting in drop item state.");
 
 			debugPass = debug.getString();
