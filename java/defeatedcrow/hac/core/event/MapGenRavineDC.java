@@ -1,10 +1,13 @@
 package defeatedcrow.hac.core.event;
 
+import defeatedcrow.hac.config.CoreConfigDC;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.MapGenRavine;
+import net.minecraftforge.common.BiomeDictionary;
 
 public class MapGenRavineDC extends MapGenRavine {
 	protected static final IBlockState BLK_WATER = Blocks.FLOWING_WATER.getDefaultState();
@@ -43,7 +46,15 @@ public class MapGenRavineDC extends MapGenRavine {
 					data.setBlockState(x, y, z, FLOWING_LAVA);
 				}
 			} else {
-				data.setBlockState(x, y, z, AIR);
+				if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN)) {
+					if (y < 40 && CoreConfigDC.enableSubmergedCave) {
+						data.setBlockState(x, y, z, BLK_WATER);
+					} else if (state.getMaterial() != Material.WATER) {
+						data.setBlockState(x, y, z, AIR);
+					}
+				} else {
+					data.setBlockState(x, y, z, AIR);
+				}
 
 				if (foundTop && data.getBlockState(x, y - 1, z).getBlock() == filler.getBlock()) {
 					data.setBlockState(x, y - 1, z, top.getBlock().getDefaultState());

@@ -29,7 +29,7 @@ public class MapGenCaveDC extends MapGenCaves {
 		IBlockState filler = biome.fillerBlock;
 
 		if (this.canReplaceBlock(state, up) || state.getBlock() == top.getBlock()
-				|| state.getBlock() == filler.getBlock() || state.getMaterial() == Material.WATER) {
+				|| state.getBlock() == filler.getBlock()) {
 			if (y - 1 < 10) {
 				if (biome.getRainfall() >= 0.85F) {
 					data.setBlockState(x, y, z, BLK_WATER);
@@ -37,9 +37,12 @@ public class MapGenCaveDC extends MapGenCaves {
 					data.setBlockState(x, y, z, BLK_LAVA);
 				}
 			} else {
-				if (y < 40 && BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN)
-						&& CoreConfigDC.enableSubmergedCave && state.getBlock() != BLK_AIR) {
-					data.setBlockState(x, y, z, BLK_WATER);
+				if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN)) {
+					if (y < 40 && CoreConfigDC.enableSubmergedCave) {
+						data.setBlockState(x, y, z, BLK_WATER);
+					} else if (state.getMaterial() != Material.WATER) {
+						data.setBlockState(x, y, z, BLK_AIR);
+					}
 				} else {
 					data.setBlockState(x, y, z, BLK_AIR);
 				}
