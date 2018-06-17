@@ -31,9 +31,11 @@ import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.passive.EntityLlama;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -130,13 +132,15 @@ public class APILoader {
 		DamageAPI.resistantData.registerEntityResistant(EntityVillager.class, 3.0F, 4.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityIronGolem.class, 4.0F, 8.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntitySnowman.class, 0.0F, 8.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityWither.class, 6.0F, 2.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityDragon.class, 2.0F, 6.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityWither.class, 8.0F, 2.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityDragon.class, 2.0F, 8.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntitySheep.class, 1.0F, 3.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityPig.class, 3.0F, 2.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityRabbit.class, 2.0F, 4.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityPolarBear.class, 1.0F, 6.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 0.0F, 6.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityShulker.class, 0.0F, 6.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityWolf.class, 2.0F, 4.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityPolarBear.class, 1.0F, 8.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 0.0F, 8.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityShulker.class, 0.0F, 8.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityLlama.class, 2.0F, 6.0F);
 	}
 
