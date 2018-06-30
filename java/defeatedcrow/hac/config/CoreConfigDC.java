@@ -79,7 +79,7 @@ public class CoreConfigDC {
 			cfg.addCustomCategoryComment("hardmode setting", "This may destroy your game play. Be careful!");
 
 			Property debug = cfg.get("debug setting", "Debug Mode Pass", debugPass,
-					"Input the password for starting in debug mode. This is only for authers.");
+					"Input the password for starting in debug mode. This is only for authors.");
 
 			Property climate_dam = cfg.get("difficulty setting", "Enable Climate Damage", climateDam,
 					"Enable damage from hot or cold climate.");

@@ -31,7 +31,7 @@ public class ArmorMaterialRegister implements IArmorMaterialRegister {
 		if (!heatMap.containsKey(material) && !coldMap.containsKey(material)) {
 			heatMap.put(material, heat);
 			coldMap.put(material, cold);
-			DCLogger.debugLog("register armor material: " + material + " heat " + heat + "/cold " + cold);
+			DCLogger.infoLog("register armor material: " + material + " heat " + heat + "/cold " + cold);
 		}
 	}
 

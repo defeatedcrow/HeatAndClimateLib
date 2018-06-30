@@ -252,15 +252,18 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 
 			Block item = Block.REGISTRY.getObject(new ResourceLocation(modid, itemName));
 			if (item != null && item != Blocks.AIR && clm != null) {
-				DCLogger.debugLog("register target block from json: " + modid + ":" + itemName + ", " + meta);
+				DCLogger.infoLog("register target block climate from json: " + modid + ":" + itemName + ", " + meta);
 				if (clm.getHeat() != DCHeatTier.NORMAL) {
 					ClimateAPI.registerBlock.registerHeatBlock(item, meta, clm.getHeat());
+					DCLogger.infoLog("* HeatTier: " + clm.getHeat());
 				}
 				if (clm.getHumidity() != DCHumidity.NORMAL) {
 					ClimateAPI.registerBlock.registerHumBlock(item, meta, clm.getHumidity());
+					DCLogger.infoLog("* Humidity: " + clm.getHumidity());
 				}
 				if (clm.getAirflow() != DCAirflow.TIGHT) {
 					ClimateAPI.registerBlock.registerAirBlock(item, meta, clm.getAirflow());
+					DCLogger.infoLog("* Airflow: " + clm.getAirflow());
 				}
 			} else {
 				DCLogger.debugLog("fail to register target block from json: " + name);

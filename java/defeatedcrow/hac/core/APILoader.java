@@ -107,6 +107,8 @@ public class APILoader {
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.WATER, 32767, DCHeatTier.NORMAL);
 
 		// cold
+		ClimateAPI.registerBlock.registerHeatBlock(Blocks.END_ROD, 32767, DCHeatTier.COOL);
+
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.ICE, 32767, DCHeatTier.COLD);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.SNOW, 32767, DCHeatTier.COOL);
 		ClimateAPI.registerBlock.registerHeatBlock(Blocks.PACKED_ICE, 32767, DCHeatTier.COLD);

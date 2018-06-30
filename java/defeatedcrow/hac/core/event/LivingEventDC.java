@@ -180,12 +180,12 @@ public class LivingEventDC {
 						float adj = DamageAPI.resistantData.getHeatResistant(living);
 						prev += adj;
 						if (living.isPotionActive(MobEffects.FIRE_RESISTANCE)) {
-							prev += 2.0F;
+							prev += 4.0F;
 						}
 						if (living.isImmuneToFire()) {
-							prev += CoreConfigDC.infernalInferno ? 8.0F : 2.0F;
+							prev += CoreConfigDC.infernalInferno ? 8.0F : 4.0F;
 						} else if (heat.getTier() > DCHeatTier.OVEN.getTier() && living.isEntityUndead()) {
-							prev -= 2.0F;
+							prev /= 2.0F;
 						}
 					}
 
@@ -212,7 +212,7 @@ public class LivingEventDC {
 					dam = result;
 
 					// 2.0F未満の場合はとどめを刺さない
-					if (dam < 2.0F && living.getHealth() < 1.0F) {
+					if (dam < 2.0F && living.getHealth() < 2.0F) {
 						dam = 0.0F;
 					}
 
