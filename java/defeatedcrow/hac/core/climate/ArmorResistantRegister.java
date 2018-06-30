@@ -52,7 +52,7 @@ public class ArmorResistantRegister implements IArmorItemRegister {
 		if (!heatMap.containsKey(set) && !coldMap.containsKey(set)) {
 			heatMap.put(set, heat);
 			coldMap.put(set, cold);
-			DCLogger.debugLog("register armor material: " + item.getDisplayName() + " heat " + heat + "/cold " + cold);
+			DCLogger.infoLog("register armor material: " + item.getDisplayName() + " heat " + heat + "/cold " + cold);
 			String mapName = item.getItem().getRegistryName().toString() + ":" + item.getItemDamage();
 			Map<String, Float> map = Maps.newHashMap();
 			map.put("heat", heat);

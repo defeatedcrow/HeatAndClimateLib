@@ -2,6 +2,7 @@ package defeatedcrow.hac.api.climate;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 
 /** ItemStackのようなBlock、metaのセットが欲しかったので作成 */
 public class BlockSet {
@@ -15,7 +16,7 @@ public class BlockSet {
 	}
 
 	public IBlockState getState() {
-		return block.getStateFromMeta(meta);
+		return block == null ? Blocks.AIR.getDefaultState() : block.getStateFromMeta(meta);
 	}
 
 	/**
@@ -34,5 +35,11 @@ public class BlockSet {
 	public int hashCode() {
 		int i = block.getUnlocalizedName().hashCode() + meta;
 		return i;
+	}
+
+	@Override
+	public String toString() {
+		String name = block == null ? "null" : block.toString();
+		return name + ":" + meta;
 	}
 }
