@@ -269,7 +269,7 @@ public class LivingEventDC {
 	public void playerChunkUpdate(LivingEvent.LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 
-		if (CoreConfigDC.enableVanilla && (entity instanceof EntityPlayer)) {
+		if (CoreConfigDC.enableVanilla) {
 			if (count2 > 0) {
 				count2--;
 				return;

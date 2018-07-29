@@ -55,7 +55,10 @@ public class CommonProxyD {
 			MinecraftForge.EVENT_BUS.register(new SuffocationEventDC());
 		}
 		MinecraftForge.EVENT_BUS.register(new CoreAnvilEvent());
-		MinecraftForge.EVENT_BUS.register(new DropItemUpdateEvent());
+
+		if (CoreConfigDC.enableDropItemSmelting) {
+			MinecraftForge.EVENT_BUS.register(new DropItemUpdateEvent());
+		}
 
 		HaCPacket.init();
 	}

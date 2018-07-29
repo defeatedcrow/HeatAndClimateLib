@@ -118,6 +118,9 @@ public class APILoader {
 		ClimateAPI.registerBlock.registerHumBlock(Blocks.SOUL_SAND, 0, DCHumidity.DRY);
 
 		ClimateAPI.registerBlock.registerHumBlock(Blocks.SPONGE, 1, DCHumidity.WET);
+		ClimateAPI.registerBlock.registerHumBlock(Blocks.CAULDRON, 1, DCHumidity.WET);
+		ClimateAPI.registerBlock.registerHumBlock(Blocks.CAULDRON, 2, DCHumidity.WET);
+		ClimateAPI.registerBlock.registerHumBlock(Blocks.CAULDRON, 3, DCHumidity.UNDERWATER);
 
 		ClimateAPI.registerBlock.registerHumBlock(Blocks.FLOWING_WATER, 32767, DCHumidity.UNDERWATER);
 		ClimateAPI.registerBlock.registerHumBlock(Blocks.WATER, 32767, DCHumidity.UNDERWATER);
