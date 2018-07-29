@@ -1,6 +1,7 @@
 package defeatedcrow.hac.api.recipe;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -13,7 +14,7 @@ public interface IClimateSmeltingRegister {
 	/**
 	 * Recipeのリストを得る。HeatTierごとに別リストになっている。
 	 */
-	List<? extends IClimateSmelting> getRecipeList(DCHeatTier tier);
+	List<? extends IClimateSmelting> getRecipeList();
 
 	/**
 	 * Recipe登録<br>
@@ -45,11 +46,17 @@ public interface IClimateSmeltingRegister {
 	/**
 	 * coreのClimateSmelting.class以外受け付けないのでご注意を(要本体)
 	 */
+	void addRecipe(IClimateSmelting recipe);
+
+	/** 後方互換対策 */
+	@Deprecated
 	void addRecipe(IClimateSmelting recipe, DCHeatTier heat);
 
 	/**
 	 * input, Climateでレシピを判定
 	 */
+	IClimateSmelting getRecipe(Supplier<IClimate> clm, ItemStack item);
+
 	IClimateSmelting getRecipe(IClimate clm, ItemStack item);
 
 	IClimateSmelting getRecipe(int code, ItemStack item);

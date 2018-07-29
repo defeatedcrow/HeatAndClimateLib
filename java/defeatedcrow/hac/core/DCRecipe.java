@@ -122,29 +122,29 @@ public class DCRecipe {
 		// 紙魚抹殺
 		ClimateSmelting silverfish5 = new ClimateSmelting(new ItemStack(Blocks.STONEBRICK, 1, 2), null, DCHeatTier.KILN,
 				null, null, 0, false, new ItemStack(Blocks.MONSTER_EGG, 1, 4));
-		RecipeAPI.registerSmelting.addRecipe(silverfish5, DCHeatTier.KILN);
+		RecipeAPI.registerSmelting.addRecipe(silverfish5);
 
 		ClimateSmelting silverfish4 = new ClimateSmelting(new ItemStack(Blocks.STONEBRICK, 1, 1), null, DCHeatTier.KILN,
 				null, null, 0, false, new ItemStack(Blocks.MONSTER_EGG, 1, 3));
-		RecipeAPI.registerSmelting.addRecipe(silverfish4, DCHeatTier.KILN);
+		RecipeAPI.registerSmelting.addRecipe(silverfish4);
 
 		ClimateSmelting silverfish3 = new ClimateSmelting(new ItemStack(Blocks.STONEBRICK, 1, 0), null, DCHeatTier.KILN,
 				null, null, 0, false, new ItemStack(Blocks.MONSTER_EGG, 1, 2));
-		RecipeAPI.registerSmelting.addRecipe(silverfish3, DCHeatTier.KILN);
+		RecipeAPI.registerSmelting.addRecipe(silverfish3);
 
 		ClimateSmelting silverfish2 = new ClimateSmelting(new ItemStack(Blocks.COBBLESTONE, 1, 0), null,
 				DCHeatTier.KILN, null, null, 0, false, new ItemStack(Blocks.MONSTER_EGG, 1, 1));
-		RecipeAPI.registerSmelting.addRecipe(silverfish2, DCHeatTier.KILN);
+		RecipeAPI.registerSmelting.addRecipe(silverfish2);
 
 		ClimateSmelting silverfish1 = new ClimateSmelting(new ItemStack(Blocks.STONE, 1, 1), null, DCHeatTier.KILN,
 				null, null, 0, false, new ItemStack(Blocks.MONSTER_EGG, 1, 0));
-		RecipeAPI.registerSmelting.addRecipe(silverfish1, DCHeatTier.KILN);
+		RecipeAPI.registerSmelting.addRecipe(silverfish1);
 
 		// grassとsandの風化
 		ClimateSmelting sand = new ClimateSmelting(new ItemStack(Blocks.SAND, 1, 0), null, DCHeatTier.SMELTING,
 				DCHumidity.DRY, null, 0, false, new ItemStack(Blocks.DIRT, 1, 0));
 		sand.requiredHeat().add(DCHeatTier.INFERNO);
-		RecipeAPI.registerSmelting.addRecipe(sand, DCHeatTier.SMELTING);
+		RecipeAPI.registerSmelting.addRecipe(sand);
 
 		ClimateSmelting sand2 = new ClimateSmelting(new ItemStack(Blocks.DIRT, 1, 0), null, DCHeatTier.SMELTING,
 				DCHumidity.DRY, null, 0, false, new ItemStack(Blocks.GRASS, 1, 0)) {
@@ -156,7 +156,7 @@ public class DCRecipe {
 			}
 		};
 		sand2.requiredHeat().add(DCHeatTier.INFERNO);
-		RecipeAPI.registerSmelting.addRecipe(sand2, DCHeatTier.SMELTING);
+		RecipeAPI.registerSmelting.addRecipe(sand2);
 
 		ClimateSmelting dirt2 = new ClimateSmelting(new ItemStack(Blocks.DIRT, 1, 0), null, DCHeatTier.WARM,
 				DCHumidity.WET, null, 0, false, new ItemStack(Blocks.SAND, 1, 0)) {
@@ -169,13 +169,13 @@ public class DCRecipe {
 		};
 		dirt2.requiredHum().add(DCHumidity.UNDERWATER);
 		dirt2.requiredHeat().remove(DCHeatTier.NORMAL);
-		RecipeAPI.registerSmelting.addRecipe(dirt2, DCHeatTier.WARM);
+		RecipeAPI.registerSmelting.addRecipe(dirt2);
 
 		ClimateSmelting dirt3 = new ClimateSmelting(new ItemStack(Blocks.GRASS, 1, 0), null, DCHeatTier.WARM,
 				DCHumidity.WET, null, 0, false, new ItemStack(Blocks.DIRT, 1, 0));
 		dirt3.requiredHum().add(DCHumidity.UNDERWATER);
 		dirt3.requiredHeat().remove(DCHeatTier.NORMAL);
-		RecipeAPI.registerSmelting.addRecipe(dirt3, DCHeatTier.WARM);
+		RecipeAPI.registerSmelting.addRecipe(dirt3);
 
 		ClimateSmelting sap = new ClimateSmelting(new ItemStack(Blocks.SAPLING, 1, 0), null, DCHeatTier.WARM,
 				DCHumidity.WET, null, 0, false, new ItemStack(Blocks.DEADBUSH, 1, 0)) {
@@ -187,7 +187,7 @@ public class DCRecipe {
 				return false;
 			}
 		};
-		RecipeAPI.registerSmelting.addRecipe(sap, DCHeatTier.WARM);
+		RecipeAPI.registerSmelting.addRecipe(sap);
 
 		ClimateSmelting sap2 = new ClimateSmelting(new ItemStack(Blocks.DEADBUSH, 1, 0), null, DCHeatTier.OVEN,
 				DCHumidity.DRY, null, 0, false, new ItemStack(Blocks.SAPLING, 1, 32767)) {
@@ -200,7 +200,7 @@ public class DCRecipe {
 				return false;
 			}
 		};
-		RecipeAPI.registerSmelting.addRecipe(sap2, DCHeatTier.OVEN);
+		RecipeAPI.registerSmelting.addRecipe(sap2);
 	}
 
 	public static void addShapedRecipe(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {

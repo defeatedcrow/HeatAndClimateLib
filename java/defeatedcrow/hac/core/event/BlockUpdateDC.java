@@ -1,9 +1,7 @@
 package defeatedcrow.hac.core.event;
 
-import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.IClimate;
+import com.google.common.base.Suppliers;
+import defeatedcrow.hac.api.climate.*;
 import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import defeatedcrow.hac.api.recipe.DCBlockFreezeEvent;
 import defeatedcrow.hac.api.recipe.DCBlockUpdateEvent;
@@ -26,6 +24,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.function.Supplier;
+
 public class BlockUpdateDC {
 
 	@SubscribeEvent
@@ -45,7 +45,7 @@ public class BlockUpdateDC {
 				return;
 
 			int meta = block.getMetaFromState(st);
-			IClimate clm = ClimateAPI.calculator.getClimate(world, p);
+			ClimateSupplier clm = new ClimateSupplier(world, p);
 			boolean roof = hasRoof(world, p);
 
 			// 直接指定の仕様
@@ -62,12 +62,12 @@ public class BlockUpdateDC {
 				}
 			} else if (block instanceof IGrowable) {
 				// WETの参照posを真下に
-				IClimate clm2 = ClimateAPI.calculator.getClimate(world, p.down());
 				if (block == Blocks.TALLGRASS) {
 					// WARMかつWETの場合に成長が促進される
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
-						if ((clm.getHeat() == DCHeatTier.WARM || clm.getHeat() == DCHeatTier.HOT)
+						IClimate clm2 = ClimateAPI.calculator.getClimate(world, p.down());
+						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT)
 								&& clm2.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
 						}
@@ -78,7 +78,8 @@ public class BlockUpdateDC {
 					// WARMかつWETの場合に成長が促進されるが、バニラ植物ほど加速はしない
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(10) == 0) {
-						if ((clm.getHeat() == DCHeatTier.WARM || clm.getHeat() == DCHeatTier.HOT)
+						IClimate clm2 = ClimateAPI.calculator.getClimate(world, p.down());
+						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT)
 								&& clm2.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
 						}
@@ -87,11 +88,12 @@ public class BlockUpdateDC {
 					// WARMかつWETの場合に成長が促進され、COLD以下の場合は成長が遅くなる
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
-						if ((clm.getHeat() == DCHeatTier.WARM || clm.getHeat() == DCHeatTier.HOT)
+						IClimate clm2 = ClimateAPI.calculator.getClimate(world, p.down());
+						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT)
 								&& clm2.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
 							// DCLogger.debugLog("Grow!");
-						} else if (clm.getHeat().getTier() < -1) {
+						} else if (clm.get().getHeat().getTier() < -1) {
 							event.setCanceled(true);
 							// DCLogger.debugLog("Grow Canceled");
 						}
@@ -104,17 +106,17 @@ public class BlockUpdateDC {
 			 * WARM以上で強制溶解
 			 */
 			else if (block == Blocks.ICE) {
-				if (clm.getHeat().getTier() < 0) {
+				if (clm.get().getHeat().getTier() < 0) {
 					// 隣接4つもチェックする
 					int r1 = world.rand.nextInt(4);
-					if (clm.getHeat().getTier() == DCHeatTier.ABSOLUTE.getTier()) {
+					if (clm.get().getHeat().getTier() == DCHeatTier.ABSOLUTE.getTier()) {
 						world.setBlockState(p, Blocks.PACKED_ICE.getDefaultState(), 2);
 						world.notifyNeighborsOfStateChange(p, Blocks.PACKED_ICE, false);
 						event.setCanceled(true);
 						// DCLogger.debugLog("Freeze!!");
 					}
 					event.setCanceled(true);
-				} else if (clm.getHeat().getTier() > 0) {
+				} else if (clm.get().getHeat().getTier() > 0) {
 					world.setBlockState(p, Blocks.WATER.getDefaultState(), 2);
 					world.notifyNeighborsOfStateChange(p, Blocks.WATER, false);
 					event.setCanceled(true);
@@ -125,9 +127,9 @@ public class BlockUpdateDC {
 				 * COOL以下であれば氷が溶けなくなり、WARM以上で強制溶解
 				 */
 			} else if (block == Blocks.SNOW || block == Blocks.SNOW_LAYER) {
-				if (clm.getHeat().getTier() < 0) {
+				if (clm.get().getHeat().getTier() < 0) {
 					event.setCanceled(true);
-				} else if (clm.getHeat().getTier() > 0) {
+				} else if (clm.get().getHeat().getTier() > 0) {
 					world.setBlockToAir(p);
 					event.setCanceled(true);
 					// DCLogger.debugLog("Melted");
@@ -138,7 +140,7 @@ public class BlockUpdateDC {
 			// レシピ判定
 			if (CoreConfigDC.enableVanilla && !(block instanceof IClimateObject)) {
 				IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(block, 1, meta));
-				if (recipe != null && recipe.matchClimate(clm) && recipe.additionalRequire(world, p)
+				if (recipe != null && recipe.matchClimate(clm.get()) && recipe.additionalRequire(world, p)
 						&& recipe.hasPlaceableOutput() == 1) {
 					if (recipe.getOutput() != null && recipe.getOutput().getItem() instanceof ItemBlock) {
 						Block retB = Block.getBlockFromItem(recipe.getOutput().getItem());
@@ -155,9 +157,9 @@ public class BlockUpdateDC {
 
 			// ハードモード
 			if (CoreConfigDC.harderVanilla) {
-				if (clm.getHeat().getTier() > DCHeatTier.SMELTING.getTier()) {
+				if (clm.get().getHeat().getTier() > DCHeatTier.SMELTING.getTier()) {
 
-					if (clm.getHeat() == DCHeatTier.INFERNO) {
+					if (clm.get().getHeat() == DCHeatTier.INFERNO) {
 						// 融解
 						if (st.getMaterial() == Material.ROCK || st.getMaterial() == Material.SAND
 								|| st.getMaterial() == Material.GROUND) {

@@ -4,7 +4,7 @@
  * Please check the License.txt included in the package file of this Mod.
  */
 
-@API(apiVersion = "2.1.0", owner = "dcs_lib", provides = "DCsHaCAPI|core")
+@API(apiVersion = "2.1.1", owner = "dcs_lib", provides = "DCsHaCAPI|core")
 package defeatedcrow.hac.api;
 
 import net.minecraftforge.fml.common.API;
