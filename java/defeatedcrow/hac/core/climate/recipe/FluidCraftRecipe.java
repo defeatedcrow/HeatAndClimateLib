@@ -91,7 +91,9 @@ public class FluidCraftRecipe implements IFluidRecipe {
 					throw new IllegalArgumentException("Unknown Object passed to recipe!");
 				}
 			}
-			count = input.length;
+			int i1 = iF == null ? 0 : 1;
+			i1 += input.length;
+			count = i1;
 		} else {
 			count = 0;
 		}

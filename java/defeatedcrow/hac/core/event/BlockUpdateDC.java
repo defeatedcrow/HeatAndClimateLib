@@ -177,7 +177,7 @@ public class BlockUpdateDC {
 				}
 			}
 
-			if (f2) {
+			if (f2 && CoreConfigDC.enableVanilla) {
 
 				for (BlockPos p3 : BlockPos.getAllInBox(p.east().north(), p.west().south())) {
 					if (!world.isAirBlock(p3)) {

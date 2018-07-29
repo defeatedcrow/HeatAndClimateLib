@@ -4,15 +4,12 @@ import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.placeable.IEntityItem;
 import defeatedcrow.hac.api.recipe.DCEntityItemUpdateEvent;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
-import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,14 +24,7 @@ public class DropItemUpdateEvent {
 		EntityItem entity = event.entityItem;
 		if (entity != null && !entity.getEntityWorld().isRemote) {
 			if (!DCUtil.isEmpty(entity.getItem())) {
-				boolean flag = false;
-				if (!(entity.getItem().getItem() instanceof ItemBlock)
-						&& !(entity.getItem().getItem() instanceof IEntityItem)) {
-					flag = true;
-				} else if (CoreConfigDC.enableDropItemSmelting) {
-					flag = true;
-				}
-				if (!entity.cannotPickup() && flag) {
+				if (!entity.cannotPickup()) {
 					NBTTagCompound tag = entity.getEntityData();
 					short c = 0;
 					if (tag.hasKey("dcs.counter")) {

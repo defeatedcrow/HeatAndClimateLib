@@ -85,7 +85,13 @@ public class ReactorRecipe implements IReactorRecipe {
 					throw new IllegalArgumentException("Unknown Object passed to recipe!");
 				}
 			}
-			count = input.length;
+			int i1 = 0;
+			if (iF1 != null)
+				i1++;
+			if (iF2 != null)
+				i1++;
+			i1 += input.length;
+			count = i1;
 		} else {
 			count = 0;
 		}

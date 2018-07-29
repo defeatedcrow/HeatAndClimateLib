@@ -120,6 +120,8 @@ public class DCUtil {
 				NBTTagCompound t2 = i2.getTagCompound();
 				if (t1 == null && t2 == null) {
 					return true;
+				} else if (t1 == null || t2 == null) {
+					return false;
 				} else {
 					return t1.equals(t2);
 				}
@@ -139,6 +141,8 @@ public class DCUtil {
 				NBTTagCompound t2 = i2.getTagCompound();
 				if (t1 == null && t2 == null) {
 					return true;
+				} else if (t1 == null || t2 == null) {
+					return false;
 				} else {
 					return t1.equals(t2);
 				}
@@ -160,6 +164,8 @@ public class DCUtil {
 					NBTTagCompound t2 = i2.getTagCompound();
 					if (t1 == null && t2 == null) {
 						return true;
+					} else if (t1 == null || t2 == null) {
+						return false;
 					} else {
 						return t1.equals(t2);
 					}
