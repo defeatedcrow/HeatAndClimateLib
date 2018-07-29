@@ -7,7 +7,7 @@
 /**
  * このAPIは、気候によるモブへのダメージを扱います。<br>
  */
-@API(apiVersion = "2.0.1", owner = "dcs_lib", provides = "DCsHaCAPI|damage")
+@API(apiVersion = "2.1.1", owner = "dcs_lib", provides = "DCsHaCAPI|damage")
 package defeatedcrow.hac.api.damage;
 
 import net.minecraftforge.fml.common.API;

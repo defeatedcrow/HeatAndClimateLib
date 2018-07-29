@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
+
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -22,11 +23,10 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	/*
 	 * RecipeListは温度ごとに別になっている。
 	 */
-	//todo Make it a list of IClimateSmelting instead of ClimateSmelting?
+	// todo Make it a list of IClimateSmelting instead of ClimateSmelting?
 	private List<ClimateSmelting> recipes = new ArrayList<>();
 
-	public ClimateSmeltingRegister() {
-	}
+	public ClimateSmeltingRegister() {}
 
 	public IClimateSmeltingRegister instance() {
 		return RecipeAPI.registerSmelting;
@@ -53,7 +53,8 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 				secondary = ItemStack.EMPTY;
 			}
 			boolean drop = false;
-			getRecipeList().add(new ClimateSmelting(output, secondary, heat, hum, air, secondaryChance, cooling, input));
+			getRecipeList()
+					.add(new ClimateSmelting(output, secondary, heat, hum, air, secondaryChance, cooling, input));
 		}
 	}
 
@@ -78,14 +79,14 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 
 	@Override
 	public void addRecipe(IClimateSmelting recipe) {
-		if(recipe instanceof ClimateSmelting)
-			getRecipeList().add((ClimateSmelting)recipe);
+		if (recipe instanceof ClimateSmelting)
+			getRecipeList().add((ClimateSmelting) recipe);
 	}
 
 	@Override
 	public IClimateSmelting getRecipe(Supplier<IClimate> clm, ItemStack item) {
-		for(IClimateSmelting recipe : recipes) {
-			if(recipe.matcheInput(item) && recipe.matchClimate(clm.get())) {
+		for (IClimateSmelting recipe : recipes) {
+			if (recipe.matcheInput(item) && recipe.matchClimate(clm.get())) {
 				return recipe;
 			}
 		}
@@ -101,5 +102,10 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	public IClimateSmelting getRecipe(int code, ItemStack item) {
 		IClimate clm = ClimateAPI.register.getClimateFromInt(code);
 		return getRecipe(clm, item);
+	}
+
+	@Override
+	public void addRecipe(IClimateSmelting recipe, DCHeatTier heat) {
+		this.addRecipe(recipe);
 	}
 }

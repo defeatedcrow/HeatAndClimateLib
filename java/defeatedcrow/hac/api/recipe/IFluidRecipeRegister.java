@@ -14,7 +14,7 @@ public interface IFluidRecipeRegister {
 	/**
 	 * Recipeのリストを得る。HeatTierごとに別リストになっている。
 	 */
-	List<? extends IFluidRecipe> getRecipeList(DCHeatTier tier);
+	List<? extends IFluidRecipe> getRecipeList();
 
 	/**
 	 * Recipe登録<br>
@@ -41,11 +41,15 @@ public interface IFluidRecipeRegister {
 	/**
 	 * FluidRecipe.class以外受け付けないのでご注意を(要本体)
 	 */
+	void addRecipe(IFluidRecipe recipe);
+
+	@Deprecated
 	void addRecipe(IFluidRecipe recipe, DCHeatTier heat);
 
 	/**
 	 * inputs, Climateでレシピを判定
 	 */
+
 	IFluidRecipe getRecipe(IClimate clm, List<ItemStack> items, FluidStack inFluid);
 
 	IFluidRecipe getRecipe(int code, List<ItemStack> items, FluidStack inFluid);

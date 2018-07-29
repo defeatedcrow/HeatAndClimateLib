@@ -48,6 +48,10 @@ public interface IClimateSmeltingRegister {
 	 */
 	void addRecipe(IClimateSmelting recipe);
 
+	/** 後方互換対策 */
+	@Deprecated
+	void addRecipe(IClimateSmelting recipe, DCHeatTier heat);
+
 	/**
 	 * input, Climateでレシピを判定
 	 */

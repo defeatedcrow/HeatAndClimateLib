@@ -11,7 +11,7 @@ public interface IReactorRecipeRegister {
 	/**
 	 * Recipeのリストを得る。HeatTierごとに別リストになっている。
 	 */
-	List<? extends IReactorRecipe> getRecipeList(DCHeatTier tier);
+	List<? extends IReactorRecipe> getRecipeList();
 
 	/**
 	 * Recipe登録<br>
@@ -37,6 +37,9 @@ public interface IReactorRecipeRegister {
 	/**
 	 * ReactorRecipe.class以外受け付けないのでご注意を(要Lib本体)
 	 */
+	void addRecipe(IReactorRecipe recipe);
+
+	@Deprecated
 	void addRecipe(IReactorRecipe recipe, DCHeatTier heat);
 
 	/**

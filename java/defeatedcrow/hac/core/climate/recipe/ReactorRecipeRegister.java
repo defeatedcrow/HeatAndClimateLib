@@ -14,22 +14,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ReactorRecipeRegister implements IReactorRecipeRegister {
 
-	public ReactorRecipeRegister() {
-		this.absList = new ArrayList<ReactorRecipe>();
-		this.cryoList = new ArrayList<ReactorRecipe>();
-		this.frostList = new ArrayList<ReactorRecipe>();
-		this.coldList = new ArrayList<ReactorRecipe>();
-		this.coolList = new ArrayList<ReactorRecipe>();
-		this.normalList = new ArrayList<ReactorRecipe>();
-		this.warmList = new ArrayList<ReactorRecipe>();
-		this.hotList = new ArrayList<ReactorRecipe>();
-		this.boilList = new ArrayList<ReactorRecipe>();
-		this.ovenList = new ArrayList<ReactorRecipe>();
-		this.kilnList = new ArrayList<ReactorRecipe>();
-		this.smeltList = new ArrayList<ReactorRecipe>();
-		this.uhtList = new ArrayList<ReactorRecipe>();
-		this.infList = new ArrayList<ReactorRecipe>();
-	}
+	public ReactorRecipeRegister() {}
 
 	public IReactorRecipeRegister instance() {
 		return RecipeAPI.registerReactorRecipes;
@@ -38,55 +23,11 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 	/*
 	 * RecipeListは温度ごとに別になっている。
 	 */
-	private static List<ReactorRecipe> absList;
-	private static List<ReactorRecipe> cryoList;
-	private static List<ReactorRecipe> frostList;
-	private static List<ReactorRecipe> coldList;
-	private static List<ReactorRecipe> coolList;
-	private static List<ReactorRecipe> normalList;
-	private static List<ReactorRecipe> warmList;
-	private static List<ReactorRecipe> hotList;
-	private static List<ReactorRecipe> boilList;
-	private static List<ReactorRecipe> ovenList;
-	private static List<ReactorRecipe> kilnList;
-	private static List<ReactorRecipe> smeltList;
-	private static List<ReactorRecipe> uhtList;
-	private static List<ReactorRecipe> infList;
+	private static List<ReactorRecipe> list = new ArrayList<>();
 
 	@Override
-	public List<ReactorRecipe> getRecipeList(DCHeatTier tier) {
-		switch (tier) {
-		case ABSOLUTE:
-			return absList;
-		case CRYOGENIC:
-			return cryoList;
-		case FROSTBITE:
-			return frostList;
-		case COLD:
-			return coldList;
-		case COOL:
-			return coolList;
-		case NORMAL:
-			return normalList;
-		case WARM:
-			return warmList;
-		case HOT:
-			return hotList;
-		case BOIL:
-			return boilList;
-		case OVEN:
-			return ovenList;
-		case KILN:
-			return kilnList;
-		case SMELTING:
-			return smeltList;
-		case UHT:
-			return uhtList;
-		case INFERNO:
-			return infList;
-		default:
-			return ovenList;
-		}
+	public List<ReactorRecipe> getRecipeList() {
+		return list;
 	}
 
 	@Override
@@ -102,7 +43,6 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 		if (catalyst == null) {
 			catalyst = ItemStack.EMPTY;
 		}
-		List<ReactorRecipe> list = getRecipeList(heat);
 		boolean b1 = input == null && inFluid1 == null && inFluid2 == null;
 		boolean b2 = DCUtil.isEmpty(output) && outFluid1 == null && outFluid2 == null;
 		boolean b3 = hasEmptyInput(input);
@@ -114,7 +54,6 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 
 	@Override
 	public void addRecipe(IReactorRecipe recipe, DCHeatTier heat) {
-		List<ReactorRecipe> list = getRecipeList(heat);
 		if (recipe instanceof ReactorRecipe && !hasEmptyInput(recipe.getInput()))
 			list.add((ReactorRecipe) recipe);
 	}
@@ -147,35 +86,18 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 
 	@Override
 	public IReactorRecipe getRecipe(DCHeatTier tier, List<ItemStack> items, FluidStack fluid1, FluidStack fluid2) {
-		List<ReactorRecipe> list = new ArrayList<ReactorRecipe>();
-		list.addAll(getRecipeList(tier));
-		/*
-		 * 現在環境の1つ下の温度帯のレシピも条件にあてまはる
-		 */
-		if (tier != DCHeatTier.ABSOLUTE) {
-			DCHeatTier d = tier.addTier(-1);
-			list.addAll(getRecipeList(d));
-		}
-		if (tier != DCHeatTier.INFERNO) {
-			DCHeatTier u = tier.addTier(1);
-			list.addAll(getRecipeList(u));
-		}
 		IReactorRecipe ret = null;
-		if (list.isEmpty()) {} else {
-			// DCLogger.debugLog("### searching... ###");
-			int c = 0;
-			for (IReactorRecipe recipe : list) {
-				if (recipe.matches(items, fluid1, fluid2) && recipe.matchHeatTier(tier)) {
-					if (recipe.recipeCoincidence() >= c) {
-						ret = recipe;
-						c = recipe.recipeCoincidence();
-					}
+		int c = 0;
+		for (IReactorRecipe recipe : list) {
+			if (recipe.matches(items, fluid1, fluid2) && recipe.matchHeatTier(tier)) {
+				if (recipe.recipeCoincidence() >= c) {
+					ret = recipe;
+					c = recipe.recipeCoincidence();
 				}
 			}
 		}
 
 		if (ret != null) {
-			// DCLogger.debugLog("### fluid recipe found! ###");
 			return ret;
 		}
 		return null;
@@ -184,6 +106,11 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 	@Override
 	public IReactorRecipe getRecipe(int id, List<ItemStack> items, FluidStack fluid1, FluidStack fluid2) {
 		return getRecipe(DCHeatTier.getTypeByID(id), items, fluid1, fluid2);
+	}
+
+	@Override
+	public void addRecipe(IReactorRecipe recipe) {
+		this.addRecipe(recipe);
 	}
 
 }
