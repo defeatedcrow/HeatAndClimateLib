@@ -139,7 +139,7 @@ public class BlockUpdateDC {
 			boolean f2 = false;
 			// レシピ判定
 			if (CoreConfigDC.enableVanilla && !(block instanceof IClimateObject)) {
-				IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm.get(), new ItemStack(block, 1, meta));
+				IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(block, 1, meta));
 				if (recipe != null && recipe.matchClimate(clm.get()) && recipe.additionalRequire(world, p)
 						&& recipe.hasPlaceableOutput() == 1) {
 					if (recipe.getOutput() != null && recipe.getOutput().getItem() instanceof ItemBlock) {
