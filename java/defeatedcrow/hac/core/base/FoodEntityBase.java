@@ -19,7 +19,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
@@ -38,6 +37,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // Food
 public abstract class FoodEntityBase extends Entity implements IItemDropEntity, IRapidCollectables {
@@ -45,7 +46,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	private int totalAge = 0;
 	private int cookingAge = 0;
 	private int count = 0;
-	private int cookingTime = 32; // 2~16 sec 焼く
+	private int cookingTime = 16; // 1~8 sec 焼く
 	private int burntTime = 64;
 	private byte sideInt = 0;
 	private int individual;
@@ -139,13 +140,6 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 					0.0D, new int[0]);
 		}
 
-		// 動作
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
-
-		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-
 		if (this.isFallable()) {
 
 			this.motionY -= 0.04D;
@@ -155,10 +149,10 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			IBlockState in = world.getBlockState(pos);
 			IBlockState under = world.getBlockState(pos.down());
 
-			if (in.getBlock() == Blocks.HOPPER || under.getBlock() == Blocks.HOPPER) {
-				this.dropAndDeath(null);
+			if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof IHopper) {
+				this.dropAndDeath(pos.up());
 			} else if (world.getTileEntity(pos.down()) != null && world.getTileEntity(pos.down()) instanceof IHopper) {
-				this.dropAndDeath(null);
+				this.dropAndDeath(pos);
 			}
 
 			// 水中
@@ -196,7 +190,23 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 			collideWithNearbyEntities();
 
+			if (world.isRemote) {
+				addParticle();
+			}
+
 		}
+
+		// 動作
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
+
+		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected void addParticle() {
+
 	}
 
 	protected void collideWithNearbyEntities() {
@@ -207,6 +217,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			for (int i = 0; i < list.size(); ++i) {
 				Entity entity = list.get(i);
 				this.collideWithEntity(entity);
+				this.applyEntityCollision(entity);
 			}
 		}
 	}
@@ -284,7 +295,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			case OVEN:
 				return 2;
 			case KILN:
-				return 8;
+				return 4;
 			case SMELTING:
 				return 16;
 			default:
@@ -326,7 +337,9 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		if (!world.isRemote && !DCUtil.isEmpty(getDropItem())) {
 			ItemStack item = this.getDropItem();
 			EntityItem drop = new EntityItem(world, x, y, z, item);
-			drop.motionY = 0.025D;
+			drop.motionX = 0.0D;
+			drop.motionY = 0.0D;
+			drop.motionZ = 0.0D;
 			world.spawnEntity(drop);
 		}
 	}
@@ -360,7 +373,6 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		if (this.world.handleMaterialAcceleration(this.getEntityBoundingBox(), Material.WATER, this)) {
 			if (!this.inWater && !this.firstUpdate) {
 				this.doWaterSplashEffect();
-				;
 			}
 
 			this.inWater = true;
