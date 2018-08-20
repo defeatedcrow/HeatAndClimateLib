@@ -184,7 +184,7 @@ public class FluidIDRegisterDC {
 	}
 
 	public static void setDir(File file) {
-		dir = new File(file, "defeatedcrow/climate/fluids.json");
+		dir = new File(file, "fluids.json");
 		if (dir.getParentFile() != null) {
 			dir.getParentFile().mkdirs();
 		}

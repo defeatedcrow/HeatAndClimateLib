@@ -188,12 +188,14 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 				this.motionZ = 0.0D;
 			}
 
-			collideWithNearbyEntities();
-
 			if (world.isRemote) {
 				addParticle();
 			}
 
+		}
+
+		if (!world.isRemote) {
+			collideWithNearbyEntities();
 		}
 
 		// 動作

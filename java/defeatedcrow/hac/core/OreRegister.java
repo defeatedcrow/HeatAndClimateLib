@@ -1,10 +1,10 @@
 package defeatedcrow.hac.core;
 
+import defeatedcrow.hac.core.recipe.ConvertTargetList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import defeatedcrow.hac.core.recipe.ConvertTargetList;
 
 public class OreRegister {
 	public static void load() {
@@ -43,6 +43,7 @@ public class OreRegister {
 		OreDictionary.registerOre("cropPumpkin", new ItemStack(Blocks.PUMPKIN));
 		OreDictionary.registerOre("cropMelon", new ItemStack(Items.MELON));
 		OreDictionary.registerOre("cropReeds", new ItemStack(Items.REEDS));
+		OreDictionary.registerOre("cropBeetroot", new ItemStack(Items.BEETROOT));
 
 		OreDictionary.registerOre("bucketWater", new ItemStack(Items.WATER_BUCKET));
 		OreDictionary.registerOre("bucketLava", new ItemStack(Items.LAVA_BUCKET));

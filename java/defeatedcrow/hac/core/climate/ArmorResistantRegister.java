@@ -227,7 +227,7 @@ public class ArmorResistantRegister implements IArmorItemRegister {
 	}
 
 	public static void setDir(File file) {
-		dir = new File(file, "defeatedcrow/climate/armor_item_resistant.json");
+		dir = new File(file, "armor_item_resistant.json");
 		if (dir.getParentFile() != null) {
 			dir.getParentFile().mkdirs();
 		}
