@@ -74,12 +74,7 @@ public abstract class DCItem extends Item implements ITexturePath {
 	}
 
 	public ActionResult<ItemStack> onItemRightClick2(World world, EntityPlayer player, EnumHand hand) {
-		if (player != null) {
-			ItemStack ret = player.getHeldItem(hand);
-			return new ActionResult(EnumActionResult.PASS, ret);
-		} else {
-			return new ActionResult(EnumActionResult.PASS, ItemStack.EMPTY);
-		}
+		return super.onItemRightClick(world, player, hand);
 	}
 
 	@Override

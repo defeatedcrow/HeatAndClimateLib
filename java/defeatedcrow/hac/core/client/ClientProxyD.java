@@ -1,5 +1,7 @@
 package defeatedcrow.hac.core.client;
 
+import javax.annotation.Nonnull;
+
 import org.lwjgl.input.Keyboard;
 
 import defeatedcrow.hac.config.CoreConfigDC;
@@ -10,11 +12,13 @@ import defeatedcrow.hac.core.client.base.ModelThinBiped;
 import defeatedcrow.hac.core.client.event.RenderTempHUDEvent;
 import defeatedcrow.hac.core.client.event.WaterFogEvent;
 import defeatedcrow.hac.core.climate.WeatherChecker;
+import defeatedcrow.hac.core.recipe.RecipeJsonMaker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -154,6 +158,16 @@ public class ClientProxyD extends CommonProxyD {
 			return WeatherChecker.INSTANCE.getWindOffset(dim, isHell);
 		}
 		return 0;
+	}
+
+	@Override
+	public void addShapedRecipeJson(String name, @Nonnull ItemStack result, Object... recipe) {
+		RecipeJsonMaker.buildShapedRecipe(name, result, recipe);
+	}
+
+	@Override
+	public void addShapelessRecipeJson(String name, @Nonnull ItemStack result, Object... recipe) {
+		RecipeJsonMaker.buildShapelessRecipe(name, result, recipe);
 	}
 
 }

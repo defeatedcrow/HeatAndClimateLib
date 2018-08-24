@@ -1,5 +1,7 @@
 package defeatedcrow.hac.core;
 
+import javax.annotation.Nonnull;
+
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
 import defeatedcrow.hac.core.climate.WeatherChecker;
@@ -7,6 +9,7 @@ import defeatedcrow.hac.core.event.BlockUpdateDC;
 import defeatedcrow.hac.core.event.CaveGenLavaDC;
 import defeatedcrow.hac.core.event.ClickEventDC;
 import defeatedcrow.hac.core.event.CoreAnvilEvent;
+import defeatedcrow.hac.core.event.DispenseEntityItem;
 import defeatedcrow.hac.core.event.DropItemUpdateEvent;
 import defeatedcrow.hac.core.event.LivingEventDC;
 import defeatedcrow.hac.core.event.LivingHurtDC;
@@ -14,7 +17,10 @@ import defeatedcrow.hac.core.event.SuffocationEventDC;
 import defeatedcrow.hac.core.event.TickEventDC;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.util.PotionFreezeResistance;
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
 import net.minecraft.world.World;
@@ -58,6 +64,10 @@ public class CommonProxyD {
 
 		if (CoreConfigDC.enableDropItemSmelting) {
 			MinecraftForge.EVENT_BUS.register(new DropItemUpdateEvent());
+		}
+
+		for (Item item : DispenseEntityItem.getInstance().dispenceList) {
+			BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(item, DispenseEntityItem.getInstance());
 		}
 
 		HaCPacket.init();
@@ -116,6 +126,14 @@ public class CommonProxyD {
 			return WeatherChecker.INSTANCE.getWindOffset(dim, isHell);
 		}
 		return 0;
+	}
+
+	public void addShapedRecipeJson(String name, @Nonnull ItemStack result, Object... recipe) {
+
+	}
+
+	public void addShapelessRecipeJson(String name, @Nonnull ItemStack result, Object... recipe) {
+
 	}
 
 }

@@ -232,7 +232,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 	}
 
 	public static void setDir(File file) {
-		dir = new File(file, "defeatedcrow/climate/mob_resistant.json");
+		dir = new File(file, "mob_resistant.json");
 		if (dir.getParentFile() != null) {
 			dir.getParentFile().mkdirs();
 		}

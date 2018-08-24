@@ -14,19 +14,25 @@ public class ClimateConfig {
 
 	public static final ClimateConfig INSTANCE = new ClimateConfig();
 
+	public File configDir;
+
 	public void load(File file) {
 
-		File cfgFile = new File(file, "defeatedcrow/climate/core.cfg");
-		CoreConfigDC.INSTANCE.load(new Configuration(cfgFile));
+		configDir = new File(file, "defeatedcrow/climate/");
+		if (configDir == null) {
+			configDir.mkdirs();
+		}
+		File dir = new File(file, "defeatedcrow/climate/core.cfg");
+		CoreConfigDC.INSTANCE.load(new Configuration(dir));
 
 		// fluid
-		FluidIDRegisterDC.setDir(file);
+		FluidIDRegisterDC.setDir(configDir);
 		FluidIDRegisterDC.pre();
 
 		// resistant data
-		MobResistantRegister.setDir(file);
-		ArmorResistantRegister.setDir(file);
-		HeatBlockRegister.setDir(file);
+		MobResistantRegister.setDir(configDir);
+		ArmorResistantRegister.setDir(configDir);
+		HeatBlockRegister.setDir(configDir);
 	}
 
 }

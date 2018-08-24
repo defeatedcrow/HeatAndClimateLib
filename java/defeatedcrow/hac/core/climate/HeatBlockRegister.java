@@ -369,7 +369,7 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 	}
 
 	public static void setDir(File file) {
-		dir = new File(file, "defeatedcrow/climate/block_climate_parameter.json");
+		dir = new File(file, "block_climate_parameter.json");
 		if (dir.getParentFile() != null) {
 			dir.getParentFile().mkdirs();
 		}

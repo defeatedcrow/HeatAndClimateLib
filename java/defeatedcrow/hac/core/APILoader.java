@@ -67,13 +67,10 @@ public class APILoader {
 		CropAPI.register = new ClimateCropRegister();
 		CropAPI.isLoaded = true;
 
-		registerClimate();
-		registerMaterial();
-		registerMobResistant();
 		ThermalInsulationUtil.load();
 	}
 
-	private static void registerMaterial() {
+	public static void registerMaterial() {
 		DamageAPI.armorRegister.registerMaterial(ArmorMaterial.LEATHER, 2.0F, 2.0F);
 		DamageAPI.armorRegister.registerMaterial(ArmorMaterial.DIAMOND, 0.5F, 0.5F);
 		DamageAPI.itemRegister.registerMaterial(new ItemStack(Items.DIAMOND_HORSE_ARMOR), 2.0F, 2.0F);
@@ -133,7 +130,7 @@ public class APILoader {
 
 	}
 
-	static void registerMobResistant() {
+	public static void registerMobResistant() {
 		DamageAPI.resistantData.registerEntityResistant(EntityVillager.class, 3.0F, 4.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityIronGolem.class, 4.0F, 8.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntitySnowman.class, 0.0F, 8.0F);
