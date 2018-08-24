@@ -19,7 +19,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -162,12 +161,12 @@ public class ClientProxyD extends CommonProxyD {
 	}
 
 	@Override
-	public void addShapedRecipeJson(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
+	public void addShapedRecipeJson(String name, @Nonnull ItemStack result, Object... recipe) {
 		RecipeJsonMaker.buildShapedRecipe(name, result, recipe);
 	}
 
 	@Override
-	public void addShapelessRecipeJson(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
+	public void addShapelessRecipeJson(String name, @Nonnull ItemStack result, Object... recipe) {
 		RecipeJsonMaker.buildShapelessRecipe(name, result, recipe);
 	}
 

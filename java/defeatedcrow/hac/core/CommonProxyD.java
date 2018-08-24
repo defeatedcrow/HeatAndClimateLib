@@ -23,7 +23,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -129,11 +128,11 @@ public class CommonProxyD {
 		return 0;
 	}
 
-	public void addShapedRecipeJson(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
+	public void addShapedRecipeJson(String name, @Nonnull ItemStack result, Object... recipe) {
 
 	}
 
-	public void addShapelessRecipeJson(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
+	public void addShapelessRecipeJson(String name, @Nonnull ItemStack result, Object... recipe) {
 
 	}
 

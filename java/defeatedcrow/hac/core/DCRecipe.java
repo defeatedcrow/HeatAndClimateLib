@@ -10,7 +10,6 @@ import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
 import defeatedcrow.hac.core.recipe.ShapedNBTRecipe;
 import defeatedcrow.hac.core.recipe.ShapelessNBTRecipe;
-import defeatedcrow.hac.core.util.RecipeResources;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.block.material.Material;
@@ -70,47 +69,46 @@ public class DCRecipe {
 	static void addAltRecipes() {
 		// コンパス
 
-		jsonShapedRecipe(RecipeResources.CORE.getRecipeName(), new ItemStack(Items.COMPASS, 1, 0), new Object[] {
+		jsonShapedRecipe("core", new ItemStack(Items.COMPASS, 1, 0), new Object[] {
 				" X ", "XYX", " X ", 'X', "ingotIron", 'Y', "dustMagnetite"
 		});
 
 		// 火打ち石のアナザー
-		jsonShapelessRecipe(RecipeResources.CORE.getRecipeName(), new ItemStack(Items.FLINT_AND_STEEL, 1, 0),
-				new Object[] {
-						new ItemStack(Items.IRON_INGOT, 1, 0), "gemChalcedony"
-				});
+		jsonShapelessRecipe("core", new ItemStack(Items.FLINT_AND_STEEL, 1, 0), new Object[] {
+				new ItemStack(Items.IRON_INGOT, 1, 0), "gemChalcedony"
+		});
 
 		// 火薬
-		jsonShapelessRecipe(RecipeResources.CORE.getRecipeName(), new ItemStack(Items.GUNPOWDER, 4, 0), new Object[] {
+		jsonShapelessRecipe("core", new ItemStack(Items.GUNPOWDER, 4, 0), new Object[] {
 				"dustGraphite", "dustGraphite", "dustGraphite", "gemNiter", "gemNiter", "gemSulfur"
 		});
 
-		jsonShapelessRecipe(RecipeResources.CORE.getRecipeName(), new ItemStack(Items.GUNPOWDER, 4, 0), new Object[] {
+		jsonShapelessRecipe("core", new ItemStack(Items.GUNPOWDER, 4, 0), new Object[] {
 				"dustGraphite", "dustGraphite", "dustGraphite", "dustNiter", "dustNiter", "dustSulfur"
 		});
 
 		// 代替系
-		jsonShapedRecipe(RecipeResources.CORE.getRecipeName(), new ItemStack(Items.CAKE, 1, 0), new Object[] {
+		jsonShapedRecipe("core", new ItemStack(Items.CAKE, 1, 0), new Object[] {
 				"XXX", "YZY", "WWW", 'X', "bucketMilk", 'Y', "dustSugar", 'Z', "egg", 'W', "foodFlour"
 		});
 
-		jsonShapedRecipe(RecipeResources.CORE.getRecipeName(), new ItemStack(Items.COOKIE, 8, 0), new Object[] {
+		jsonShapedRecipe("core", new ItemStack(Items.COOKIE, 8, 0), new Object[] {
 				"YZY", 'Y', "foodFlour", 'Z', "cropCocoa"
 		});
 
-		jsonShapedRecipe(RecipeResources.CORE.getRecipeName(), new ItemStack(Items.BREAD, 1, 0), new Object[] {
+		jsonShapedRecipe("core", new ItemStack(Items.BREAD, 1, 0), new Object[] {
 				"YYY", 'Y', "foodFlour"
 		});
 
-		jsonShapedRecipe(RecipeResources.CORE.getRecipeName(), new ItemStack(Items.BED, 1, 0), new Object[] {
+		jsonShapedRecipe("core", new ItemStack(Items.BED, 1, 0), new Object[] {
 				"XXX", "YYY", 'X', "itemCloth", 'Y', "plankWood"
 		});
 
-		jsonShapedRecipe(RecipeResources.CORE.getRecipeName(), new ItemStack(Items.PAINTING, 1, 0), new Object[] {
+		jsonShapedRecipe("core", new ItemStack(Items.PAINTING, 1, 0), new Object[] {
 				"XXX", "XYX", "XXX", 'X', "stickWood", 'Y', "itemCloth"
 		});
 
-		jsonShapedRecipe(RecipeResources.CORE.getRecipeName(), new ItemStack(Items.SADDLE, 1, 0), new Object[] {
+		jsonShapedRecipe("core", new ItemStack(Items.SADDLE, 1, 0), new Object[] {
 				"X", "Y", "Z", 'X', "itemLeather", 'Y', "itemCloth", 'Z', "ingotIron"
 		});
 
@@ -247,11 +245,11 @@ public class DCRecipe {
 		ForgeRegistries.RECIPES.register(ret);
 	}
 
-	public static void jsonShapedRecipe(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
+	public static void jsonShapedRecipe(String name, @Nonnull ItemStack result, Object... recipe) {
 		ClimateCore.proxy.addShapedRecipeJson(name, result, recipe);
 	}
 
-	public static void jsonShapelessRecipe(ResourceLocation name, @Nonnull ItemStack result, Object... recipe) {
+	public static void jsonShapelessRecipe(String name, @Nonnull ItemStack result, Object... recipe) {
 		ClimateCore.proxy.addShapelessRecipeJson(name, result, recipe);
 	}
 

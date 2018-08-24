@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -22,11 +21,12 @@ public class RecipeJsonMaker {
 
 	public static final RecipeJsonMaker INSTANCE = new RecipeJsonMaker();
 
-	public static boolean flag = false;
+	public static boolean canUse = false;
+	public static boolean canDeprecate = false;
 
-	public static Path dir = Paths.get("E:\\modding\\1.12.1\\hac_lib_2\\recipes\\");
+	public static Path dir = null;
 
-	public static void buildShapedRecipe(ResourceLocation name, ItemStack result, Object... keys) {
+	public static void buildShapedRecipe(String domain, ItemStack result, Object... keys) {
 		int count = 0;
 		for (Object o : keys) {
 			if (o instanceof String) {
@@ -49,27 +49,89 @@ public class RecipeJsonMaker {
 			// DCLogger.infoLog("**** pair " + pair.ch + " " + pair.obj.toString());
 			obj[i1] = pair;
 		}
-		buildShapedRecipe(name, result, pat, obj);
+		buildShapedRecipe(domain, result, pat, obj);
 	}
 
-	public static void buildShapedRecipe(ResourceLocation name, ItemStack result, String[] pattern, Pairs... keys) {
-		if (flag && !DCUtil.isEmpty(result)) {
+	public static void buildShapedRecipe(String domain, ItemStack result, String[] pattern, Pairs... keys) {
+		if (dir != null && canUse && !DCUtil.isEmpty(result)) {
 			Map<String, Map<String, Object>> key = keys(keys);
 			Map<String, Object> res = result(result);
 			Shaped ret = INSTANCE.new Shaped(pattern, key, res);
 
 			String filename = result.getItem().getRegistryName().getResourcePath() + "_" + result.getItemDamage();
+			if (result.getItem().getRegistryName().getResourceDomain().equalsIgnoreCase("minecraft")) {
+				filename = "dcs_" + filename;
+			}
+
 			dir.normalize();
-			File f = new File(dir + "/" + filename + ".json");
+			File f = new File(dir + "/" + domain + "/" + filename + ".json");
+			if (!canDeprecate && f.exists())
+				return;
 			int a = 2;
 			while (f.exists()) {
-				f = new File(dir + "/" + filename + "_" + a + ".json");
+				f = new File(dir + "/" + domain + "/" + filename + "_" + a + ".json");
 				a++;
+			}
+
+			if (!f.getParentFile().exists()) {
+				f.getParentFile().mkdirs();
 			}
 
 			try {
 				f.createNewFile();
 				// DCLogger.infoLog("shaped file created: " + f.getName());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+			try {
+				if (f.canWrite()) {
+					FileOutputStream fos = new FileOutputStream(f.getPath());
+					OutputStreamWriter osw = new OutputStreamWriter(fos);
+					JsonWriter jsw = new JsonWriter(osw);
+					jsw.setIndent(" ");
+					Gson gson = new Gson();
+					gson.toJson(ret, ret.getClass(), jsw);
+
+					osw.close();
+					fos.close();
+					jsw.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void buildShapelessRecipe(String domain, ItemStack result, Object... keys) {
+		if (dir != null && canUse && !DCUtil.isEmpty(result)) {
+			// DCLogger.infoLog("**** start 2 ****");
+			List<Map<String, Object>> key = ing(keys);
+			Map<String, Object> res = result(result);
+			Shapeless ret = INSTANCE.new Shapeless(key, res);
+
+			String filename = result.getItem().getRegistryName().getResourcePath() + "_" + result.getItemDamage();
+			if (result.getItem().getRegistryName().getResourceDomain().equalsIgnoreCase("minecraft")) {
+				filename = "dcs_" + filename;
+			}
+
+			dir.normalize();
+			File f = new File(dir + "/" + domain + "/" + filename + ".json");
+			if (!canDeprecate && f.exists())
+				return;
+			int a = 2;
+			while (f.exists()) {
+				f = new File(dir + "/" + domain + "/" + filename + "_" + a + ".json");
+				a++;
+			}
+
+			if (!f.getParentFile().exists()) {
+				f.getParentFile().mkdirs();
+			}
+
+			try {
+				f.createNewFile();
+				// DCLogger.infoLog("shapeless file created: " + f.getName());
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -106,48 +168,6 @@ public class RecipeJsonMaker {
 		}
 	}
 
-	public static void buildShapelessRecipe(ResourceLocation name, ItemStack result, Object... keys) {
-		if (flag && !DCUtil.isEmpty(result)) {
-			// DCLogger.infoLog("**** start 2 ****");
-			List<Map<String, Object>> key = ing(keys);
-			Map<String, Object> res = result(result);
-			Shapeless ret = INSTANCE.new Shapeless(key, res);
-
-			String filename = result.getItem().getRegistryName().getResourcePath() + "_" + result.getItemDamage();
-			dir.normalize();
-			File f = new File(dir + "/" + filename + ".json");
-			int a = 2;
-			while (f.exists()) {
-				f = new File(dir + "/" + filename + "_" + a + ".json");
-				a++;
-			}
-
-			try {
-				f.createNewFile();
-				// DCLogger.infoLog("shapeless file created: " + f.getName());
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-
-			try {
-				if (f.canWrite()) {
-					FileOutputStream fos = new FileOutputStream(f.getPath());
-					OutputStreamWriter osw = new OutputStreamWriter(fos);
-					JsonWriter jsw = new JsonWriter(osw);
-					jsw.setIndent(" ");
-					Gson gson = new Gson();
-					gson.toJson(ret, ret.getClass(), jsw);
-
-					osw.close();
-					fos.close();
-					jsw.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	private class Shapeless {
 		final String type = "forge:ore_shapeless";
 		final List<Map<String, Object>> ingredients;
@@ -156,6 +176,16 @@ public class RecipeJsonMaker {
 		private Shapeless(List<Map<String, Object>> i, final Map<String, Object> res) {
 			ingredients = i;
 			result = res;
+		}
+	}
+
+	private class Pairs {
+		final Character ch;
+		final Object obj;
+
+		Pairs(Character c, Object o) {
+			ch = c;
+			obj = o;
 		}
 	}
 
@@ -214,13 +244,4 @@ public class RecipeJsonMaker {
 		return map;
 	}
 
-	private class Pairs {
-		final Character ch;
-		final Object obj;
-
-		Pairs(Character c, Object o) {
-			ch = c;
-			obj = o;
-		}
-	}
 }
