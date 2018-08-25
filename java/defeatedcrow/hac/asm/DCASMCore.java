@@ -43,7 +43,6 @@ public class DCASMCore extends DummyModContainer {
 	@Override
 	@Nullable
 	public Certificate getSigningCertificate() {
-		// 4cd12b92959105443b7b694fffe0cea9ed004886
 		return certificate;
 	}
 }

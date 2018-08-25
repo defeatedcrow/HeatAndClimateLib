@@ -41,7 +41,7 @@ public class CoreConfigDC {
 	public static boolean burntFood = false;
 
 	// recipe
-	public static boolean enableVanilla = true;
+	public static boolean enableVanilla = false;
 	public static int updateFrequency = 5;
 	public static boolean disableCustomRecipe = false;
 	public static boolean enableDropItemSmelting = false;
@@ -214,7 +214,7 @@ public class CoreConfigDC {
 
 			int h = update_block.getInt();
 			if (h < 0 || h > 20)
-				h = 20;
+				h = 1;
 			updateFrequency = h;
 
 			int dr = drought.getInt();
