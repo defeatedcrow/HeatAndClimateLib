@@ -66,7 +66,7 @@ public class DCTimeHelper {
 
 	public static int getCount2(World world) {
 		long f = 1200L / CoreConfigDC.updateFrequency;
-		long i = (totalTime(world) / f);
+		long i = (totalTime(world) % f);
 		return (int) i;
 	}
 

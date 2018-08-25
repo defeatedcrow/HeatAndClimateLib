@@ -40,6 +40,10 @@ public class CoreConfigDC {
 	public static int damageDifficulty = 1; // 0-2
 	public static boolean burntFood = false;
 
+	// entity
+	public static boolean mobClimateDamage = true;
+	public static boolean sharePotionWithRidingMob = true;
+
 	// recipe
 	public static boolean enableVanilla = false;
 	public static int updateFrequency = 5;
@@ -183,6 +187,12 @@ public class CoreConfigDC {
 			Property dropSmelting = cfg.get("setting", "Enable DropItem Recipe", enableDropItemSmelting,
 					"Enable all climate smelting and vanilla smelting in drop item state.");
 
+			Property mobDamage = cfg.get("entity setting", "Enable Mob Climate Damage", mobClimateDamage,
+					"Enable damage from hot or cold climate to mobs.");
+
+			Property sharePotion = cfg.get("entity setting", "Enable Sharing Potion", sharePotionWithRidingMob,
+					"Enable sharing potion effects with riding mob.");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
@@ -206,6 +216,8 @@ public class CoreConfigDC {
 			hudEffect = hud_effect.getBoolean();
 			enableSubmergedCave = submerged.getBoolean();
 			enableDropItemSmelting = dropSmelting.getBoolean();
+			mobClimateDamage = mobDamage.getBoolean();
+			sharePotionWithRidingMob = sharePotion.getBoolean();
 
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)
