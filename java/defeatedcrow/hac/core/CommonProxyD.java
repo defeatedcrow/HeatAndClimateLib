@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
 import defeatedcrow.hac.core.climate.WeatherChecker;
+import defeatedcrow.hac.core.event.BlockFreezeEventDC;
 import defeatedcrow.hac.core.event.BlockUpdateDC;
 import defeatedcrow.hac.core.event.CaveGenLavaDC;
 import defeatedcrow.hac.core.event.ClickEventDC;
@@ -50,6 +51,7 @@ public class CommonProxyD {
 		OreRegister.load();
 		if (CoreConfigDC.enableVanilla) {
 			DCRecipe.load();
+			MinecraftForge.EVENT_BUS.register(new BlockFreezeEventDC());
 		}
 		MinecraftForge.EVENT_BUS.register(new LivingEventDC());
 		MinecraftForge.EVENT_BUS.register(new BlockUpdateDC());

@@ -81,42 +81,45 @@ public class LivingEventDC {
 			if (!living.world.isRemote) {
 
 				/* Potion */
-				boolean f = true;
-				if (living instanceof EntityLiving && ((EntityLiving) living).hasCustomName()) {
+				boolean f = false;
+				if (living.isRiding()) {
+					f = true;
+					if (living instanceof EntityLiving && ((EntityLiving) living).hasCustomName()) {
 
-				} else {
-					if (living instanceof IMob) {
-						f = false;
-					} else if (living.getLowestRidingEntity() != null
-							&& living.getLowestRidingEntity() instanceof IMob) {
-						f = false;
-					} else if (living.getRidingEntity() != null && living.getRidingEntity() instanceof IMob) {
-						f = false;
+					} else {
+						if (living instanceof IMob) {
+							f = false;
+						} else if (living.getRidingEntity() != null && living.getRidingEntity() instanceof IMob) {
+							f = false;
+						}
 					}
 				}
 
 				if (f) {
 					// PotionEffectのリスト
-					Iterator iterator = living.getActivePotionEffects().iterator();
+					if (!living.getActivePotionEffects().isEmpty()) {
+						Iterator iterator = living.getActivePotionEffects().iterator();
 
-					while (iterator.hasNext()) {
-						PotionEffect effect = (PotionEffect) iterator.next();
+						while (iterator.hasNext()) {
+							PotionEffect effect = (PotionEffect) iterator.next();
 
-						Potion potion = effect.getPotion();
+							Potion potion = effect.getPotion();
 
-						if (potion != null && potion == MobEffects.JUMP_BOOST) {
-							living.fallDistance = 0.0F;
-						}
+							if (potion != null && potion == MobEffects.JUMP_BOOST) {
+								living.fallDistance = 0.0F;
+							}
 
-						// 騎乗関係のMobにポーション効果を分け与える
-						if (living.getRidingEntity() != null && living.getRidingEntity() instanceof EntityLivingBase) {
-							EntityLivingBase riding = (EntityLivingBase) event.getEntity().getRidingEntity();
-							if (potion != null) {
-								riding.addPotionEffect(effect);
+							// 騎乗関係のMobにポーション効果を分け与える
+							if (living.getRidingEntity() != null
+									&& living.getRidingEntity() instanceof EntityLivingBase) {
+								EntityLivingBase riding = (EntityLivingBase) event.getEntity().getRidingEntity();
+								if (potion != null) {
+									riding.addPotionEffect(effect);
+								}
 							}
 						}
+						iterator = null;
 					}
-					iterator = null;
 				}
 
 				/* Amulet */
