@@ -44,6 +44,12 @@ public class OreRegister {
 		OreDictionary.registerOre("cropMelon", new ItemStack(Items.MELON));
 		OreDictionary.registerOre("cropReeds", new ItemStack(Items.REEDS));
 		OreDictionary.registerOre("cropBeetroot", new ItemStack(Items.BEETROOT));
+		OreDictionary.registerOre("flowerRed", new ItemStack(Blocks.RED_FLOWER));
+		OreDictionary.registerOre("flowerYellow", new ItemStack(Blocks.YELLOW_FLOWER));
+		OreDictionary.registerOre("cropMushroom", new ItemStack(Blocks.RED_MUSHROOM));
+		OreDictionary.registerOre("cropMushroom", new ItemStack(Blocks.BROWN_MUSHROOM));
+		OreDictionary.registerOre("cropMushroomRed", new ItemStack(Blocks.RED_MUSHROOM));
+		OreDictionary.registerOre("cropMushroomBrowm", new ItemStack(Blocks.BROWN_MUSHROOM));
 
 		OreDictionary.registerOre("bucketWater", new ItemStack(Items.WATER_BUCKET));
 		OreDictionary.registerOre("bucketLava", new ItemStack(Items.LAVA_BUCKET));
@@ -60,7 +66,6 @@ public class OreRegister {
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.MILK_BUCKET), "bucketMilk");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.WATER_BUCKET), "bucketWater");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.LAVA_BUCKET), "bucketLava");
-		ConvertTargetList.addReplaceTarget(new ItemStack(Items.SUGAR), "dustSugar");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.WHEAT), "dustFlour");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Blocks.WOOL, 1, 32767), "itemCloth");
 	}
