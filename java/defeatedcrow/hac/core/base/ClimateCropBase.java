@@ -127,8 +127,12 @@ public abstract class ClimateCropBase extends BlockDC
 		super.updateTick(world, pos, state, rand);
 		if (!world.isRemote && state != null && state.getBlock() instanceof ClimateCropBase) {
 			IClimate clm = this.getClimate(world, pos, state);
+			DCHumidity underHum = ClimateAPI.calculator.getHumidity(world, pos.down());
 			GrowingStage stage = this.getCurrentStage(state);
 			int chance = this.isSuitableClimate(clm, state) ? 6 : 30;
+			if ((clm.getHeat() == DCHeatTier.WARM || clm.getHeat() == DCHeatTier.HOT) && underHum == DCHumidity.WET) {
+				chance /= 2;
+			}
 			if (stage != GrowingStage.GROWN && rand.nextInt(chance) == 0) {
 				this.grow(world, pos, state);
 			} else {

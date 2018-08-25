@@ -39,7 +39,7 @@ public class ClimateBlock extends BlockDC implements IClimateObject {
 
 	@Override
 	public int tickRate(World world) {
-		return 40;
+		return 100;
 	}
 
 	@Override

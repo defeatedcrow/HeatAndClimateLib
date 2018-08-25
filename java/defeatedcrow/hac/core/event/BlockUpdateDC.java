@@ -1,8 +1,10 @@
 package defeatedcrow.hac.core.event;
 
-import com.google.common.base.Suppliers;
-import defeatedcrow.hac.api.climate.*;
-import defeatedcrow.hac.api.cultivate.IClimateCrop;
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.ClimateSupplier;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.DCBlockFreezeEvent;
 import defeatedcrow.hac.api.recipe.DCBlockUpdateEvent;
 import defeatedcrow.hac.api.recipe.IClimateObject;
@@ -24,8 +26,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.function.Supplier;
-
 public class BlockUpdateDC {
 
 	@SubscribeEvent
@@ -43,6 +43,10 @@ public class BlockUpdateDC {
 
 			if (p.getY() < 0 || p.getY() > 255)
 				return;
+
+			if (block instanceof IClimateObject) {
+				return;
+			}
 
 			int meta = block.getMetaFromState(st);
 			ClimateSupplier clm = new ClimateSupplier(world, p);
@@ -70,20 +74,11 @@ public class BlockUpdateDC {
 						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT)
 								&& clm2.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
+							return;
 						}
 					}
 				} else if (block == Blocks.GRASS) {
 					// なにもしない
-				} else if (block instanceof IClimateCrop) {
-					// WARMかつWETの場合に成長が促進されるが、バニラ植物ほど加速はしない
-					IGrowable grow = (IGrowable) block;
-					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(10) == 0) {
-						IClimate clm2 = ClimateAPI.calculator.getClimate(world, p.down());
-						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT)
-								&& clm2.getHumidity() == DCHumidity.WET) {
-							grow.grow(world, world.rand, p, st);
-						}
-					}
 				} else if (block != Blocks.DOUBLE_PLANT) {
 					// WARMかつWETの場合に成長が促進され、COLD以下の場合は成長が遅くなる
 					IGrowable grow = (IGrowable) block;
@@ -92,9 +87,11 @@ public class BlockUpdateDC {
 						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT)
 								&& clm2.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
+							return;
 							// DCLogger.debugLog("Grow!");
 						} else if (clm.get().getHeat().getTier() < -1) {
 							event.setCanceled(true);
+							return;
 							// DCLogger.debugLog("Grow Canceled");
 						}
 					}
@@ -113,6 +110,7 @@ public class BlockUpdateDC {
 						world.setBlockState(p, Blocks.PACKED_ICE.getDefaultState(), 2);
 						world.notifyNeighborsOfStateChange(p, Blocks.PACKED_ICE, false);
 						event.setCanceled(true);
+						return;
 						// DCLogger.debugLog("Freeze!!");
 					}
 					event.setCanceled(true);
@@ -120,6 +118,7 @@ public class BlockUpdateDC {
 					world.setBlockState(p, Blocks.WATER.getDefaultState(), 2);
 					world.notifyNeighborsOfStateChange(p, Blocks.WATER, false);
 					event.setCanceled(true);
+					return;
 					// DCLogger.debugLog("Melted");
 				}
 				/*
@@ -129,16 +128,18 @@ public class BlockUpdateDC {
 			} else if (block == Blocks.SNOW || block == Blocks.SNOW_LAYER) {
 				if (clm.get().getHeat().getTier() < 0) {
 					event.setCanceled(true);
+					return;
 				} else if (clm.get().getHeat().getTier() > 0) {
 					world.setBlockToAir(p);
 					event.setCanceled(true);
+					return;
 					// DCLogger.debugLog("Melted");
 				}
 			}
 
 			boolean f2 = false;
 			// レシピ判定
-			if (CoreConfigDC.enableVanilla && !(block instanceof IClimateObject)) {
+			if (CoreConfigDC.enableVanilla) {
 				IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(block, 1, meta));
 				if (recipe != null && recipe.matchClimate(clm.get()) && recipe.additionalRequire(world, p)
 						&& recipe.hasPlaceableOutput() == 1) {
@@ -179,7 +180,7 @@ public class BlockUpdateDC {
 				}
 			}
 
-			if (f2 && CoreConfigDC.enableVanilla) {
+			if (f2 && CoreConfigDC.enableVanilla && !block.getTickRandomly()) {
 
 				for (BlockPos p3 : BlockPos.getAllInBox(p.east().north(), p.west().south())) {
 					if (!world.isAirBlock(p3)) {

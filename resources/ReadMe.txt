@@ -254,6 +254,7 @@ Z=赤石
 　　・FoodEntityのドロップ時の挙動を調整
 　　・FoodEntityをディスペンサーでスポーンできるように
 　　・クラフトレシピをjson化し、json自動排出クラスを作った
+　　・BlockUpdate処理を少し修正
 　修正
 　　・Itemベースクラスの右クリック処理のnullチェックを外した
 
