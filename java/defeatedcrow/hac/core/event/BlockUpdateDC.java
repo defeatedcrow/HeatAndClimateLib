@@ -13,6 +13,7 @@ import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.ThermalInsulationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -60,8 +61,8 @@ public class BlockUpdateDC {
 					world.setBlockState(p, next, 2);
 					// DCLogger.debugLog("farmland update");
 					event.setCanceled(true);
-					return;
 				}
+				return;
 			} else if (block instanceof IGrowable) {
 				// WETの参照posを真下に
 				if (block == Blocks.TALLGRASS) {
@@ -72,11 +73,11 @@ public class BlockUpdateDC {
 						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT)
 								&& clm2.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
-							return;
 						}
 					}
-				} else if (block == Blocks.GRASS) {
-					// なにもしない
+					return;
+				} else if (block == Blocks.GRASS || block instanceof BlockLeaves) {
+					return;
 				} else if (block != Blocks.DOUBLE_PLANT) {
 					// WARMかつWETの場合に成長が促進され、COLD以下の場合は成長が遅くなる
 					IGrowable grow = (IGrowable) block;
@@ -85,14 +86,13 @@ public class BlockUpdateDC {
 						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT)
 								&& clm2.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
-							return;
 							// DCLogger.debugLog("Grow!");
 						} else if (clm.get().getHeat().getTier() < -1) {
 							event.setCanceled(true);
-							return;
 							// DCLogger.debugLog("Grow Canceled");
 						}
 					}
+					return;
 				}
 			}
 			/*
@@ -108,7 +108,6 @@ public class BlockUpdateDC {
 						world.setBlockState(p, Blocks.PACKED_ICE.getDefaultState(), 2);
 						world.notifyNeighborsOfStateChange(p, Blocks.PACKED_ICE, false);
 						event.setCanceled(true);
-						return;
 						// DCLogger.debugLog("Freeze!!");
 					}
 					event.setCanceled(true);
@@ -116,23 +115,22 @@ public class BlockUpdateDC {
 					world.setBlockState(p, Blocks.WATER.getDefaultState(), 2);
 					world.notifyNeighborsOfStateChange(p, Blocks.WATER, false);
 					event.setCanceled(true);
-					return;
 					// DCLogger.debugLog("Melted");
 				}
 				/*
 				 * SNOW
 				 * COOL以下であれば氷が溶けなくなり、WARM以上で強制溶解
 				 */
+				return;
 			} else if (block == Blocks.SNOW || block == Blocks.SNOW_LAYER) {
 				if (clm.get().getHeat().getTier() < 0) {
 					event.setCanceled(true);
-					return;
 				} else if (clm.get().getHeat().getTier() > 0) {
 					world.setBlockToAir(p);
 					event.setCanceled(true);
-					return;
 					// DCLogger.debugLog("Melted");
 				}
+				return;
 			}
 
 			boolean f2 = false;
