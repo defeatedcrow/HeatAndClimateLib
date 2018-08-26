@@ -1,5 +1,12 @@
 package defeatedcrow.hac.config;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import defeatedcrow.hac.api.climate.BlockSet;
+import defeatedcrow.hac.core.util.DCUtil;
+import net.minecraft.entity.Entity;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -43,6 +50,11 @@ public class CoreConfigDC {
 	// entity
 	public static boolean mobClimateDamage = true;
 	public static boolean sharePotionWithRidingMob = true;
+	public static int entityInterval = 60;
+	public static String[] entityBlackList = new String[] {
+			"minecraft:squid", "minecraft:bat", "minecraft:villager", "ModID:entityRegistryName"
+	};
+	public static final List<Class<? extends Entity>> blackListEntity = Lists.newArrayList();
 
 	// recipe
 	public static boolean enableVanilla = false;
@@ -66,6 +78,12 @@ public class CoreConfigDC {
 	public static boolean infernalInferno = false;
 	public static boolean enableSuffocation = false;
 	public static boolean tightUnderworld = false;
+
+	public static String[] updateBlackList = new String[] {
+			"minecraft:leaves:32767", "minecraft:leaves2:32767", "minecraft:tallgrass:32767",
+			"ModID:sampleBlock:sampleMeta"
+	};
+	public static final List<BlockSet> blackListBlock = Lists.newArrayList();
 
 	public void load(Configuration cfg) {
 
@@ -193,6 +211,12 @@ public class CoreConfigDC {
 			Property sharePotion = cfg.get("entity setting", "Enable Sharing Potion", sharePotionWithRidingMob,
 					"Enable sharing potion effects with riding mob.");
 
+			Property entityRate = cfg.get("entity setting", "Entity Update Interval", entityInterval,
+					"Set the number of tick of entity update interval. 20-1200");
+
+			Property b_list = cfg.get("world setting", "Tick Update Black List", updateBlackList,
+					"Please add block registry names you want exclude from climate tick update for reducing lag.");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
@@ -218,6 +242,8 @@ public class CoreConfigDC {
 			enableDropItemSmelting = dropSmelting.getBoolean();
 			mobClimateDamage = mobDamage.getBoolean();
 			sharePotionWithRidingMob = sharePotion.getBoolean();
+
+			updateBlackList = b_list.getStringList();
 
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)
@@ -260,12 +286,22 @@ public class CoreConfigDC {
 			}
 			lavaFix = d2;
 
+			int ei = entityRate.getInt();
+			if (ei < 20 || ei > 1200)
+				ei = 100;
+			entityInterval = sf;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			cfg.save();
 		}
 
+	}
+
+	public static void leadBlockNames() {
+		blackListBlock.addAll(DCUtil.getListFromStrings(updateBlackList, "Tick Update Invalid List"));
+		blackListEntity.addAll(DCUtil.getEntityListFromStrings(entityBlackList, "Climate Damage Invalid List"));
 	}
 
 }

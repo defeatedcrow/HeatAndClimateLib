@@ -26,22 +26,30 @@ public class DCMaterialReg {
 	private static void registerHarvestLevel() {}
 
 	public static void registerBlock(Block block, String name, String modid) {
+		if (block == null)
+			return;
 		Block reg = block.setRegistryName(modid, name);
 		ForgeRegistries.BLOCKS.register(reg);
 		ForgeRegistries.ITEMS.register(new DCItemBlock(reg));
 	}
 
 	public static void registerItem(Item item, String name, String modid) {
+		if (item == null)
+			return;
 		ForgeRegistries.ITEMS.register(item.setRegistryName(modid, name));
 	}
 
 	public static void registerBlock(String modid, Block block, String name) {
+		if (block == null)
+			return;
 		Block reg = block.setRegistryName(modid, name);
 		ForgeRegistries.BLOCKS.register(reg);
 		ForgeRegistries.ITEMS.register(new DCItemBlock(reg));
 	}
 
 	public static void registerItem(String modid, Item item, String name) {
+		if (item == null)
+			return;
 		ForgeRegistries.ITEMS.register(item.setRegistryName(modid, name));
 	}
 }
