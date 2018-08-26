@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.event;
 
+import defeatedcrow.hac.api.climate.BlockSet;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.ClimateSupplier;
 import defeatedcrow.hac.api.climate.DCHeatTier;
@@ -48,6 +49,14 @@ public class BlockUpdateDC {
 			}
 
 			int meta = block.getMetaFromState(st);
+			for (BlockSet set : CoreConfigDC.blackListBlock) {
+				if (block == set.block) {
+					if (set.meta == 32767 || meta == set.meta) {
+						return;
+					}
+				}
+			}
+
 			ClimateSupplier clm = new ClimateSupplier(world, p);
 			boolean roof = hasRoof(world, p);
 

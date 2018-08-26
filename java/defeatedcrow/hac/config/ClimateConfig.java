@@ -24,6 +24,7 @@ public class ClimateConfig {
 		}
 		File dir = new File(file, "defeatedcrow/climate/core.cfg");
 		CoreConfigDC.INSTANCE.load(new Configuration(dir));
+		CoreConfigDC.leadBlockNames();
 
 		// fluid
 		FluidIDRegisterDC.setDir(configDir);

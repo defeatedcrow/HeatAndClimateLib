@@ -10,6 +10,7 @@ import java.util.Random;
 
 import com.google.common.collect.Lists;
 
+import defeatedcrow.hac.api.climate.BlockSet;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelAmulet;
@@ -20,10 +21,13 @@ import defeatedcrow.hac.core.plugin.ChastMobPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
@@ -35,6 +39,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -435,6 +440,69 @@ public class DCUtil {
 
 	public static boolean machCreativeTab(CreativeTabs target, CreativeTabs tab) {
 		return tab != null && (target == CreativeTabs.SEARCH || target == tab);
+	}
+
+	public static List<BlockSet> getListFromStrings(String[] names, String logname) {
+		List<BlockSet> list = Lists.newArrayList();
+		if (names != null && names.length > 0) {
+			for (String name : names) {
+				if (name != null) {
+					String itemName = name;
+					String modid = "minecraft";
+					int meta = 32767;
+					if (name.contains(":")) {
+						String[] n2 = name.split(":");
+						if (n2 != null && n2.length > 0) {
+							if (n2.length > 2) {
+								Integer m = null;
+								try {
+									m = Integer.parseInt(n2[2]);
+								} catch (NumberFormatException e) {
+									DCLogger.debugLog("Tried to parse non Integer target: " + n2[2]);
+								}
+								if (m != null && m >= 0) {
+									meta = m;
+								}
+							}
+
+							if (n2.length == 1) {
+								itemName = n2[0];
+							} else {
+								modid = n2[0];
+								itemName = n2[1];
+							}
+						}
+					}
+
+					Block block = Block.REGISTRY.getObject(new ResourceLocation(modid, itemName));
+					if (block != null && block != Blocks.AIR) {
+						DCLogger.infoLog(logname + " add target: " + modid + ":" + itemName + ", " + meta);
+						BlockSet set = new BlockSet(block, meta);
+						list.add(set);
+					} else {
+						DCLogger.infoLog("Failed find target: " + modid + ":" + itemName);
+					}
+				}
+			}
+		}
+		return list;
+	}
+
+	public static List<Class<? extends Entity>> getEntityListFromStrings(String[] names, String logname) {
+		List<Class<? extends Entity>> list = Lists.newArrayList();
+		if (names != null && names.length > 0) {
+			for (String name : names) {
+				if (name != null) {
+					ResourceLocation res = new ResourceLocation(name);
+					if (EntityList.getClass(res) != null) {
+						Class<? extends Entity> entity = EntityList.getClass(res);
+						list.add(entity);
+						DCLogger.infoLog("Failed find target: " + name);
+					}
+				}
+			}
+		}
+		return list;
 	}
 
 	// デバッグモード

@@ -51,6 +51,8 @@ public class JsonRegisterHelper {
 	 * 一枚絵アイコンItemのJson生成と登録をまとめて行うメソッド。
 	 */
 	public void regSimpleItem(Item item, String domein, String name, String dir, int max) {
+		if (item == null)
+			return;
 		int m = 0;
 		while (m < max + 1) {
 			if (active)
@@ -66,6 +68,8 @@ public class JsonRegisterHelper {
 	 * Blockのモデルには一切手を付けず、一枚絵アイコンの標準的なItemJsonを生成
 	 */
 	public void regBakedBlock(Block block, String domein, String name, String dir, int max) {
+		if (block == null)
+			return;
 		int m = 0;
 		while (m < max + 1) {
 			if (active)
@@ -81,6 +85,8 @@ public class JsonRegisterHelper {
 	 * 外見は仮のJsonファイルに紐付け、TESRで描画する
 	 */
 	public void regTEBlock(Block block, String domein, String name, String dir, int maxMeta) {
+		if (block == null)
+			return;
 		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.FACING, DCState.TYPE4).build());
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(block),
 				new ModelResourceLocation(domein + ":" + "basetile"));
@@ -104,6 +110,8 @@ public class JsonRegisterHelper {
 	 * FACINGがないやつ
 	 */
 	public void regTESimpleBlock(Block block, String domein, String name, String dir, int maxMeta) {
+		if (block == null)
+			return;
 		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.TYPE16).build());
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(block),
 				new ModelResourceLocation(domein + ":" + "basetile"));
@@ -127,6 +135,8 @@ public class JsonRegisterHelper {
 	 * SIDEをもつ、TorqueTile用
 	 */
 	public void regTETorqueBlock(Block block, String domein, String name, String dir, int maxMeta) {
+		if (block == null)
+			return;
 		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.SIDE, DCState.POWERED).build());
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(block),
 				new ModelResourceLocation(domein + ":" + "basetile"));
@@ -150,6 +160,8 @@ public class JsonRegisterHelper {
 	 * Block、Blockstate用Jsonはここでは生成しない。
 	 */
 	public void regSimpleBlock(Block block, String domein, String name, String dir, int maxMeta) {
+		if (block == null)
+			return;
 		if (maxMeta == 0) {
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(block),
 					new ModelResourceLocation(domein + ":" + dir + "/" + name, "type"));

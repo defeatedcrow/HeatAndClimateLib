@@ -22,6 +22,7 @@ import defeatedcrow.hac.core.util.DCTimeHelper;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -146,6 +147,11 @@ public class LivingEventDC {
 						// ピースフルではダメージがない
 						if (living.world.getDifficulty() == EnumDifficulty.PEACEFUL && !CoreConfigDC.peacefulDam) {
 							return;
+						}
+
+						for (Class<? extends Entity> c : CoreConfigDC.blackListEntity) {
+							if (c.isInstance(living))
+								return;
 						}
 
 						ClimateSupplier clm = new ClimateSupplier(living.world, living.getPosition().up());

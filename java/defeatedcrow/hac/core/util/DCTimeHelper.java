@@ -60,7 +60,7 @@ public class DCTimeHelper {
 	}
 
 	public static int getCount(World world) {
-		long i = (totalTime(world) % 20L);
+		long i = (totalTime(world) % CoreConfigDC.entityInterval);
 		return (int) i;
 	}
 
