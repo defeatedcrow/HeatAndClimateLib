@@ -69,6 +69,7 @@ public class CoreConfigDC {
 	public static boolean enableForestLake = true;
 	public static int droughtFrequency = 60;
 	public static boolean enableSeasonEffect = true;
+	public static boolean enableSeasonTemp = true;
 	public static boolean enableWeatherEffect = true;
 	public static boolean enableSubmergedCave = false;
 	public static int seasonFrequency = 60;
@@ -81,7 +82,7 @@ public class CoreConfigDC {
 
 	public static String[] updateBlackList = new String[] {
 			"minecraft:leaves:32767", "minecraft:leaves2:32767", "minecraft:tallgrass:32767",
-			"ModID:sampleBlock:sampleMeta"
+			"minecraft:snow_layer:32767", "ModID:sampleBlock:sampleMeta"
 	};
 	public static final List<BlockSet> blackListBlock = Lists.newArrayList();
 
@@ -197,6 +198,9 @@ public class CoreConfigDC {
 			Property season = cfg.get("world setting", "Enable Season Effect", enableSeasonEffect,
 					"Enable temperature change due to the season.");
 
+			Property seasonT = cfg.get("world setting", "Enable Season Weather Effect", enableSeasonTemp,
+					"Enable weather effect change due to the season.");
+
 			Property lava = cfg.get("render setting", "Density of Lava Fog Fix", lavaFix, "Set fog density in lava");
 
 			Property submerged = cfg.get("world setting", "Enable Submerged Ocean Cave", enableSubmergedCave,
@@ -214,8 +218,11 @@ public class CoreConfigDC {
 			Property entityRate = cfg.get("entity setting", "Entity Update Interval", entityInterval,
 					"Set the number of tick of entity update interval. 20-1200");
 
-			Property b_list = cfg.get("world setting", "Tick Update Black List", updateBlackList,
+			Property b_list = cfg.get("world setting", "Tick Update Blacklist", updateBlackList,
 					"Please add block registry names you want exclude from climate tick update for reducing lag.");
+
+			Property e_list = cfg.get("entity setting", "Climate Damage Blacklist", entityBlackList,
+					"Please add entity registry names you want exclude from climate tick update for reducing lag.");
 
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
@@ -237,6 +244,7 @@ public class CoreConfigDC {
 			tightUnderworld = tight.getBoolean();
 			enableWeatherEffect = weather.getBoolean();
 			enableSeasonEffect = season.getBoolean();
+			enableSeasonTemp = seasonT.getBoolean();
 			hudEffect = hud_effect.getBoolean();
 			enableSubmergedCave = submerged.getBoolean();
 			enableDropItemSmelting = dropSmelting.getBoolean();
@@ -244,6 +252,7 @@ public class CoreConfigDC {
 			sharePotionWithRidingMob = sharePotion.getBoolean();
 
 			updateBlackList = b_list.getStringList();
+			entityBlackList = e_list.getStringList();
 
 			int d = diff_dam.getInt();
 			if (d < 0 || d > 2)

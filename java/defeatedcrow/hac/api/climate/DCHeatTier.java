@@ -187,6 +187,23 @@ public enum DCHeatTier {
 			return DCHeatTier.ABSOLUTE;
 	}
 
+	public static DCHeatTier getTypeByBiomeTemp(float temp) {
+		if (temp > 2.2F)
+			return DCHeatTier.BOIL;
+		else if (temp > 1.3F)
+			return DCHeatTier.HOT;
+		else if (temp > 0.9F)
+			return DCHeatTier.WARM;
+		else if (temp > 0.4F)
+			return DCHeatTier.NORMAL;
+		else if (temp > 0.1F)
+			return DCHeatTier.COOL;
+		else if (temp > -0.8F)
+			return DCHeatTier.COLD;
+		else
+			return DCHeatTier.FROSTBITE;
+	}
+
 	public static DCHeatTier getFromName(String name) {
 		if (name != null)
 			for (DCHeatTier t : DCHeatTier.values()) {

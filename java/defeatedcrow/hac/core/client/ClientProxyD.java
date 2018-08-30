@@ -109,6 +109,11 @@ public class ClientProxyD extends CommonProxyD {
 		return Minecraft.getMinecraft().world;
 	}
 
+	@Override
+	public World getWorld() {
+		return Minecraft.getMinecraft().world;
+	}
+
 	// ruby氏に無限に感謝
 	/**
 	 * @param cls

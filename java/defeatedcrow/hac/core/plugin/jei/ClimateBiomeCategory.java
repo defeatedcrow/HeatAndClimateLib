@@ -60,15 +60,18 @@ public class ClimateBiomeCategory implements IRecipeCategory {
 		// wrapper.getIngredients(ingredients);
 
 		List<DCHeatTier> temps = wrapper.getTemps();
-		recipeLayout.getIngredientsGroup(DCHeatTier.class).init(0, true, new HeatTierRenderer(), 17, 37, 40, 5, 0, 0);
-		recipeLayout.getIngredientsGroup(DCHeatTier.class).set(0, temps.get(0));
+		for (int i = 0; i < 4; i++) {
+			recipeLayout.getIngredientsGroup(DCHeatTier.class).init(i, true, new HeatTierRenderer(), 17 + 21 * i, 32,
+					20, 5, 0, 0);
+			recipeLayout.getIngredientsGroup(DCHeatTier.class).set(i, temps.get(i));
+		}
 
 		List<DCHumidity> hums = wrapper.getHums();
-		recipeLayout.getIngredientsGroup(DCHumidity.class).init(0, true, new HumidityRenderer(), 17, 59, 40, 5, 0, 0);
+		recipeLayout.getIngredientsGroup(DCHumidity.class).init(0, true, new HumidityRenderer(), 17, 53, 40, 5, 0, 0);
 		recipeLayout.getIngredientsGroup(DCHumidity.class).set(0, hums.get(0));
 
 		List<DCAirflow> airs = wrapper.getAirs();
-		recipeLayout.getIngredientsGroup(DCAirflow.class).init(0, true, new AirflowRenderer(), 17, 81, 40, 5, 0, 0);
+		recipeLayout.getIngredientsGroup(DCAirflow.class).init(0, true, new AirflowRenderer(), 17, 74, 40, 5, 0, 0);
 		recipeLayout.getIngredientsGroup(DCAirflow.class).set(0, airs.get(0));
 
 	}
