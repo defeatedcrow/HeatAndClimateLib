@@ -8,11 +8,9 @@ import java.util.Map;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.EnumSeason;
 import defeatedcrow.hac.api.climate.IBiomeClimateRegister;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.config.CoreConfigDC;
-import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -149,19 +147,9 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		if (clm != null) {
 			return clm.getHeat();
 		} else if (b != null) {
-			float temp = b.getDefaultTemperature();
-			if (CoreConfigDC.enableSeasonEffect && !seasons.contains(id)) {
-				if (CoreConfigDC.enableSeasonTemp) {
-					temp = b.getTemperature(pos);
-				} else {
-					EnumSeason season = DCTimeHelper.getSeasonEnum(world);
-					temp += season.temp;
-				}
-			}
-
+			float temp = b.getTemperature(pos);
 			if (CoreConfigDC.enableWeatherEffect) {
-				float offset = WeatherChecker.getTempOffsetFloat(world.provider.getDimension(),
-						world.provider.doesWaterVaporize());
+				float offset = WeatherChecker.getTempOffsetFloat(dim, world.provider.doesWaterVaporize());
 				temp += offset;
 			}
 

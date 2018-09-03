@@ -15,6 +15,7 @@ import defeatedcrow.hac.core.climate.ArmorResistantRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
 import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.fluid.FluidIDRegisterDC;
+import defeatedcrow.hac.core.packet.DCServerCommand;
 import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
 import defeatedcrow.hac.core.util.DCWaterOpaque;
@@ -24,9 +25,9 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 // @SortingIndex(1102)
 @Mod(modid = ClimateCore.MOD_ID, name = ClimateCore.MOD_NAME, version = ClimateCore.MOD_MEJOR + "."
@@ -97,5 +98,8 @@ public class ClimateCore {
 	}
 
 	@EventHandler
-	public void loadComplete(FMLLoadCompleteEvent event) {}
+	public void serverLoad(FMLServerStartingEvent event) {
+		if (isDebug)
+			event.registerServerCommand(new DCServerCommand());
+	}
 }

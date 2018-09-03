@@ -29,6 +29,12 @@ public class CoreConfigDC {
 	public static int[] ranges = new int[] {
 			2, 1, 1
 	};
+	public static double[] seasonEffects = new double[] {
+			0.05D, 0.4D, 0.0D, -0.4D
+	};
+	public static double[] weatherEffects = new double[] {
+			-0.4D, 0.4D
+	};
 
 	public static boolean wall = true;
 
@@ -193,13 +199,14 @@ public class CoreConfigDC {
 					"Set the indoor underground (<Y30) airflow to tight.");
 
 			Property weather = cfg.get("world setting", "Enable Weather Effect", enableWeatherEffect,
-					"Enable temperature change due to the weather.");
+					"Enable temperature change by the weather.");
 
 			Property season = cfg.get("world setting", "Enable Season Effect", enableSeasonEffect,
-					"Enable temperature change due to the season.");
+					"Enable temperature change by the season.");
 
-			Property seasonT = cfg.get("world setting", "Enable Season Weather Effect", enableSeasonTemp,
-					"Enable weather effect change due to the season.");
+			Property seasonT = cfg.get("world setting", "Enable Vanilla Temperature Effect", enableSeasonTemp,
+					"Enable vanilla temperature change by the season and altitude." + BR
+							+ "It affects the vanilla system. ex. the biome color, the world generation");
 
 			Property lava = cfg.get("render setting", "Density of Lava Fog Fix", lavaFix, "Set fog density in lava");
 
@@ -210,7 +217,7 @@ public class CoreConfigDC {
 					"Enable all climate smelting and vanilla smelting in drop item state.");
 
 			Property mobDamage = cfg.get("entity setting", "Enable Mob Climate Damage", mobClimateDamage,
-					"Enable damage from hot or cold climate to mobs.");
+					"Enable damage from hot or cold climate to mobs (excluding player).");
 
 			Property sharePotion = cfg.get("entity setting", "Enable Sharing Potion", sharePotionWithRidingMob,
 					"Enable sharing potion effects with riding mob.");
@@ -223,6 +230,14 @@ public class CoreConfigDC {
 
 			Property e_list = cfg.get("entity setting", "Climate Damage Blacklist", entityBlackList,
 					"Please add entity registry names you want exclude from climate tick update for reducing lag.");
+
+			Property season_d = cfg.get("world setting", "Seasonal Influence of Temperature", seasonEffects,
+					"Setting of the amount of temperature change by each season." + BR
+							+ "default: spr +0.05 / smr +0.4 / aut 0 / wtr -0.4");
+
+			Property weather_d = cfg.get("world setting", "Weather Influence of Temperature", weatherEffects,
+					"Setting of the amount of temperature change by weather." + BR
+							+ "default: rain -0.4 / drought +0.4");
 
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
@@ -299,6 +314,18 @@ public class CoreConfigDC {
 			if (ei < 20 || ei > 1200)
 				ei = 100;
 			entityInterval = sf;
+
+			if (season_d.isDoubleList() && season_d.getDoubleList().length >= 4) {
+				for (int i = 0; i < 4; i++) {
+					seasonEffects[i] = season_d.getDoubleList()[i];
+				}
+			}
+
+			if (weather_d.isDoubleList() && weather_d.getDoubleList().length >= 2) {
+				for (int i = 0; i < 2; i++) {
+					weatherEffects[i] = weather_d.getDoubleList()[i];
+				}
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

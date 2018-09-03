@@ -5,6 +5,7 @@ import java.util.Random;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.EnumSeason;
 import defeatedcrow.hac.api.recipe.DCBiomeTempEvent;
+import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.util.math.BlockPos;
@@ -26,8 +27,10 @@ public class BiomeTempEventDC {
 			// season
 			if (ClimateCore.proxy.getWorld() != null
 					&& !ClimateAPI.register.getNoSeasonList().contains(Biome.getIdForBiome(event.biome))) {
-				EnumSeason season = DCTimeHelper.getSeasonEnum(ClimateCore.proxy.getWorld());
-				temp += season.temp;
+				if (CoreConfigDC.enableWeatherEffect) {
+					EnumSeason season = DCTimeHelper.getSeasonEnum(ClimateCore.proxy.getWorld());
+					temp += season.temp;
+				}
 			}
 
 			// attitude
@@ -35,8 +38,8 @@ public class BiomeTempEventDC {
 			if (h > 15) {
 				h = 15;
 			}
-			if (h < -8) {
-				h = -8;
+			if (h < -10) {
+				h = -10;
 			}
 			temp -= (h * 0.05F);
 

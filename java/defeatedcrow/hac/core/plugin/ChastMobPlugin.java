@@ -8,14 +8,13 @@ import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import schr0.chastmob.entity.EntityChast;
 
 public class ChastMobPlugin {
 
 	public static Map<Integer, ItemStack> getAmulet(EntityLivingBase living) {
 		Map<Integer, ItemStack> ret = new HashMap<Integer, ItemStack>();
-		if (living instanceof EntityChast) {
-			IInventory inv = ((EntityChast) living).getInventoryChastMain();
+		if (living instanceof schr0.chastmob.entity.EntityChast) {
+			IInventory inv = ((schr0.chastmob.entity.EntityChast) living).getInventoryChastMain();
 			for (int i = 0; i < inv.getSizeInventory(); i++) {
 				ItemStack check = inv.getStackInSlot(i);
 				if (!DCUtil.isEmpty(check) && check.getItem() instanceof IJewelAmulet) {
@@ -27,6 +26,6 @@ public class ChastMobPlugin {
 	}
 
 	public static boolean isChastMob(EntityLivingBase living) {
-		return living instanceof EntityChast;
+		return living instanceof schr0.chastmob.entity.EntityChast;
 	}
 }

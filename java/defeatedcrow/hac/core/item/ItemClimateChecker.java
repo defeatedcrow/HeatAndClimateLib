@@ -9,6 +9,7 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.base.DCItem;
@@ -80,11 +81,17 @@ public class ItemClimateChecker extends DCItem {
 							sun = WeatherChecker.sunCountMap.get(dim);
 						}
 
-						DCLogger.debugLog("== current weather info ==");
-						DCLogger.debugLog("remote world: " + world.isRemote + ". time: " + time);
-						DCLogger.debugLog("world rain: " + world.rainingStrength);
-						DCLogger.debugLog("rain: " + rain + ", time: " + count);
-						DCLogger.debugLog("sun time: " + sun);
+						player.sendMessage(new TextComponentString("== current weather info =="));
+						player.sendMessage(
+								new TextComponentString("remote world: " + world.isRemote + ". time: " + time));
+						player.sendMessage(new TextComponentString(
+								"world rain: " + world.rainingStrength + ", time " + count + ", sun : " + sun));
+						player.sendMessage(new TextComponentString(
+								"biome temp: " + String.format("%.2f", world.getBiome(pos).getTemperature(pos))));
+						if (CoreConfigDC.enableWeatherEffect) {
+							player.sendMessage(new TextComponentString("weather offset: " + String.format("%.2f",
+									WeatherChecker.getTempOffsetFloat(dim, world.provider.doesWaterVaporize()))));
+						}
 
 						if (player.isSneaking()) {
 							DCLogger.debugLog("== forced smelting ==");

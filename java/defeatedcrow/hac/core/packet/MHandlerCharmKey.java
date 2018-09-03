@@ -6,10 +6,12 @@ import java.util.Map.Entry;
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.plugin.baubles.DCPluginBaubles;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -32,7 +34,20 @@ public class MHandlerCharmKey implements IMessageHandler<MessageCharmKey, IMessa
 						player.inventory.setInventorySlotContents(entry.getKey(), ItemStack.EMPTY);
 						player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
 						player.inventory.markDirty();
-						break;
+						return null;
+					}
+				}
+			}
+			if (Loader.isModLoaded("baubles")) {
+				ItemStack item = DCPluginBaubles.getBaublesCharm(player, CharmType.KEY);
+				if (!DCUtil.isEmpty(item)) {
+					IJewelCharm charm = (IJewelCharm) item.getItem();
+					if (charm.onUsing(player, item)) {
+						if (DCUtil.isEmpty(charm.consumeCharmItem(item))) {
+							DCPluginBaubles.setBaublesCharmEmpty(player);
+							player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
+							return null;
+						}
 					}
 				}
 			}

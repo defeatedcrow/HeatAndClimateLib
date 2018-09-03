@@ -52,10 +52,10 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 			temps.add(tem);
 			temps.add(tem);
 		} else {
-			float spr = biome.getDefaultTemperature() + EnumSeason.SPRING.temp;
-			float smr = biome.getDefaultTemperature() + EnumSeason.SUMMER.temp;
-			float aut = biome.getDefaultTemperature() + EnumSeason.AUTUMN.temp;
-			float wtr = biome.getDefaultTemperature() + EnumSeason.WINTER.temp;
+			float spr = biome.getDefaultTemperature() + (float) EnumSeason.SPRING.temp;
+			float smr = biome.getDefaultTemperature() + (float) EnumSeason.SUMMER.temp;
+			float aut = biome.getDefaultTemperature() + (float) EnumSeason.AUTUMN.temp;
+			float wtr = biome.getDefaultTemperature() + (float) EnumSeason.WINTER.temp;
 			temps.add(DCHeatTier.getTypeByBiomeTemp(spr));
 			temps.add(DCHeatTier.getTypeByBiomeTemp(smr));
 			temps.add(DCHeatTier.getTypeByBiomeTemp(aut));
@@ -122,7 +122,7 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 		String wtr = "WTR";
 		mc.fontRenderer.drawString(wtr, 90 - mc.fontRenderer.getStringWidth(wtr) / 2, baseY + 12, 0x000000, false);
 
-		DCHeatTier heat = temps.get(0);
+		DCHeatTier heat = temps.get(2);
 		String t = heat.name();
 		int heatColor = heat.getTier() < 0 ? 0x5050FF : 0xFF5050;
 		mc.fontRenderer.drawString("BASE TEMP : " + biome.getDefaultTemperature() + " (" + t + ")", 18, baseY + 25,
