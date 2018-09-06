@@ -13,7 +13,6 @@ import defeatedcrow.hac.api.climate.IHeatCanceler;
 import defeatedcrow.hac.api.climate.IHeatTile;
 import defeatedcrow.hac.api.climate.IHumidityTile;
 import defeatedcrow.hac.config.CoreConfigDC;
-import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
@@ -115,16 +114,6 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			} else if (temp.getTier() > 0) {
 				hot = temp.addTier(-1);
 			}
-		} else {
-			int offset = WeatherChecker.getTempOffset(world.provider.getDimension(),
-					world.provider.doesWaterVaporize());
-			if (offset < 0 || (offset > 0 && DCTimeHelper.isDayTime(world))) {
-				hot = temp.addTier(offset);
-			}
-		}
-
-		if (pos.getY() >= 100) {
-			hot = hot.addTier(-1);
 		}
 
 		/*
@@ -257,14 +246,6 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			} else if (temp.getTier() > 0) {
 				cold = cold.addTier(-1);
 			}
-		} else {
-			int offset = WeatherChecker.getTempOffset(world.provider.getDimension(),
-					world.provider.doesWaterVaporize());
-			cold = cold.addTier(offset);
-		}
-
-		if (pos.getY() > 100) {
-			cold = cold.addTier(-1);
 		}
 
 		if (cold == DCHeatTier.ABSOLUTE || cold == DCHeatTier.CRYOGENIC) {

@@ -18,6 +18,7 @@ import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.packet.MessageCharmKey;
+import defeatedcrow.hac.core.plugin.baubles.DCPluginBaubles;
 import defeatedcrow.hac.core.util.DCTimeHelper;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
@@ -39,6 +40,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -260,6 +262,14 @@ public class LivingEventDC {
 					jew.constantEffect(player, item2);
 				}
 				charms.clear();
+
+				if (Loader.isModLoaded("baubles")) {
+					ItemStack item = DCPluginBaubles.getBaublesCharm(player, null);
+					if (!DCUtil.isEmpty(item)) {
+						IJewelCharm charm = (IJewelCharm) item.getItem();
+						charm.constantEffect(player, item);
+					}
+				}
 			}
 		}
 	}

@@ -14,6 +14,7 @@ import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.client.DCTextures;
+import defeatedcrow.hac.core.plugin.baubles.DCPluginBaubles;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -34,6 +35,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -115,6 +117,13 @@ public class RenderTempHUDEvent {
 					for (Entry<Integer, ItemStack> entry : charms.entrySet()) {
 						IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
 						prev2 += charm.reduceDamage(source, entry.getValue());
+					}
+
+					if (Loader.isModLoaded("baubles")) {
+						ItemStack charm = DCPluginBaubles.getBaublesCharm(player, CharmType.DEFFENCE);
+						if (!DCUtil.isEmpty(charm)) {
+							prev2 += ((IJewelCharm) charm.getItem()).reduceDamage(source, charm);
+						}
 					}
 
 					items = null;

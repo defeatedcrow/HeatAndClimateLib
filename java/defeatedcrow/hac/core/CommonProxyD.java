@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
 import defeatedcrow.hac.core.climate.WeatherChecker;
+import defeatedcrow.hac.core.event.BiomeTempEventDC;
 import defeatedcrow.hac.core.event.BlockFreezeEventDC;
 import defeatedcrow.hac.core.event.BlockUpdateDC;
 import defeatedcrow.hac.core.event.CaveGenLavaDC;
@@ -24,8 +25,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class CommonProxyD {
@@ -57,13 +60,16 @@ public class CommonProxyD {
 		MinecraftForge.EVENT_BUS.register(new BlockUpdateDC());
 		MinecraftForge.EVENT_BUS.register(new LivingHurtDC());
 		MinecraftForge.EVENT_BUS.register(new ClickEventDC());
+		MinecraftForge.EVENT_BUS.register(new ClickEventDC());
 		MinecraftForge.TERRAIN_GEN_BUS.register(new CaveGenLavaDC());
 		MinecraftForge.EVENT_BUS.register(new TickEventDC());
 		if (CoreConfigDC.enableSuffocation) {
 			MinecraftForge.EVENT_BUS.register(new SuffocationEventDC());
 		}
 		MinecraftForge.EVENT_BUS.register(new CoreAnvilEvent());
-
+		if (CoreConfigDC.enableSeasonTemp) {
+			MinecraftForge.EVENT_BUS.register(new BiomeTempEventDC());
+		}
 		if (CoreConfigDC.enableDropItemSmelting) {
 			MinecraftForge.EVENT_BUS.register(new DropItemUpdateEvent());
 		}
@@ -101,6 +107,11 @@ public class CommonProxyD {
 
 	public World getClientWorld() {
 		return null;
+	}
+
+	public World getWorld() {
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+		return server.getEntityWorld();
 	}
 
 	public int getWeatherHeatOffset(World world) {

@@ -8,6 +8,8 @@ public class DCTimeHelper {
 
 	private DCTimeHelper() {}
 
+	public static EnumSeason forcedSeason = null;
+
 	public static long time(World world) {
 		return world.getWorldInfo().getWorldTime() % 24000L;
 	}
@@ -71,6 +73,9 @@ public class DCTimeHelper {
 	}
 
 	public static EnumSeason getSeasonEnum(World world) {
+		if (forcedSeason != null) {
+			return forcedSeason;
+		}
 		int s = getSeason(world);
 		if (s == 1) {
 			return EnumSeason.SUMMER;

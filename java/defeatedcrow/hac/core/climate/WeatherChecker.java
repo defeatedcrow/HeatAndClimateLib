@@ -64,12 +64,12 @@ public class WeatherChecker {
 		} else if (drought > 0) {
 			if (sunCountMap.containsKey(dim)) {
 				int count = sunCountMap.get(dim);
-				if (count > drought) {
+				if (count > drought * 24) {
 					DCLogger.debugLog("dim " + dim + " drought");
 				}
 				count++;
-				int i = Math.max(drought / 4, 2);
-				if (count > drought + i) {
+				int i = Math.max(drought, 2);
+				if (count > drought * 24 + i) {
 					count = DCUtil.rand.nextInt(i);
 				}
 				sunCountMap.put(dim, count);
@@ -87,8 +87,38 @@ public class WeatherChecker {
 		// DCLogger.debugLog("dim " + dim + " received data: " + rain + "/" + countR + ", " + countS);
 	}
 
+	public static float getTempOffsetFloat(int dim, boolean isHell) {
+		if (!CoreConfigDC.enableWeatherEffect) {
+			return 0;
+		}
+		int count = 0;
+		int sun = 0;
+		float rain = 0F;
+		if (rainPowerMap.containsKey(dim)) {
+			rain = rainPowerMap.get(dim);
+		}
+		if (rainCountMap.containsKey(dim)) {
+			count = rainCountMap.get(dim);
+		}
+		if (sunCountMap.containsKey(dim)) {
+			sun = sunCountMap.get(dim);
+		}
+		if (drought > 0 && sun > drought * 24 && !isHell) {
+			// 日照り気味
+			return (float) CoreConfigDC.weatherEffects[1];
+		}
+		if (count > 6 && rain > 0.25F) {
+			return (float) (isHell ? CoreConfigDC.weatherEffects[1] : CoreConfigDC.weatherEffects[0]);
+		}
+		if (rain > 0.85F) {
+			return (float) (isHell ? CoreConfigDC.weatherEffects[1] : CoreConfigDC.weatherEffects[0]);
+		}
+
+		return 0;
+	}
+
 	public static int getTempOffset(int dim, boolean isHell) {
-		if (!CoreConfigDC.enableSeasonEffect) {
+		if (!CoreConfigDC.enableWeatherEffect) {
 			return 0;
 		}
 		int count = 0;
@@ -118,7 +148,7 @@ public class WeatherChecker {
 	}
 
 	public static int getHumOffset(int dim, boolean isHell) {
-		if (!CoreConfigDC.enableSeasonEffect) {
+		if (!CoreConfigDC.enableWeatherEffect) {
 			return 0;
 		}
 		int count = 0;
@@ -138,7 +168,7 @@ public class WeatherChecker {
 	}
 
 	public static int getWindOffset(int dim, boolean isHell) {
-		if (!CoreConfigDC.enableSeasonEffect) {
+		if (!CoreConfigDC.enableWeatherEffect) {
 			return 0;
 		}
 		int count = 0;

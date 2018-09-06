@@ -8,11 +8,9 @@ import java.util.Map;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.EnumSeason;
 import defeatedcrow.hac.api.climate.IBiomeClimateRegister;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.config.CoreConfigDC;
-import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -143,18 +141,27 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		Biome biome = world.getBiomeForCoordsBody(pos);
 		int dim = world.provider.getDimension();
 		int i = getKey(biome, dim);
-		DCHeatTier tier = getHeatTier(i);
+		IClimate clm = getClimateFromList(i);
+		int id = i & 255;
+		Biome b = Biome.getBiome(id);
+		if (clm != null) {
+			return clm.getHeat();
+		} else if (b != null) {
+			float temp = b.getTemperature(pos);
+			if (CoreConfigDC.enableWeatherEffect) {
+				float offset = WeatherChecker.getTempOffsetFloat(dim, world.provider.doesWaterVaporize());
+				temp += offset;
+			}
 
-		// season
-		EnumSeason season = DCTimeHelper.getSeasonEnum(world);
-		if (CoreConfigDC.enableSeasonEffect && biome != null && !seasons.contains(Biome.getIdForBiome(biome))) {
-			if (season == EnumSeason.SUMMER && tier.getTier() < DCHeatTier.HOT.getTier()) {
-				return tier.addTier(1);
-			} else if (season == EnumSeason.WINTER && tier.getTier() > DCHeatTier.COLD.getTier()) {
-				return tier.addTier(-1);
+			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
+				return DCHeatTier.OVEN;
+			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
+				return DCHeatTier.COLD;
+			} else {
+				return DCHeatTier.getTypeByBiomeTemp(temp);
 			}
 		}
-		return tier;
+		return DCHeatTier.NORMAL;
 	}
 
 	@Override
@@ -181,23 +188,13 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		if (clm != null) {
 			return clm.getHeat();
 		} else if (b != null) {
+			float temp = b.getDefaultTemperature();
 			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
 				return DCHeatTier.OVEN;
 			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
 				return DCHeatTier.COLD;
 			} else {
-				float temp = b.getDefaultTemperature();
-				if (temp > 1.1F) {
-					return DCHeatTier.HOT;
-				} else if (temp > 0.8F) {
-					return DCHeatTier.WARM;
-				} else if (temp > 0.4F) {
-					return DCHeatTier.NORMAL;
-				} else if (temp > 0.1F) {
-					return DCHeatTier.COOL;
-				} else {
-					return DCHeatTier.COLD;
-				}
+				return DCHeatTier.getTypeByBiomeTemp(temp);
 			}
 		}
 		return DCHeatTier.NORMAL;
