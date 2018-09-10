@@ -37,7 +37,7 @@ public class DCServerCommand extends CommandBase {
 				sender.sendMessage(new TextComponentTranslation(
 						"\u00a7c2./climate drought: you can forced the drought in the overworld"));
 				sender.sendMessage(new TextComponentTranslation(
-						"\u00a7c3./climate drought cansel: you can cancel the drought in the overworld"));
+						"\u00a7c3./climate drought cancel: you can cancel the drought in the overworld"));
 			} else if (args[0].equalsIgnoreCase("season") && args.length > 1) {
 				EnumSeason season = null;
 				if (args[1].equalsIgnoreCase("spring") || args[1].equalsIgnoreCase("spr")

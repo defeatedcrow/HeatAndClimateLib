@@ -51,8 +51,7 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 
 	@Override
 	public void addRecipe(IFluidRecipe recipe, DCHeatTier heat) {
-		if (recipe instanceof FluidCraftRecipe && !hasEmptyInput(recipe.getInput()))
-			list.add((FluidCraftRecipe) recipe);
+		this.addRecipe(recipe);
 	}
 
 	private boolean hasEmptyInput(Object... inputs) {
@@ -108,7 +107,8 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 
 	@Override
 	public void addRecipe(IFluidRecipe recipe) {
-		this.addRecipe(recipe);
+		if (recipe instanceof FluidCraftRecipe && !hasEmptyInput(recipe.getInput()))
+			list.add((FluidCraftRecipe) recipe);
 	}
 
 }
