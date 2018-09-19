@@ -4,7 +4,7 @@
 # 前提Ver&Mod
 
 ・Minecraft1.12.2
-・MincraftForge 1.12.2-14.23.3.2655
+・MincraftForge 1.12.2-14.23.3.2705
 
 ### 注意事項! ###
 

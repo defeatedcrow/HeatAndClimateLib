@@ -83,6 +83,17 @@ public abstract class TileTorqueLockable extends TileTorqueBase
 		}
 	}
 
+	public IClimate getClimate() {
+		return current;
+	}
+
+	public void setClimate(int i) {
+		IClimate ret = ClimateAPI.register.getClimateFromInt(i);
+		if (ret != null) {
+			current = ret;
+		}
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);

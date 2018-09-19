@@ -68,7 +68,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 	public FoodEntityBase(World worldIn) {
 		super(worldIn);
-		this.setSize(0.4F, 0.25F);
+		this.setSize(0.6F, 0.2F);
 		this.setSide(EnumFacing.DOWN);
 	}
 
@@ -218,7 +218,6 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		if (!list.isEmpty()) {
 			for (int i = 0; i < list.size(); ++i) {
 				Entity entity = list.get(i);
-				this.collideWithEntity(entity);
 				this.applyEntityCollision(entity);
 			}
 		}
