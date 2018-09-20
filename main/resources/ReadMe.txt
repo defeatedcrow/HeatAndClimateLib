@@ -1,10 +1,10 @@
-﻿#### Heat&Climate Lib 2.6.1 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 2.6.2 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
 
 ・Minecraft1.12.2
-・MincraftForge 1.12.2-14.23.3.2655
+・MincraftForge 1.12.2-14.23.3.2705
 
 ### 注意事項! ###
 
@@ -257,6 +257,11 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○2.6.2
+　修正
+　　・液体レシピ登録時のクラッシュバグ
+　　・Baublesスロットのアミュレットの常時効果が発動しない
 
 ○2.6.1
 　変更

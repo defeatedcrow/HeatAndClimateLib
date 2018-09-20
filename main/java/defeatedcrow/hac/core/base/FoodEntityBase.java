@@ -68,7 +68,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 	public FoodEntityBase(World worldIn) {
 		super(worldIn);
-		this.setSize(0.4F, 0.25F);
+		this.setSize(0.375F, 0.25F);
 		this.setSide(EnumFacing.DOWN);
 	}
 
@@ -81,6 +81,17 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		this(worldIn, posX, posY, posZ);
 		if (player != null)
 			this.rotationYaw = player.rotationYaw;
+	}
+
+	@Override
+	protected void setSize(float width, float height) {
+		float f = this.width;
+		this.width = width;
+		this.height = height;
+
+		double d0 = width / 2.0D;
+		this.setEntityBoundingBox(new AxisAlignedBB(this.posX - d0, this.posY, this.posZ - d0, this.posX + d0,
+				this.posY + height, this.posZ + d0));
 	}
 
 	/* update処理 */
@@ -194,9 +205,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 		}
 
-		if (!world.isRemote) {
-			collideWithNearbyEntities();
-		}
+		collideWithNearbyEntities();
 
 		// 動作
 		this.prevPosX = this.posX;
@@ -218,7 +227,6 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		if (!list.isEmpty()) {
 			for (int i = 0; i < list.size(); ++i) {
 				Entity entity = list.get(i);
-				this.collideWithEntity(entity);
 				this.applyEntityCollision(entity);
 			}
 		}
@@ -279,7 +287,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	}
 
 	protected void collideWithEntity(Entity entityIn) {
-		entityIn.applyEntityCollision(this);
+		this.applyEntityCollision(entityIn);
 	}
 
 	public boolean collideable() {
@@ -351,7 +359,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	@Override
 	@Nullable
 	public AxisAlignedBB getCollisionBox(Entity entityIn) {
-		return entityIn.getEntityBoundingBox();
+		return this.getEntityBoundingBox();
 	}
 
 	@Override

@@ -269,6 +269,12 @@ public class LivingEventDC {
 						IJewelCharm charm = (IJewelCharm) item.getItem();
 						charm.constantEffect(player, item);
 					}
+
+					ItemStack item2 = DCPluginBaubles.getBaublesAmulet(player);
+					if (!DCUtil.isEmpty(item2)) {
+						IJewelAmulet amulet = (IJewelAmulet) item2.getItem();
+						amulet.constantEffect(player, item2);
+					}
 				}
 			}
 		}

@@ -54,8 +54,7 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 
 	@Override
 	public void addRecipe(IReactorRecipe recipe, DCHeatTier heat) {
-		if (recipe instanceof ReactorRecipe && !hasEmptyInput(recipe.getInput()))
-			list.add((ReactorRecipe) recipe);
+		this.addRecipe(recipe);
 	}
 
 	private boolean hasEmptyInput(Object... inputs) {
@@ -110,7 +109,8 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 
 	@Override
 	public void addRecipe(IReactorRecipe recipe) {
-		this.addRecipe(recipe);
+		if (recipe instanceof ReactorRecipe && !hasEmptyInput(recipe.getInput()))
+			list.add((ReactorRecipe) recipe);
 	}
 
 }
