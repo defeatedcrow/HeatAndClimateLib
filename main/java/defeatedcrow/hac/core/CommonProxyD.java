@@ -111,7 +111,10 @@ public class CommonProxyD {
 
 	public World getWorld() {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		return server.getEntityWorld();
+		if (ClimateCore.serverStarted && server != null && server.isServerRunning()) {
+			return server.getEntityWorld();
+		}
+		return null;
 	}
 
 	public int getWeatherHeatOffset(World world) {
