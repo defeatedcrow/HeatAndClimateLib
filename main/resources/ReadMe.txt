@@ -1,10 +1,10 @@
-﻿#### Heat&Climate Lib 2.6.2 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 2.6.3 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
 
 ・Minecraft1.12.2
-・MincraftForge 1.12.2-14.23.3.2705
+・MincraftForge 1.12.2-14.23.4.2705
 
 ### 注意事項! ###
 
@@ -258,10 +258,15 @@ Z=赤石
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
 
+○2.6.3
+　修正
+　　・サーバー立ち上げ前にサーバーワールドを参照してクラッシュする
+
 ○2.6.2
 　修正
 　　・液体レシピ登録時のクラッシュバグ
 　　・Baublesスロットのアミュレットの常時効果が発動しない
+　　・食べ物Entityの基礎サイズの変更
 
 ○2.6.1
 　変更

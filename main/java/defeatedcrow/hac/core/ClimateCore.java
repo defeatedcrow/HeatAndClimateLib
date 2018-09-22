@@ -38,7 +38,7 @@ public class ClimateCore {
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 2;
 	public static final int MOD_MINOR = 6;
-	public static final int MOD_BUILD = 2;
+	public static final int MOD_BUILD = 3;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.12,1.12.2]";
 	public static final String PACKAGE_BASE = "dcs";
@@ -55,6 +55,7 @@ public class ClimateCore {
 	public static final CreativeTabs climate = new CreativeTabClimate(MOD_ID);
 
 	public static boolean isDebug = false;
+	public static boolean serverStarted = false;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -100,5 +101,6 @@ public class ClimateCore {
 	@EventHandler
 	public void serverLoad(FMLServerStartingEvent event) {
 		event.registerServerCommand(new DCServerCommand());
+		serverStarted = true;
 	}
 }
