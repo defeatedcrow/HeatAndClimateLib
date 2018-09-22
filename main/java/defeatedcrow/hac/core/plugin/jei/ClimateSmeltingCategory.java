@@ -27,7 +27,7 @@ public class ClimateSmeltingCategory implements IRecipeCategory {
 
 	public ClimateSmeltingCategory(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_smelting_gui_jei.png");
-		background = guiHelper.createDrawable(location, 8, 5, 160, 70, 3, 0, 0, 0);
+		background = guiHelper.createDrawable(location, 8, 5, 160, 90);
 	}
 
 	@Override

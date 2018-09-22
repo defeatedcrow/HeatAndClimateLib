@@ -26,7 +26,7 @@ public class ClimateBiomeCategory implements IRecipeCategory {
 
 	public ClimateBiomeCategory(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_biome_gui.png");
-		background = guiHelper.createDrawable(location, 8, 8, 160, 100);
+		background = guiHelper.createDrawable(location, 8, 9, 160, 110);
 	}
 
 	@Override

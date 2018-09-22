@@ -86,7 +86,7 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 	public void drawInfo(Minecraft mc, int wid, int hei, int mouseX, int mouseY) {
 		DCHumidity hum = hums.get(0);
 		DCAirflow air = airs.get(0);
-		int baseY = 12;
+		int baseY = 25;
 
 		ResourceLocation res = new ResourceLocation("dcs_climate", "textures/gui/c_biome_gui.png");
 		mc.getTextureManager().bindTexture(res);
