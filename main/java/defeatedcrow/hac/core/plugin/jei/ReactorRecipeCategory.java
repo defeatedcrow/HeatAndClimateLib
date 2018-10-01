@@ -86,7 +86,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 
 		if (!catalyst.isEmpty()) {
 			recipeLayout.getItemStacks().init(6, false, 93, 10);
-			recipeLayout.getItemStacks().set(6, catalyst.get(0));
+			recipeLayout.getItemStacks().set(6, catalyst);
 		}
 
 		if (!inF1.isEmpty() && inF1.get(0) != null) {
