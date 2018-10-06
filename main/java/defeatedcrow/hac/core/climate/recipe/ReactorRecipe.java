@@ -40,6 +40,20 @@ public class ReactorRecipe implements IReactorRecipe {
 
 	public ReactorRecipe(ItemStack o, ItemStack s, FluidStack oF1, FluidStack oF2, DCHeatTier t, float c,
 			List<ItemStack> cat, FluidStack iF1, FluidStack iF2, Object... inputs) {
+		this(o, s, oF1, oF2, t, c, iF1, iF2, inputs);
+		if (cat != null && !cat.isEmpty())
+			catalyst.addAll(cat);
+	}
+
+	public ReactorRecipe(ItemStack o, ItemStack s, FluidStack oF1, FluidStack oF2, DCHeatTier t, float c, ItemStack cat,
+			FluidStack iF1, FluidStack iF2, Object... inputs) {
+		this(o, s, oF1, oF2, t, c, iF1, iF2, inputs);
+		if (!DCUtil.isEmpty(cat))
+			catalyst.add(cat);
+	}
+
+	public ReactorRecipe(ItemStack o, ItemStack s, FluidStack oF1, FluidStack oF2, DCHeatTier t, float c,
+			FluidStack iF1, FluidStack iF2, Object... inputs) {
 		input = inputs;
 		inputF1 = iF1;
 		inputF2 = iF2;
@@ -48,7 +62,7 @@ public class ReactorRecipe implements IReactorRecipe {
 		outputF2 = oF2;
 		secondary = s;
 		chance = c;
-		catalyst.addAll(cat);
+
 		if (t != null) {
 			heat.add(t);
 			if (t.getID() < DCHeatTier.INFERNO.getID()) {
