@@ -47,7 +47,7 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 			}
 		}
 		catalyst = new ArrayList<>();
-		catalyst.add(recipe.getCatalyst());
+		catalyst.addAll(recipe.getCatalyst());
 		input2.addAll(input);
 		input2.add(catalyst);
 

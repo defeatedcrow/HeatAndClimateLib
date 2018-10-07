@@ -3,6 +3,8 @@ package defeatedcrow.hac.core.climate.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.recipe.IReactorRecipe;
 import defeatedcrow.hac.api.recipe.IReactorRecipeRegister;
@@ -40,15 +42,39 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 		if (secondary == null) {
 			secondary = ItemStack.EMPTY;
 		}
-		if (catalyst == null) {
-			catalyst = ItemStack.EMPTY;
+		List<ItemStack> cat = Lists.newArrayList();
+		if (!DCUtil.isEmpty(catalyst)) {
+			cat.add(catalyst);
 		}
 		boolean b1 = input == null && inFluid1 == null && inFluid2 == null;
 		boolean b2 = DCUtil.isEmpty(output) && outFluid1 == null && outFluid2 == null;
 		boolean b3 = hasEmptyInput(input);
 		if (!b1 && !b2 && !b3) {
-			list.add(new ReactorRecipe(output, secondary, outFluid1, outFluid2, heat, secondaryChance, catalyst,
-					inFluid1, inFluid2, input));
+			list.add(new ReactorRecipe(output, secondary, outFluid1, outFluid2, heat, secondaryChance, cat, inFluid1,
+					inFluid2, input));
+		}
+	}
+
+	@Override
+	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, FluidStack outFluid1,
+			FluidStack outFluid2, DCHeatTier heat, String catalystName, FluidStack inFluid1, FluidStack inFluid2,
+			Object... input) {
+		if (output == null) {
+			output = ItemStack.EMPTY;
+		}
+		if (secondary == null) {
+			secondary = ItemStack.EMPTY;
+		}
+		List<ItemStack> cat = Lists.newArrayList();
+		if (catalystName != null) {
+			cat.addAll(OreDictionary.getOres(catalystName));
+		}
+		boolean b1 = input == null && inFluid1 == null && inFluid2 == null;
+		boolean b2 = DCUtil.isEmpty(output) && outFluid1 == null && outFluid2 == null;
+		boolean b3 = hasEmptyInput(input) || cat.isEmpty();
+		if (!b1 && !b2 && !b3) {
+			list.add(new ReactorRecipe(output, secondary, outFluid1, outFluid2, heat, secondaryChance, cat, inFluid1,
+					inFluid2, input));
 		}
 	}
 

@@ -29,7 +29,7 @@ public interface IReactorRecipe {
 	ItemStack getOutput();
 
 	@Nullable
-	ItemStack getCatalyst();
+	List<ItemStack> getCatalyst();
 
 	@Nullable
 	FluidStack getInputFluid();

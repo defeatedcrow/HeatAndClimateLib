@@ -34,6 +34,10 @@ public interface IReactorRecipeRegister {
 			FluidStack outFluid2, DCHeatTier heat, ItemStack catalyst, FluidStack inFluid1, FluidStack inFluid2,
 			Object... input);
 
+	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, FluidStack outFluid1,
+			FluidStack outFluid2, DCHeatTier heat, String catalystOredic, FluidStack inFluid1, FluidStack inFluid2,
+			Object... input);
+
 	/**
 	 * ReactorRecipe.class以外受け付けないのでご注意を(要Lib本体)
 	 */

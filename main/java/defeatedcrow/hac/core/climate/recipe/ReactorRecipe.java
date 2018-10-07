@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.recipe.IReactorRecipe;
 import defeatedcrow.hac.api.recipe.IRecipePanel;
@@ -30,13 +32,27 @@ public class ReactorRecipe implements IReactorRecipe {
 	private final FluidStack outputF2;
 	private final ItemStack secondary;
 	private final float chance;
-	private final ItemStack catalyst;
+	private final ArrayList<ItemStack> catalyst = new ArrayList<ItemStack>();
 	private List<DCHeatTier> heat = new ArrayList<DCHeatTier>();
 	private String type = "";
 	private static final ArrayList<Object> EMPTY = new ArrayList<Object>();
 	private final int count;
 
+	public ReactorRecipe(ItemStack o, ItemStack s, FluidStack oF1, FluidStack oF2, DCHeatTier t, float c,
+			List<ItemStack> cat, FluidStack iF1, FluidStack iF2, Object... inputs) {
+		this(o, s, oF1, oF2, t, c, iF1, iF2, inputs);
+		if (cat != null && !cat.isEmpty())
+			catalyst.addAll(cat);
+	}
+
 	public ReactorRecipe(ItemStack o, ItemStack s, FluidStack oF1, FluidStack oF2, DCHeatTier t, float c, ItemStack cat,
+			FluidStack iF1, FluidStack iF2, Object... inputs) {
+		this(o, s, oF1, oF2, t, c, iF1, iF2, inputs);
+		if (!DCUtil.isEmpty(cat))
+			catalyst.add(cat);
+	}
+
+	public ReactorRecipe(ItemStack o, ItemStack s, FluidStack oF1, FluidStack oF2, DCHeatTier t, float c,
 			FluidStack iF1, FluidStack iF2, Object... inputs) {
 		input = inputs;
 		inputF1 = iF1;
@@ -46,7 +62,7 @@ public class ReactorRecipe implements IReactorRecipe {
 		outputF2 = oF2;
 		secondary = s;
 		chance = c;
-		catalyst = cat;
+
 		if (t != null) {
 			heat.add(t);
 			if (t.getID() < DCHeatTier.INFERNO.getID()) {
@@ -136,8 +152,9 @@ public class ReactorRecipe implements IReactorRecipe {
 	}
 
 	@Override
-	public ItemStack getCatalyst() {
-		return catalyst;
+	public List<ItemStack> getCatalyst() {
+		ImmutableList list = ImmutableList.copyOf(catalyst);
+		return list;
 	}
 
 	@Override
@@ -326,8 +343,13 @@ public class ReactorRecipe implements IReactorRecipe {
 
 	@Override
 	public boolean matchCatalyst(ItemStack cat) {
-		if (DCUtil.isEmpty(catalyst) || DCUtil.isSameItem(catalyst, cat, false)) {
+		if (getCatalyst().isEmpty()) {
 			return true;
+		}
+		for (ItemStack check : getCatalyst()) {
+			if (DCUtil.isSameItem(check, cat, false)) {
+				return true;
+			}
 		}
 		return false;
 	}
