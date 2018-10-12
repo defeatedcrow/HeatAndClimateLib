@@ -46,6 +46,7 @@ public class RenderTempHUDEvent {
 	public static final RenderTempHUDEvent INSTANCE = new RenderTempHUDEvent();
 
 	private int tier = 0;
+	public int iconTier = 2;
 	private float conf_prev = 0.0F;
 	private float prev2 = 0.0F;
 	private float damage = 0.0F;
@@ -129,37 +130,37 @@ public class RenderTempHUDEvent {
 					items = null;
 					charms = null;
 
+					if (tier < 0) {
+						damage = (tier + conf_prev) * 2;
+						damage += prev2;
+						if (damage > 0F) {
+							damage = 0F;
+						}
+					} else if (tier > 0) {
+						damage = tier - conf_prev;
+						damage -= prev2;
+						if (damage < 0F) {
+							damage = 0F;
+						}
+					}
+
+					iconTier = 2;
+					if (damage > 0F) {
+						if (damage >= 2F) {
+							iconTier = 4;
+						} else if (damage >= 1F) {
+							iconTier = 3;
+						}
+					} else {
+						if (damage <= -2F) {
+							iconTier = 0;
+						} else if (damage <= -1F) {
+							iconTier = 1;
+						}
+					}
+
 				} else {
 					count--;
-				}
-
-				if (tier < 0) {
-					damage = (tier + conf_prev) * 2;
-					damage += prev2;
-					if (damage > 0F) {
-						damage = 0F;
-					}
-				} else if (tier > 0) {
-					damage = tier - conf_prev;
-					damage -= prev2;
-					if (damage < 0F) {
-						damage = 0F;
-					}
-				}
-
-				int tX = 2;
-				if (damage > 0F) {
-					if (damage >= 2F) {
-						tX = 4;
-					} else if (damage >= 1F) {
-						tX = 3;
-					}
-				} else {
-					if (damage <= -2F) {
-						tX = 0;
-					} else if (damage <= -1F) {
-						tX = 1;
-					}
 				}
 
 				Minecraft.getMinecraft().getTextureManager().bindTexture(DCTextures.HUD.getRocation());
@@ -173,21 +174,21 @@ public class RenderTempHUDEvent {
 					int offsetY = CoreConfigDC.iconY;
 					int x = (event.getResolution().getScaledWidth() / 2) + factX + offsetX;
 					int y = event.getResolution().getScaledHeight() - 39 + factY + offsetY;
-					drawTexturedModalRect(x, y, tX * 16, 0, 16, 16);
+					drawTexturedModalRect(x, y, iconTier * 16, 0, 16, 16);
 				}
 
 				int sizeX = event.getResolution().getScaledWidth();
 				int sizeY = event.getResolution().getScaledHeight();
 
 				if (CoreConfigDC.hudEffect) {
-					if (tX > 2) {
+					if (iconTier > 2) {
 						GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
 								GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
 								GlStateManager.DestFactor.ZERO);
 						GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.3F);
 						Minecraft.getMinecraft().getTextureManager().bindTexture(DCTextures.HOT_DISP.getRocation());
 						drawDispTexture(0, 0, sizeX, sizeY);
-					} else if (tX < 2) {
+					} else if (iconTier < 2) {
 						GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
 								GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
 								GlStateManager.DestFactor.ZERO);

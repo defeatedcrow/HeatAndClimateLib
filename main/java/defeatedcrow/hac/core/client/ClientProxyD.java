@@ -9,6 +9,7 @@ import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.CommonProxyD;
 import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
+import defeatedcrow.hac.core.client.event.DCGuiInfomationEvent;
 import defeatedcrow.hac.core.client.event.RenderTempHUDEvent;
 import defeatedcrow.hac.core.client.event.WaterFogEvent;
 import defeatedcrow.hac.core.climate.WeatherChecker;
@@ -67,6 +68,7 @@ public class ClientProxyD extends CommonProxyD {
 		super.loadInit();
 
 		MinecraftForge.EVENT_BUS.register(RenderTempHUDEvent.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(DCGuiInfomationEvent.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new WaterFogEvent());
 	}
 

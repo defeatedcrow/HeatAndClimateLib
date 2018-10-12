@@ -134,7 +134,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 
 	/* json */
 	private static Map<String, Object> jsonMap = new HashMap<String, Object>();
-	private static Map<String, Map<String, Float>> floatMap = new HashMap<String, Map<String, Float>>();
+	public static Map<String, Map<String, Float>> floatMap = new HashMap<String, Map<String, Float>>();
 
 	private static File dir = null;
 
