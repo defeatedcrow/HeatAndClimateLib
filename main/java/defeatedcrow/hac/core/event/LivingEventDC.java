@@ -296,6 +296,8 @@ public class LivingEventDC {
 			} else {
 				x_key = false;
 			}
+
+			ClimateCore.proxy.updatePlayerClimate();
 		}
 	}
 

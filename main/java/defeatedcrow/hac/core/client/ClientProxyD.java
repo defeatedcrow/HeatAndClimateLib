@@ -187,6 +187,6 @@ public class ClientProxyD extends CommonProxyD {
 		}
 	}
 
-	private int localCount = 10;
+	private static int localCount = 10;
 
 }
