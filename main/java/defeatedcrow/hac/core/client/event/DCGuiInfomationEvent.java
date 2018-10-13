@@ -5,15 +5,14 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.client.ClientClimateData;
 import defeatedcrow.hac.core.client.DCTextures;
-import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -24,10 +23,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class DCGuiInfomationEvent {
 
 	public static final DCGuiInfomationEvent INSTANCE = new DCGuiInfomationEvent();
-
-	private float heat_prev = 0.0F;
-	private float cold_prev = 0.0F;
-	private int count = 20;
 
 	public static boolean enable = CoreConfigDC.showDamageIcon;
 
@@ -47,30 +42,16 @@ public class DCGuiInfomationEvent {
 				Minecraft.getMinecraft().getTextureManager().bindTexture(DCTextures.HUD.getRocation());
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				gui.drawTexturedModalRect(gui.getGuiLeft() + 25, gui.getGuiTop() + 7,
-						RenderTempHUDEvent.INSTANCE.iconTier * 16, 0, 16, 16);
-
-				if (count < 0) {
-					if (gui.mc.player != null) {
-						heat_prev = 0.0F;
-						cold_prev = 0.0F;
-						for (ItemStack armor : gui.mc.player.inventory.armorInventory) {
-							if (!DCUtil.isEmpty(armor)) {
-								heat_prev += DCUtil.getItemResistantData(armor, false);
-								cold_prev += DCUtil.getItemResistantData(armor, true);
-							}
-						}
-					}
-					count = 20;
-				} else {
-					count--;
-				}
+						ClientClimateData.INSTANCE.getIconTier() * 16, 0, 16, 16);
 
 				List<String> list = Lists.newArrayList();
 				// list.add("x:" + x + ", y:" + y);
 				if (x > 26 && x < 42 && y > 6 && y < 22) {
 					list.add("Armor Heat Resistant");
-					list.add(TextFormatting.GOLD.toString() + "Heat: " + String.format("%.1fF", heat_prev));
-					list.add(TextFormatting.AQUA.toString() + "Cold: " + String.format("%.1fF", cold_prev));
+					list.add(TextFormatting.GOLD.toString() + "Heat: "
+							+ String.format("%.1fF", ClientClimateData.INSTANCE.getArmorHeatPrev()));
+					list.add(TextFormatting.AQUA.toString() + "Cold: "
+							+ String.format("%.1fF", ClientClimateData.INSTANCE.getArmorColdPrev()));
 				}
 				gui.drawHoveringText(list, event.getMouseX(), event.getMouseY());
 			}

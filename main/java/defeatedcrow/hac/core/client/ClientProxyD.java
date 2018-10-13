@@ -177,4 +177,16 @@ public class ClientProxyD extends CommonProxyD {
 		RecipeJsonMaker.buildShapelessRecipe(name, result, recipe);
 	}
 
+	@Override
+	public void updatePlayerClimate() {
+		if (localCount <= 0) {
+			localCount = 10;
+			ClientClimateData.INSTANCE.updatePlayerClimate(getClientWorld(), getPlayer());
+		} else {
+			localCount--;
+		}
+	}
+
+	private int localCount = 10;
+
 }

@@ -71,8 +71,8 @@ public class OreRegister {
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.LAVA_BUCKET), "bucketLava");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.WHEAT), "dustFlour");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Blocks.WOOL, 1, 32767), "itemCloth");
-		ConvertTargetList.addReplaceTarget(new ItemStack(Items.RABBIT_HIDE, 1, 6), "rabbithide");
-		ConvertTargetList.addReplaceTarget(new ItemStack(Items.LEATHER, 1, 6), "leather");
+		ConvertTargetList.addReplaceTarget(new ItemStack(Items.RABBIT_HIDE), "rabbithide");
+		ConvertTargetList.addReplaceTarget(new ItemStack(Items.LEATHER), "leather");
 
 	}
 

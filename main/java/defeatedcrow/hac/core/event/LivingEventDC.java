@@ -299,7 +299,6 @@ public class LivingEventDC {
 		}
 	}
 
-	private int localCount = 0;
 	private int count2 = 20;
 
 	// Block Update をプレイヤーに肩代わりさせる

@@ -109,7 +109,7 @@ public class LivingHurtDC {
 					charms2.clear();
 
 					if (Loader.isModLoaded("baubles")) {
-						ItemStack item = DCPluginBaubles.getBaublesCharm(attacker, CharmType.DEFFENCE);
+						ItemStack item = DCPluginBaubles.getBaublesCharm(attacker, CharmType.ATTACK);
 						if (!DCUtil.isEmpty(item)) {
 							IJewelCharm charm = (IJewelCharm) item.getItem();
 							add *= charm.increaceDamage(living, item);
