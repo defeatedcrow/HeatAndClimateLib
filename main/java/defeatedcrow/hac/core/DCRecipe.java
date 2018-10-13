@@ -109,7 +109,7 @@ public class DCRecipe {
 		});
 
 		jsonShapedRecipe("core", new ItemStack(Items.SADDLE, 1, 0), new Object[] {
-				"X", "Y", "Z", 'X', "itemLeather", 'Y', "itemCloth", 'Z', "ingotIron"
+				"X", "Y", "Z", 'X', "leather", 'Y', "itemCloth", 'Z', "ingotIron"
 		});
 
 	}

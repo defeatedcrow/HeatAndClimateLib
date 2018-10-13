@@ -24,10 +24,12 @@ public class OreRegister {
 
 		OreDictionary.registerOre("gemCoal", new ItemStack(Items.COAL));
 		OreDictionary.registerOre("gemFlint", new ItemStack(Items.FLINT));
+		OreDictionary.registerOre("charcoal", new ItemStack(Items.COAL, 1, 1));
 
-		OreDictionary.registerOre("itemLeather", new ItemStack(Items.LEATHER));
-		OreDictionary.registerOre("itemFeather", new ItemStack(Items.FEATHER));
-		OreDictionary.registerOre("itemString", new ItemStack(Items.STRING));
+		OreDictionary.registerOre("leather", new ItemStack(Items.LEATHER));
+		OreDictionary.registerOre("feather", new ItemStack(Items.FEATHER));
+		OreDictionary.registerOre("string", new ItemStack(Items.STRING));
+		OreDictionary.registerOre("rabbithide", new ItemStack(Items.RABBIT_HIDE, 1, 0));
 
 		OreDictionary.registerOre("foodFish", new ItemStack(Items.FISH));
 		OreDictionary.registerOre("foodSalmon", new ItemStack(Items.FISH, 1, 1));
@@ -62,12 +64,16 @@ public class OreRegister {
 	static void addConversion() {
 		ConvertTargetList.addExclusing(new ItemStack(Blocks.HAY_BLOCK));
 		ConvertTargetList.addExclusing(new ItemStack(Blocks.WOOL, 1, 32767));
+		ConvertTargetList.addExclusing(new ItemStack(Items.LEATHER));
 
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.MILK_BUCKET), "bucketMilk");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.WATER_BUCKET), "bucketWater");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.LAVA_BUCKET), "bucketLava");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.WHEAT), "dustFlour");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Blocks.WOOL, 1, 32767), "itemCloth");
+		ConvertTargetList.addReplaceTarget(new ItemStack(Items.RABBIT_HIDE), "rabbithide");
+		ConvertTargetList.addReplaceTarget(new ItemStack(Items.LEATHER), "leather");
+
 	}
 
 }

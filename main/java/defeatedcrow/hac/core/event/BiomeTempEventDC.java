@@ -34,12 +34,12 @@ public class BiomeTempEventDC {
 			}
 
 			// attitude
-			int h = (pos.getY() - 80) / 10;
+			float h = (pos.getY() - 80) * 0.1F;
 			if (h > 15) {
-				h = 15;
+				h = 15F;
 			}
 			if (h < -10) {
-				h = -10;
+				h = -10F;
 			}
 			temp -= (h * 0.05F);
 

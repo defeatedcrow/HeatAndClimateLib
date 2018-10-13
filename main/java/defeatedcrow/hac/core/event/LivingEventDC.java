@@ -296,10 +296,11 @@ public class LivingEventDC {
 			} else {
 				x_key = false;
 			}
+
+			ClimateCore.proxy.updatePlayerClimate();
 		}
 	}
 
-	private int localCount = 0;
 	private int count2 = 20;
 
 	// Block Update をプレイヤーに肩代わりさせる

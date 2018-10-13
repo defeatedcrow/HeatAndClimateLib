@@ -80,16 +80,14 @@ public class MobResistantRegister implements IMobHeatResistant {
 	public void registerEntityResistant(Class<? extends Entity> entityClass, float heat, float cold) {
 		if (entityClass != null) {
 			if (heat != 0) {
-				if (heatResistant.containsKey(entityClass)) {
-					heatResistant.remove(entityClass);
+				if (!heatResistant.containsKey(entityClass)) {
+					heatResistant.put(entityClass, heat);
 				}
-				heatResistant.put(entityClass, heat);
 			}
 			if (cold != 0) {
-				if (coldResistant.containsKey(entityClass)) {
-					coldResistant.remove(entityClass);
+				if (!coldResistant.containsKey(entityClass)) {
+					coldResistant.put(entityClass, cold);
 				}
-				coldResistant.put(entityClass, cold);
 			}
 			DCLogger.infoLog("success registering : " + entityClass.getSimpleName() + " " + heat + "/" + cold);
 			String name = EntityList.getKey(entityClass).toString();
@@ -134,7 +132,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 
 	/* json */
 	private static Map<String, Object> jsonMap = new HashMap<String, Object>();
-	private static Map<String, Map<String, Float>> floatMap = new HashMap<String, Map<String, Float>>();
+	public static Map<String, Map<String, Float>> floatMap = new HashMap<String, Map<String, Float>>();
 
 	private static File dir = null;
 

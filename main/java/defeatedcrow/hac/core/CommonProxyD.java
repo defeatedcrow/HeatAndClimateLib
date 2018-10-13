@@ -152,4 +152,6 @@ public class CommonProxyD {
 
 	}
 
+	public void updatePlayerClimate() {}
+
 }
