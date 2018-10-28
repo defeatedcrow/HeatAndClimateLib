@@ -128,7 +128,7 @@ public class CrusherRecipe implements ICrusherRecipe {
 						continue;
 					}
 					if (b4 < -1 && DCUtil.isStackable(getTertialy(), get)) {
-						b3 = i;
+						b4 = i;
 						continue;
 					}
 				}

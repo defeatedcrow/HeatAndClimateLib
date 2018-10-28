@@ -47,15 +47,18 @@ public class FluidDictionaryDC {
 		if (target == null || ref == null)
 			return false;
 
+		if (target == ref) {
+			return true;
+		}
+
 		Integer id = fluidMap.get(ref);
 		Integer id2 = fluidMap.get(target);
 		if (id != null) {
-			String name = idToName.get(id);
-			if (id2 != null) {
-				return id.intValue() == id2.intValue();
+			if (id2 != null && id.intValue() == id2.intValue()) {
+				return true;
 			} else {
-				String targetName = target.getName();
-				if (targetName.contains(name)) {
+				String name = idToName.get(id2);
+				if (matchFluidName(target, name)) {
 					return true;
 				}
 			}
@@ -70,16 +73,14 @@ public class FluidDictionaryDC {
 
 		if (nameMap.containsKey(name)) {
 			Integer id = nameMap.get(name);
-			Integer id2 = fluidMap.get(target);
-			if (id != null) {
-				if (id2 != null) {
-					return id.intValue() == id2.intValue();
-				}
+			Integer id2 = nameMap.get(target);
+			if (id != null && id2 != null && id.intValue() == id2.intValue()) {
+				return true;
 			}
 		}
 
 		String targetName = target.getName();
-		if (targetName.contains(name)) {
+		if (targetName != null && targetName.contains(name)) {
 			return true;
 		}
 

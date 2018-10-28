@@ -49,7 +49,7 @@ public class ClickEventDC {
 			}
 
 			if (Loader.isModLoaded("baubles")) {
-				ItemStack item = DCPluginBaubles.getBaublesCharm(event.getPlayer(), CharmType.DEFFENCE);
+				ItemStack item = DCPluginBaubles.getBaublesCharm(event.getPlayer(), CharmType.TOOL);
 				if (!DCUtil.isEmpty(item)) {
 					IJewelCharm charm = (IJewelCharm) item.getItem();
 					if (charm.onToolUsing(event.getPlayer(), event.getPos(), event.getState(), item)) {
@@ -99,7 +99,7 @@ public class ClickEventDC {
 	}
 
 	// 虚空を右クリックした場合
-	@SubscribeEvent
+	// @SubscribeEvent
 	public void onRightClickAir(PlayerInteractEvent.RightClickItem event) {
 		EntityPlayer player = event.getEntityPlayer();
 		ItemStack held = event.getItemStack();

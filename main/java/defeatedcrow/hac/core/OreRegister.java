@@ -31,14 +31,20 @@ public class OreRegister {
 		OreDictionary.registerOre("string", new ItemStack(Items.STRING));
 		OreDictionary.registerOre("rabbithide", new ItemStack(Items.RABBIT_HIDE, 1, 0));
 
-		OreDictionary.registerOre("foodFish", new ItemStack(Items.FISH));
-		OreDictionary.registerOre("foodSalmon", new ItemStack(Items.FISH, 1, 1));
+		OreDictionary.registerOre("listAllfishraw", new ItemStack(Items.FISH));
+		OreDictionary.registerOre("listAllfishraw", new ItemStack(Items.FISH, 1, 1));
+		OreDictionary.registerOre("foodSalmonraw", new ItemStack(Items.FISH, 1, 1));
 
-		OreDictionary.registerOre("foodAnyMeat", new ItemStack(Items.BEEF));
-		OreDictionary.registerOre("foodAnyMeat", new ItemStack(Items.PORKCHOP));
-		OreDictionary.registerOre("foodAnyMeat", new ItemStack(Items.CHICKEN));
-		OreDictionary.registerOre("foodAnyMeat", new ItemStack(Items.MUTTON));
-		OreDictionary.registerOre("foodAnyMeat", new ItemStack(Items.RABBIT));
+		OreDictionary.registerOre("listAllmeatraw", new ItemStack(Items.BEEF));
+		OreDictionary.registerOre("listAllmeatraw", new ItemStack(Items.PORKCHOP));
+		OreDictionary.registerOre("listAllmeatraw", new ItemStack(Items.CHICKEN));
+		OreDictionary.registerOre("listAllmeatraw", new ItemStack(Items.MUTTON));
+		OreDictionary.registerOre("listAllmeatraw", new ItemStack(Items.RABBIT));
+		OreDictionary.registerOre("listAllbeefraw", new ItemStack(Items.BEEF));
+		OreDictionary.registerOre("listAllporkraw", new ItemStack(Items.PORKCHOP));
+		OreDictionary.registerOre("listAllchickenraw", new ItemStack(Items.CHICKEN));
+		OreDictionary.registerOre("listAllmuttonraw", new ItemStack(Items.MUTTON));
+		OreDictionary.registerOre("listAllrabbitraw", new ItemStack(Items.RABBIT));
 
 		OreDictionary.registerOre("cropApple", new ItemStack(Items.APPLE));
 		OreDictionary.registerOre("cropCocoa", new ItemStack(Items.DYE, 1, 3));

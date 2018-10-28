@@ -336,6 +336,8 @@ public class CoreConfigDC {
 	}
 
 	public static void leadBlockNames() {
+		blackListBlock.clear();
+		blackListEntity.clear();
 		blackListBlock.addAll(DCUtil.getListFromStrings(updateBlackList, "Tick Update Invalid List"));
 		blackListEntity.addAll(DCUtil.getEntityListFromStrings(entityBlackList, "Climate Damage Invalid List"));
 	}

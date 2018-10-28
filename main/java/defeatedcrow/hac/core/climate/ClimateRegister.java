@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class ClimateRegister implements IBiomeClimateRegister {
 
@@ -122,6 +123,9 @@ public class ClimateRegister implements IBiomeClimateRegister {
 
 	@Override
 	public IClimate getClimateFromInt(int code) {
+		if (code <= 0) {
+			return new DCClimate(DCHeatTier.NORMAL, DCHumidity.NORMAL, DCAirflow.NORMAL);
+		}
 		int t = code & 15;
 		int h = (code >> 4) & 3;
 		int a = (code >> 6) & 3;
@@ -151,6 +155,23 @@ public class ClimateRegister implements IBiomeClimateRegister {
 			if (CoreConfigDC.enableWeatherEffect) {
 				float offset = WeatherChecker.getTempOffsetFloat(dim, world.provider.doesWaterVaporize());
 				temp += offset;
+			}
+
+			if (temp == 0.5F) {
+				float off2 = 0;
+				if (BiomeDictionary.hasType(b, Type.COLD) || BiomeDictionary.hasType(b, Type.SNOWY)) {
+					off2 -= 0.5F;
+				}
+				if (BiomeDictionary.hasType(b, Type.DEAD) || BiomeDictionary.hasType(b, Type.CONIFEROUS)) {
+					off2 -= 0.35F;
+				}
+				if (BiomeDictionary.hasType(b, Type.JUNGLE) || BiomeDictionary.hasType(b, Type.LUSH)) {
+					off2 += 0.5F;
+				}
+				if (BiomeDictionary.hasType(b, Type.MESA) || BiomeDictionary.hasType(b, Type.HOT)) {
+					off2 += 1.0F;
+				}
+				temp += off2;
 			}
 
 			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
