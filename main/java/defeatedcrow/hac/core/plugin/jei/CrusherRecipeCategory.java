@@ -22,7 +22,7 @@ public class CrusherRecipeCategory implements IRecipeCategory {
 
 	public CrusherRecipeCategory(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_crusher_gui_jei.png");
-		background = guiHelper.createDrawable(location, 30, 10, 140, 60, 0, 0, 0, 0);
+		background = guiHelper.createDrawable(location, 30, 15, 140, 55);
 	}
 
 	@Override
@@ -58,31 +58,31 @@ public class CrusherRecipeCategory implements IRecipeCategory {
 		List<ItemStack> outputs = wrapper.getOutputs();
 		List<List<FluidStack>> outputF = ingredients.getOutputs(FluidStack.class);
 
-		recipeLayout.getItemStacks().init(0, true, 15, 14);
+		recipeLayout.getItemStacks().init(0, true, 15, 9);
 		recipeLayout.getItemStacks().set(0, inputs);
 
 		if (!wrapper.getCatalyst().isEmpty()) {
-			recipeLayout.getItemStacks().init(1, true, 46, 14);
+			recipeLayout.getItemStacks().init(1, true, 46, 9);
 			recipeLayout.getItemStacks().set(1, wrapper.getCatalyst());
 		}
 
 		if (!outputs.isEmpty()) {
-			recipeLayout.getItemStacks().init(2, false, 83, 5);
+			recipeLayout.getItemStacks().init(2, false, 83, 0);
 			recipeLayout.getItemStacks().set(2, outputs.get(0));
 		}
 
 		if (outputs.size() > 1) {
-			recipeLayout.getItemStacks().init(3, false, 83, 23);
+			recipeLayout.getItemStacks().init(3, false, 83, 18);
 			recipeLayout.getItemStacks().set(3, outputs.get(1));
 		}
 
 		if (outputs.size() > 2) {
-			recipeLayout.getItemStacks().init(4, false, 83, 41);
+			recipeLayout.getItemStacks().init(4, false, 83, 36);
 			recipeLayout.getItemStacks().set(4, outputs.get(2));
 		}
 
 		if (!outputF.isEmpty()) {
-			recipeLayout.getFluidStacks().init(5, false, 119, 8, 12, 50, 5000, false, null);
+			recipeLayout.getFluidStacks().init(5, false, 119, 3, 12, 50, 5000, false, null);
 			recipeLayout.getFluidStacks().set(5, outputF.get(0).get(0));
 		}
 	}

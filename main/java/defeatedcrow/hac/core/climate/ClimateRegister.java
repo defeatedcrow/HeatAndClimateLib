@@ -165,9 +165,6 @@ public class ClimateRegister implements IBiomeClimateRegister {
 				if (BiomeDictionary.hasType(b, Type.DEAD) || BiomeDictionary.hasType(b, Type.CONIFEROUS)) {
 					off2 -= 0.35F;
 				}
-				if (BiomeDictionary.hasType(b, Type.JUNGLE) || BiomeDictionary.hasType(b, Type.LUSH)) {
-					off2 += 0.5F;
-				}
 				if (BiomeDictionary.hasType(b, Type.MESA) || BiomeDictionary.hasType(b, Type.HOT)) {
 					off2 += 1.0F;
 				}
@@ -210,6 +207,20 @@ public class ClimateRegister implements IBiomeClimateRegister {
 			return clm.getHeat();
 		} else if (b != null) {
 			float temp = b.getDefaultTemperature();
+			if (temp == 0.5F) {
+				float off2 = 0;
+				if (BiomeDictionary.hasType(b, Type.COLD) || BiomeDictionary.hasType(b, Type.SNOWY)) {
+					off2 -= 0.5F;
+				}
+				if (BiomeDictionary.hasType(b, Type.DEAD) || BiomeDictionary.hasType(b, Type.CONIFEROUS)) {
+					off2 -= 0.35F;
+				}
+				if (BiomeDictionary.hasType(b, Type.MESA) || BiomeDictionary.hasType(b, Type.HOT)) {
+					off2 += 1.0F;
+				}
+				temp += off2;
+			}
+
 			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
 				return DCHeatTier.OVEN;
 			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
