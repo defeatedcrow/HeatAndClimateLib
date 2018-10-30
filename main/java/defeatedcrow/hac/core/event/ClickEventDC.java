@@ -37,7 +37,7 @@ public class ClickEventDC {
 			// TOOLチャーム
 			Map<Integer, ItemStack> charms = DCUtil.getPlayerCharm(event.getPlayer(), CharmType.TOOL);
 			for (Entry<Integer, ItemStack> entry : charms.entrySet()) {
-				DCLogger.debugLog("mining charm");
+				DCLogger.debugInfoLog("mining charm");
 				IJewelCharm charm = ((IJewelCharm) entry.getValue().getItem());
 				if (charm.onToolUsing(event.getPlayer(), event.getPos(), event.getState(), entry.getValue())) {
 					if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {

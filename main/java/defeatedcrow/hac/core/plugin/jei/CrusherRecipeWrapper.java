@@ -19,7 +19,7 @@ public class CrusherRecipeWrapper implements IRecipeWrapper {
 	private final List<ItemStack> output;
 	private final List<ItemStack> catalyst;
 	private final List<FluidStack> outF;
-	private final CrusherRecipe rec;
+	public final CrusherRecipe rec;
 
 	@SuppressWarnings("unchecked")
 	public CrusherRecipeWrapper(CrusherRecipe recipe) {

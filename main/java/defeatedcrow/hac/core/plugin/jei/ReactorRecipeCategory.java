@@ -5,6 +5,7 @@ import java.util.List;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
+import defeatedcrow.hac.core.plugin.jei.ingredients.ItemStackRendererDC;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -24,7 +25,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 
 	public ReactorRecipeCategory(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_reactor_gui_jei.png");
-		background = guiHelper.createDrawable(location, 4, 4, 168, 125, 2, 0, 0, 0);
+		background = guiHelper.createDrawable(location, 4, 4, 168, 120, 2, 0, 0, 0);
 	}
 
 	@Override
@@ -79,7 +80,8 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 			recipeLayout.getItemStacks().init(4, false, 89, 94);
 			recipeLayout.getItemStacks().set(4, outputs.get(0));
 			if (outputs.size() > 1) {
-				recipeLayout.getItemStacks().init(5, false, 107, 94);
+				recipeLayout.getItemStacks().init(5, false, new ItemStackRendererDC(wrapper.chance), 108, 95, 16, 16, 0,
+						0);
 				recipeLayout.getItemStacks().set(5, outputs.get(1));
 			}
 		}

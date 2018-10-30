@@ -3,6 +3,7 @@ package defeatedcrow.hac.core.plugin.jei;
 import java.util.List;
 
 import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.plugin.jei.ingredients.ItemStackRendererDC;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -67,17 +68,20 @@ public class CrusherRecipeCategory implements IRecipeCategory {
 		}
 
 		if (!outputs.isEmpty()) {
-			recipeLayout.getItemStacks().init(2, false, 83, 0);
+			recipeLayout.getItemStacks().init(2, false, new ItemStackRendererDC(wrapper.rec.getChance()), 84, 1, 16, 16,
+					0, 0);
 			recipeLayout.getItemStacks().set(2, outputs.get(0));
 		}
 
 		if (outputs.size() > 1) {
-			recipeLayout.getItemStacks().init(3, false, 83, 18);
+			recipeLayout.getItemStacks().init(3, false, new ItemStackRendererDC(wrapper.rec.getSecondaryChance()), 84,
+					19, 16, 16, 0, 0);
 			recipeLayout.getItemStacks().set(3, outputs.get(1));
 		}
 
 		if (outputs.size() > 2) {
-			recipeLayout.getItemStacks().init(4, false, 83, 36);
+			recipeLayout.getItemStacks().init(4, false, new ItemStackRendererDC(wrapper.rec.getTertialyChance()), 84,
+					37, 16, 16, 0, 0);
 			recipeLayout.getItemStacks().set(4, outputs.get(2));
 		}
 

@@ -60,7 +60,6 @@ public class CommonProxyD {
 		MinecraftForge.EVENT_BUS.register(new BlockUpdateDC());
 		MinecraftForge.EVENT_BUS.register(new LivingHurtDC());
 		MinecraftForge.EVENT_BUS.register(new ClickEventDC());
-		MinecraftForge.EVENT_BUS.register(new ClickEventDC());
 		MinecraftForge.TERRAIN_GEN_BUS.register(new CaveGenLavaDC());
 		MinecraftForge.EVENT_BUS.register(new TickEventDC());
 		if (CoreConfigDC.enableSuffocation) {

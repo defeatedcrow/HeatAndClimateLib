@@ -29,6 +29,7 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 	private final List<DCHeatTier> temps;
 	private final List<DCHumidity> hums;
 	private final List<DCAirflow> airs;
+	public final float chance;
 
 	@SuppressWarnings("unchecked")
 	public FluidRecipeWrapper(FluidCraftRecipe recipe) {
@@ -51,6 +52,7 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 		if (!DCUtil.isEmpty(recipe.getSecondary())) {
 			output.add(recipe.getSecondary());
 		}
+		chance = recipe.getSecondaryChance();
 
 		inF = new ArrayList<FluidStack>();
 		outF = new ArrayList<FluidStack>();
@@ -197,8 +199,6 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 				int i = (int) (rec.getSecondaryChance() * 100);
 				if (rec.getSecondary() == null || i == 0) {
 					s.add("NO SECONDARY OUTPUT");
-				} else {
-					s.add("CHANCE: " + i + "%");
 				}
 			}
 		}
