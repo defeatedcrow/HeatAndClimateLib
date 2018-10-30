@@ -300,6 +300,7 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 	}
 
 	public static void pre() {
+		jsonMap.clear();
 		if (dir != null) {
 			try {
 				if (!dir.exists() && !dir.createNewFile()) {

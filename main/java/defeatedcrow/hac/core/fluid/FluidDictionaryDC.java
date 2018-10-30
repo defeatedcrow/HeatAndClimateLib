@@ -13,7 +13,6 @@ import net.minecraftforge.fluids.Fluid;
 public class FluidDictionaryDC {
 
 	private static List<String> idToName = new ArrayList<String>();
-	private static Map<String, Integer> nameMap = new HashMap<String, Integer>(128);
 	private static Map<Fluid, Integer> fluidMap = new HashMap<Fluid, Integer>(128);
 	public static final ImmutableList<ItemStack> EMPTY_LIST = ImmutableList.of();
 
@@ -33,53 +32,74 @@ public class FluidDictionaryDC {
 		}
 	}
 
-	public static int getNameID(String name) {
-		Integer val = nameMap.get(name);
-		if (val == null) {
-			idToName.add(name);
-			val = idToName.size() - 1;
-			nameMap.put(name, val);
+	public static String getFluidDicName(Fluid fluid) {
+		if (fluid == null)
+			return null;
+
+		if (fluidMap.containsKey(fluid)) {
+			Integer fid = fluidMap.get(fluid);
+			if (fid != null) {
+				return idToName.get(fid);
+			}
+
 		}
-		return val;
+		return null;
+	}
+
+	public static int getNameID(String name) {
+		if (idToName.isEmpty()) {
+			idToName.add(name);
+			return 0;
+		} else {
+			int id = -1;
+			int size = idToName.size();
+			for (int i = 0; i < idToName.size(); i++) {
+				String n2 = idToName.get(i);
+				if (n2 != null && n2.equalsIgnoreCase(name)) {
+					id = i;
+				}
+				if (id != -1) {
+					break;
+				}
+			}
+
+			if (id == -1) {
+				idToName.add(name);
+				return size;
+			} else {
+				return id;
+			}
+		}
 	}
 
 	public static boolean matchFluid(Fluid target, Fluid ref) {
 		if (target == null || ref == null)
 			return false;
 
-		Integer id = fluidMap.get(ref);
-		Integer id2 = fluidMap.get(target);
-		if (id != null) {
-			String name = idToName.get(id);
-			if (id2 != null) {
-				return id.intValue() == id2.intValue();
-			} else {
-				String targetName = target.getName();
-				if (targetName.contains(name)) {
-					return true;
-				}
-			}
+		if (target == ref) {
+			return true;
 		}
 
-		return false;
+		if (target == ref) {
+			return true;
+		} else {
+			String dic = getFluidDicName(ref);
+			return matchFluidName(target, dic);
+		}
 	}
 
 	public static boolean matchFluidName(Fluid target, String name) {
 		if (target == null || name == null)
 			return false;
 
-		if (nameMap.containsKey(name)) {
-			Integer id = nameMap.get(name);
-			Integer id2 = fluidMap.get(target);
-			if (id != null) {
-				if (id2 != null) {
-					return id.intValue() == id2.intValue();
-				}
-			}
+		String dic = getFluidDicName(target);
+
+		if (dic != null && dic.equals(name)) {
+			return true;
 		}
 
 		String targetName = target.getName();
-		if (targetName.contains(name)) {
+		if (targetName != null && targetName.contains(name)) {
 			return true;
 		}
 

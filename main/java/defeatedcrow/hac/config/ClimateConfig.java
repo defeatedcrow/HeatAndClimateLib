@@ -14,7 +14,7 @@ public class ClimateConfig {
 
 	public static final ClimateConfig INSTANCE = new ClimateConfig();
 
-	public File configDir;
+	public static File configDir;
 
 	public void load(File file) {
 

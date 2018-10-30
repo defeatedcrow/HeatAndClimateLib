@@ -297,16 +297,14 @@ public class ReactorRecipe implements IReactorRecipe {
 		if (this.outputF1 == null || fluid1 == null) {
 			b1 = true;
 		} else if (fluid1 != null) {
-			b1 = (outputF1.getFluid() == fluid1.getFluid())
-					|| FluidDictionaryDC.matchFluid(outputF1.getFluid(), fluid1.getFluid());
+			b1 = (outputF1.getFluid() == fluid1.getFluid());
 		}
 
 		boolean b2 = false;
 		if (this.outputF2 == null || fluid2 == null) {
 			b2 = true;
 		} else if (fluid2 != null) {
-			b2 = (outputF2.getFluid() == fluid2.getFluid())
-					|| FluidDictionaryDC.matchFluid(outputF2.getFluid(), fluid2.getFluid());
+			b2 = (outputF2.getFluid() == fluid2.getFluid());
 		}
 
 		if (b1 && b2) {

@@ -3,6 +3,7 @@ package defeatedcrow.hac.core.plugin.jei;
 import java.util.List;
 
 import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.plugin.jei.ingredients.ItemStackRendererDC;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -63,7 +64,7 @@ public class MillRecipeCategory implements IRecipeCategory {
 		recipeLayout.getItemStacks().init(1, false, 95, 11);
 		recipeLayout.getItemStacks().set(1, outputs.get(0));
 		if (outputs.size() > 1) {
-			recipeLayout.getItemStacks().init(2, false, 115, 11);
+			recipeLayout.getItemStacks().init(2, false, new ItemStackRendererDC(wrapper.chance), 116, 12, 16, 16, 0, 0);
 			recipeLayout.getItemStacks().set(2, outputs.get(1));
 		}
 	}

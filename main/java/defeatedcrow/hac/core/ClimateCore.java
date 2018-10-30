@@ -15,11 +15,12 @@ import defeatedcrow.hac.core.climate.ArmorResistantRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
 import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.fluid.FluidIDRegisterDC;
-import defeatedcrow.hac.core.packet.DCServerCommand;
+import defeatedcrow.hac.core.packet.command.DCServerCommand;
 import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
 import defeatedcrow.hac.core.util.DCWaterOpaque;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -37,8 +38,8 @@ public class ClimateCore {
 	public static final String MOD_ID = "dcs_lib";
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 2;
-	public static final int MOD_MINOR = 6;
-	public static final int MOD_BUILD = 5;
+	public static final int MOD_MINOR = 7;
+	public static final int MOD_BUILD = 0;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.12,1.12.2]";
 	public static final String PACKAGE_BASE = "dcs";
@@ -56,11 +57,15 @@ public class ClimateCore {
 
 	public static boolean isDebug = false;
 	public static boolean serverStarted = false;
+	public static boolean loadedMain = false;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		ClimateConfig.INSTANCE.load(event.getModConfigurationDirectory());
 		isDebug = DCUtil.checkDebugModePass(CoreConfigDC.debugPass);
+		if (Loader.isModLoaded("dcs_climate")) {
+			loadedMain = true;
+		}
 		// API
 		APILoader.loadAPI();
 

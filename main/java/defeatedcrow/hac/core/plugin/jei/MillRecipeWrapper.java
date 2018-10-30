@@ -15,6 +15,7 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 	private final List<ItemStack> input;
 	private final List<ItemStack> output;
 	private final MillRecipe rec;
+	public final float chance;
 
 	@SuppressWarnings("unchecked")
 	public MillRecipeWrapper(MillRecipe recipe) {
@@ -25,6 +26,7 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 		if (!DCUtil.isEmpty(recipe.getSecondary())) {
 			output.add(recipe.getSecondary());
 		}
+		chance = recipe.getSecondaryChance();
 	}
 
 	@Override

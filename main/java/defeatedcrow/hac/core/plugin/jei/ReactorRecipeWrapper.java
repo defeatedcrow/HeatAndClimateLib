@@ -29,6 +29,7 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 	private final List<FluidStack> inF;
 	private final List<FluidStack> outF;
 	private final List<DCHeatTier> temps;
+	public final float chance;
 
 	@SuppressWarnings("unchecked")
 	public ReactorRecipeWrapper(ReactorRecipe recipe) {
@@ -56,6 +57,7 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 		if (!DCUtil.isEmpty(recipe.getSecondary())) {
 			output.add(recipe.getSecondary());
 		}
+		chance = recipe.getSecondaryChance();
 
 		inF = new ArrayList<>();
 		outF = new ArrayList<>();
@@ -151,14 +153,12 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 				int i = (int) (rec.getSecondaryChance() * 100);
 				if (rec.getSecondary() == null || i == 0) {
 					s.add("NO SECONDARY OUTPUT");
-				} else {
-					s.add("CHANCE: " + i + "%");
 				}
 			}
 		}
 		if (y > 10 && y < 26) {
 			if (x > 93 && x < 109) {
-				if (rec.getCatalyst() == null) {
+				if (rec.getCatalyst() == null || rec.getCatalyst().isEmpty()) {
 					s.add("NO CATALYST REQUIRED");
 				} else {
 					s.add("CATALYST");

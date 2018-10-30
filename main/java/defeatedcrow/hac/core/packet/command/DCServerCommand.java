@@ -1,14 +1,24 @@
-package defeatedcrow.hac.core.packet;
+package defeatedcrow.hac.core.packet.command;
+
+import java.io.File;
 
 import defeatedcrow.hac.api.climate.EnumSeason;
+import defeatedcrow.hac.config.ClimateConfig;
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.climate.ArmorResistantRegister;
+import defeatedcrow.hac.core.climate.HeatBlockRegister;
+import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.climate.WeatherChecker;
+import defeatedcrow.hac.core.packet.HaCPacket;
+import defeatedcrow.hac.core.plugin.main.MainComHelper;
 import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.common.config.Configuration;
 
 public class DCServerCommand extends CommandBase {
 
@@ -54,27 +64,60 @@ public class DCServerCommand extends CommandBase {
 					season = EnumSeason.WINTER;
 				}
 				DCTimeHelper.forcedSeason = season;
+				byte num = season == null ? 4 : (byte) season.id;
+				HaCPacket.INSTANCE.sendToAll(new MessageComSeason(num));
 				if (season == null) {
-					sender.sendMessage(new TextComponentTranslation("\u00a7bCleared HaC forced season"));
+					notifyCommandListener(sender, this, "\u00a7bCleared HaC forced season");
 				} else {
-					sender.sendMessage(new TextComponentTranslation("\u00a7bSet HaC forced season: " + season));
+					notifyCommandListener(sender, this, "\u00a7bSet HaC forced season: " + season.toString());
 				}
 			} else if (args[0].equalsIgnoreCase("drought")) {
 				if (args.length > 1 && args[1].equalsIgnoreCase("cancel")) {
 					WeatherChecker.INSTANCE.sunCountMap.put(0, 0);
-					sender.sendMessage(new TextComponentTranslation("\u00a7bSet HaC canceled the drought"));
+					notifyCommandListener(sender, this, "\u00a7bSet HaC canceled the drought", new Object[] {});
+					HaCPacket.INSTANCE.sendToAll(new MessageComDrought((byte) 0));
 				} else {
 					WeatherChecker.INSTANCE.sunCountMap.put(0, CoreConfigDC.droughtFrequency * 24 + 1);
-					sender.sendMessage(new TextComponentTranslation("\u00a7bSet HaC forced drought"));
+					notifyCommandListener(sender, this, "\u00a7bSet HaC forced drought", new Object[] {});
+					HaCPacket.INSTANCE.sendToAll(new MessageComDrought((byte) 1));
 				}
 
+			} else if (args[0].equalsIgnoreCase("config") && args.length > 1) {
+				if (args[1].contains("core")) {
+					File dir = new File(ClimateConfig.configDir, "core.cfg");
+					CoreConfigDC.INSTANCE.load(new Configuration(dir));
+					CoreConfigDC.leadBlockNames();
+					notifyCommandListener(sender, this, "\u00a7b core.cfg has been reloaded.", new Object[] {});
+					HaCPacket.INSTANCE.sendToAll(new MessageComConfig((byte) 0));
+				} else if (args[1].contains("armor")) {
+					ArmorResistantRegister.pre();
+					notifyCommandListener(sender, this, "\u00a7b armor_item_resistant.json has been reloaded.",
+							new Object[] {});
+					HaCPacket.INSTANCE.sendToAll(new MessageComConfig((byte) 1));
+				} else if (args[1].contains("block")) {
+					HeatBlockRegister.pre();
+					notifyCommandListener(sender, this, "\u00a7b block_climate_parameter.json has been reloaded.",
+							new Object[] {});
+					HaCPacket.INSTANCE.sendToAll(new MessageComConfig((byte) 2));
+				} else if (args[1].contains("mob")) {
+					MobResistantRegister.pre();
+					notifyCommandListener(sender, this, "\u00a7b mob_resistant.json has been reloaded.",
+							new Object[] {});
+					HaCPacket.INSTANCE.sendToAll(new MessageComConfig((byte) 3));
+				} else if (args[1].contains("main") && ClimateCore.loadedMain) {
+					MainComHelper.reloadMainConfig();
+					notifyCommandListener(sender, this, "\u00a7b main.cfg has been reloaded.", new Object[] {});
+					HaCPacket.INSTANCE.sendToAll(new MessageComConfig((byte) 4));
+				} else {
+					sender.sendMessage(new TextComponentTranslation("\u00a7c This file name can not be used."));
+				}
 			} else {
 				sender.sendMessage(new TextComponentTranslation(
-						"\u00a7c/climate help: you can see the help of HeatAndClimate command."));
+						"\u00a7c/climate help: You can see the help of HeatAndClimate command."));
 			}
 		} else {
 			sender.sendMessage(new TextComponentTranslation(
-					"\u00a7c/climate help: you can see the help of HeatAndClimate command."));
+					"\u00a7c/climate help: You can see the help of HeatAndClimate command."));
 		}
 
 	}

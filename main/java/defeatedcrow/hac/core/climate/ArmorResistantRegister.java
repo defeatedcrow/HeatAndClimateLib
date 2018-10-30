@@ -49,16 +49,14 @@ public class ArmorResistantRegister implements IArmorItemRegister {
 		if (DCUtil.isEmpty(item))
 			return;
 		ItemSet set = new ItemSet(item.getItem(), item.getItemDamage());
-		if (!heatMap.containsKey(set) && !coldMap.containsKey(set)) {
-			heatMap.put(set, heat);
-			coldMap.put(set, cold);
-			DCLogger.infoLog("register armor material: " + item.getDisplayName() + " heat " + heat + "/cold " + cold);
-			String mapName = item.getItem().getRegistryName().toString() + ":" + item.getItemDamage();
-			Map<String, Float> map = Maps.newHashMap();
-			map.put("heat", heat);
-			map.put("cold", cold);
-			floatMap.put(mapName, map);
-		}
+		heatMap.put(set, heat);
+		coldMap.put(set, cold);
+		DCLogger.infoLog("register armor material: " + item.getDisplayName() + " heat " + heat + "/cold " + cold);
+		String mapName = item.getItem().getRegistryName().toString() + ":" + item.getItemDamage();
+		Map<String, Float> map = Maps.newHashMap();
+		map.put("heat", heat);
+		map.put("cold", cold);
+		floatMap.put(mapName, map);
 	}
 
 	@Override
@@ -158,6 +156,7 @@ public class ArmorResistantRegister implements IArmorItemRegister {
 	}
 
 	public static void pre() {
+		jsonMap.clear();
 		if (dir != null) {
 			try {
 				if (!dir.exists() && !dir.createNewFile()) {
