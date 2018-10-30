@@ -69,7 +69,7 @@ public class DCServerCommand extends CommandBase {
 				if (season == null) {
 					notifyCommandListener(sender, this, "\u00a7bCleared HaC forced season");
 				} else {
-					notifyCommandListener(sender, this, "\u00a7bSet HaC forced season: %n", season.name);
+					notifyCommandListener(sender, this, "\u00a7bSet HaC forced season: " + season.toString());
 				}
 			} else if (args[0].equalsIgnoreCase("drought")) {
 				if (args.length > 1 && args[1].equalsIgnoreCase("cancel")) {
