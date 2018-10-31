@@ -34,14 +34,14 @@ public class BiomeTempEventDC {
 			}
 
 			// attitude
-			float h = (pos.getY() - 70) * 0.1F;
-			if (h > 15) {
-				h = 15F;
+
+			if (pos.getY() > 80) {
+				float h = (pos.getY() - 80) * 0.1F;
+				temp -= (h * 0.05F);
+			} else if (pos.getY() < 60) {
+				float h = (60 - pos.getY()) * 0.1F;
+				temp += (h * 0.05F);
 			}
-			if (h < -10) {
-				h = -10F;
-			}
-			temp -= (h * 0.05F);
 
 			if (pos.getY() > 64) {
 				float f = (float) (TEMPERATURE_NOISE.getValue(pos.getX() / 8.0F, pos.getZ() / 8.0F) * 4.0D);
