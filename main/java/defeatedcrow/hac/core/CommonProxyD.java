@@ -30,7 +30,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import weather2.api.WeatherDataHelper;
 
 public class CommonProxyD {
 
@@ -153,11 +152,5 @@ public class CommonProxyD {
 	}
 
 	public void updatePlayerClimate() {}
-
-	public void onWetherCheck(EntityPlayer player) {
-		if (WeatherDataHelper.isPrecipitatingAt(player.world, player.getPosition())) {
-			DCLogger.debugInfoLog("affected in server");
-		}
-	}
 
 }

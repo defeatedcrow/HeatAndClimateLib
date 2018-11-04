@@ -8,7 +8,6 @@ import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.CommonProxyD;
 import defeatedcrow.hac.core.DCInit;
-import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
 import defeatedcrow.hac.core.client.event.DCGuiInfomationEvent;
 import defeatedcrow.hac.core.client.event.RenderTempHUDEvent;
@@ -25,7 +24,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import weather2.api.WeatherDataHelper;
 
 public class ClientProxyD extends CommonProxyD {
 
@@ -190,12 +188,5 @@ public class ClientProxyD extends CommonProxyD {
 	}
 
 	private static int localCount = 10;
-
-	@Override
-	public void onWetherCheck(EntityPlayer player) {
-		if (WeatherDataHelper.isPrecipitatingAt(player.world, player.getPosition())) {
-			DCLogger.debugInfoLog("affected in client");
-		}
-	}
 
 }
