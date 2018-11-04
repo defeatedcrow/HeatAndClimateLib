@@ -24,19 +24,25 @@ public class DCInventory implements IInventory {
 	}
 
 	public List<ItemStack> getInputs(int from, int to) {
-		List<ItemStack> ret = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		for (int i = from; i <= to; i++) {
-			if (!DCUtil.isEmpty(getStackInSlot(i)))
+			if (DCUtil.isEmpty(getStackInSlot(i))) {
+				ret.add(ItemStack.EMPTY);
+			} else {
 				ret.add(getStackInSlot(i));
+			}
 		}
 		return ret;
 	}
 
 	public List<ItemStack> getOutputs(int from, int to) {
-		List<ItemStack> ret = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		for (int i = from; i <= to; i++) {
-			if (!DCUtil.isEmpty(getStackInSlot(i)))
+			if (DCUtil.isEmpty(getStackInSlot(i))) {
+				ret.add(ItemStack.EMPTY);
+			} else {
 				ret.add(getStackInSlot(i));
+			}
 		}
 		return ret;
 	}

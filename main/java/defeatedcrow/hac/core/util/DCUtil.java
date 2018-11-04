@@ -190,6 +190,15 @@ public class DCUtil {
 		return false;
 	}
 
+	public static boolean canInsert(ItemStack i1, ItemStack i2) {
+		if (!isEmpty(i1) && isEmpty(i2)) {
+			return true;
+		} else if (isSameItem(i1, i2, false)) {
+			return i1.getCount() <= (i2.getMaxStackSize() - i2.getCount());
+		}
+		return false;
+	}
+
 	/*
 	 * 辞書チェック
 	 */

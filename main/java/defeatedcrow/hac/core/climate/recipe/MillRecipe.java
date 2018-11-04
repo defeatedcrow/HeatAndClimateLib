@@ -92,24 +92,16 @@ public class MillRecipe implements IMillRecipe {
 			int b3 = DCUtil.isEmpty(getSecondary()) ? -1 : -2;
 			for (int i = 0; i < target.size(); i++) {
 				ItemStack get = target.get(i);
-				if (b2 < -1 && DCUtil.isStackable(getOutput(), get)) {
+				if (b2 < -1 && DCUtil.canInsert(getOutput(), get)) {
 					b2 = i;
 					continue;
 				}
-				if (b3 < -1 && DCUtil.isStackable(getSecondary(), get)) {
+				if (b3 < -1 && DCUtil.canInsert(getSecondary(), get)) {
 					b3 = i;
 					continue;
 				}
 			}
-			if (target.size() < slotsize - 1) {
-				return true;
-			} else if (target.size() == slotsize - 1) {
-				return b2 > -2 || b3 > -2;
-			} else {
-				if (b2 > -2 && b3 > -2) {
-					return true;
-				}
-			}
+			return b2 > -2 && b3 > -2 && b2 != b3;
 		} else {
 			if (slotsize > 1) {
 				return true;
@@ -119,6 +111,5 @@ public class MillRecipe implements IMillRecipe {
 				return false;
 			}
 		}
-		return false;
 	}
 }

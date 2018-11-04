@@ -40,7 +40,7 @@ public class MapGenRavineDC extends MapGenRavine {
 		if (state.getBlock() == Blocks.STONE || state.getBlock() == top.getBlock()
 				|| state.getBlock() == filler.getBlock()) {
 			if (y - 1 < 10) {
-				if (biome.getRainfall() >= 0.85F) {
+				if (biome.getRainfall() >= 0.85F || BiomeDictionary.hasType(biome, BiomeDictionary.Type.WET)) {
 					data.setBlockState(x, y, z, BLK_WATER);
 				} else {
 					data.setBlockState(x, y, z, FLOWING_LAVA);
