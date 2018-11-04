@@ -5,7 +5,6 @@ import java.util.Map.Entry;
 
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
-import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.plugin.baubles.DCPluginBaubles;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +22,6 @@ public class MHandlerCharmKey implements IMessageHandler<MessageCharmKey, IMessa
 	public IMessage onMessage(MessageCharmKey message, MessageContext ctx) {
 		EntityPlayer player = ctx.getServerHandler().player;
 		if (player != null) {
-			DCLogger.debugLog("packet!");
 			Map<Integer, ItemStack> charms = DCUtil.getPlayerCharm(player, CharmType.KEY);
 
 			// 発動するのは最も左の一つだけ

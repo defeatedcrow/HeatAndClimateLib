@@ -36,7 +36,7 @@ public class CaveGenLavaDC {
 			if (CoreConfigDC.enableUnderLake) {
 				BlockPos pos = new BlockPos(event.getChunkX() * 16, 0, event.getChunkZ() * 16);
 				Biome biome = event.getWorld().getBiomeForCoordsBody(pos);
-				if (biome.getRainfall() > 0.8F) {
+				if (biome.getRainfall() > 0.8F || BiomeDictionary.hasType(biome, BiomeDictionary.Type.WET)) {
 					int x = rand.nextInt(16) + 8;
 					int y = rand.nextInt(256);
 					int z = rand.nextInt(16) + 8;
@@ -67,7 +67,7 @@ public class CaveGenLavaDC {
 			Biome biome = event.getWorld().getBiomeForCoordsBody(event.getPos());
 			Random random = event.getWorld().rand;
 			boolean flag = false;
-			if (biome.getRainfall() > 0.8F) {
+			if (biome.getRainfall() > 0.8F || BiomeDictionary.hasType(biome, BiomeDictionary.Type.WET)) {
 				// 降雨量が多いと溶岩ができない
 				event.setResult(Result.DENY);
 			}

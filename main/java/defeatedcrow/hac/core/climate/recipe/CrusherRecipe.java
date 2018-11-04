@@ -119,30 +119,24 @@ public class CrusherRecipe implements ICrusherRecipe {
 				int b4 = DCUtil.isEmpty(getTertialy()) ? -1 : -2;
 				for (int i = 0; i < target.size(); i++) {
 					ItemStack get = target.get(i);
-					if (b2 < -1 && DCUtil.isStackable(getOutput(), get)) {
+					if (b2 < -1 && DCUtil.canInsert(getOutput(), get)) {
 						b2 = i;
 						continue;
 					}
-					if (b3 < -1 && DCUtil.isStackable(getSecondary(), get)) {
+					if (b3 < -1 && DCUtil.canInsert(getSecondary(), get)) {
 						b3 = i;
 						continue;
 					}
-					if (b4 < -1 && DCUtil.isStackable(getTertialy(), get)) {
+					if (b4 < -1 && DCUtil.canInsert(getTertialy(), get)) {
 						b4 = i;
 						continue;
 					}
 				}
-				if (target.size() < slotsize - 2) {
-					return true;
-				} else if (target.size() == slotsize - 2) {
-					return b2 > -2 || b3 > -2 || b4 > -2;
-				} else {
-					if (b2 > -2 || b3 > -2 || b4 > -2) {
-						boolean b5 = b2 == -1 || (b2 != b3 && b2 != b4);
-						boolean b6 = b3 == -1 || (b3 != b2 && b3 != b4);
-						boolean b7 = b4 == -1 || (b4 != b3 && b4 != b2);
-						return b5 && b6 && b7;
-					}
+				if (b2 > -2 && b3 > -2 && b4 > -2) {
+					boolean b5 = b2 == -1 || (b2 != b3 && b2 != b4);
+					boolean b6 = b3 == -1 || (b3 != b2 && b3 != b4);
+					boolean b7 = b4 == -1 || (b4 != b3 && b4 != b2);
+					return b5 && b6 && b7;
 				}
 			} else {
 				if (slotsize > 2) {

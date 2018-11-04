@@ -262,23 +262,23 @@ public class FluidCraftRecipe implements IFluidRecipe {
 
 		if (b1) {
 			if (items != null && !items.isEmpty()) {
-				boolean b2 = false;
-				boolean b3 = false;
-				for (ItemStack get : items) {
-					if (DCUtil.isEmpty(getOutput()) || DCUtil.isStackable(getOutput(), get)) {
-						b2 = true;
+				int i1 = -2;
+				int i2 = -2;
+				if (DCUtil.isEmpty(getOutput()))
+					i1 = -1;
+				if (DCUtil.isEmpty(getSecondary()))
+					i2 = -1;
+				for (int i = 0; i < items.size(); i++) {
+					ItemStack get = items.get(i);
+					if (i1 == -2 && DCUtil.canInsert(getOutput(), get)) {
+						i1 = i;
+						continue;
 					}
-					if (DCUtil.isEmpty(getSecondary()) || DCUtil.isStackable(getSecondary(), get)) {
-						b3 = true;
+					if (i2 == -2 && DCUtil.canInsert(getSecondary(), get)) {
+						i2 = i;
 					}
 				}
-				if (items.size() < slotsize - 1) {
-					return true;
-				} else if (items.size() == slotsize - 1) {
-					return b2 || b3;
-				} else {
-					return b2 && b3;
-				}
+				return i1 != -2 && i2 != -2 && i1 != i2;
 			} else {
 				if (slotsize > 1) {
 					return true;
