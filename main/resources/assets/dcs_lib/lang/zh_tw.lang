@@ -30,5 +30,5 @@ dcs.freeze_resistance=寒冷耐性
 
 dcs.potion.freeze_res=寒冷耐性
 potion.effect.dcs.freeze_res=寒冷耐性
-splash_potion.effect.dcs.freeze_res=寒冷耐性的飛濺藥水
-lingering_potion.effect.dcs.freeze_res=寒冷耐性的滯留藥水
+splash_potion.effect.dcs.freeze_res=飛濺 寒冷耐性藥水
+lingering_potion.effect.dcs.freeze_res=滯留 寒冷耐性藥水
