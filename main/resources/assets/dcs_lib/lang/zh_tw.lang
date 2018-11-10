@@ -1,0 +1,34 @@
+
+## item
+item.dcs_checker_normal.name=氣候檢測器
+item.dcs_repair_patty.name=修補膏
+
+## massage
+dcs.climate.tip.checker=右鍵:檢查目標座標的Climate值 (範圍2)
+dcs_climate.tip.durability=最大耐久度
+dcs_climate.tip.harvestlevel=挖掘等級
+dcs_climate.tip.resistance=氣候耐性
+
+dcs.tip.shift=Lshift鍵: 顯示詳情
+
+dcs_climate.smelting=氣候精煉配方
+dcs_climate.recipe=氣候利用合成
+dcs_climate.mill=石臼
+dcs_climate.fluidcraft=液體加工配方
+dcs_climate.reactor=化學反應配方
+dcs_climate.crop=氣候利用作物
+dcs_climate.effective=氣候影響的方塊
+dcs_climate.spinning=紡織機
+dcs_climate.biome=生態域氣候情報
+dcs_climate.crusher=粉碎機配方
+
+death.attack.dcs_heat=%1$s被烤的金黃
+death.attack.dcs_cold=%1$s被凍成了雪酪
+
+dcs.potion.freeze_resistance=寒冷耐性
+dcs.freeze_resistance=寒冷耐性
+
+dcs.potion.freeze_res=寒冷耐性
+potion.effect.dcs.freeze_res=寒冷耐性
+splash_potion.effect.dcs.freeze_res=飛濺 寒冷耐性藥水
+lingering_potion.effect.dcs.freeze_res=滯留 寒冷耐性藥水
