@@ -78,10 +78,6 @@ public class FluidDictionaryDC {
 
 		if (target == ref) {
 			return true;
-		}
-
-		if (target == ref) {
-			return true;
 		} else {
 			String dic = getFluidDicName(ref);
 			return matchFluidName(target, dic);

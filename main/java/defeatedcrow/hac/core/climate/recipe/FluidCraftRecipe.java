@@ -181,7 +181,8 @@ public class FluidCraftRecipe implements IFluidRecipe {
 	public boolean matches(List<ItemStack> items, FluidStack fluid) {
 		boolean b1 = false;
 		if (this.inputF == null) {
-			b1 = true;
+			if (fluid == null)
+				b1 = true;
 		} else if (fluid != null) {
 			if (inputF.getFluid() == fluid.getFluid()
 					|| FluidDictionaryDC.matchFluid(fluid.getFluid(), inputF.getFluid())) {
@@ -190,61 +191,66 @@ public class FluidCraftRecipe implements IFluidRecipe {
 		}
 
 		if (b1) {
-			// DCLogger.debugLog("1: fluid match");
+			// DCLogger.debugInfoLog("1: fluid match");
 			ArrayList<Object> required = new ArrayList<Object>(this.inputList);
-			if (required.isEmpty())
-				return true;
 
-			for (int x = 0; x < items.size(); x++) {
-				ItemStack slot = items.get(x);
-
-				if (!DCUtil.isEmpty(slot)) {
-					boolean inRecipe = false;
-					Iterator<Object> req = required.iterator();
-
-					if (slot.getItem() instanceof IRecipePanel) {
-						inRecipe = true;
-						continue;
-					}
-
-					while (req.hasNext()) {
-						boolean match = false;
-
-						Object next = req.next();
-						if (next == null) {
-							continue;
-						}
-
-						if (next instanceof ItemStack) {
-							// DCLogger.debugLog("target: item");
-							match = DCUtil.isSameItem((ItemStack) next, slot, false);
-						} else if (next instanceof String) {
-							// DCLogger.debugLog("target: string " + "[" + (String) next + "]");
-							int target = OreDictionary.getOreID((String) next);
-							int[] ids = OreDictionary.getOreIDs(slot);
-							for (int i : ids) {
-								if (i == target) {
-									match = true;
-								}
-							}
-						}
-
-						if (match) {
-							inRecipe = true;
-							required.remove(next);
-							break;
-						}
-					}
-
-					req = null;
-
-					if (!inRecipe) {
+			if (required.isEmpty()) {
+				for (int x = 0; x < items.size(); x++) {
+					ItemStack slot = items.get(x);
+					if (!DCUtil.isEmpty(slot)) {
+						// DCLogger.debugInfoLog("fail");
 						return false;
 					}
 				}
+				return true;
 			}
-			// if (required.isEmpty())
-			// DCLogger.debugLog("2: item match");
+
+			for (int x = 0; x < items.size(); x++) {
+				ItemStack slot = items.get(x);
+				if (DCUtil.isEmpty(slot) || slot.getItem() instanceof IRecipePanel || required.isEmpty()) {
+					continue;
+				}
+
+				boolean inRecipe = false;
+				Iterator<Object> req = required.iterator();
+
+				while (req.hasNext()) {
+					boolean match = false;
+
+					Object next = req.next();
+					if (next == null) {
+						continue;
+					}
+
+					if (next instanceof ItemStack) {
+						// DCLogger.debugInfoLog("target: item");
+						match = DCUtil.isSameItem((ItemStack) next, slot, false);
+					} else if (next instanceof String) {
+						// DCLogger.debugInfoLog("target: string " + "[" + (String) next + "]");
+						match = DCUtil.matchDicName((String) next, slot);
+					}
+
+					if (match) {
+						// DCLogger.debugInfoLog("match");
+						inRecipe = true;
+						required.remove(next);
+						break;
+					}
+				}
+
+				req = null;
+
+				if (!inRecipe) {
+					// DCLogger.debugInfoLog("fail");
+					return false;
+				}
+			}
+
+			// if (required.isEmpty()) {
+			// DCLogger.debugInfoLog("2: item match");
+			// } else {
+			// DCLogger.debugInfoLog("fail " + required.toString());
+			// }
 			return required.isEmpty();
 		} else {
 			return false;
@@ -278,15 +284,12 @@ public class FluidCraftRecipe implements IFluidRecipe {
 						i2 = i;
 					}
 				}
-				return i1 != -2 && i2 != -2 && i1 != i2;
-			} else {
-				if (slotsize > 1) {
+				if (i1 == -1 && i2 == -1) {
 					return true;
-				} else if (slotsize > 0) {
-					return DCUtil.isEmpty(getOutput()) || DCUtil.isEmpty(getSecondary());
-				} else {
-					return DCUtil.isEmpty(getOutput()) && DCUtil.isEmpty(getSecondary());
-				}
+				} else
+					return i1 > -2 && i2 > -2 && i1 != i2;
+			} else {
+				return DCUtil.isEmpty(getOutput()) && DCUtil.isEmpty(getSecondary());
 			}
 		}
 		return false;
@@ -309,7 +312,7 @@ public class FluidCraftRecipe implements IFluidRecipe {
 		boolean h = requiredHum().isEmpty() || requiredHum().contains(climate.getHumidity());
 		boolean a = requiredAir().isEmpty() || requiredAir().contains(climate.getAirflow());
 		// if (t && h && a)
-		// DCLogger.debugLog("3: clm match");
+		// DCLogger.debugInfoLog("3: clm match");
 		return t && h && a;
 	}
 

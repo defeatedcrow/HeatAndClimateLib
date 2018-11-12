@@ -89,11 +89,13 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 				if (recipe.recipeCoincidence() >= c) {
 					ret = recipe;
 					c = recipe.recipeCoincidence();
+					// DCLogger.debugInfoLog("4: coincidence " + c);
 				}
 			}
 		}
 
 		if (ret != null) {
+			// DCLogger.debugInfoLog("5: TRUE");
 			return ret;
 		}
 		return null;

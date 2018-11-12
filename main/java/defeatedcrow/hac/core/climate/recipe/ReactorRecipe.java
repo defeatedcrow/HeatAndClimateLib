@@ -211,7 +211,8 @@ public class ReactorRecipe implements IReactorRecipe {
 	public boolean matches(List<ItemStack> items, FluidStack fluid1, FluidStack fluid2) {
 		boolean b1 = false;
 		if (this.inputF1 == null) {
-			b1 = fluid1 == null;
+			if (fluid1 == null)
+				b1 = true;
 		} else if (fluid1 != null) {
 			if (inputF1.getFluid() == fluid1.getFluid()
 					|| FluidDictionaryDC.matchFluid(fluid1.getFluid(), inputF1.getFluid())) {
@@ -221,7 +222,8 @@ public class ReactorRecipe implements IReactorRecipe {
 
 		boolean b2 = false;
 		if (this.inputF2 == null) {
-			b2 = fluid2 == null;
+			if (fluid2 == null)
+				b2 = true;
 		} else if (fluid2 != null) {
 			if (inputF2.getFluid() == fluid2.getFluid()
 					|| FluidDictionaryDC.matchFluid(fluid2.getFluid(), inputF2.getFluid())) {
@@ -230,61 +232,61 @@ public class ReactorRecipe implements IReactorRecipe {
 		}
 
 		if (b1 && b2) {
-			// DCLogger.debugLog("1: fluid match");
+			// DCLogger.debugInfoLog("1: fluid match");
 			ArrayList<Object> required = new ArrayList<Object>(this.inputList);
-			if (required.isEmpty())
+			if (required.isEmpty()) {
+				for (int x = 0; x < items.size(); x++) {
+					ItemStack slot = items.get(x);
+					if (!DCUtil.isEmpty(slot)) {
+						return false;
+					}
+				}
 				return true;
+			}
 
 			for (int x = 0; x < items.size(); x++) {
 				ItemStack slot = items.get(x);
 
-				if (!DCUtil.isEmpty(slot)) {
-					boolean inRecipe = false;
-					Iterator<Object> req = required.iterator();
+				if (DCUtil.isEmpty(slot) || slot.getItem() instanceof IRecipePanel || required.isEmpty()) {
+					continue;
+				}
 
-					if (slot.getItem() instanceof IRecipePanel) {
-						inRecipe = true;
+				boolean inRecipe = false;
+				Iterator<Object> req = required.iterator();
+
+				while (req.hasNext()) {
+					boolean match = false;
+
+					Object next = req.next();
+					if (next == null) {
 						continue;
 					}
 
-					while (req.hasNext()) {
-						boolean match = false;
-
-						Object next = req.next();
-						if (next == null) {
-							continue;
-						}
-
-						if (next instanceof ItemStack) {
-							// DCLogger.debugLog("target: item");
-							match = DCUtil.isSameItem((ItemStack) next, slot, false);
-						} else if (next instanceof String) {
-							// DCLogger.debugLog("target: string " + "[" + (String) next + "]");
-							int target = OreDictionary.getOreID((String) next);
-							int[] ids = OreDictionary.getOreIDs(slot);
-							for (int i : ids) {
-								if (i == target) {
-									match = true;
-								}
-							}
-						}
-
-						if (match) {
-							inRecipe = true;
-							required.remove(next);
-							break;
-						}
+					if (next instanceof ItemStack) {
+						// DCLogger.debugInfoLog("target: item");
+						match = DCUtil.isSameItem((ItemStack) next, slot, false);
+					} else if (next instanceof String) {
+						// DCLogger.debugInfoLog("target: string " + "[" + (String) next + "]");
+						match = DCUtil.matchDicName((String) next, slot);
 					}
 
-					req = null;
-
-					if (!inRecipe) {
-						return false;
+					if (match) {
+						inRecipe = true;
+						required.remove(next);
+						break;
 					}
 				}
+
+				req = null;
+
+				if (!inRecipe) {
+					return false;
+				}
 			}
+
 			// if (required.isEmpty())
-			// DCLogger.debugLog("2: item match");
+			// DCLogger.debugInfoLog("2: item match");
+
 			return required.isEmpty();
 		} else {
 			return false;
@@ -325,15 +327,12 @@ public class ReactorRecipe implements IReactorRecipe {
 						i2 = i;
 					}
 				}
-				return i1 != -2 && i2 != -2 && i1 != i2;
-			} else {
-				if (slotsize > 1) {
+				if (i1 == -1 && i2 == -1) {
 					return true;
-				} else if (slotsize > 0) {
-					return DCUtil.isEmpty(getOutput()) || DCUtil.isEmpty(getSecondary());
-				} else {
-					return DCUtil.isEmpty(getOutput()) && DCUtil.isEmpty(getSecondary());
-				}
+				} else
+					return i1 > -2 && i2 > -2 && i1 != i2;
+			} else {
+				return DCUtil.isEmpty(getOutput()) && DCUtil.isEmpty(getSecondary());
 			}
 		}
 		return false;
