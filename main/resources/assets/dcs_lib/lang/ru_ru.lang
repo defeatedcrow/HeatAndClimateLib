@@ -1,0 +1,36 @@
+
+## item
+item.dcs_checker_normal.name=Климат-контроль
+item.dcs_repair_patty.name=Ремонт Пэтти
+
+## massage
+dcs.climate.tip.checker=Можно проверить климат правого щелчка на позиции(диапазон 2)
+dcs_climate.tip.durability=Макс. прочность
+dcs_climate.tip.harvestlevel=Уровень добычи
+dcs_climate.tip.resistance=Климатическое сопротивление
+
+dcs.tip.shift=Клавиша LShift: развернуть подсказку
+
+dcs_climate.smelting=Климатическая плавка
+dcs_climate.recipe=Климатическое создание
+dcs_climate.mill=Рецепт мельницы
+dcs_climate.fluidcraft=Жидкостная обработка
+dcs_climate.reactor=Реакторная обработка
+dcs_climate.crop=Климатические культуры
+dcs_climate.effective=Климатические эффективные плитки
+dcs_climate.spinning=Прядильная машина
+dcs_climate.biome=Климатические данные биома
+dcs_climate.crusher=Рецепт дробилки
+
+death.attack.dcs_heat=%1$s был сожжен поджаренным.
+death.attack.dcs_cold=%1$s стал шербетом.
+
+dcs.potion.freeze_res=Морозостойкость
+potion.effect.dcs.freeze_res=Зелье морозостойкости
+splash_potion.effect.dcs.freeze_res=Всплеск зелье морозостойкости
+lingering_potion.effect.dcs.freeze_res=Затяжное зелье морозостойкости
+
+dcs.tip.spring=ВЕСНА
+dcs.tip.summer=ЛЕТО
+dcs.tip.autumn=ОСЕНЬ
+dcs.tip.winter=ЗИМА
