@@ -1,74 +1,85 @@
 package defeatedcrow.hac.core.fluid;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonWriter;
 
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 public class FluidDictionaryDC {
 
-	private static List<String> idToName = new ArrayList<String>();
-	private static Map<Fluid, Integer> fluidMap = new HashMap<Fluid, Integer>(128);
-	public static final ImmutableList<ItemStack> EMPTY_LIST = ImmutableList.of();
+	public static final List<FluidDic> DICS = Lists.newArrayList();
+
+	public static final FluidDictionaryDC INSTANCE = new FluidDictionaryDC();
 
 	public static void registerFluidDic(Fluid fluid, String name) {
 		if (fluid == null || name == null)
 			return;
 
-		int id = getNameID(name);
+		FluidDic dic = getDic(name);
 
-		if (fluidMap.containsKey(fluid)) {
-			Integer fid = fluidMap.get(fluid);
-			if (fid == null) {
-				fluidMap.put(fluid, id);
+		for (FluidDic d2 : DICS) {
+			String n2 = d2.dicName;
+			if (n2 != null && n2.equalsIgnoreCase(name)) {
+				dic = d2;
+				dic.fluids.add(fluid);
+				break;
 			}
-		} else {
-			fluidMap.put(fluid, id);
 		}
 	}
 
-	public static String getFluidDicName(Fluid fluid) {
+	public static FluidDic getDic(Fluid fluid) {
 		if (fluid == null)
 			return null;
 
-		if (fluidMap.containsKey(fluid)) {
-			Integer fid = fluidMap.get(fluid);
-			if (fid != null) {
-				return idToName.get(fid);
+		if (!DICS.isEmpty()) {
+			for (FluidDic d2 : DICS) {
+				if (d2.match(fluid)) {
+					return d2;
+				}
 			}
-
 		}
 		return null;
 	}
 
-	public static int getNameID(String name) {
-		if (idToName.isEmpty()) {
-			idToName.add(name);
-			return 0;
-		} else {
-			int id = -1;
-			int size = idToName.size();
-			for (int i = 0; i < idToName.size(); i++) {
-				String n2 = idToName.get(i);
-				if (n2 != null && n2.equalsIgnoreCase(name)) {
-					id = i;
-				}
-				if (id != -1) {
-					break;
-				}
-			}
+	public static FluidDic getDic(FluidStack fluidstack) {
+		if (fluidstack == null)
+			return null;
 
-			if (id == -1) {
-				idToName.add(name);
-				return size;
-			} else {
-				return id;
+		return getDic(fluidstack.getFluid());
+	}
+
+	public static FluidDic getDic(String name) {
+		if (name == null) {
+			return null;
+		}
+		if (DICS.isEmpty()) {
+			FluidDic dic = new FluidDic(name);
+			DICS.add(dic);
+			return dic;
+		} else {
+			FluidDic dic = null;
+			for (FluidDic d2 : DICS) {
+				String n2 = d2.dicName;
+				if (n2 != null && n2.equalsIgnoreCase(name)) {
+					dic = d2;
+					return dic;
+				}
 			}
+			FluidDic d3 = new FluidDic(name);
+			DICS.add(d3);
+			dic = d3;
+			return dic;
+
 		}
 	}
 
@@ -79,8 +90,8 @@ public class FluidDictionaryDC {
 		if (target == ref) {
 			return true;
 		} else {
-			String dic = getFluidDicName(ref);
-			return matchFluidName(target, dic);
+			FluidDic dic = getDic(ref);
+			return dic != null && dic.match(target);
 		}
 	}
 
@@ -88,18 +99,56 @@ public class FluidDictionaryDC {
 		if (target == null || name == null)
 			return false;
 
-		String dic = getFluidDicName(target);
+		FluidDic dic = getDic(name);
+		return dic != null && dic.match(target);
+	}
 
-		if (dic != null && dic.equals(name)) {
-			return true;
+	private static File dir = null;
+	public static final Map<String, List<String>> fluidMap = new HashMap<String, List<String>>();
+
+	public static void post() {
+
+		if (dir != null) {
+			try {
+				if (!dir.exists() && !dir.createNewFile()) {
+					return;
+				}
+
+				if (dir.canWrite() && !DICS.isEmpty()) {
+					fluidMap.clear();
+					for (FluidDic d2 : DICS) {
+						if (d2 != null) {
+							List<String> list = Lists.newArrayList();
+							for (Fluid f : d2.fluids) {
+								if (f != null)
+									list.add(f.getName());
+							}
+							fluidMap.put(d2.dicName, list);
+						}
+					}
+
+					FileOutputStream fos = new FileOutputStream(dir.getPath());
+					OutputStreamWriter osw = new OutputStreamWriter(fos);
+					JsonWriter jsw = new JsonWriter(osw);
+					jsw.setIndent(" ");
+					Gson gson = new Gson();
+					gson.toJson(fluidMap, Map.class, jsw);
+
+					osw.close();
+					fos.close();
+					jsw.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+	}
 
-		String targetName = target.getName();
-		if (targetName != null && targetName.contains(name)) {
-			return true;
+	public static void setDir(File file) {
+		dir = new File(file, "fluid_dic.json");
+		if (dir.getParentFile() != null) {
+			dir.getParentFile().mkdirs();
 		}
-
-		return false;
 	}
 
 }

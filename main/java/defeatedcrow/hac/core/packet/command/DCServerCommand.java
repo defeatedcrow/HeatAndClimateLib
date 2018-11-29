@@ -10,6 +10,7 @@ import defeatedcrow.hac.core.climate.ArmorResistantRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
 import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.climate.WeatherChecker;
+import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.plugin.main.MainComHelper;
 import defeatedcrow.hac.core.util.DCTimeHelper;
@@ -108,6 +109,10 @@ public class DCServerCommand extends CommandBase {
 					MainComHelper.reloadMainConfig();
 					notifyCommandListener(sender, this, "\u00a7b main.cfg has been reloaded.", new Object[] {});
 					HaCPacket.INSTANCE.sendToAll(new MessageComConfig((byte) 4));
+				} else if (args[1].contains("fluiddic") && ClimateCore.isDebug) {
+					notifyCommandListener(sender, this, "\u00a7b fluid_dic.json has been exported.", new Object[] {});
+					FluidDictionaryDC.post();
+					HaCPacket.INSTANCE.sendToAll(new MessageComConfig((byte) 5));
 				} else {
 					sender.sendMessage(new TextComponentTranslation("\u00a7c This file name can not be used."));
 				}

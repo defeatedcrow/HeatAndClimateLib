@@ -2,6 +2,7 @@ package defeatedcrow.hac.core.plugin.jei.ingredients;
 
 import java.util.List;
 
+import defeatedcrow.hac.core.fluid.FluidDic;
 import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import mezz.jei.plugins.vanilla.ingredients.FluidStackRenderer;
 import net.minecraft.client.Minecraft;
@@ -14,9 +15,9 @@ public class FluidStackRendererDC extends FluidStackRenderer {
 	public List<String> getTooltip(Minecraft minecraft, FluidStack fluidStack, ITooltipFlag tooltipFlag) {
 		List<String> list = super.getTooltip(minecraft, fluidStack, tooltipFlag);
 		if (fluidStack != null) {
-			String dic = FluidDictionaryDC.getFluidDicName(fluidStack.getFluid());
+			FluidDic dic = FluidDictionaryDC.getDic(fluidStack.getFluid());
 			if (dic != null)
-				list.add("FluidDic: " + dic);
+				list.add("FluidDic: " + dic.dicName);
 		}
 		return list;
 	}

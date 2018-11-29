@@ -2,10 +2,14 @@ package defeatedcrow.hac.core.plugin.jei;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.fluid.FluidDic;
+import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowRenderer;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityRenderer;
@@ -18,9 +22,10 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 public class FluidRecipeCategory implements IRecipeCategory {
@@ -39,7 +44,7 @@ public class FluidRecipeCategory implements IRecipeCategory {
 
 	@Override
 	public String getTitle() {
-		return I18n.translateToLocal(getUid());
+		return I18n.format(getUid());
 	}
 
 	@Override
@@ -89,7 +94,17 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		if (!inF.isEmpty() && inF.get(0) != null) {
 			FluidStack f1 = inF.get(0);
 			recipeLayout.getFluidStacks().init(0, false, 30, 16, 12, 50, 5000, false, null);
-			recipeLayout.getFluidStacks().set(0, f1);
+			FluidDic dic = FluidDictionaryDC.getDic(f1);
+			if (dic != null && !dic.fluids.isEmpty()) {
+				List<FluidStack> ret = Lists.newArrayList();
+				for (Fluid f : dic.fluids) {
+					ret.add(new FluidStack(f, f1.amount));
+				}
+				recipeLayout.getFluidStacks().set(0, ret);
+			} else {
+				recipeLayout.getFluidStacks().set(0, f1);
+			}
+
 		}
 		if (!outF.isEmpty() && outF.get(0) != null) {
 			FluidStack f2 = outF.get(0);

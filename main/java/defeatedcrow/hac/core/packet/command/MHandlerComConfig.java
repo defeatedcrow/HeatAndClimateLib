@@ -8,6 +8,7 @@ import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.climate.ArmorResistantRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
 import defeatedcrow.hac.core.climate.MobResistantRegister;
+import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import defeatedcrow.hac.core.plugin.main.MainComHelper;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -34,6 +35,8 @@ public class MHandlerComConfig implements IMessageHandler<MessageComConfig, IMes
 				MobResistantRegister.pre();
 			} else if (data == 4 && ClimateCore.loadedMain) {
 				MainComHelper.reloadMainConfig();
+			} else if (data == 5 && ClimateCore.isDebug) {
+				FluidDictionaryDC.post();
 			}
 		}
 		return null;

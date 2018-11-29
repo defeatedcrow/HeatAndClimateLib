@@ -2,8 +2,12 @@ package defeatedcrow.hac.core.plugin.jei;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.core.ClimateCore;
+import defeatedcrow.hac.core.fluid.FluidDic;
+import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
 import defeatedcrow.hac.core.plugin.jei.ingredients.ItemStackRendererDC;
 import mezz.jei.api.IGuiHelper;
@@ -14,9 +18,10 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 public class ReactorRecipeCategory implements IRecipeCategory {
@@ -35,7 +40,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 
 	@Override
 	public String getTitle() {
-		return I18n.translateToLocal(getUid());
+		return I18n.format(getUid());
 	}
 
 	@Override
@@ -94,11 +99,29 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 		if (!inF1.isEmpty() && inF1.get(0) != null) {
 			FluidStack f1 = inF1.get(0);
 			recipeLayout.getFluidStacks().init(0, false, 7, 18, 12, 40, 4000, false, null);
-			recipeLayout.getFluidStacks().set(0, f1);
+			FluidDic dic = FluidDictionaryDC.getDic(f1);
+			if (dic != null && !dic.fluids.isEmpty()) {
+				List<FluidStack> ret = Lists.newArrayList();
+				for (Fluid f : dic.fluids) {
+					ret.add(new FluidStack(f, f1.amount));
+				}
+				recipeLayout.getFluidStacks().set(0, ret);
+			} else {
+				recipeLayout.getFluidStacks().set(0, f1);
+			}
 			if (inF1.size() > 1) {
 				FluidStack f2 = inF1.get(1);
 				recipeLayout.getFluidStacks().init(1, false, 47, 18, 12, 40, 4000, false, null);
-				recipeLayout.getFluidStacks().set(1, f2);
+				FluidDic dic2 = FluidDictionaryDC.getDic(f2);
+				if (dic2 != null && !dic2.fluids.isEmpty()) {
+					List<FluidStack> ret = Lists.newArrayList();
+					for (Fluid f : dic2.fluids) {
+						ret.add(new FluidStack(f, f2.amount));
+					}
+					recipeLayout.getFluidStacks().set(0, ret);
+				} else {
+					recipeLayout.getFluidStacks().set(1, f2);
+				}
 			}
 		}
 

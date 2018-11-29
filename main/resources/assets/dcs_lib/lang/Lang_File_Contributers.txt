@@ -10,3 +10,6 @@ TartaricAcid
 zh_TW
 AileRozy
 
+ru_RU
+Sergey Akilin
+
