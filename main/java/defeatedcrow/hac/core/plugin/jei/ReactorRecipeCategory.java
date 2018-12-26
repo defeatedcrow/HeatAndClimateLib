@@ -118,7 +118,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 					for (Fluid f : dic2.fluids) {
 						ret.add(new FluidStack(f, f2.amount));
 					}
-					recipeLayout.getFluidStacks().set(0, ret);
+					recipeLayout.getFluidStacks().set(1, ret);
 				} else {
 					recipeLayout.getFluidStacks().set(1, f2);
 				}

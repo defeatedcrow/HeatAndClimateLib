@@ -27,7 +27,7 @@ public class FluidDictionaryDC {
 
 		FluidDic dic = getDic(name);
 
-		for (FluidDic d2 : DICS) {
+		for (FluidDic d2 : INSTANCE.DICS) {
 			String n2 = d2.dicName;
 			if (n2 != null && n2.equalsIgnoreCase(name)) {
 				dic = d2;
@@ -41,8 +41,8 @@ public class FluidDictionaryDC {
 		if (fluid == null)
 			return null;
 
-		if (!DICS.isEmpty()) {
-			for (FluidDic d2 : DICS) {
+		if (!INSTANCE.DICS.isEmpty()) {
+			for (FluidDic d2 : INSTANCE.DICS) {
 				if (d2.match(fluid)) {
 					return d2;
 				}
@@ -62,13 +62,13 @@ public class FluidDictionaryDC {
 		if (name == null) {
 			return null;
 		}
-		if (DICS.isEmpty()) {
+		if (INSTANCE.DICS.isEmpty()) {
 			FluidDic dic = new FluidDic(name);
-			DICS.add(dic);
+			INSTANCE.DICS.add(dic);
 			return dic;
 		} else {
 			FluidDic dic = null;
-			for (FluidDic d2 : DICS) {
+			for (FluidDic d2 : INSTANCE.DICS) {
 				String n2 = d2.dicName;
 				if (n2 != null && n2.equalsIgnoreCase(name)) {
 					dic = d2;
@@ -76,7 +76,7 @@ public class FluidDictionaryDC {
 				}
 			}
 			FluidDic d3 = new FluidDic(name);
-			DICS.add(d3);
+			INSTANCE.DICS.add(d3);
 			dic = d3;
 			return dic;
 
@@ -114,16 +114,16 @@ public class FluidDictionaryDC {
 					return;
 				}
 
-				if (dir.canWrite() && !DICS.isEmpty()) {
-					fluidMap.clear();
-					for (FluidDic d2 : DICS) {
+				if (dir.canWrite() && !INSTANCE.DICS.isEmpty()) {
+					INSTANCE.fluidMap.clear();
+					for (FluidDic d2 : INSTANCE.DICS) {
 						if (d2 != null) {
 							List<String> list = Lists.newArrayList();
 							for (Fluid f : d2.fluids) {
 								if (f != null)
 									list.add(f.getName());
 							}
-							fluidMap.put(d2.dicName, list);
+							INSTANCE.fluidMap.put(d2.dicName, list);
 						}
 					}
 
@@ -132,7 +132,7 @@ public class FluidDictionaryDC {
 					JsonWriter jsw = new JsonWriter(osw);
 					jsw.setIndent(" ");
 					Gson gson = new Gson();
-					gson.toJson(fluidMap, Map.class, jsw);
+					gson.toJson(INSTANCE.fluidMap, Map.class, jsw);
 
 					osw.close();
 					fos.close();

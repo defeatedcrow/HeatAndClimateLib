@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 2.7.3 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 2.7.4 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -257,6 +257,10 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○2.7.4
+　修正
+　　・JEIプラグインで化学反応槽のレシピが正しく表示されない問題
 
 ○2.7.3
 　修正
