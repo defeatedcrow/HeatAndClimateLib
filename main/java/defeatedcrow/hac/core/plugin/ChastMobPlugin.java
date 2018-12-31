@@ -14,7 +14,7 @@ public class ChastMobPlugin {
 	public static Map<Integer, ItemStack> getAmulet(EntityLivingBase living) {
 		Map<Integer, ItemStack> ret = new HashMap<Integer, ItemStack>();
 		if (living instanceof schr0.chastmob.entity.EntityChast) {
-			IInventory inv = ((schr0.chastmob.entity.EntityChast) living).getInventoryChastMain();
+			IInventory inv = ((schr0.chastmob.entity.EntityChast) living).getInventoryMain();
 			for (int i = 0; i < inv.getSizeInventory(); i++) {
 				ItemStack check = inv.getStackInSlot(i);
 				if (!DCUtil.isEmpty(check) && check.getItem() instanceof IJewelAmulet) {
