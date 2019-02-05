@@ -106,7 +106,7 @@ public class BlockUpdateDC {
 			}
 			/*
 			 * ICE
-			 * COOL以下であれば氷が溶けなくなり、COLDより冷たいTierでは周囲を強制凍結
+			 * 屋内かつCOOL以下であれば氷が溶けなくなり、COLDより冷たいTierでは周囲を強制凍結
 			 * WARM以上で強制溶解
 			 */
 			else if (block == Blocks.ICE) {
@@ -119,7 +119,9 @@ public class BlockUpdateDC {
 						event.setCanceled(true);
 						// DCLogger.debugLog("Freeze!!");
 					}
-					event.setCanceled(true);
+					if (roof) {
+						event.setCanceled(true);
+					}
 				} else if (clm.get().getHeat().getTier() > 0) {
 					world.setBlockState(p, Blocks.WATER.getDefaultState(), 2);
 					world.notifyNeighborsOfStateChange(p, Blocks.WATER, false);
@@ -132,7 +134,7 @@ public class BlockUpdateDC {
 				 */
 				return;
 			} else if (block == Blocks.SNOW || block == Blocks.SNOW_LAYER) {
-				if (clm.get().getHeat().getTier() < 0) {
+				if (clm.get().getHeat().getTier() < 0 && roof) {
 					event.setCanceled(true);
 				} else if (clm.get().getHeat().getTier() > 0) {
 					world.setBlockToAir(p);

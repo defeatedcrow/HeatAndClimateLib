@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 2.7.5 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 2.7.6 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -257,6 +257,10 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○2.7.6
+　修正
+　　・氷が溶けない問題を修正
 
 ○2.7.5
 　修正
