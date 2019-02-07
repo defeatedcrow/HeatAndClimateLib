@@ -80,4 +80,9 @@ public interface IBiomeClimateRegister {
 	IClimate getClimateFromInt(int i);
 
 	IClimate getClimateFromParam(DCHeatTier heat, DCHumidity hum, DCAirflow air);
+
+	/**
+	 * 内部用
+	 */
+	void addBiomeToJsonMap(Biome biome, DCHeatTier temp, DCHumidity hum, DCAirflow airflow);
 }

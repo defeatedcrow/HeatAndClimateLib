@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import defeatedcrow.hac.config.ClimateConfig;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.ArmorResistantRegister;
+import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
 import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.fluid.FluidIDRegisterDC;
@@ -94,6 +95,7 @@ public class ClimateCore {
 		MobResistantRegister.pre();
 		ArmorResistantRegister.pre();
 		HeatBlockRegister.pre();
+		ClimateRegister.pre();
 
 		// default property
 		APILoader.registerClimate();
@@ -104,6 +106,7 @@ public class ClimateCore {
 		MobResistantRegister.post();
 		ArmorResistantRegister.post();
 		HeatBlockRegister.post();
+		ClimateRegister.post();
 
 		if (Loader.isModLoaded("weather2")) {
 			loadWeather2 = true;

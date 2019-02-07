@@ -43,6 +43,13 @@ public class BiomeTempEventDC {
 				temp += (h * 0.05F);
 			}
 
+			if (temp < -3) {
+				temp = -3;
+			}
+			if (temp > 3) {
+				temp = 3;
+			}
+
 			if (pos.getY() > 64) {
 				float f = (float) (TEMPERATURE_NOISE.getValue(pos.getX() / 8.0F, pos.getZ() / 8.0F) * 4.0D);
 				event.newTemp = temp - (f + pos.getY() - 64.0F) * 0.05F / 30.0F;

@@ -245,7 +245,7 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 					}
 
 				} else {
-					DCLogger.debugLog("fail to register target block from json: " + name);
+					DCLogger.warnLog("fail to register target block from json: " + name);
 					return;
 				}
 			}
@@ -266,7 +266,7 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 					DCLogger.infoLog("* Airflow: " + clm.getAirflow());
 				}
 			} else {
-				DCLogger.debugLog("fail to register target block from json: " + name);
+				DCLogger.warnLog("fail to register target block from json: " + name);
 				return;
 			}
 		}
