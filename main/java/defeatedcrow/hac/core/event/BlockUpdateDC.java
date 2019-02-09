@@ -110,22 +110,24 @@ public class BlockUpdateDC {
 			 * WARM以上で強制溶解
 			 */
 			else if (block == Blocks.ICE) {
+				DCHeatTier h2 = ClimateAPI.register.getHeatTier(world, p);
 				if (clm.get().getHeat().getTier() < 0) {
-					// 隣接4つもチェックする
-					int r1 = world.rand.nextInt(4);
 					if (clm.get().getHeat().getTier() == DCHeatTier.ABSOLUTE.getTier()) {
 						world.setBlockState(p, Blocks.PACKED_ICE.getDefaultState(), 2);
 						world.notifyNeighborsOfStateChange(p, Blocks.PACKED_ICE, false);
 						event.setCanceled(true);
+						return;
 						// DCLogger.debugLog("Freeze!!");
-					}
-					if (roof) {
+					} else if (roof) {
 						event.setCanceled(true);
+						return;
 					}
-				} else if (clm.get().getHeat().getTier() > 0) {
+				}
+				if (!roof && h2.getTier() >= 0) {
 					world.setBlockState(p, Blocks.WATER.getDefaultState(), 2);
 					world.notifyNeighborsOfStateChange(p, Blocks.WATER, false);
 					event.setCanceled(true);
+					return;
 					// DCLogger.debugLog("Melted");
 				}
 				/*
@@ -134,11 +136,15 @@ public class BlockUpdateDC {
 				 */
 				return;
 			} else if (block == Blocks.SNOW || block == Blocks.SNOW_LAYER) {
+				DCHeatTier h2 = ClimateAPI.register.getHeatTier(world, p);
 				if (clm.get().getHeat().getTier() < 0 && roof) {
 					event.setCanceled(true);
-				} else if (clm.get().getHeat().getTier() > 0) {
+					return;
+				}
+				if (!roof && h2.getTier() >= 0) {
 					world.setBlockToAir(p);
 					event.setCanceled(true);
+					return;
 					// DCLogger.debugLog("Melted");
 				}
 				return;
@@ -206,6 +212,8 @@ public class BlockUpdateDC {
 		if (world.provider.hasSkyLight()) {
 			lim = pos.getY() + 5;
 		}
+		if (world.canSeeSky(pos))
+			return false;
 		while (pos2.getY() < lim && pos2.getY() < world.getActualHeight()) {
 			IBlockState state = world.getBlockState(pos2);
 			Block block = world.getBlockState(pos2).getBlock();
