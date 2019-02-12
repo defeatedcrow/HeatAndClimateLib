@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 2.7.6 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 2.7.7 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -257,6 +257,10 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○2.7.7
+　修正
+　　・Entityに対して左右クリックに行うとDupeする現象の修正
 
 ○2.7.6
 　変更

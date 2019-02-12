@@ -100,6 +100,10 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	public void onUpdate() {
 		super.onUpdate();
 
+		if (!world.isRemote && deadPos != null) {
+			this.dropAndDeath(deadPos);
+		}
+
 		if (this.posY < -16.0D) {
 			this.setDead();
 		}
@@ -296,6 +300,8 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 	/* レシピ */
 
+	public BlockPos deadPos;
+
 	/**
 	 * Tierによって焼ける早さが異なる
 	 */
@@ -450,7 +456,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			return false;
 		} else {
 			this.markVelocityChanged();
-			this.dropAndDeath(null);
+			deadPos = this.getPosition();
 			return false;
 		}
 	}
@@ -462,7 +468,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		}
 		if (player != null && !player.isSneaking()) {
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
-			this.dropAndDeath(player.getPosition());
+			deadPos = player.getPosition();
 			return true;
 		}
 		return false;
@@ -494,7 +500,7 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	@Override
 	public boolean doCollect(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack tool) {
 		if (!world.isRemote && !DCUtil.isEmpty(getDropItem())) {
-			this.dropAndDeath(player.getPosition());
+			deadPos = player.getPosition();
 			return true;
 		}
 		return false;

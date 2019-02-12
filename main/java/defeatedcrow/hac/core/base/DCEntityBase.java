@@ -73,6 +73,10 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 	public void onUpdate() {
 		super.onUpdate();
 
+		if (!world.isRemote && deadPos != null) {
+			this.dropAndDeath(deadPos);
+		}
+
 		if (this.posY < -16.0D) {
 			this.setDead();
 		}
@@ -226,6 +230,8 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 
 	/* レシピ */
 
+	public BlockPos deadPos;
+
 	@Override
 	public ItemStack getDropItem() {
 		return drops();
@@ -351,7 +357,7 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 			return false;
 		} else {
 			this.markVelocityChanged();
-			this.dropAndDeath(null);
+			deadPos = this.getPosition();
 			return false;
 		}
 	}
@@ -363,7 +369,7 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 		}
 		if (player != null && !player.isSneaking()) {
 			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
-			this.dropAndDeath(player.getPosition());
+			deadPos = player.getPosition();
 			return true;
 		}
 		return false;
@@ -384,7 +390,7 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 	@Override
 	public boolean doCollect(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack tool) {
 		if (!world.isRemote && !DCUtil.isEmpty(getDropItem())) {
-			this.dropAndDeath(player.getPosition());
+			deadPos = player.getPosition();
 			return true;
 		}
 		return false;
