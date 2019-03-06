@@ -11,9 +11,9 @@ import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.fluid.FluidDic;
 import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowRenderer;
+import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityRenderer;
-import defeatedcrow.hac.core.plugin.jei.ingredients.ItemStackRendererDC;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -34,7 +34,7 @@ public class FluidRecipeCategory implements IRecipeCategory {
 
 	public FluidRecipeCategory(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_fluidcraft_gui_jei.png");
-		background = guiHelper.createDrawable(location, 8, 6, 160, 105, 3, 0, 0, 0);
+		background = guiHelper.createDrawable(location, 8, 3, 160, 105);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		recipeLayout.getItemStacks().init(4, false, 93, 13);
 		recipeLayout.getItemStacks().set(4, outputs.get(0));
 		if (outputs.size() > 1) {
-			recipeLayout.getItemStacks().init(5, false, new ItemStackRendererDC(wrapper.chance), 94, 32, 16, 16, 0, 0);
+			recipeLayout.getItemStacks().init(5, false, 94, 32);
 			recipeLayout.getItemStacks().set(5, outputs.get(1));
 		}
 
@@ -115,27 +115,27 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		List<DCHeatTier> temps = wrapper.getTemps();
 		int i = 0;
 		for (DCHeatTier temp : temps) {
-			recipeLayout.getIngredientsGroup(DCHeatTier.class).init(i, true, new HeatTierRenderer(),
+			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).init(i, true, new HeatTierRenderer(),
 					38 + temp.getID() * 6, 74, 6, 5, 0, 0);
-			recipeLayout.getIngredientsGroup(DCHeatTier.class).set(i, temp);
+			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).set(i, temp);
 			i++;
 		}
 
 		List<DCHumidity> hums = wrapper.getHums();
 		int j = 0;
 		for (DCHumidity hum : hums) {
-			recipeLayout.getIngredientsGroup(DCHumidity.class).init(j, true, new HumidityRenderer(),
+			recipeLayout.getIngredientsGroup(ClimateTypes.HUM).init(j, true, new HumidityRenderer(),
 					38 + hum.getID() * 21, 84, 21, 5, 0, 0);
-			recipeLayout.getIngredientsGroup(DCHumidity.class).set(j, hum);
+			recipeLayout.getIngredientsGroup(ClimateTypes.HUM).set(j, hum);
 			j++;
 		}
 
 		List<DCAirflow> airs = wrapper.getAirs();
 		int k = 0;
 		for (DCAirflow air : airs) {
-			recipeLayout.getIngredientsGroup(DCAirflow.class).init(k, true, new AirflowRenderer(),
+			recipeLayout.getIngredientsGroup(ClimateTypes.AIR).init(k, true, new AirflowRenderer(),
 					38 + air.getID() * 21, 94, 21, 5, 0, 0);
-			recipeLayout.getIngredientsGroup(DCAirflow.class).set(k, air);
+			recipeLayout.getIngredientsGroup(ClimateTypes.AIR).set(k, air);
 			k++;
 		}
 	}

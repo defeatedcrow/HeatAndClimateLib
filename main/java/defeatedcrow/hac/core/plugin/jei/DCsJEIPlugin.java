@@ -14,6 +14,7 @@ import defeatedcrow.hac.core.climate.recipe.SpinningRecipe;
 import defeatedcrow.hac.core.plugin.DCsJEIPluginLists;
 import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowHelper;
 import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowRenderer;
+import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierHelper;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityHelper;
@@ -131,9 +132,9 @@ public class DCsJEIPlugin implements IModPlugin {
 
 	@Override
 	public void registerIngredients(IModIngredientRegistration registry) {
-		registry.register(DCHeatTier.class, DCHeatTier.createList(), new HeatTierHelper(), new HeatTierRenderer());
-		registry.register(DCHumidity.class, DCHumidity.createList(), new HumidityHelper(), new HumidityRenderer());
-		registry.register(DCAirflow.class, DCAirflow.createList(), new AirflowHelper(), new AirflowRenderer());
+		registry.register(ClimateTypes.TEMP, DCHeatTier.createList(), new HeatTierHelper(), new HeatTierRenderer());
+		registry.register(ClimateTypes.HUM, DCHumidity.createList(), new HumidityHelper(), new HumidityRenderer());
+		registry.register(ClimateTypes.AIR, DCAirflow.createList(), new AirflowHelper(), new AirflowRenderer());
 	}
 
 	public static final String BIOME_UID = "dcs_climate.biome";

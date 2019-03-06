@@ -11,9 +11,9 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 
 public class SpinningRecipeCategory implements IRecipeCategory {
 
@@ -21,7 +21,7 @@ public class SpinningRecipeCategory implements IRecipeCategory {
 
 	public SpinningRecipeCategory(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_mill_gui_jei.png");
-		background = guiHelper.createDrawable(location, 10, 20, 150, 40, 0, 0, 0, 0);
+		background = guiHelper.createDrawable(location, 10, 20, 150, 40);
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class SpinningRecipeCategory implements IRecipeCategory {
 
 	@Override
 	public String getTitle() {
-		return I18n.translateToLocal(getUid());
+		return I18n.format(getUid());
 	}
 
 	@Override

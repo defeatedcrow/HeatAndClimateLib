@@ -27,10 +27,10 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 	/*
 	 * RecipeListは温度ごとに別になっている。
 	 */
-	private static List<FluidCraftRecipe> list = new ArrayList<>();
+	private static List<IFluidRecipe> list = new ArrayList<>();
 
 	@Override
-	public List<FluidCraftRecipe> getRecipeList() {
+	public List<IFluidRecipe> getRecipeList() {
 		return list;
 	}
 
@@ -110,7 +110,7 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 	@Override
 	public void addRecipe(IFluidRecipe recipe) {
 		if (recipe instanceof FluidCraftRecipe && !hasEmptyInput(recipe.getInput()))
-			list.add((FluidCraftRecipe) recipe);
+			list.add(recipe);
 	}
 
 }

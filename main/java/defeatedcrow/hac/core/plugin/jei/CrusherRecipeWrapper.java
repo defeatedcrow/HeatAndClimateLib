@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import defeatedcrow.hac.core.climate.recipe.CrusherRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -49,9 +50,9 @@ public class CrusherRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ing) {
-		ing.setInputLists(ItemStack.class, input);
-		ing.setOutputs(ItemStack.class, output);
-		ing.setOutputs(FluidStack.class, outF);
+		ing.setInputLists(VanillaTypes.ITEM, input);
+		ing.setOutputs(VanillaTypes.ITEM, output);
+		ing.setOutputs(VanillaTypes.FLUID, outF);
 	}
 
 	public List<ItemStack> getInputs() {

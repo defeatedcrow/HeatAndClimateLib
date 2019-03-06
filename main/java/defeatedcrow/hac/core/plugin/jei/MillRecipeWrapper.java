@@ -6,6 +6,7 @@ import java.util.List;
 import defeatedcrow.hac.core.climate.recipe.MillRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -31,8 +32,8 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ing) {
-		ing.setInputs(ItemStack.class, input);
-		ing.setOutputs(ItemStack.class, output);
+		ing.setInputs(VanillaTypes.ITEM, input);
+		ing.setOutputs(VanillaTypes.ITEM, output);
 	}
 
 	public List<ItemStack> getInputs() {

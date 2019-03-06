@@ -25,10 +25,10 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 	/*
 	 * RecipeListは温度ごとに別になっている。
 	 */
-	private static List<ReactorRecipe> list = new ArrayList<>();
+	private static List<IReactorRecipe> list = new ArrayList<>();
 
 	@Override
-	public List<ReactorRecipe> getRecipeList() {
+	public List<IReactorRecipe> getRecipeList() {
 		return list;
 	}
 
@@ -136,7 +136,7 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 	@Override
 	public void addRecipe(IReactorRecipe recipe) {
 		if (recipe instanceof ReactorRecipe && !hasEmptyInput(recipe.getInput()))
-			list.add((ReactorRecipe) recipe);
+			list.add(recipe);
 	}
 
 }

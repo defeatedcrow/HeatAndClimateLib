@@ -7,6 +7,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowRenderer;
+import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityRenderer;
 import mezz.jei.api.IGuiHelper;
@@ -14,12 +15,13 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 
 public class ClimateCropCategory implements IRecipeCategory {
 
@@ -27,7 +29,7 @@ public class ClimateCropCategory implements IRecipeCategory {
 
 	public ClimateCropCategory(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_crops_gui_jei.png");
-		background = guiHelper.createDrawable(location, 8, 6, 160, 105, 3, 0, 0, 0);
+		background = guiHelper.createDrawable(location, 8, 3, 160, 105);
 	}
 
 	@Override
@@ -37,7 +39,7 @@ public class ClimateCropCategory implements IRecipeCategory {
 
 	@Override
 	public String getTitle() {
-		return I18n.translateToLocal(getUid());
+		return I18n.format(getUid());
 	}
 
 	@Override
@@ -60,8 +62,8 @@ public class ClimateCropCategory implements IRecipeCategory {
 		ClimateCropWrapper wrapper = ((ClimateCropWrapper) recipeWrapper);
 		// wrapper.getIngredients(ingredients);
 
-		List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
-		List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
+		List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
+		List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 
 		if (inputs.size() < 2 || outputs.isEmpty()) {
 			return;
@@ -81,27 +83,27 @@ public class ClimateCropCategory implements IRecipeCategory {
 		List<DCHeatTier> temps = wrapper.getTemps();
 		int i = 0;
 		for (DCHeatTier temp : temps) {
-			recipeLayout.getIngredientsGroup(DCHeatTier.class).init(i, true, new HeatTierRenderer(),
+			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).init(i, true, new HeatTierRenderer(),
 					38 + temp.getID() * 6, 74, 6, 5, 0, 0);
-			recipeLayout.getIngredientsGroup(DCHeatTier.class).set(i, temp);
+			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).set(i, temp);
 			i++;
 		}
 
 		List<DCHumidity> hums = wrapper.getHums();
 		int j = 0;
 		for (DCHumidity hum : hums) {
-			recipeLayout.getIngredientsGroup(DCHumidity.class).init(j, true, new HumidityRenderer(),
+			recipeLayout.getIngredientsGroup(ClimateTypes.HUM).init(j, true, new HumidityRenderer(),
 					38 + hum.getID() * 21, 84, 21, 5, 0, 0);
-			recipeLayout.getIngredientsGroup(DCHumidity.class).set(j, hum);
+			recipeLayout.getIngredientsGroup(ClimateTypes.HUM).set(j, hum);
 			j++;
 		}
 
 		List<DCAirflow> airs = wrapper.getAirs();
 		int k = 0;
 		for (DCAirflow air : airs) {
-			recipeLayout.getIngredientsGroup(DCAirflow.class).init(k, true, new AirflowRenderer(),
+			recipeLayout.getIngredientsGroup(ClimateTypes.AIR).init(k, true, new AirflowRenderer(),
 					38 + air.getID() * 21, 94, 21, 5, 0, 0);
-			recipeLayout.getIngredientsGroup(DCAirflow.class).set(k, air);
+			recipeLayout.getIngredientsGroup(ClimateTypes.AIR).set(k, air);
 			k++;
 		}
 	}

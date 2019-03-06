@@ -11,8 +11,10 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.core.climate.recipe.ReactorRecipe;
+import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import defeatedcrow.hac.core.util.DCUtil;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -87,11 +89,11 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ing) {
-		ing.setInputLists(ItemStack.class, input2);
-		ing.setInputs(FluidStack.class, inF);
-		ing.setOutputs(ItemStack.class, output);
-		ing.setOutputs(FluidStack.class, outF);
-		ing.setInputs(DCHeatTier.class, temps);
+		ing.setInputLists(VanillaTypes.ITEM, input2);
+		ing.setInputs(VanillaTypes.FLUID, inF);
+		ing.setOutputs(VanillaTypes.ITEM, output);
+		ing.setOutputs(VanillaTypes.FLUID, outF);
+		ing.setInputs(ClimateTypes.TEMP, temps);
 	}
 
 	public List<List<ItemStack>> getInputs() {
@@ -135,6 +137,11 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 			}
 		}
 
+		int i = (int) (rec.getSecondaryChance() * 100);
+		if (!DCUtil.isEmpty(rec.getSecondary()) && i > 0) {
+			mc.fontRenderer.drawString(i + "%", 110, 113, 0x0099FF, false);
+		}
+
 		IClimate clm = ClimateAPI.register.getClimateFromParam(minT, maxH, maxA);
 	}
 
@@ -151,7 +158,7 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 		if (y > 94 && y < 112) {
 			if (x > 108 && x < 124) {
 				int i = (int) (rec.getSecondaryChance() * 100);
-				if (rec.getSecondary() == null || i == 0) {
+				if (DCUtil.isEmpty(rec.getSecondary()) || i == 0) {
 					s.add("NO SECONDARY OUTPUT");
 				}
 			}

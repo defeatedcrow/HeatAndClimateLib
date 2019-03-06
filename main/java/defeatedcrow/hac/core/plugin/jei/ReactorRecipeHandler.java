@@ -6,6 +6,7 @@ import defeatedcrow.hac.core.climate.recipe.ReactorRecipe;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
+@Deprecated
 public class ReactorRecipeHandler implements IRecipeHandler<ReactorRecipe> {
 
 	@Override

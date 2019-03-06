@@ -17,6 +17,7 @@ import defeatedcrow.hac.core.climate.WeatherChecker;
 import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -26,7 +27,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -65,33 +65,6 @@ public class ItemClimateChecker extends DCItem {
 					if (ClimateCore.isDebug) {
 						player.sendMessage(
 								new TextComponentString("Climate int: " + Integer.toBinaryString(c.getClimateInt())));
-						// weather
-						int time = DCTimeHelper.currentTime(world);
-						int dim = world.provider.getDimension();
-						int count = 0;
-						int sun = 0;
-						float rain = 0F;
-						if (WeatherChecker.rainPowerMap.containsKey(dim)) {
-							rain = WeatherChecker.rainPowerMap.get(dim);
-						}
-						if (WeatherChecker.rainCountMap.containsKey(dim)) {
-							count = WeatherChecker.rainCountMap.get(dim);
-						}
-						if (WeatherChecker.sunCountMap.containsKey(dim)) {
-							sun = WeatherChecker.sunCountMap.get(dim);
-						}
-
-						player.sendMessage(new TextComponentString("== current weather info =="));
-						player.sendMessage(
-								new TextComponentString("remote world: " + world.isRemote + ". time: " + time));
-						player.sendMessage(new TextComponentString(
-								"world rain: " + world.rainingStrength + ", time " + count + ", sun : " + sun));
-						player.sendMessage(new TextComponentString(
-								"biome temp: " + String.format("%.2f", world.getBiome(pos).getTemperature(pos))));
-						if (CoreConfigDC.enableWeatherEffect) {
-							player.sendMessage(new TextComponentString("weather offset: " + String.format("%.2f",
-									WeatherChecker.getTempOffsetFloat(dim, world.provider.doesWaterVaporize()))));
-						}
 
 						if (player.isSneaking()) {
 							DCLogger.debugLog("== forced smelting ==");
@@ -118,17 +91,50 @@ public class ItemClimateChecker extends DCItem {
 							}
 						}
 					}
-					return EnumActionResult.SUCCESS;
 				}
+			}
+
+			if (ClimateCore.isDebug) {
+				showCurrentBiomeData(player, world, pos);
 			}
 		}
 		return EnumActionResult.SUCCESS;
 	}
 
+	private void showCurrentBiomeData(EntityPlayer player, World world, BlockPos pos) {
+		// weather
+		int time = DCTimeHelper.currentTime(world);
+		int dim = world.provider.getDimension();
+		int count = 0;
+		int sun = 0;
+		float rain = 0F;
+		if (WeatherChecker.rainPowerMap.containsKey(dim)) {
+			rain = WeatherChecker.rainPowerMap.get(dim);
+		}
+		if (WeatherChecker.rainCountMap.containsKey(dim)) {
+			count = WeatherChecker.rainCountMap.get(dim);
+		}
+		if (WeatherChecker.sunCountMap.containsKey(dim)) {
+			sun = WeatherChecker.sunCountMap.get(dim);
+		}
+
+		player.sendMessage(new TextComponentString("== current weather info =="));
+		player.sendMessage(new TextComponentString("remote world: " + world.isRemote + ". time: " + time));
+		player.sendMessage(
+				new TextComponentString("world rain: " + world.rainingStrength + ", time " + count + ", sun : " + sun));
+		player.sendMessage(new TextComponentString("biome name: " + world.getBiome(pos).getBiomeName()));
+		player.sendMessage(new TextComponentString(
+				"biome temp: " + String.format("%.2f", world.getBiome(pos).getTemperature(pos))));
+		if (CoreConfigDC.enableWeatherEffect) {
+			player.sendMessage(new TextComponentString("weather offset: " + String.format("%.2f",
+					WeatherChecker.getTempOffsetFloat(dim, world.provider.doesWaterVaporize()))));
+		}
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation2(ItemStack stack, @Nullable World world, List<String> tooltip) {
-		tooltip.add(I18n.translateToLocal("dcs.climate.tip.checker"));
+		tooltip.add(I18n.format("dcs.climate.tip.checker"));
 	}
 
 	@Override

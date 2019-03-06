@@ -15,17 +15,17 @@ import net.minecraftforge.oredict.OreDictionary;
 public class CrusherRecipeRegister implements ICrusherRecipeRegister {
 
 	public CrusherRecipeRegister() {
-		this.list = new ArrayList<CrusherRecipe>();
+		this.list = new ArrayList<ICrusherRecipe>();
 	}
 
 	public ICrusherRecipeRegister instance() {
 		return RecipeAPI.registerCrushers;
 	}
 
-	private static List<CrusherRecipe> list;
+	private static List<ICrusherRecipe> list;
 
 	@Override
-	public List<? extends ICrusherRecipe> getRecipeList() {
+	public List<ICrusherRecipe> getRecipeList() {
 		return this.list;
 	}
 
@@ -84,7 +84,7 @@ public class CrusherRecipeRegister implements ICrusherRecipeRegister {
 	@Override
 	public void addRecipe(ICrusherRecipe recipe) {
 		if (recipe instanceof CrusherRecipe) {
-			list.add((CrusherRecipe) recipe);
+			list.add(recipe);
 		}
 	}
 

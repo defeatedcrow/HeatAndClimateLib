@@ -9,6 +9,7 @@ import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.EnumSeason;
+import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
@@ -65,9 +66,9 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ing) {
-		ing.setInputs(DCHeatTier.class, temps);
-		ing.setInputs(DCHumidity.class, hums);
-		ing.setInputs(DCAirflow.class, airs);
+		ing.setInputs(ClimateTypes.TEMP, temps);
+		ing.setInputs(ClimateTypes.HUM, hums);
+		ing.setInputs(ClimateTypes.AIR, airs);
 	}
 
 	public List<DCHeatTier> getTemps() {

@@ -14,17 +14,17 @@ import net.minecraftforge.oredict.OreDictionary;
 public class MillRecipeRegister implements IMillRecipeRegister {
 
 	public MillRecipeRegister() {
-		this.list = new ArrayList<MillRecipe>();
+		this.list = new ArrayList<IMillRecipe>();
 	}
 
 	public IMillRecipeRegister instance() {
 		return RecipeAPI.registerMills;
 	}
 
-	private static List<MillRecipe> list;
+	private static List<IMillRecipe> list;
 
 	@Override
-	public List<? extends IMillRecipe> getRecipeList() {
+	public List<IMillRecipe> getRecipeList() {
 		return this.list;
 	}
 
@@ -59,7 +59,7 @@ public class MillRecipeRegister implements IMillRecipeRegister {
 	@Override
 	public void addRecipe(IMillRecipe recipe) {
 		if (recipe instanceof MillRecipe) {
-			list.add((MillRecipe) recipe);
+			list.add(recipe);
 		}
 	}
 

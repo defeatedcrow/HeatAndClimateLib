@@ -6,6 +6,7 @@ import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
+@Deprecated
 public class FluidRecipeHandler implements IRecipeHandler<FluidCraftRecipe> {
 
 	@Override

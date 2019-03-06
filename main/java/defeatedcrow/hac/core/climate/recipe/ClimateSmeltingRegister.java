@@ -23,8 +23,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	/*
 	 * RecipeListは温度ごとに別になっている。
 	 */
-	// todo Make it a list of IClimateSmelting instead of ClimateSmelting?
-	private List<ClimateSmelting> recipes = new ArrayList<>();
+	private List<IClimateSmelting> recipes = new ArrayList<>();
 
 	public ClimateSmeltingRegister() {}
 
@@ -33,7 +32,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	}
 
 	@Override
-	public List<ClimateSmelting> getRecipeList() {
+	public List<IClimateSmelting> getRecipeList() {
 		return recipes;
 	}
 
@@ -80,7 +79,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	@Override
 	public void addRecipe(IClimateSmelting recipe) {
 		if (recipe instanceof ClimateSmelting)
-			getRecipeList().add((ClimateSmelting) recipe);
+			getRecipeList().add(recipe);
 	}
 
 	@Override

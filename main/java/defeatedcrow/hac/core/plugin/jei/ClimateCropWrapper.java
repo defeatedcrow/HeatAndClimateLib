@@ -7,7 +7,9 @@ import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.cultivate.IClimateCrop;
+import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -73,11 +75,11 @@ public class ClimateCropWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ing) {
-		ing.setInputs(ItemStack.class, input);
-		ing.setOutputs(ItemStack.class, output);
-		ing.setInputs(DCHeatTier.class, temps);
-		ing.setInputs(DCHumidity.class, hums);
-		ing.setInputs(DCAirflow.class, airs);
+		ing.setInputs(VanillaTypes.ITEM, input);
+		ing.setOutputs(VanillaTypes.ITEM, output);
+		ing.setInputs(ClimateTypes.TEMP, temps);
+		ing.setInputs(ClimateTypes.HUM, hums);
+		ing.setInputs(ClimateTypes.AIR, airs);
 	}
 
 	@Override

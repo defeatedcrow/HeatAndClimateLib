@@ -7,6 +7,7 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 
+@Deprecated
 public class ClimateCropHandler implements IRecipeHandler<IClimateCrop> {
 
 	@Override

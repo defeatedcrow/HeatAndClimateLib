@@ -8,8 +8,8 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.fluid.FluidDic;
 import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
+import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
-import defeatedcrow.hac.core.plugin.jei.ingredients.ItemStackRendererDC;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -30,7 +30,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 
 	public ReactorRecipeCategory(IGuiHelper guiHelper) {
 		ResourceLocation location = new ResourceLocation("dcs_climate", "textures/gui/c_reactor_gui_jei.png");
-		background = guiHelper.createDrawable(location, 4, 4, 168, 120, 2, 0, 0, 0);
+		background = guiHelper.createDrawable(location, 4, 2, 168, 120);
 	}
 
 	@Override
@@ -85,8 +85,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 			recipeLayout.getItemStacks().init(4, false, 89, 94);
 			recipeLayout.getItemStacks().set(4, outputs.get(0));
 			if (outputs.size() > 1) {
-				recipeLayout.getItemStacks().init(5, false, new ItemStackRendererDC(wrapper.chance), 108, 95, 16, 16, 0,
-						0);
+				recipeLayout.getItemStacks().init(5, false, 108, 95);
 				recipeLayout.getItemStacks().set(5, outputs.get(1));
 			}
 		}
@@ -139,9 +138,9 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 		List<DCHeatTier> temps = wrapper.getTemps();
 		int i = 0;
 		for (DCHeatTier temp : temps) {
-			recipeLayout.getIngredientsGroup(DCHeatTier.class).init(i, true, new HeatTierRenderer(),
+			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).init(i, true, new HeatTierRenderer(),
 					2 + temp.getID() * 6, 103, 6, 5, 0, 0);
-			recipeLayout.getIngredientsGroup(DCHeatTier.class).set(i, temp);
+			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).set(i, temp);
 			i++;
 		}
 	}

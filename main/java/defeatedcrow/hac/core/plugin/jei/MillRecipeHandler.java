@@ -7,6 +7,7 @@ import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 
+@Deprecated
 public class MillRecipeHandler implements IRecipeHandler<MillRecipe> {
 
 	@Override

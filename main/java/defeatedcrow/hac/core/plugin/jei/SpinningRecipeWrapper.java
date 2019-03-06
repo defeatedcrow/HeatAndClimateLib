@@ -5,6 +5,7 @@ import java.util.List;
 
 import defeatedcrow.hac.core.climate.recipe.SpinningRecipe;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -25,8 +26,8 @@ public class SpinningRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ing) {
-		ing.setInputs(ItemStack.class, input);
-		ing.setOutputs(ItemStack.class, output);
+		ing.setInputs(VanillaTypes.ITEM, input);
+		ing.setOutputs(VanillaTypes.ITEM, output);
 	}
 
 	public List<ItemStack> getInputs() {

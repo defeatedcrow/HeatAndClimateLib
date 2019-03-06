@@ -4,6 +4,7 @@ import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.world.biome.Biome;
 
+@Deprecated
 public class ClimateBiomeHandler implements IRecipeHandler<Biome> {
 
 	@Override

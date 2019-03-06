@@ -7,6 +7,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.plugin.jei.ingredients.AirflowRenderer;
+import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HeatTierRenderer;
 import defeatedcrow.hac.core.plugin.jei.ingredients.HumidityRenderer;
 import mezz.jei.api.IGuiHelper;
@@ -17,8 +18,8 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 
 public class ClimateBiomeCategory implements IRecipeCategory {
 
@@ -36,7 +37,7 @@ public class ClimateBiomeCategory implements IRecipeCategory {
 
 	@Override
 	public String getTitle() {
-		return I18n.translateToLocal(getUid());
+		return I18n.format(getUid());
 	}
 
 	@Override
@@ -61,18 +62,18 @@ public class ClimateBiomeCategory implements IRecipeCategory {
 
 		List<DCHeatTier> temps = wrapper.getTemps();
 		for (int i = 0; i < 4; i++) {
-			recipeLayout.getIngredientsGroup(DCHeatTier.class).init(i, true, new HeatTierRenderer(), 17 + 21 * i, 45,
+			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).init(i, true, new HeatTierRenderer(), 17 + 21 * i, 45,
 					20, 5, 0, 0);
-			recipeLayout.getIngredientsGroup(DCHeatTier.class).set(i, temps.get(i));
+			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).set(i, temps.get(i));
 		}
 
 		List<DCHumidity> hums = wrapper.getHums();
-		recipeLayout.getIngredientsGroup(DCHumidity.class).init(0, true, new HumidityRenderer(), 17, 66, 40, 5, 0, 0);
-		recipeLayout.getIngredientsGroup(DCHumidity.class).set(0, hums.get(0));
+		recipeLayout.getIngredientsGroup(ClimateTypes.HUM).init(0, true, new HumidityRenderer(), 17, 66, 40, 5, 0, 0);
+		recipeLayout.getIngredientsGroup(ClimateTypes.HUM).set(0, hums.get(0));
 
 		List<DCAirflow> airs = wrapper.getAirs();
-		recipeLayout.getIngredientsGroup(DCAirflow.class).init(0, true, new AirflowRenderer(), 17, 87, 40, 5, 0, 0);
-		recipeLayout.getIngredientsGroup(DCAirflow.class).set(0, airs.get(0));
+		recipeLayout.getIngredientsGroup(ClimateTypes.AIR).init(0, true, new AirflowRenderer(), 17, 87, 40, 5, 0, 0);
+		recipeLayout.getIngredientsGroup(ClimateTypes.AIR).set(0, airs.get(0));
 
 	}
 

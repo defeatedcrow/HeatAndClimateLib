@@ -9,8 +9,10 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
+import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import defeatedcrow.hac.core.util.DCUtil;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -97,13 +99,13 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void getIngredients(IIngredients ing) {
-		ing.setInputLists(ItemStack.class, input);
-		ing.setInputs(FluidStack.class, inF);
-		ing.setOutputs(ItemStack.class, output);
-		ing.setOutputs(FluidStack.class, outF);
-		ing.setInputs(DCHeatTier.class, temps);
-		ing.setInputs(DCHumidity.class, hums);
-		ing.setInputs(DCAirflow.class, airs);
+		ing.setInputLists(VanillaTypes.ITEM, input);
+		ing.setInputs(VanillaTypes.FLUID, inF);
+		ing.setOutputs(VanillaTypes.ITEM, output);
+		ing.setOutputs(VanillaTypes.FLUID, outF);
+		ing.setInputs(ClimateTypes.TEMP, temps);
+		ing.setInputs(ClimateTypes.HUM, hums);
+		ing.setInputs(ClimateTypes.AIR, airs);
 	}
 
 	public List<List<ItemStack>> getInputs() {
