@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import defeatedcrow.hac.api.magic.CharmType;
-import defeatedcrow.hac.api.magic.IJewelAmulet;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.plugin.baubles.DCPluginBaubles;
@@ -62,23 +61,12 @@ public class LivingHurtDC {
 							}
 						}
 					}
-
-					ItemStack item2 = DCPluginBaubles.getBaublesAmulet(player);
-					if (!DCUtil.isEmpty(item2)) {
-						IJewelAmulet charm = (IJewelAmulet) item2.getItem();
-						prev += charm.reduceDamage(source, item2);
-						if (charm.onDiffence(source, player, newDam, item2)) {
-							if (DCUtil.isEmpty(charm.consumeCharmItem(item2))) {
-								DCPluginBaubles.setBaublesCharmEmpty(player);
-							}
-						}
-					}
 				}
 			}
 
-			Map<Integer, ItemStack> amulets = DCUtil.getAmulets(living);
+			Map<Integer, ItemStack> amulets = DCUtil.getMobCharm(living);
 			for (Entry<Integer, ItemStack> entry : amulets.entrySet()) {
-				IJewelAmulet amu = (IJewelAmulet) entry.getValue().getItem();
+				IJewelCharm amu = (IJewelCharm) entry.getValue().getItem();
 				prev += amu.reduceDamage(source, entry.getValue());
 				if (amu.onDiffence(source, living, newDam, entry.getValue())) {
 					if (DCUtil.isEmpty(amu.consumeCharmItem(entry.getValue()))) {
@@ -98,7 +86,7 @@ public class LivingHurtDC {
 						DCLogger.debugLog("attack charm");
 						IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
 						add *= charm.increaceDamage(living, entry.getValue());
-						if (charm.onAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
+						if (charm.onPlayerAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
 							if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
 								attacker.inventory.setInventorySlotContents(entry.getKey(), ItemStack.EMPTY);
 								attacker.inventory.markDirty();
@@ -119,24 +107,13 @@ public class LivingHurtDC {
 								}
 							}
 						}
-
-						ItemStack item2 = DCPluginBaubles.getBaublesAmulet(attacker);
-						if (!DCUtil.isEmpty(item2)) {
-							IJewelAmulet charm = (IJewelAmulet) item2.getItem();
-							add += charm.increaceDamage(living, item2);
-							if (charm.onAttacking(attacker, living, source, newDam - prev, item2)) {
-								if (DCUtil.isEmpty(charm.consumeCharmItem(item2))) {
-									DCPluginBaubles.setBaublesCharmEmpty(attacker);
-								}
-							}
-						}
 					}
 				}
 				if (source.getTrueSource() instanceof EntityLivingBase) {
 					EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
-					Map<Integer, ItemStack> amulets2 = DCUtil.getAmulets(attacker);
+					Map<Integer, ItemStack> amulets2 = DCUtil.getMobCharm(attacker);
 					for (Entry<Integer, ItemStack> entry : amulets2.entrySet()) {
-						IJewelAmulet amu = (IJewelAmulet) entry.getValue().getItem();
+						IJewelCharm amu = (IJewelCharm) entry.getValue().getItem();
 						add2 += amu.increaceDamage(living, entry.getValue());
 						if (amu.onAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
 							if (DCUtil.isEmpty(amu.consumeCharmItem(entry.getValue()))) {

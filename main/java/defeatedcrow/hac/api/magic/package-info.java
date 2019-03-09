@@ -8,7 +8,7 @@
  * 宝石アクセサリーなどの魔法効果を扱うAPIです。<br>
  * 判定用インターフェイスや、効果の発動に干渉するEventを含みます。
  */
-@API(apiVersion = "2.1.1", owner = "dcs_lib", provides = "DCsHaCAPI|magic")
+@API(apiVersion = "2.2.0", owner = "dcs_lib", provides = "DCsHaCAPI|magic")
 package defeatedcrow.hac.api.magic;
 
 import net.minecraftforge.fml.common.API;

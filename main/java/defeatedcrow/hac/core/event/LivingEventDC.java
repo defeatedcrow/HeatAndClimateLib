@@ -11,7 +11,6 @@ import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.damage.ClimateDamageEvent;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.damage.DamageSourceClimate;
-import defeatedcrow.hac.api.magic.IJewelAmulet;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
@@ -133,10 +132,10 @@ public class LivingEventDC {
 
 				/* Amulet */
 
-				Map<Integer, ItemStack> charms = DCUtil.getAmulets(living);
+				Map<Integer, ItemStack> charms = DCUtil.getMobCharm(living);
 				for (ItemStack item2 : charms.values()) {
 					int m = item2.getMetadata();
-					IJewelAmulet amu = (IJewelAmulet) item2.getItem();
+					IJewelCharm amu = (IJewelCharm) item2.getItem();
 					amu.constantEffect(living, item2);
 				}
 				charms.clear();
@@ -268,12 +267,6 @@ public class LivingEventDC {
 					if (!DCUtil.isEmpty(item)) {
 						IJewelCharm charm = (IJewelCharm) item.getItem();
 						charm.constantEffect(player, item);
-					}
-
-					ItemStack item2 = DCPluginBaubles.getBaublesAmulet(player);
-					if (!DCUtil.isEmpty(item2)) {
-						IJewelAmulet amulet = (IJewelAmulet) item2.getItem();
-						amulet.constantEffect(player, item2);
 					}
 				}
 			}

@@ -2,6 +2,10 @@ package defeatedcrow.hac.api.magic;
 
 public abstract interface IJewel {
 
-	CharmType getType(int meta);
+	CharmType getCharmType(int meta);
+
+	MagicType getType(int meta);
+
+	MagicColor getColor(int meta);
 
 }

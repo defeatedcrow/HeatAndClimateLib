@@ -8,6 +8,8 @@ public enum CharmType {
 	DEFFENCE,
 	/* 攻撃追加効果 */
 	ATTACK,
+	/* プレイヤー攻撃追加効果 */
+	PLAYER_ATTACK,
 	/* ツール使用時追加効果 */
 	TOOL,
 	/* 右クリック使用による任意発動型 */

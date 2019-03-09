@@ -14,7 +14,6 @@ import net.minecraft.util.math.BlockPos;
  */
 public interface IJewelCharm extends IJewel {
 
-	// Defense charm
 	/**
 	 * DIFFENCE<br>
 	 * プレイヤーがダメージを受けたときに呼ばれ、軽減量を返す
@@ -26,7 +25,7 @@ public interface IJewelCharm extends IJewel {
 	 * プレイヤーがダメージを受けたときに呼ばれ、被弾時のアクションを起こす。<br>
 	 * trueの場合、チャームアイテムのダメージ処理を呼ぶ(消費、耐久値減少など)
 	 */
-	boolean onDiffence(DamageSource source, EntityLivingBase target, float damage, ItemStack charm);
+	boolean onDiffence(DamageSource source, EntityLivingBase owner, float damage, ItemStack charm);
 
 	// Attack charm
 	/**
@@ -37,10 +36,18 @@ public interface IJewelCharm extends IJewel {
 
 	/**
 	 * ATTACK<br>
+	 * ダメージを与えたときに呼ばれ、アクションを起こす。<br>
+	 * trueの場合、チャームアイテムのダメージ処理を呼ぶ(消費、耐久値減少など)
+	 */
+	boolean onAttacking(EntityLivingBase owner, EntityLivingBase target, DamageSource source, float damage,
+			ItemStack charm);
+
+	/**
+	 * PLAYER_ATTACK<br>
 	 * プレイヤーがダメージを与えたときに呼ばれ、アクションを起こす。<br>
 	 * trueの場合、チャームアイテムのダメージ処理を呼ぶ(消費、耐久値減少など)
 	 */
-	boolean onAttacking(EntityPlayer player, EntityLivingBase target, DamageSource source, float damage,
+	boolean onPlayerAttacking(EntityPlayer owner, EntityLivingBase target, DamageSource source, float damage,
 			ItemStack charm);
 
 	// Tool charm
@@ -49,14 +56,14 @@ public interface IJewelCharm extends IJewel {
 	 * プレイヤーがブロックを破壊した時に呼ばれる。<br>
 	 * trueの場合、チャームアイテムのダメージ処理を呼ぶ(消費、耐久値減少など)
 	 */
-	boolean onToolUsing(EntityPlayer player, BlockPos pos, IBlockState state, ItemStack charm);
+	boolean onToolUsing(EntityLivingBase owner, BlockPos pos, IBlockState state, ItemStack charm);
 
 	// Constant charm
 	/**
 	 * CONSTANT<br>
 	 * プレイヤーのTick更新ごとに呼ばれる常時効果<br>
 	 */
-	void constantEffect(EntityPlayer player, ItemStack charm);
+	void constantEffect(EntityLivingBase owner, ItemStack charm);
 
 	// X key using
 	/**
@@ -65,7 +72,7 @@ public interface IJewelCharm extends IJewel {
 	 *
 	 * @return
 	 */
-	boolean onUsing(EntityPlayer player, ItemStack charm);
+	boolean onUsing(EntityPlayer owner, ItemStack charm);
 
 	// active check
 	/**

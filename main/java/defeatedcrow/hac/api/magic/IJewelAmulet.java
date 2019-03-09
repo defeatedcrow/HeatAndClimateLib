@@ -9,6 +9,7 @@ import net.minecraft.util.DamageSource;
  * プレイヤー以外のMobのインベントリにあると効果を発揮する、宝石アクセサリの一種です。<br>
  * インベントリのどこにおいても効果があります。
  */
+@Deprecated
 public interface IJewelAmulet {
 
 	/**

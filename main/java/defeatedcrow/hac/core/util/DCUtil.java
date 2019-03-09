@@ -13,7 +13,6 @@ import com.google.common.collect.Lists;
 import defeatedcrow.hac.api.climate.BlockSet;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.magic.CharmType;
-import defeatedcrow.hac.api.magic.IJewelAmulet;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
@@ -319,20 +318,20 @@ public class DCUtil {
 			if (!isEmpty(check) && check.getItem() instanceof IJewelCharm) {
 				IJewelCharm charm = (IJewelCharm) check.getItem();
 				int m = check.getItemDamage();
-				if (type == null || charm.getType(m) == type)
+				if (type == null || charm.getCharmType(m) == type)
 					ret.put(i, check);
 			}
 		}
 		return ret;
 	}
 
-	public static Map<Integer, ItemStack> getAmulets(EntityLivingBase living) {
+	public static Map<Integer, ItemStack> getMobCharm(EntityLivingBase living) {
 		Map<Integer, ItemStack> ret = new HashMap<Integer, ItemStack>();
 		if (living == null) {
 			return ret;
 		} else {
 			if (Loader.isModLoaded("schr0chastmob") && ChastMobPlugin.isChastMob(living)) {
-				ret.putAll(ChastMobPlugin.getAmulet(living));
+				ret.putAll(ChastMobPlugin.getCharms(living));
 				return ret;
 			}
 
@@ -340,7 +339,7 @@ public class DCUtil {
 			if (handler != null) {
 				for (int i = 0; i < handler.getSlots(); i++) {
 					ItemStack check = handler.getStackInSlot(i);
-					if (!isEmpty(check) && check.getItem() instanceof IJewelAmulet) {
+					if (!isEmpty(check) && check.getItem() instanceof IJewelCharm) {
 						ret.put(i, check);
 					}
 				}
@@ -348,7 +347,7 @@ public class DCUtil {
 				IInventory inv = ((EntityVillager) living).getVillagerInventory();
 				for (int i = 0; i < inv.getSizeInventory(); i++) {
 					ItemStack check = inv.getStackInSlot(i);
-					if (!isEmpty(check) && check.getItem() instanceof IJewelAmulet) {
+					if (!isEmpty(check) && check.getItem() instanceof IJewelCharm) {
 						ret.put(i, check);
 					}
 				}

@@ -38,8 +38,8 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 public class ClimateCore {
 	public static final String MOD_ID = "dcs_lib";
 	public static final String MOD_NAME = "HeatAndClimateLib";
-	public static final int MOD_MEJOR = 2;
-	public static final int MOD_MINOR = 8;
+	public static final int MOD_MEJOR = 3;
+	public static final int MOD_MINOR = 0;
 	public static final int MOD_BUILD = 0;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.12,1.12.2]";
@@ -59,9 +59,6 @@ public class ClimateCore {
 	public static boolean isDebug = false;
 	public static boolean serverStarted = false;
 	public static boolean loadedMain = false;
-
-	// plugin
-	public static boolean loadWeather2 = false;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -107,10 +104,6 @@ public class ClimateCore {
 		ArmorResistantRegister.post();
 		HeatBlockRegister.post();
 		ClimateRegister.post();
-
-		if (Loader.isModLoaded("weather2")) {
-			loadWeather2 = true;
-		}
 	}
 
 	@EventHandler
