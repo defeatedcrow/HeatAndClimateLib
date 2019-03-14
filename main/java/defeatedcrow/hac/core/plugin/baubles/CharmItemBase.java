@@ -2,6 +2,7 @@ package defeatedcrow.hac.core.plugin.baubles;
 
 import baubles.api.IBauble;
 import defeatedcrow.hac.api.magic.IJewelCharm;
+import defeatedcrow.hac.api.magic.MagicType;
 import defeatedcrow.hac.core.base.DCItem;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Optional;
@@ -15,7 +16,21 @@ public abstract class CharmItemBase extends DCItem implements IJewelCharm, IBaub
 	@Override
 	@Method(modid = "baubles")
 	public baubles.api.BaubleType getBaubleType(ItemStack arg0) {
-		return baubles.api.BaubleType.CHARM;
+		MagicType type = getType(arg0.getItemDamage());
+		switch (type) {
+		case AMULET:
+			return baubles.api.BaubleType.AMULET;
+		case BADGE:
+			return baubles.api.BaubleType.CHARM;
+		case PENDANT:
+			return baubles.api.BaubleType.AMULET;
+		case RING:
+			return baubles.api.BaubleType.RING;
+		default:
+			return baubles.api.BaubleType.CHARM;
+
+		}
+
 	}
 
 }

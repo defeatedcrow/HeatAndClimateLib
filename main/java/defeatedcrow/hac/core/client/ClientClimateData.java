@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.client;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -87,12 +88,14 @@ public class ClientClimateData {
 		}
 
 		if (Loader.isModLoaded("baubles")) {
-			ItemStack charm = DCPluginBaubles.getBaublesCharm(player, CharmType.DEFFENCE);
-			if (!DCUtil.isEmpty(charm)) {
-				if (isCold)
-					coldPrev += ((IJewelCharm) charm.getItem()).reduceDamage(source, charm);
-				else
-					heatPrev += ((IJewelCharm) charm.getItem()).reduceDamage(source, charm);
+			List<ItemStack> charms2 = DCPluginBaubles.getBaublesCharm(player, CharmType.DEFFENCE);
+			for (ItemStack charm : charms2) {
+				if (!DCUtil.isEmpty(charm)) {
+					if (isCold)
+						coldPrev += ((IJewelCharm) charm.getItem()).reduceDamage(source, charm);
+					else
+						heatPrev += ((IJewelCharm) charm.getItem()).reduceDamage(source, charm);
+				}
 			}
 		}
 

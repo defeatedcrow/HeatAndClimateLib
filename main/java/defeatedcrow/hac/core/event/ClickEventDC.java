@@ -49,12 +49,14 @@ public class ClickEventDC {
 			}
 
 			if (Loader.isModLoaded("baubles")) {
-				ItemStack item = DCPluginBaubles.getBaublesCharm(event.getPlayer(), CharmType.TOOL);
-				if (!DCUtil.isEmpty(item)) {
-					IJewelCharm charm = (IJewelCharm) item.getItem();
-					if (charm.onToolUsing(event.getPlayer(), event.getPos(), event.getState(), item)) {
-						if (DCUtil.isEmpty(charm.consumeCharmItem(item))) {
-							DCPluginBaubles.setBaublesCharmEmpty(event.getPlayer());
+				List<ItemStack> items = DCPluginBaubles.getBaublesCharm(event.getPlayer(), CharmType.TOOL);
+				for (ItemStack item : items) {
+					if (!DCUtil.isEmpty(item)) {
+						IJewelCharm charm = (IJewelCharm) item.getItem();
+						if (charm.onToolUsing(event.getPlayer(), event.getPos(), event.getState(), item)) {
+							if (DCUtil.isEmpty(charm.consumeCharmItem(item))) {
+								DCPluginBaubles.setBaublesCharmEmpty(event.getPlayer());
+							}
 						}
 					}
 				}

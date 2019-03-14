@@ -2,6 +2,7 @@ package defeatedcrow.hac.core.event;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
@@ -263,10 +264,12 @@ public class LivingEventDC {
 				charms.clear();
 
 				if (Loader.isModLoaded("baubles")) {
-					ItemStack item = DCPluginBaubles.getBaublesCharm(player, null);
-					if (!DCUtil.isEmpty(item)) {
-						IJewelCharm charm = (IJewelCharm) item.getItem();
-						charm.constantEffect(player, item);
+					List<ItemStack> charms2 = DCPluginBaubles.getBaublesCharm(player, null);
+					for (ItemStack item : charms2) {
+						if (!DCUtil.isEmpty(item)) {
+							IJewelCharm charm = (IJewelCharm) item.getItem();
+							charm.constantEffect(player, item);
+						}
 					}
 				}
 			}

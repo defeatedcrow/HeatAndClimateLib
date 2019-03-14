@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.packet;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -37,14 +38,16 @@ public class MHandlerCharmKey implements IMessageHandler<MessageCharmKey, IMessa
 				}
 			}
 			if (Loader.isModLoaded("baubles")) {
-				ItemStack item = DCPluginBaubles.getBaublesCharm(player, CharmType.KEY);
-				if (!DCUtil.isEmpty(item)) {
-					IJewelCharm charm = (IJewelCharm) item.getItem();
-					if (charm.onUsing(player, item)) {
-						if (DCUtil.isEmpty(charm.consumeCharmItem(item))) {
-							DCPluginBaubles.setBaublesCharmEmpty(player);
-							player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
-							return null;
+				List<ItemStack> items = DCPluginBaubles.getBaublesCharm(player, CharmType.KEY);
+				for (ItemStack item : items) {
+					if (!DCUtil.isEmpty(item)) {
+						IJewelCharm charm = (IJewelCharm) item.getItem();
+						if (charm.onUsing(player, item)) {
+							if (DCUtil.isEmpty(charm.consumeCharmItem(item))) {
+								DCPluginBaubles.setBaublesCharmEmpty(player);
+								player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
+								return null;
+							}
 						}
 					}
 				}

@@ -1,5 +1,10 @@
 package defeatedcrow.hac.core.plugin.baubles;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import baubles.api.BaublesApi;
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
@@ -9,22 +14,34 @@ import net.minecraft.item.ItemStack;
 
 public class DCPluginBaubles {
 
-	public static ItemStack getBaublesCharm(EntityPlayer player, CharmType type) {
-		ItemStack item = BaublesApi.getBaublesHandler(player).getStackInSlot(6);
-		if (!DCUtil.isEmpty(item) && item.getItem() instanceof IJewelCharm) {
-			IJewelCharm charm = (IJewelCharm) item.getItem();
-			if (type == null || charm.getCharmType(item.getItemDamage()) == type) {
-				return item;
+	public static List<ItemStack> getBaublesCharm(EntityPlayer player, CharmType type) {
+		ArrayList<ItemStack> ret = Lists.newArrayList();
+		for (int i = 0; i < 7; i++) {
+			ItemStack item = BaublesApi.getBaublesHandler(player).getStackInSlot(i);
+			if (!DCUtil.isEmpty(item) && item.getItem() instanceof IJewelCharm) {
+				IJewelCharm charm = (IJewelCharm) item.getItem();
+				if (type == null || charm.getCharmType(item.getItemDamage()) == type) {
+					ret.add(item);
+				}
 			}
 		}
-		return ItemStack.EMPTY;
+
+		return ret;
 	}
 
 	public static boolean hasBaublesCharm(EntityPlayer player, ItemStack item) {
-		ItemStack item2 = BaublesApi.getBaublesHandler(player).getStackInSlot(6);
-		if (!DCUtil.isEmpty(item2) && !DCUtil.isEmpty(item)) {
-			return item2.getItem() == item.getItem() && item2.getItemDamage() == item.getItemDamage();
+		if (item.getItem() instanceof CharmItemBase) {
+			int[] num = ((CharmItemBase) item.getItem()).getBaubleType(item).getValidSlots();
+			if (num != null) {
+				for (int i : num) {
+					ItemStack item2 = BaublesApi.getBaublesHandler(player).getStackInSlot(i);
+					if (!DCUtil.isEmpty(item2) && !DCUtil.isEmpty(item)) {
+						return item2.getItem() == item.getItem() && item2.getItemDamage() == item.getItemDamage();
+					}
+				}
+			}
 		}
+
 		return false;
 	}
 

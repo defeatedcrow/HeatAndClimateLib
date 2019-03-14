@@ -87,7 +87,7 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		recipeLayout.getItemStacks().init(4, false, 93, 13);
 		recipeLayout.getItemStacks().set(4, outputs.get(0));
 		if (outputs.size() > 1) {
-			recipeLayout.getItemStacks().init(5, false, 94, 32);
+			recipeLayout.getItemStacks().init(5, false, 93, 31);
 			recipeLayout.getItemStacks().set(5, outputs.get(1));
 		}
 

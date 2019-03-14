@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.event;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -51,13 +52,15 @@ public class LivingHurtDC {
 				charms.clear();
 
 				if (Loader.isModLoaded("baubles")) {
-					ItemStack item = DCPluginBaubles.getBaublesCharm(player, CharmType.DEFFENCE);
-					if (!DCUtil.isEmpty(item)) {
-						IJewelCharm charm = (IJewelCharm) item.getItem();
-						prev += charm.reduceDamage(source, item);
-						if (charm.onDiffence(source, player, newDam, item)) {
-							if (DCUtil.isEmpty(charm.consumeCharmItem(item))) {
-								DCPluginBaubles.setBaublesCharmEmpty(player);
+					List<ItemStack> charms2 = DCPluginBaubles.getBaublesCharm(player, CharmType.DEFFENCE);
+					for (ItemStack item : charms2) {
+						if (!DCUtil.isEmpty(item)) {
+							IJewelCharm charm = (IJewelCharm) item.getItem();
+							prev += charm.reduceDamage(source, item);
+							if (charm.onDiffence(source, player, newDam, item)) {
+								if (DCUtil.isEmpty(charm.consumeCharmItem(item))) {
+									DCPluginBaubles.setBaublesCharmEmpty(player);
+								}
 							}
 						}
 					}
@@ -97,13 +100,15 @@ public class LivingHurtDC {
 					charms2.clear();
 
 					if (Loader.isModLoaded("baubles")) {
-						ItemStack item = DCPluginBaubles.getBaublesCharm(attacker, CharmType.ATTACK);
-						if (!DCUtil.isEmpty(item)) {
-							IJewelCharm charm = (IJewelCharm) item.getItem();
-							add *= charm.increaceDamage(living, item);
-							if (charm.onAttacking(attacker, living, source, newDam - prev, item)) {
-								if (DCUtil.isEmpty(charm.consumeCharmItem(item))) {
-									DCPluginBaubles.setBaublesCharmEmpty(attacker);
+						List<ItemStack> charms3 = DCPluginBaubles.getBaublesCharm(attacker, CharmType.ATTACK);
+						for (ItemStack item : charms3) {
+							if (!DCUtil.isEmpty(item)) {
+								IJewelCharm charm = (IJewelCharm) item.getItem();
+								add *= charm.increaceDamage(living, item);
+								if (charm.onAttacking(attacker, living, source, newDam - prev, item)) {
+									if (DCUtil.isEmpty(charm.consumeCharmItem(item))) {
+										DCPluginBaubles.setBaublesCharmEmpty(attacker);
+									}
 								}
 							}
 						}

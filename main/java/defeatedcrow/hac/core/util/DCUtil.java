@@ -17,6 +17,7 @@ import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.plugin.ChastMobPlugin;
+import defeatedcrow.hac.core.plugin.baubles.DCPluginBaubles;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -327,7 +328,7 @@ public class DCUtil {
 
 	public static Map<Integer, ItemStack> getMobCharm(EntityLivingBase living) {
 		Map<Integer, ItemStack> ret = new HashMap<Integer, ItemStack>();
-		if (living == null) {
+		if (living == null || living instanceof EntityPlayer) {
 			return ret;
 		} else {
 			if (Loader.isModLoaded("schr0chastmob") && ChastMobPlugin.isChastMob(living)) {
@@ -364,6 +365,32 @@ public class DCUtil {
 			ItemStack check = player.inventory.getStackInSlot(i);
 			if (!isEmpty(check) && OreDictionary.itemMatches(check, item, false)) {
 				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean hasCharmItem(EntityLivingBase living, ItemStack item) {
+		if (living == null || isEmpty(item))
+			return false;
+		if (living instanceof EntityPlayer) {
+			for (int i = 9; i < 18; i++) {
+				ItemStack check = ((EntityPlayer) living).inventory.getStackInSlot(i);
+				if (!isEmpty(check) && OreDictionary.itemMatches(check, item, false)) {
+					return true;
+				}
+			}
+			if (Loader.isModLoaded("baubles")) {
+				if (DCPluginBaubles.hasBaublesCharm((EntityPlayer) living, item)) {
+					return true;
+				}
+			}
+		} else {
+			Map<Integer, ItemStack> charms = getMobCharm(living);
+			for (ItemStack check : charms.values()) {
+				if (!isEmpty(check) && OreDictionary.itemMatches(check, item, false)) {
+					return true;
+				}
 			}
 		}
 		return false;

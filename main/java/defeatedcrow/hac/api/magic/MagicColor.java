@@ -6,6 +6,7 @@ public enum MagicColor {
 	GREEN,
 	BLUE,
 	WHITE,
-	BLACK;
+	BLACK,
+	NONE;
 
 }

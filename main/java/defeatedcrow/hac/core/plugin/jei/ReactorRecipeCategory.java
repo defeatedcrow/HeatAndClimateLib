@@ -85,7 +85,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 			recipeLayout.getItemStacks().init(4, false, 89, 94);
 			recipeLayout.getItemStacks().set(4, outputs.get(0));
 			if (outputs.size() > 1) {
-				recipeLayout.getItemStacks().init(5, false, 108, 95);
+				recipeLayout.getItemStacks().init(5, false, 107, 94);
 				recipeLayout.getItemStacks().set(5, outputs.get(1));
 			}
 		}

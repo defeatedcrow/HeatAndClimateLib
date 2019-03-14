@@ -63,7 +63,7 @@ public class MillRecipeCategory implements IRecipeCategory {
 		recipeLayout.getItemStacks().init(1, false, 95, 11);
 		recipeLayout.getItemStacks().set(1, outputs.get(0));
 		if (outputs.size() > 1) {
-			recipeLayout.getItemStacks().init(2, false, 116, 12);
+			recipeLayout.getItemStacks().init(2, false, 115, 11);
 			recipeLayout.getItemStacks().set(2, outputs.get(1));
 		}
 	}
