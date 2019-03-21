@@ -142,10 +142,14 @@ public class DCsJEIPlugin implements IModPlugin {
 	public static final String SMELTING_UID = "dcs_climate.smelting";
 	public static final String MILL_UID = "dcs_climate.mill";
 	public static final String FLUID_UID = "dcs_climate.fluidcraft";
+	public static final String FLUID_POT_UID = "dcs_climate.fluidcraft_pottery";
 	public static final String REACTOR_UID = "dcs_climate.reactor";
 	public static final String SPINNING_UID = "dcs_climate.spinning";
 	public static final String CROP_UID = "dcs_climate.crop";
 	public static final String CRUSHER_UID = "dcs_climate.crusher";
+	public static final String CRUSHER_SUS_UID = "dcs_climate.crusher_sus";
+	public static final String CRUSHER_TI_UID = "dcs_climate.crusher_titanium";
+	public static final String CRUSHER_SC_UID = "dcs_climate.crusher_screen";
 	public static final String NBT_UID = "dcs_climate.nbt";
 
 }
