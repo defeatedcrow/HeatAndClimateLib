@@ -3,7 +3,7 @@ package defeatedcrow.hac.core.plugin.jei;
 import java.util.ArrayList;
 import java.util.List;
 
-import defeatedcrow.hac.core.climate.recipe.SpinningRecipe;
+import defeatedcrow.hac.api.recipe.ISpinningRecipe;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -14,10 +14,10 @@ public class SpinningRecipeWrapper implements IRecipeWrapper {
 
 	private final List<ItemStack> input;
 	private final List<ItemStack> output;
-	private final SpinningRecipe rec;
+	private final ISpinningRecipe rec;
 
 	@SuppressWarnings("unchecked")
-	public SpinningRecipeWrapper(SpinningRecipe recipe) {
+	public SpinningRecipeWrapper(ISpinningRecipe recipe) {
 		rec = recipe;
 		input = recipe.getProcessedInput();
 		output = new ArrayList<ItemStack>();

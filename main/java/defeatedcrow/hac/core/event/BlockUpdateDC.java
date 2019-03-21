@@ -14,7 +14,6 @@ import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.ThermalInsulationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
-import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -45,6 +44,10 @@ public class BlockUpdateDC {
 				return;
 
 			if (block instanceof IClimateObject) {
+				return;
+			}
+
+			if (block == Blocks.GRASS || block.isLeaves(st, world, p)) {
 				return;
 			}
 
@@ -84,8 +87,6 @@ public class BlockUpdateDC {
 							grow.grow(world, world.rand, p, st);
 						}
 					}
-					return;
-				} else if (block == Blocks.GRASS || block instanceof BlockLeaves) {
 					return;
 				} else if (block != Blocks.DOUBLE_PLANT) {
 					// WARMかつWETの場合に成長が促進され、COLD以下の場合は成長が遅くなる

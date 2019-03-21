@@ -8,7 +8,7 @@ import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
+import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import defeatedcrow.hac.core.util.DCUtil;
 import mezz.jei.api.ingredients.IIngredients;
@@ -22,13 +22,13 @@ public class ClimateSmeltingWrapper implements IRecipeWrapper {
 
 	private final List<ItemStack> input;
 	private final List<ItemStack> output;
-	private final ClimateSmelting rec;
+	private final IClimateSmelting rec;
 	private final List<DCHeatTier> temps;
 	private final List<DCHumidity> hums;
 	private final List<DCAirflow> airs;
 
 	@SuppressWarnings("unchecked")
-	public ClimateSmeltingWrapper(ClimateSmelting recipe) {
+	public ClimateSmeltingWrapper(IClimateSmelting recipe) {
 		rec = recipe;
 		input = recipe.getProcessedInput();
 		output = new ArrayList<ItemStack>();

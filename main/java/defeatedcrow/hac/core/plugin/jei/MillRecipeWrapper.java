@@ -3,7 +3,7 @@ package defeatedcrow.hac.core.plugin.jei;
 import java.util.ArrayList;
 import java.util.List;
 
-import defeatedcrow.hac.core.climate.recipe.MillRecipe;
+import defeatedcrow.hac.api.recipe.IMillRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
@@ -15,11 +15,11 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 
 	private final List<ItemStack> input;
 	private final List<ItemStack> output;
-	private final MillRecipe rec;
+	private final IMillRecipe rec;
 	public final float chance;
 
 	@SuppressWarnings("unchecked")
-	public MillRecipeWrapper(MillRecipe recipe) {
+	public MillRecipeWrapper(IMillRecipe recipe) {
 		rec = recipe;
 		input = recipe.getProcessedInput();
 		output = new ArrayList<ItemStack>();

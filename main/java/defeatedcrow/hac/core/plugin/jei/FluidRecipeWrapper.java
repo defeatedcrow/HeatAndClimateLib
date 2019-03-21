@@ -8,7 +8,7 @@ import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.core.climate.recipe.FluidCraftRecipe;
+import defeatedcrow.hac.api.recipe.IFluidRecipe;
 import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import defeatedcrow.hac.core.util.DCUtil;
 import mezz.jei.api.ingredients.IIngredients;
@@ -23,7 +23,7 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 
 	private final List<List<ItemStack>> input;
 	private final List<ItemStack> output;
-	private final FluidCraftRecipe rec;
+	private final IFluidRecipe rec;
 	private final List<FluidStack> inF;
 	private final List<FluidStack> outF;
 	private final String type;
@@ -34,7 +34,7 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 	public final float chance;
 
 	@SuppressWarnings("unchecked")
-	public FluidRecipeWrapper(FluidCraftRecipe recipe) {
+	public FluidRecipeWrapper(IFluidRecipe recipe) {
 		type = recipe.additionalString();
 		rec = recipe;
 		input = new ArrayList<List<ItemStack>>();

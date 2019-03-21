@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import defeatedcrow.hac.core.climate.recipe.CrusherRecipe;
+import defeatedcrow.hac.api.recipe.ICrusherRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
@@ -20,10 +20,10 @@ public class CrusherRecipeWrapper implements IRecipeWrapper {
 	private final List<ItemStack> output;
 	private final List<ItemStack> catalyst;
 	private final List<FluidStack> outF;
-	public final CrusherRecipe rec;
+	public final ICrusherRecipe rec;
 
 	@SuppressWarnings("unchecked")
-	public CrusherRecipeWrapper(CrusherRecipe recipe) {
+	public CrusherRecipeWrapper(ICrusherRecipe recipe) {
 		rec = recipe;
 
 		input = Lists.newArrayList();
