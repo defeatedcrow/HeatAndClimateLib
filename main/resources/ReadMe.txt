@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.0.0 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.0.1 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -265,6 +265,10 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.0.1
+　修正
+　　・ハンマーミル、化学反応槽のレシピ検索時に触媒をマッチングするように
 
 ○3.0.0
 　変更

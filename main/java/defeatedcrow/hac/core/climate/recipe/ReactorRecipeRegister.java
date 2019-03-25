@@ -110,11 +110,12 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 	}
 
 	@Override
-	public IReactorRecipe getRecipe(DCHeatTier tier, List<ItemStack> items, FluidStack fluid1, FluidStack fluid2) {
+	public IReactorRecipe getRecipe(DCHeatTier tier, List<ItemStack> items, FluidStack fluid1, FluidStack fluid2,
+			ItemStack cat) {
 		IReactorRecipe ret = null;
 		int c = 0;
 		for (IReactorRecipe recipe : list) {
-			if (recipe.matches(items, fluid1, fluid2) && recipe.matchHeatTier(tier)) {
+			if (recipe.matches(items, fluid1, fluid2) && recipe.matchHeatTier(tier) && recipe.matchCatalyst(cat)) {
 				if (recipe.recipeCoincidence() >= c) {
 					ret = recipe;
 					c = recipe.recipeCoincidence();
@@ -130,7 +131,12 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 
 	@Override
 	public IReactorRecipe getRecipe(int id, List<ItemStack> items, FluidStack fluid1, FluidStack fluid2) {
-		return getRecipe(DCHeatTier.getTypeByID(id), items, fluid1, fluid2);
+		return getRecipe(DCHeatTier.getTypeByID(id), items, fluid1, fluid2, ItemStack.EMPTY);
+	}
+
+	@Override
+	public IReactorRecipe getRecipe(DCHeatTier tier, List<ItemStack> items, FluidStack fluid1, FluidStack fluid2) {
+		return getRecipe(tier, items, fluid1, fluid2, ItemStack.EMPTY);
 	}
 
 	@Override

@@ -52,6 +52,7 @@ public class CoreConfigDC {
 	public static boolean peacefulDam = false;
 	public static int damageDifficulty = 1; // 0-2
 	public static boolean burntFood = false;
+	public static double food_amount = 1.0D;
 
 	// entity
 	public static boolean mobClimateDamage = true;
@@ -239,6 +240,9 @@ public class CoreConfigDC {
 					"Setting of the amount of temperature change by weather." + BR
 							+ "default: rain -0.4 / drought +0.4");
 
+			Property food_a = cfg.get("setting", "Default Food Saturation Amount", food_amount,
+					"Set the magnification of the food effect amount. (0.1-2.0)");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
@@ -314,6 +318,14 @@ public class CoreConfigDC {
 			if (ei < 20 || ei > 1200)
 				ei = 100;
 			entityInterval = sf;
+
+			food_amount = food_a.getDouble();
+			if (food_amount < 0) {
+				food_amount = 0.1D;
+			}
+			if (food_amount > 2.0) {
+				food_amount = 2.0D;
+			}
 
 			if (season_d.isDoubleList() && season_d.getDoubleList().length >= 4) {
 				for (int i = 0; i < 4; i++) {

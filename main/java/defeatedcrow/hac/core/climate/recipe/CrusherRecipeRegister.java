@@ -89,17 +89,22 @@ public class CrusherRecipeRegister implements ICrusherRecipeRegister {
 	}
 
 	@Override
-	public ICrusherRecipe getRecipe(ItemStack item) {
+	public ICrusherRecipe getRecipe(ItemStack item, ItemStack catalyst) {
 		ICrusherRecipe ret = null;
 		if (!list.isEmpty()) {
 			for (ICrusherRecipe recipe : list) {
-				if (recipe.matches(item)) {
+				if (recipe.matches(item) && recipe.matchCatalyst(catalyst)) {
 					// DCLogger.debugLog("get recipe");
 					ret = recipe;
 				}
 			}
 		}
 		return ret;
+	}
+
+	@Override
+	public ICrusherRecipe getRecipe(ItemStack item) {
+		return getRecipe(item, ItemStack.EMPTY);
 	}
 
 }

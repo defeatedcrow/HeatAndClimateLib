@@ -49,8 +49,13 @@ public interface IReactorRecipeRegister {
 	/**
 	 * inputs, Climateでレシピを判定
 	 */
+	@Deprecated
 	IReactorRecipe getRecipe(DCHeatTier tier, List<ItemStack> items, FluidStack inFluid1, FluidStack inFluid2);
 
+	@Deprecated
 	IReactorRecipe getRecipe(int id, List<ItemStack> items, FluidStack inFluid1, FluidStack inFluid2);
+
+	IReactorRecipe getRecipe(DCHeatTier tier, List<ItemStack> items, FluidStack inFluid1, FluidStack inFluid2,
+			ItemStack catalyst);
 
 }

@@ -53,6 +53,9 @@ public interface ICrusherRecipeRegister {
 	/**
 	 * inputs, Climateでレシピを判定
 	 */
+	ICrusherRecipe getRecipe(ItemStack items, ItemStack catalyst);
+
+	@Deprecated
 	ICrusherRecipe getRecipe(ItemStack items);
 
 }

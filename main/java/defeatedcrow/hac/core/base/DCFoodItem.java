@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
+import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -128,7 +129,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	@Override
 	public int getHealAmount(ItemStack stack) {
 		if (!DCUtil.isEmpty(stack)) {
-			return getFoodAmo(stack.getItemDamage());
+			return (int) (getFoodAmo(stack.getItemDamage()) * CoreConfigDC.food_amount);
 		}
 		return super.getHealAmount(stack);
 	}
