@@ -145,4 +145,14 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 			list.add(recipe);
 	}
 
+	@Override
+	public boolean removeRecipe(DCHeatTier tier, List<ItemStack> inputs, FluidStack inFluid1, FluidStack inFluid2,
+			ItemStack catalyst) {
+		IReactorRecipe recipe = getRecipe(tier, inputs, inFluid1, inFluid2);
+		if (recipe != null && list.remove(recipe)) {
+			return true;
+		}
+		return false;
+	}
+
 }

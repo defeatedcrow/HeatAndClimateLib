@@ -33,6 +33,8 @@ public interface ISpinningRecipeRegister {
 	/**
 	 * inputs, Climateでレシピを判定
 	 */
-	ISpinningRecipe getRecipe(ItemStack items);
+	ISpinningRecipe getRecipe(ItemStack input);
+
+	boolean removeRecipe(ItemStack input);
 
 }

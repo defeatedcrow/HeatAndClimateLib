@@ -50,8 +50,10 @@ public interface IFluidRecipeRegister {
 	 * inputs, Climateでレシピを判定
 	 */
 
-	IFluidRecipe getRecipe(IClimate clm, List<ItemStack> items, FluidStack inFluid);
+	IFluidRecipe getRecipe(IClimate clm, List<ItemStack> inputs, FluidStack inFluid);
 
-	IFluidRecipe getRecipe(int code, List<ItemStack> items, FluidStack inFluid);
+	IFluidRecipe getRecipe(int code, List<ItemStack> inputs, FluidStack inFluid);
+
+	boolean removeRecipe(IClimate clm, List<ItemStack> inputs, FluidStack inFluid);
 
 }

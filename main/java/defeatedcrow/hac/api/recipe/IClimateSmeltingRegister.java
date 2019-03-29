@@ -55,10 +55,12 @@ public interface IClimateSmeltingRegister {
 	/**
 	 * input, Climateでレシピを判定
 	 */
-	IClimateSmelting getRecipe(Supplier<IClimate> clm, ItemStack item);
+	IClimateSmelting getRecipe(Supplier<IClimate> clm, ItemStack input);
 
-	IClimateSmelting getRecipe(IClimate clm, ItemStack item);
+	IClimateSmelting getRecipe(IClimate clm, ItemStack input);
 
-	IClimateSmelting getRecipe(int code, ItemStack item);
+	IClimateSmelting getRecipe(int code, ItemStack input);
+
+	boolean removeRecipe(IClimate clm, ItemStack input);
 
 }

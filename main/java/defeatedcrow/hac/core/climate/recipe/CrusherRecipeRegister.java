@@ -107,4 +107,13 @@ public class CrusherRecipeRegister implements ICrusherRecipeRegister {
 		return getRecipe(item, ItemStack.EMPTY);
 	}
 
+	@Override
+	public boolean removeRecipe(ItemStack input, ItemStack catalyst) {
+		ICrusherRecipe recipe = getRecipe(input, catalyst);
+		if (recipe != null && list.remove(recipe)) {
+			return true;
+		}
+		return false;
+	}
+
 }

@@ -69,4 +69,13 @@ public class SpinningRecipeRegister implements ISpinningRecipeRegister {
 		return ret;
 	}
 
+	@Override
+	public boolean removeRecipe(ItemStack input) {
+		ISpinningRecipe recipe = getRecipe(input);
+		if (recipe != null && list.remove(recipe)) {
+			return true;
+		}
+		return false;
+	}
+
 }

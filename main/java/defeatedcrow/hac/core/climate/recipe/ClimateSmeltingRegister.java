@@ -107,4 +107,13 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	public void addRecipe(IClimateSmelting recipe, DCHeatTier heat) {
 		this.addRecipe(recipe);
 	}
+
+	@Override
+	public boolean removeRecipe(IClimate clm, ItemStack input) {
+		IClimateSmelting recipe = getRecipe(clm, input);
+		if (recipe != null) {
+			return recipes.remove(recipe);
+		}
+		return false;
+	}
 }

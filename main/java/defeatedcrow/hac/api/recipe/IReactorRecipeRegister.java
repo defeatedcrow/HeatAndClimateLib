@@ -55,7 +55,10 @@ public interface IReactorRecipeRegister {
 	@Deprecated
 	IReactorRecipe getRecipe(int id, List<ItemStack> items, FluidStack inFluid1, FluidStack inFluid2);
 
-	IReactorRecipe getRecipe(DCHeatTier tier, List<ItemStack> items, FluidStack inFluid1, FluidStack inFluid2,
+	IReactorRecipe getRecipe(DCHeatTier tier, List<ItemStack> inputs, FluidStack inFluid1, FluidStack inFluid2,
+			ItemStack catalyst);
+
+	boolean removeRecipe(DCHeatTier tier, List<ItemStack> inputs, FluidStack inFluid1, FluidStack inFluid2,
 			ItemStack catalyst);
 
 }

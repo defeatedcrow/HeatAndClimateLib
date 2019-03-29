@@ -113,4 +113,13 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 			list.add(recipe);
 	}
 
+	@Override
+	public boolean removeRecipe(IClimate clm, List<ItemStack> inputs, FluidStack inFluid) {
+		IFluidRecipe recipe = getRecipe(clm, inputs, inFluid);
+		if (recipe != null && list.remove(recipe)) {
+			return true;
+		}
+		return false;
+	}
+
 }

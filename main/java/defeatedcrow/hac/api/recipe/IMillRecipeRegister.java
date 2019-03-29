@@ -13,15 +13,15 @@ public interface IMillRecipeRegister {
 
 	/**
 	 * Recipe登録<br>
-	 * 
+	 *
 	 * @param output
-	 *            : 完成品
+	 *        : 完成品
 	 * @param secondary
-	 *            : 副生物 null可
+	 *        : 副生物 null可
 	 * @param secondaryChance
-	 *            : 副生成物の生成率 0.0F-1.0F
+	 *        : 副生成物の生成率 0.0F-1.0F
 	 * @param input
-	 *            : 材料
+	 *        : 材料
 	 */
 	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, Object input);
 
@@ -37,6 +37,8 @@ public interface IMillRecipeRegister {
 	/**
 	 * inputs, Climateでレシピを判定
 	 */
-	IMillRecipe getRecipe(ItemStack items);
+	IMillRecipe getRecipe(ItemStack input);
+
+	boolean removeRecipe(ItemStack input);
 
 }

@@ -77,4 +77,13 @@ public class MillRecipeRegister implements IMillRecipeRegister {
 		return ret;
 	}
 
+	@Override
+	public boolean removeRecipe(ItemStack input) {
+		IMillRecipe recipe = getRecipe(input);
+		if (recipe != null && list.remove(recipe)) {
+			return true;
+		}
+		return false;
+	}
+
 }
