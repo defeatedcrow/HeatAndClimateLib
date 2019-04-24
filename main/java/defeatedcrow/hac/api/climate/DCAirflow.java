@@ -14,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
  * WIND: 風を起こすブロックなどが範囲内にある状態。空気を消費したり、換気が必要なレシピに要求される。
  */
 public enum DCAirflow {
-	TIGHT(0, 0x202020),
+	TIGHT(0, 0x505050),
 	NORMAL(1, 0xEEFFFF),
 	FLOW(2, 0x00E115),
 	WIND(3, 0x00AEFF);
