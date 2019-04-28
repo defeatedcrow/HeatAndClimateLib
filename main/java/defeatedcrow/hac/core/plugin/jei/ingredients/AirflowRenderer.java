@@ -37,7 +37,7 @@ public class AirflowRenderer implements IIngredientRenderer<DCAirflow> {
 	public List<String> getTooltip(Minecraft minecraft, DCAirflow ingredient, ITooltipFlag tooltipFlag) {
 		List<String> tooltip = new ArrayList<String>();
 		if (ingredient != null) {
-			tooltip.add(ingredient.name());
+			tooltip.add(ingredient.localize());
 		}
 		return tooltip;
 	}

@@ -3,6 +3,7 @@ package defeatedcrow.hac.api.climate;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -138,12 +139,18 @@ public enum DCHeatTier {
 		int g = (color >> 8) & 255;
 		int b = color & 255;
 		return new int[] {
-				r, g, b
+				r,
+				g,
+				b
 		};
 	}
 
 	public int getColorInt() {
 		return color;
+	}
+
+	public String localize() {
+		return I18n.format("dcs.tip.heat." + name());
 	}
 
 	public static List<DCHeatTier> createList() {
@@ -212,5 +219,13 @@ public enum DCHeatTier {
 				}
 			}
 		return NORMAL;
+	}
+
+	public static String basename() {
+		return I18n.format("dcs.tip.heat_name");
+	}
+
+	public static String basename2() {
+		return I18n.format("dcs.tip.heat_name2");
 	}
 }

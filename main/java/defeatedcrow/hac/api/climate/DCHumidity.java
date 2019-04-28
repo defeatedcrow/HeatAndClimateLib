@@ -3,6 +3,7 @@ package defeatedcrow.hac.api.climate;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -36,12 +37,18 @@ public enum DCHumidity {
 		int g = (color >> 4) & 255;
 		int b = color & 255;
 		return new int[] {
-				r, g, b
+				r,
+				g,
+				b
 		};
 	}
 
 	public int getColorInt() {
 		return color;
+	}
+
+	public String localize() {
+		return I18n.format("dcs.tip.hum." + name());
 	}
 
 	public static DCHumidity getTypeByID(int i) {
@@ -71,6 +78,14 @@ public enum DCHumidity {
 				}
 			}
 		return NORMAL;
+	}
+
+	public static String basename() {
+		return I18n.format("dcs.tip.humidity_name");
+	}
+
+	public static String basename2() {
+		return I18n.format("dcs.tip.humidity_name2");
 	}
 
 }

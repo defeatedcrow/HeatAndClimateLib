@@ -29,7 +29,7 @@ public class HeatTierHelper implements IIngredientHelper<DCHeatTier> {
 
 	@Override
 	public String getDisplayName(DCHeatTier ingredient) {
-		return ingredient.name();
+		return ingredient.localize();
 	}
 
 	@Override

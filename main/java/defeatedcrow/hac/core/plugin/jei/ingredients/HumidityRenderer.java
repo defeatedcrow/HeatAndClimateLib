@@ -7,12 +7,7 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.util.ResourceLocation;
 
 public class HumidityRenderer implements IIngredientRenderer<DCHumidity> {
 	private final int width;
@@ -42,7 +37,7 @@ public class HumidityRenderer implements IIngredientRenderer<DCHumidity> {
 	public List<String> getTooltip(Minecraft minecraft, DCHumidity ingredient, ITooltipFlag tooltipFlag) {
 		List<String> tooltip = new ArrayList<String>();
 		if (ingredient != null) {
-			tooltip.add(ingredient.name());
+			tooltip.add(ingredient.localize());
 		}
 		return tooltip;
 	}

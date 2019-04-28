@@ -29,7 +29,7 @@ public class HumidityHelper implements IIngredientHelper<DCHumidity> {
 
 	@Override
 	public String getDisplayName(DCHumidity ingredient) {
-		return ingredient.name();
+		return ingredient.localize();
 	}
 
 	@Override

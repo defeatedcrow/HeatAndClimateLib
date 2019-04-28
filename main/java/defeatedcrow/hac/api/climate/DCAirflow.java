@@ -3,6 +3,7 @@ package defeatedcrow.hac.api.climate;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -31,12 +32,18 @@ public enum DCAirflow {
 		return id;
 	}
 
+	public String localize() {
+		return I18n.format("dcs.tip.air." + name());
+	}
+
 	public int[] getColor() {
 		int r = (color >> 8) & 255;
 		int g = (color >> 4) & 255;
 		int b = color & 255;
 		return new int[] {
-				r, g, b
+				r,
+				g,
+				b
 		};
 	}
 
@@ -71,6 +78,14 @@ public enum DCAirflow {
 				}
 			}
 		return TIGHT;
+	}
+
+	public static String basename() {
+		return I18n.format("dcs.tip.airflow_name");
+	}
+
+	public static String basename2() {
+		return I18n.format("dcs.tip.airflow_name2");
 	}
 
 }

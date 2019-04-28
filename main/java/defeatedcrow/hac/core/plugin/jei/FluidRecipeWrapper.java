@@ -181,19 +181,19 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 		if (y > baseY && y < baseY + 8) {
 			if (x > 38 && x < 122) {
 				int i = (x - 38) / 6;
-				s.add(DCHeatTier.getTypeByID(i).name() + " " + DCHeatTier.getTypeByID(i).getTemp());
+				s.add(DCHeatTier.getTypeByID(i).localize() + " " + DCHeatTier.getTypeByID(i).getTemp());
 			}
 		}
 		if (y > baseY + 10 && y < baseY + 18) {
 			if (x > 38 && x < 122) {
 				int i = (x - 38) / 21;
-				s.add(DCHumidity.getTypeByID(i).name());
+				s.add(DCHumidity.getTypeByID(i).localize());
 			}
 		}
 		if (y > baseY + 20 && y < baseY + 28) {
 			if (x > 38 && x < 122) {
 				int i = (x - 38) / 21;
-				s.add(DCAirflow.getTypeByID(i).name());
+				s.add(DCAirflow.getTypeByID(i).localize());
 			}
 		}
 		if (y > 31 && y < 49) {

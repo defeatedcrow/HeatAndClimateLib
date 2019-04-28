@@ -93,14 +93,14 @@ public class ClimateEffectiveWrapper implements IRecipeWrapper {
 			mc.currentScreen.drawTexturedModalRect(73, baseY + 37, air.getID() * 40, 182, 40, 3);
 		}
 
-		String t = heat == null ? " -" : heat.name();
-		mc.fontRenderer.drawString("TEMP " + t, 73, baseY, 0x993030, false);
+		String t = heat == null ? " -" : heat.localize();
+		mc.fontRenderer.drawString(DCHeatTier.basename2() + " " + t, 73, baseY, 0x993030, false);
 
-		String h = hum == null ? "  -" : hum.name();
-		mc.fontRenderer.drawString("HUM " + h, 73, baseY + 14, 0x303099, false);
+		String h = hum == null ? "  -" : hum.localize();
+		mc.fontRenderer.drawString(DCHumidity.basename2() + " " + h, 73, baseY + 14, 0x303099, false);
 
-		String a = air == null ? "  -" : air.name();
-		mc.fontRenderer.drawString("AIR " + a, 73, baseY + 28, 0x309930, false);
+		String a = air == null ? "  -" : air.localize();
+		mc.fontRenderer.drawString(DCAirflow.basename2() + " " + a, 73, baseY + 28, 0x309930, false);
 	}
 
 	@Override

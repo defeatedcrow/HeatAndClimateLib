@@ -156,19 +156,19 @@ public class ClimateSmeltingWrapper implements IRecipeWrapper {
 		if (y > 40 && y < 48) {
 			if (x > 38 && x < 122) {
 				int i = (x - 38) / 6;
-				s.add(DCHeatTier.getTypeByID(i).name() + " " + DCHeatTier.getTypeByID(i).getTemp());
+				s.add(DCHeatTier.getTypeByID(i).localize() + " " + DCHeatTier.getTypeByID(i).getTemp());
 			}
 		}
 		if (y > 50 && y < 58) {
 			if (x > 38 && x < 122) {
 				int i = (x - 38) / 21;
-				s.add(DCHumidity.getTypeByID(i).name());
+				s.add(DCHumidity.getTypeByID(i).localize());
 			}
 		}
 		if (y > 60 && y < 68) {
 			if (x > 38 && x < 122) {
 				int i = (x - 38) / 21;
-				s.add(DCAirflow.getTypeByID(i).name());
+				s.add(DCAirflow.getTypeByID(i).localize());
 			}
 		}
 		if (y > 14 && y < 30) {

@@ -29,6 +29,6 @@ dcs.potion.freeze_resistance=冷気耐性
 dcs.freeze_resistance=冷気耐性
 
 dcs.potion.freeze_res=冷気耐性
-potion.effect.dcs.freeze_res=冷気耐性
+potion.effect.dcs.freeze_res=冷気耐性のポーション
 splash_potion.effect.dcs.freeze_res=冷気耐性のスプラッシュポーション
 lingering_potion.effect.dcs.freeze_res=冷気耐性の残留ポーション

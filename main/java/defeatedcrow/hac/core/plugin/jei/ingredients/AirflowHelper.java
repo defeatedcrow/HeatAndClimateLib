@@ -29,7 +29,7 @@ public class AirflowHelper implements IIngredientHelper<DCAirflow> {
 
 	@Override
 	public String getDisplayName(DCAirflow ingredient) {
-		return ingredient.name();
+		return ingredient.localize();
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class HeatTierRenderer implements IIngredientRenderer<DCHeatTier> {
 	public List<String> getTooltip(Minecraft minecraft, DCHeatTier ingredient, ITooltipFlag tooltipFlag) {
 		List<String> tooltip = new ArrayList<String>();
 		if (ingredient != null) {
-			tooltip.add(ingredient.name() + " " + ingredient.getTemp());
+			tooltip.add(ingredient.localize() + " " + ingredient.getTemp());
 		}
 		return tooltip;
 	}

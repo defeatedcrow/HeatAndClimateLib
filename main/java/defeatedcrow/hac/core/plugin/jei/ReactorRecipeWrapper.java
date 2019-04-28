@@ -152,7 +152,7 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 		if (y > baseY && y < baseY + 8) {
 			if (x > 2 && x < 86) {
 				int i = (x - 3) / 6;
-				s.add(DCHeatTier.getTypeByID(i).name() + " " + DCHeatTier.getTypeByID(i).getTemp());
+				s.add(DCHeatTier.getTypeByID(i).localize() + " " + DCHeatTier.getTypeByID(i).getTemp());
 			}
 		}
 		if (y > 94 && y < 112) {
