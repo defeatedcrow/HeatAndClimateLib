@@ -53,7 +53,7 @@ dcs.tip.heat.HOT=HOT
 dcs.tip.heat.BOIL=BOIL
 dcs.tip.heat.OVEN=OVEN
 dcs.tip.heat.KILN=KILN
-dcs.tip.heat.SMELTING=STRING
+dcs.tip.heat.SMELTING=SMELTING
 dcs.tip.heat.UHT=UHT
 dcs.tip.heat.INFERNO=INFERNO
 
