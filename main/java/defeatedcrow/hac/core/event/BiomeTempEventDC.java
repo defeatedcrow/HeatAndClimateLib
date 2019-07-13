@@ -4,7 +4,7 @@ import java.util.Random;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.EnumSeason;
-import defeatedcrow.hac.api.recipe.DCBiomeTempEvent;
+import defeatedcrow.hac.api.hook.DCBiomeTempEvent;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.util.DCTimeHelper;

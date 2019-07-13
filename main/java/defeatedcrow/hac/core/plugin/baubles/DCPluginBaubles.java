@@ -1,21 +1,17 @@
 package defeatedcrow.hac.core.plugin.baubles;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
 import baubles.api.BaublesApi;
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public class DCPluginBaubles {
 
-	public static List<ItemStack> getBaublesCharm(EntityPlayer player, CharmType type) {
-		ArrayList<ItemStack> ret = Lists.newArrayList();
+	public static NonNullList<ItemStack> getBaublesCharm(EntityPlayer player, CharmType type) {
+		NonNullList<ItemStack> ret = NonNullList.create();
 		for (int i = 0; i < 7; i++) {
 			ItemStack item = BaublesApi.getBaublesHandler(player).getStackInSlot(i);
 			if (!DCUtil.isEmpty(item) && item.getItem() instanceof IJewelCharm) {
@@ -45,8 +41,8 @@ public class DCPluginBaubles {
 		return false;
 	}
 
-	public static void setBaublesCharmEmpty(EntityPlayer player) {
-		BaublesApi.getBaublesHandler(player).setStackInSlot(6, ItemStack.EMPTY);
+	public static void setBaublesCharmEmpty(EntityPlayer player, int slot) {
+		BaublesApi.getBaublesHandler(player).setStackInSlot(slot, ItemStack.EMPTY);
 		player.inventory.markDirty();
 	}
 

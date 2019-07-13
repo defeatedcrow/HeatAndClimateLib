@@ -25,10 +25,12 @@ public abstract class DCRenderFoodBase<T extends FoodEntityBase> extends Render<
 		boolean burnt = entity.getBURNT();
 		DCFoodModelBase model = this.getEntityModel(baked);
 		ResourceLocation tex = this.getFoodTexture(baked);
+		float f = getScale();
+		float f2 = getOffset();
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y, (float) z);
-		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
+		GlStateManager.translate((float) x, (float) y + f2, (float) z);
+		GlStateManager.scale(-f, -f, f);
 		this.bindTexture(tex);
 		if (burnt) {
 			GlStateManager.color(0.2F, 0.2F, 0.2F);
@@ -59,5 +61,13 @@ public abstract class DCRenderFoodBase<T extends FoodEntityBase> extends Render<
 	protected abstract ResourceLocation getFoodTexture(boolean baked);
 
 	protected abstract DCFoodModelBase getEntityModel(boolean baked);
+
+	protected float getScale() {
+		return 1.0F;
+	}
+
+	protected float getOffset() {
+		return 0.0F;
+	}
 
 }

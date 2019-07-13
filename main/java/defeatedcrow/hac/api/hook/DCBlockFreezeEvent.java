@@ -1,6 +1,7 @@
-package defeatedcrow.hac.api.recipe;
+package defeatedcrow.hac.api.hook;
 
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.Event.HasResult;
@@ -9,12 +10,14 @@ import net.minecraftforge.fml.common.eventhandler.Event.HasResult;
  * asm挿入用の追加イベント
  */
 @HasResult
-public class DCEntityItemUpdateEvent extends Event {
+public class DCBlockFreezeEvent extends Event {
 
-	public final EntityItem entityItem;
+	public final World world;
+	public final BlockPos pos;
 
-	public DCEntityItemUpdateEvent(EntityItem entity) {
-		this.entityItem = entity;
+	public DCBlockFreezeEvent(World worldIn, BlockPos posIn) {
+		this.pos = posIn;
+		this.world = worldIn;
 	}
 
 	public boolean result() {

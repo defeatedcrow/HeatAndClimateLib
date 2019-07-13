@@ -67,6 +67,8 @@ public class ClientProxyD extends CommonProxyD {
 	public void loadInit() {
 		super.loadInit();
 
+		MinecraftForge.EVENT_BUS.register(new AdvancedTooltipEvent());
+		MinecraftForge.EVENT_BUS.register(new AdvancedHUDEvent());
 		MinecraftForge.EVENT_BUS.register(RenderTempHUDEvent.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(DCGuiInfomationEvent.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new WaterFogEvent());
@@ -82,8 +84,8 @@ public class ClientProxyD extends CommonProxyD {
 		if (CoreConfigDC.altJumpKey == -1)
 			return Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
 		else
-			return CoreConfigDC.altJumpKey <= 0 || CoreConfigDC.altJumpKey >= Keyboard.KEYBOARD_SIZE ? false
-					: Keyboard.isCreated() && Keyboard.isKeyDown(CoreConfigDC.altJumpKey);
+			return CoreConfigDC.altJumpKey <= 0 || CoreConfigDC.altJumpKey >= Keyboard.KEYBOARD_SIZE ? false : Keyboard
+					.isCreated() && Keyboard.isKeyDown(CoreConfigDC.altJumpKey);
 	}
 
 	@Override
@@ -91,14 +93,14 @@ public class ClientProxyD extends CommonProxyD {
 		if (CoreConfigDC.altSneakKey == -1)
 			return Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
 		else
-			return CoreConfigDC.altSneakKey <= 0 || CoreConfigDC.altSneakKey >= Keyboard.KEYBOARD_SIZE ? false
-					: Keyboard.isCreated() && Keyboard.isKeyDown(CoreConfigDC.altSneakKey);
+			return CoreConfigDC.altSneakKey <= 0 || CoreConfigDC.altSneakKey >= Keyboard.KEYBOARD_SIZE ? false :
+					Keyboard.isCreated() && Keyboard.isKeyDown(CoreConfigDC.altSneakKey);
 	}
 
 	@Override
 	public boolean isWarpKeyDown() {
-		return CoreConfigDC.charmWarpKey <= 0 || CoreConfigDC.charmWarpKey >= Keyboard.KEYBOARD_SIZE ? false
-				: Keyboard.isCreated() && Keyboard.isKeyDown(CoreConfigDC.charmWarpKey);
+		return CoreConfigDC.charmWarpKey <= 0 || CoreConfigDC.charmWarpKey >= Keyboard.KEYBOARD_SIZE ? false : Keyboard
+				.isCreated() && Keyboard.isKeyDown(CoreConfigDC.charmWarpKey);
 	}
 
 	@Override

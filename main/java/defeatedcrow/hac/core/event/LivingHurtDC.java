@@ -1,22 +1,15 @@
 package defeatedcrow.hac.core.event;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
-import defeatedcrow.hac.core.DCLogger;
-import defeatedcrow.hac.core.plugin.baubles.DCPluginBaubles;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class LivingHurtDC {
@@ -35,98 +28,41 @@ public class LivingHurtDC {
 			// チャームの防御判定から
 			if (living instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) living;
-				Map<Integer, ItemStack> charms = DCUtil.getPlayerCharm(player, CharmType.DEFFENCE);
-
-				for (Entry<Integer, ItemStack> entry : charms.entrySet()) {
-					DCLogger.debugLog("hurt charm");
-					IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
-					prev += charm.reduceDamage(source, entry.getValue());
-					if (charm.onDiffence(source, player, newDam, entry.getValue())) {
-						if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
-							player.inventory.setInventorySlotContents(entry.getKey(), ItemStack.EMPTY);
-							player.inventory.markDirty();
-							player.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
-						}
-					}
+				NonNullList<ItemStack> charms = DCUtil.getPlayerCharm(player, CharmType.DEFFENCE);
+				for (ItemStack check : charms) {
+					// DCLogger.debugLog("hurt charm");
+					IJewelCharm charm = (IJewelCharm) check.getItem();
+					prev += charm.reduceDamage(source, check);
+					charm.onDiffence(source, player, newDam, check);
 				}
-				charms.clear();
-
-				if (Loader.isModLoaded("baubles")) {
-					List<ItemStack> charms2 = DCPluginBaubles.getBaublesCharm(player, CharmType.DEFFENCE);
-					for (ItemStack item : charms2) {
-						if (!DCUtil.isEmpty(item)) {
-							IJewelCharm charm = (IJewelCharm) item.getItem();
-							prev += charm.reduceDamage(source, item);
-							if (charm.onDiffence(source, player, newDam, item)) {
-								if (DCUtil.isEmpty(charm.consumeCharmItem(item))) {
-									DCPluginBaubles.setBaublesCharmEmpty(player);
-								}
-							}
-						}
-					}
+			} else {
+				NonNullList<ItemStack> charms = DCUtil.getMobCharm(living);
+				for (ItemStack check : charms) {
+					IJewelCharm amu = (IJewelCharm) check.getItem();
+					prev += amu.reduceDamage(source, check);
+					amu.onDiffence(source, living, newDam, check);
 				}
 			}
-
-			Map<Integer, ItemStack> amulets = DCUtil.getMobCharm(living);
-			for (Entry<Integer, ItemStack> entry : amulets.entrySet()) {
-				IJewelCharm amu = (IJewelCharm) entry.getValue().getItem();
-				prev += amu.reduceDamage(source, entry.getValue());
-				if (amu.onDiffence(source, living, newDam, entry.getValue())) {
-					if (DCUtil.isEmpty(amu.consumeCharmItem(entry.getValue()))) {
-						living.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
-					}
-				}
-			}
-			amulets.clear();
 
 			// ATTACK側のチャーム判定
 			if (source instanceof EntityDamageSource && source.getTrueSource() != null) {
 				if (source.getTrueSource() instanceof EntityPlayer) {
 					EntityPlayer attacker = (EntityPlayer) source.getTrueSource();
-
-					Map<Integer, ItemStack> charms2 = DCUtil.getPlayerCharm(attacker, CharmType.ATTACK);
-					for (Entry<Integer, ItemStack> entry : charms2.entrySet()) {
-						DCLogger.debugLog("attack charm");
-						IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
-						add *= charm.increaceDamage(living, entry.getValue());
-						if (charm.onPlayerAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
-							if (DCUtil.isEmpty(charm.consumeCharmItem(entry.getValue()))) {
-								attacker.inventory.setInventorySlotContents(entry.getKey(), ItemStack.EMPTY);
-								attacker.inventory.markDirty();
-								attacker.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
-							}
-						}
+					NonNullList<ItemStack> charms2 = DCUtil.getPlayerCharm(attacker, CharmType.ATTACK);
+					for (ItemStack check : charms2) {
+						// DCLogger.debugLog("attack charm");
+						IJewelCharm charm = (IJewelCharm) check.getItem();
+						add *= charm.increaceDamage(living, check);
+						charm.onPlayerAttacking(attacker, living, source, newDam - prev, check);
 					}
-					charms2.clear();
-
-					if (Loader.isModLoaded("baubles")) {
-						List<ItemStack> charms3 = DCPluginBaubles.getBaublesCharm(attacker, CharmType.ATTACK);
-						for (ItemStack item : charms3) {
-							if (!DCUtil.isEmpty(item)) {
-								IJewelCharm charm = (IJewelCharm) item.getItem();
-								add *= charm.increaceDamage(living, item);
-								if (charm.onAttacking(attacker, living, source, newDam - prev, item)) {
-									if (DCUtil.isEmpty(charm.consumeCharmItem(item))) {
-										DCPluginBaubles.setBaublesCharmEmpty(attacker);
-									}
-								}
-							}
-						}
-					}
-				}
-				if (source.getTrueSource() instanceof EntityLivingBase) {
+				} else if (source.getTrueSource() instanceof EntityLivingBase) {
 					EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
-					Map<Integer, ItemStack> amulets2 = DCUtil.getMobCharm(attacker);
-					for (Entry<Integer, ItemStack> entry : amulets2.entrySet()) {
-						IJewelCharm amu = (IJewelCharm) entry.getValue().getItem();
-						add2 += amu.increaceDamage(living, entry.getValue());
-						if (amu.onAttacking(attacker, living, source, newDam - prev, entry.getValue())) {
-							if (DCUtil.isEmpty(amu.consumeCharmItem(entry.getValue()))) {
-								attacker.playSound(Blocks.GLASS.getSoundType().getBreakSound(), 1.0F, 0.75F);
-							}
-						}
+					NonNullList<ItemStack> charms2 = DCUtil.getMobCharm(attacker);
+					for (ItemStack check : charms2) {
+						IJewelCharm amu = (IJewelCharm) check.getItem();
+						add2 += amu.increaceDamage(living, check);
+						amu.onAttacking(attacker, living, source, newDam - prev, check);
 					}
-					amulets2.clear();
 				}
 			}
 

@@ -6,7 +6,7 @@ import defeatedcrow.hac.api.climate.ClimateSupplier;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
-import defeatedcrow.hac.api.recipe.DCBlockUpdateEvent;
+import defeatedcrow.hac.api.hook.DCBlockUpdateEvent;
 import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
@@ -20,7 +20,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -82,8 +81,8 @@ public class BlockUpdateDC {
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
 						IClimate clm2 = ClimateAPI.calculator.getClimate(world, p.down());
-						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT)
-								&& clm2.getHumidity() == DCHumidity.WET) {
+						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT) && clm2
+								.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
 						}
 					}
@@ -93,8 +92,8 @@ public class BlockUpdateDC {
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
 						IClimate clm2 = ClimateAPI.calculator.getClimate(world, p.down());
-						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT)
-								&& clm2.getHumidity() == DCHumidity.WET) {
+						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT) && clm2
+								.getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
 							// DCLogger.debugLog("Grow!");
 						} else if (clm.get().getHeat().getTier() < -1) {
@@ -155,8 +154,8 @@ public class BlockUpdateDC {
 			// レシピ判定
 			if (CoreConfigDC.enableVanilla) {
 				IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(block, 1, meta));
-				if (recipe != null && recipe.matchClimate(clm.get()) && recipe.additionalRequire(world, p)
-						&& recipe.hasPlaceableOutput() == 1) {
+				if (recipe != null && recipe.matchClimate(clm.get()) && recipe.additionalRequire(world, p) && recipe
+						.hasPlaceableOutput() == 1) {
 					if (recipe.getOutput() != null && recipe.getOutput().getItem() instanceof ItemBlock) {
 						Block retB = Block.getBlockFromItem(recipe.getOutput().getItem());
 						int retM = recipe.getOutput().getMetadata();
@@ -176,20 +175,14 @@ public class BlockUpdateDC {
 
 					if (clm.get().getHeat() == DCHeatTier.INFERNO) {
 						// 融解
-						if (st.getMaterial() == Material.ROCK || st.getMaterial() == Material.SAND
-								|| st.getMaterial() == Material.GROUND) {
-							if (st.getBlock() != Blocks.OBSIDIAN
-									&& !ThermalInsulationUtil.BLOCK_MAP.containsKey(block)) {
+						if (st.getMaterial() == Material.ROCK || st.getMaterial() == Material.SAND || st
+								.getMaterial() == Material.GROUND) {
+							if (st.getBlock() != Blocks.OBSIDIAN && !ThermalInsulationUtil.BLOCK_MAP
+									.containsKey(block)) {
 								world.setBlockState(p, Blocks.LAVA.getDefaultState(), 2);
 								world.notifyNeighborsOfStateChange(p, Blocks.LAVA, false);
 							}
 						}
-					}
-					// 自然発火
-					if (st.getMaterial().getCanBurn() && world.isAirBlock(p.up())
-							&& block.isFlammable(world, p, EnumFacing.UP)) {
-						world.setBlockState(p.up(), Blocks.FIRE.getDefaultState(), 2);
-						world.notifyNeighborsOfStateChange(p.up(), Blocks.FIRE, false);
 					}
 				}
 			}

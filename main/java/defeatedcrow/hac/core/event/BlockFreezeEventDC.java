@@ -2,7 +2,7 @@ package defeatedcrow.hac.core.event;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCHeatTier;
-import defeatedcrow.hac.api.recipe.DCBlockFreezeEvent;
+import defeatedcrow.hac.api.hook.DCBlockFreezeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

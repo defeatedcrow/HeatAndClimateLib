@@ -1,4 +1,4 @@
-package defeatedcrow.hac.api.recipe;
+package defeatedcrow.hac.api.hook;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;

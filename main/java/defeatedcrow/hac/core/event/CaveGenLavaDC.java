@@ -52,8 +52,9 @@ public class CaveGenLavaDC {
 			if (CoreConfigDC.enableForestLake) {
 				BlockPos pos = new BlockPos(event.getChunkX() * 16 + 8, 64, event.getChunkZ() * 16 + 8);
 				Biome biome = event.getWorld().getBiomeForCoordsBody(pos);
-				if (pos.getY() > 45 && (BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST)
-						|| BiomeDictionary.hasType(biome, BiomeDictionary.Type.DENSE))) {
+				if (pos.getY() > 45 && (BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST) || BiomeDictionary
+						.hasType(biome, BiomeDictionary.Type.DENSE)) || BiomeDictionary
+								.hasType(biome, BiomeDictionary.Type.CONIFEROUS)) {
 					event.setResult(Result.DENY);
 				}
 			}
@@ -64,7 +65,7 @@ public class CaveGenLavaDC {
 	public void initFluid(DecorateBiomeEvent.Decorate event) {
 		if (CoreConfigDC.enableUnderLake && event
 				.getType() == net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA) {
-			Biome biome = event.getWorld().getBiomeForCoordsBody(event.getPos());
+			Biome biome = event.getWorld().getBiomeForCoordsBody(event.getChunkPos().getBlock(8, 8, 8));
 			Random random = event.getWorld().rand;
 			boolean flag = false;
 			if (biome.getRainfall() > 0.8F || BiomeDictionary.hasType(biome, BiomeDictionary.Type.WET)) {
@@ -73,10 +74,11 @@ public class CaveGenLavaDC {
 			}
 		} else if (CoreConfigDC.enableUnderLake && event
 				.getType() == net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.LAKE_WATER) {
-			Biome biome = event.getWorld().getBiomeForCoordsBody(event.getPos());
+			Biome biome = event.getWorld().getBiomeForCoordsBody(event.getChunkPos().getBlock(8, 8, 8));
 			Random random = event.getWorld().rand;
 			boolean flag = false;
 			if (biome.getRainfall() <= 0.2F) {
+				// 乾燥地帯には水の池ができない
 				event.setResult(Result.DENY);
 			}
 		}

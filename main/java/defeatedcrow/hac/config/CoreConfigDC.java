@@ -27,13 +27,19 @@ public class CoreConfigDC {
 	public static int altSneakKey = -1;
 
 	public static int[] ranges = new int[] {
-			2, 1, 1
+			2,
+			1,
+			1
 	};
 	public static double[] seasonEffects = new double[] {
-			0.05D, 0.4D, 0.0D, -0.4D
+			0.05D,
+			0.4D,
+			0.0D,
+			-0.4D
 	};
 	public static double[] weatherEffects = new double[] {
-			-0.4D, 0.4D
+			-0.2D,
+			0.2D
 	};
 
 	public static boolean wall = true;
@@ -47,6 +53,29 @@ public class CoreConfigDC {
 	public static double lavaFix = 0.01D;
 	public static boolean hudEffect = true;
 
+	public static boolean enableAdvHUD = true;
+	public static int iconHX = 0;
+	public static int iconHY = -48;
+	public static String tex1 = "textures/gui/hud_climate_normal.png";
+	public static String tex2 = "textures/gui/hud_climate_drought.png";
+	public static String tex3 = "textures/gui/hud_climate_rain.png";
+	public static boolean showBiome = true;
+	public static boolean showSeason = true;
+	public static boolean showDay = true;
+	public static boolean showClimate = true;
+	public static int[] offsetBiome = {
+			15,
+			5
+	};
+	public static int[] offsetSeason = {
+			5,
+			-8
+	};
+	public static int[] offsetClimate = {
+			10,
+			15
+	};
+
 	// difficulty
 	public static boolean climateDam = true;
 	public static boolean peacefulDam = false;
@@ -59,7 +88,10 @@ public class CoreConfigDC {
 	public static boolean sharePotionWithRidingMob = true;
 	public static int entityInterval = 60;
 	public static String[] entityBlackList = new String[] {
-			"minecraft:squid", "minecraft:bat", "minecraft:villager", "ModID:entityRegistryName"
+			"minecraft:squid",
+			"minecraft:bat",
+			"minecraft:villager",
+			"ModID:entityRegistryName"
 	};
 	public static final List<Class<? extends Entity>> blackListEntity = Lists.newArrayList();
 
@@ -88,8 +120,11 @@ public class CoreConfigDC {
 	public static boolean tightUnderworld = false;
 
 	public static String[] updateBlackList = new String[] {
-			"minecraft:leaves:32767", "minecraft:leaves2:32767", "minecraft:tallgrass:32767",
-			"minecraft:snow_layer:32767", "ModID:sampleBlock:sampleMeta"
+			"minecraft:leaves:32767",
+			"minecraft:leaves2:32767",
+			"minecraft:tallgrass:32767",
+			"minecraft:snow_layer:32767",
+			"ModID:sampleBlock:sampleMeta"
 	};
 	public static final List<BlockSet> blackListBlock = Lists.newArrayList();
 
@@ -102,146 +137,167 @@ public class CoreConfigDC {
 			cfg.addCustomCategoryComment("difficulty setting", "This setting is for changing difficulty of this mod.");
 			cfg.addCustomCategoryComment("render setting", "This setting is for such as display and model.");
 			cfg.addCustomCategoryComment("world setting", "This setting is for world gen.");
-			cfg.addCustomCategoryComment("key setting",
-					"This mod is not using the Forge KeyHandler. Please setting it in here.");
+			cfg.addCustomCategoryComment("key setting", "This mod is not using the Forge KeyHandler. Please setting it in here.");
 			cfg.addCustomCategoryComment("entity setting", "This setting is for entities.");
 			cfg.addCustomCategoryComment("setting", "This setting is for game play.");
 			cfg.addCustomCategoryComment("hardmode setting", "This may destroy your game play. Be careful!");
 
-			Property debug = cfg.get("debug setting", "Debug Mode Pass", debugPass,
-					"Input the password for starting in debug mode. This is only for authors.");
+			Property debug = cfg
+					.get("debug setting", "Debug Mode Pass", debugPass, "Input the password for starting in debug mode. This is only for authors.");
 
-			Property climate_dam = cfg.get("difficulty setting", "Enable Climate Damage", climateDam,
-					"Enable damage from hot or cold climate.");
+			Property climate_dam = cfg
+					.get("difficulty setting", "Enable Climate Damage", climateDam, "Enable damage from hot or cold climate.");
 
-			Property peace_dam = cfg.get("difficulty setting", "Enable Peaceful Damage", peacefulDam,
-					"Enable climate damage at peaceful setting.");
+			Property peace_dam = cfg
+					.get("difficulty setting", "Enable Peaceful Damage", peacefulDam, "Enable climate damage at peaceful setting.");
 
-			Property diff_dam = cfg.get("difficulty setting", "Difficulty of Climate Damage", damageDifficulty,
-					"Set difficulty of climate damage. 0:sweet 1:normal 2:bitter");
+			Property diff_dam = cfg
+					.get("difficulty setting", "Difficulty of Climate Damage", damageDifficulty, "Set difficulty of climate damage. 0:sweet 1:normal 2:bitter");
 
-			Property burnt_food = cfg.get("difficulty setting", "Enable Burnt Food", burntFood,
-					"Enable burnt food by high tier heat.");
+			Property burnt_food = cfg
+					.get("difficulty setting", "Enable Burnt Food", burntFood, "Enable burnt food by high tier heat.");
 
-			Property vanilla_block = cfg.get("world setting", "Enable Vanilla Block Recipe", enableVanilla,
-					"Enable climate change of vanilla blocks.");
+			Property vanilla_block = cfg
+					.get("world setting", "Enable Vanilla Block Recipe", enableVanilla, "Enable climate change of vanilla blocks.");
 
-			Property update_block = cfg.get("world setting", "Set Update Frequency", updateFrequency,
-					"Set the number of the update times per sec.");
+			Property update_block = cfg
+					.get("world setting", "Set Update Frequency", updateFrequency, "Set the number of the update times per sec.");
 
-			Property water_cave = cfg.get("world setting", "Enable Water Caves", enableDeepWater,
-					"Enable generating water blocks instead of lava blocks in the deep caves.");
+			Property water_cave = cfg
+					.get("world setting", "Enable Water Caves", enableDeepWater, "Enable generating water blocks instead of lava blocks in the deep caves.");
 
-			Property under_lake = cfg.get("world setting", "Enable Modificated Lake", enableUnderLake,
-					"Enable modification the underground lakes.");
+			Property under_lake = cfg
+					.get("world setting", "Enable Modificated Lake", enableUnderLake, "Enable modification the underground lakes.");
 
-			Property forest_lake = cfg.get("world setting", "Disable Forest Lava Lake", enableForestLake,
-					"Disable generation the lava lakes on ground of forest biomes.");
+			Property forest_lake = cfg
+					.get("world setting", "Disable Forest Lava Lake", enableForestLake, "Disable generation the lava lakes on ground of forest biomes.");
 
-			Property freeze_drop = cfg.get("world setting", "Enable Freeze EntityItem", enableFreezeDrop,
-					"EntityItems avoids to despawn in cold temp than the FROSTBITE tier.");
+			Property freeze_drop = cfg
+					.get("world setting", "Enable Freeze EntityItem", enableFreezeDrop, "EntityItems avoids to despawn in cold temp than the FROSTBITE tier.");
 
-			Property alt_tips = cfg.get("render setting", "Enable Alt Tooltip", showAltTips,
-					"Enable additional tooltips for harvest level, and climate registance of items with F3+H.");
+			Property alt_tips = cfg
+					.get("render setting", "Enable Alt Tooltip", showAltTips, "Enable additional tooltips for harvest level, and climate registance of items with F3+H.");
 
-			Property hud_icon = cfg.get("render setting", "Enable Thermal Damage Icon on HUD", showDamageIcon,
-					"Enable the heart-shaped icon on HUD for display of thermal damage.");
+			Property hud_icon = cfg
+					.get("render setting", "Enable Thermal Damage Icon on HUD", showDamageIcon, "Enable the heart-shaped icon on HUD for display of thermal damage.");
 
-			Property hud_effect = cfg.get("render setting", "Enable Display Effect of Climate", hudEffect,
-					"Enable the display effect of high or low temperature.");
+			Property hud_x = cfg
+					.get("render setting", "Thermal Damage Icon Offset X", iconX, "Set the amount of Xoffset of the thermal damage icon.");
 
-			Property hud_x = cfg.get("render setting", "Thermal Damage Icon Offset X", iconX,
-					"Set the amount of Xoffset of the thermal damage icon.");
+			Property hud_y = cfg
+					.get("render setting", "Thermal Damage Icon Offset Y", iconY, "Set the amount of Yoffset of the thermal damage icon.");
 
-			Property hud_y = cfg.get("render setting", "Thermal Damage Icon Offset Y", iconY,
-					"Set the amount of Yoffset of the thermal damage icon.");
+			Property hud_icon2 = cfg
+					.get("render setting", "Climate HUD Info", enableAdvHUD, "Enable display the climate info on HUD.");
 
-			Property water = cfg.get("render setting", "Density of Water Fog Fix", waterFix,
-					"Set fog density in water");
+			Property hud_x2 = cfg
+					.get("render setting", "Climate HUD Info Offset X", iconHX, "Set the amount of Xoffset of the climate info.");
 
-			Property warp_key = cfg.get("key setting", "Charm Use Key", charmWarpKey,
-					"Set key number for using jewel charm effects. Default key is X(45)." + BR
-							+ "If you don't want this effect, set 0.");
+			Property hud_y2 = cfg
+					.get("render setting", "Climate HUD Info Offset Y", iconHY, "Set the amount of Yoffset of the climate info.");
 
-			Property sit_key = cfg.get("key setting", "Sit Cushion Key", sitKey,
-					"Set key number for sitting on cushion. Default key is TAB(15)." + BR
-							+ "If you don't want this effect, set 0.");
+			Property hud_biome = cfg
+					.get("render setting", "Enable HUD Biome Name", showBiome, "Enable display the biome name on HUD.");
 
-			Property jump_key = cfg.get("key setting", "Jump Key", altJumpKey,
-					"Set key number for jumping. Default key is same as the vanilla setting." + BR
-							+ "If you want to use the default setting, set -1.");
+			Property hud_season = cfg
+					.get("render setting", "Enable Season Name", showSeason, "Enable display the season name on HUD.");
 
-			Property sneak_key = cfg.get("key setting", "Sneak Key", altSneakKey,
-					"Set key number for sneaking. Default key is same as the vanilla setting." + BR
-							+ "If you want to use the default setting, set -1.");
+			Property hud_day = cfg.get("render setting", "Enable HUD Date", showDay, "Enable display the date on HUD.");
 
-			Property enableWall = cfg.get("setting", "Thermal Insulation Wall", wall,
-					"Some of stone blocks enable to have a thermal insulation property.");
+			Property hud_climate = cfg
+					.get("render setting", "Enable HUD Climate Name", showClimate, "Enable display the climate parameter on HUD.");
 
-			Property disableCustom = cfg.get("setting", "Disable Recipe Customize", disableCustomRecipe,
-					"Disable replacing the recipe with the ore dictionary.");
+			Property off_biome = cfg
+					.get("render setting", "Offset HUD Biome Name", offsetBiome, "Set the amount of offset of the biome name in HUD.");
 
-			Property vanilla_harder = cfg.get("hardmode setting", "Enable Harder Vanilla Block Recipe", harderVanilla,
-					"Enable harder climate recipe of vanilla blocks.");
+			Property off_season = cfg
+					.get("render setting", "Offset HUD Season Name", offsetSeason, "Set the amount of offset of the season name in HUD.");
 
-			Property inferno = cfg.get("hardmode setting", "Infernal Nether world", infernalInferno,
-					"Set the temperature of Nether to maximum.");
+			Property off_climate = cfg
+					.get("render setting", "Offset HUD Climate Name", offsetClimate, "Set the amount of offset of the climate parameter in HUD.");
 
-			Property suffocation = cfg.get("hardmode setting", "Enable Suffocation Damage", enableSuffocation,
-					"Enable the suffocation effect when creatures or players in tight space.");
+			Property hud_effect = cfg
+					.get("render setting", "Enable Display Effect of Climate", hudEffect, "Enable the display effect of high or low temperature.");
 
-			Property drought = cfg.get("world setting", "Drought Frequency", droughtFrequency,
-					"Set the number of days of fine weather required for drought.");
+			Property water = cfg
+					.get("render setting", "Density of Water Fog Fix", waterFix, "Set fog density in water");
 
-			Property seasonF = cfg.get("world setting", "Season Frequency", seasonFrequency,
-					"Set the number of days of season's length.");
+			Property warp_key = cfg
+					.get("key setting", "Charm Use Key", charmWarpKey, "Set key number for using jewel charm effects. Default key is X(45)." + BR + "If you don't want this effect, set 0.");
 
-			Property tight = cfg.get("hardmode setting", "Anaerobic Underworld", tightUnderworld,
-					"Set the indoor underground (<Y30) airflow to tight.");
+			Property sit_key = cfg
+					.get("key setting", "Sit Cushion Key", sitKey, "Set key number for sitting on cushion. Default key is TAB(15)." + BR + "If you don't want this effect, set 0.");
 
-			Property weather = cfg.get("world setting", "Enable Weather Effect", enableWeatherEffect,
-					"Enable temperature change by the weather.");
+			Property jump_key = cfg
+					.get("key setting", "Jump Key", altJumpKey, "Set key number for jumping. Default key is same as the vanilla setting." + BR + "If you want to use the default setting, set -1.");
 
-			Property season = cfg.get("world setting", "Enable Season Effect", enableSeasonEffect,
-					"Enable temperature change by the season.");
+			Property sneak_key = cfg
+					.get("key setting", "Sneak Key", altSneakKey, "Set key number for sneaking. Default key is same as the vanilla setting." + BR + "If you want to use the default setting, set -1.");
 
-			Property seasonT = cfg.get("world setting", "Enable Vanilla Temperature Effect", enableSeasonTemp,
-					"Enable vanilla temperature change by the season and altitude." + BR
-							+ "It affects the vanilla system. ex. the biome color, the world generation");
+			Property enableWall = cfg
+					.get("setting", "Thermal Insulation Wall", wall, "Some of stone blocks enable to have a thermal insulation property.");
+
+			Property disableCustom = cfg
+					.get("setting", "Disable Recipe Customize", disableCustomRecipe, "Disable replacing the recipe with the ore dictionary.");
+
+			Property vanilla_harder = cfg
+					.get("hardmode setting", "Enable Harder Vanilla Block Recipe", harderVanilla, "Enable harder climate recipe of vanilla blocks.");
+
+			Property inferno = cfg
+					.get("hardmode setting", "Infernal Nether world", infernalInferno, "Set the temperature of Nether to maximum.");
+
+			Property suffocation = cfg
+					.get("hardmode setting", "Enable Suffocation Damage", enableSuffocation, "Enable the suffocation effect when creatures or players in tight space.");
+
+			Property drought = cfg
+					.get("world setting", "Drought Frequency", droughtFrequency, "Set the number of days of fine weather required for drought.");
+
+			Property seasonF = cfg
+					.get("world setting", "Season Frequency", seasonFrequency, "Set the number of days of season's length.");
+
+			Property tight = cfg
+					.get("hardmode setting", "Anaerobic Underworld", tightUnderworld, "Set the indoor underground (<Y30) airflow to tight.");
+
+			Property weather = cfg
+					.get("world setting", "Enable Weather Effect", enableWeatherEffect, "Enable temperature change by the weather.");
+
+			Property season = cfg
+					.get("world setting", "Enable Season Effect", enableSeasonEffect, "Enable temperature change by the season.");
+
+			Property seasonT = cfg
+					.get("world setting", "Enable Vanilla Temperature Effect", enableSeasonTemp, "Enable vanilla temperature change by the season and altitude." + BR + "It affects the vanilla system. ex. the biome color, the world generation");
 
 			Property lava = cfg.get("render setting", "Density of Lava Fog Fix", lavaFix, "Set fog density in lava");
 
-			Property submerged = cfg.get("world setting", "Enable Submerged Ocean Cave", enableSubmergedCave,
-					"Enable the submerged cave in ocean biomes.");
+			Property submerged = cfg
+					.get("world setting", "Enable Submerged Ocean Cave", enableSubmergedCave, "Enable the submerged cave in ocean biomes.");
 
-			Property dropSmelting = cfg.get("setting", "Enable DropItem Recipe", enableDropItemSmelting,
-					"Enable all climate smelting and vanilla smelting in drop item state.");
+			Property dropSmelting = cfg
+					.get("setting", "Enable DropItem Recipe", enableDropItemSmelting, "Enable all climate smelting and vanilla smelting in drop item state.");
 
-			Property mobDamage = cfg.get("entity setting", "Enable Mob Climate Damage", mobClimateDamage,
-					"Enable damage from hot or cold climate to mobs (excluding player).");
+			Property mobDamage = cfg
+					.get("entity setting", "Enable Mob Climate Damage", mobClimateDamage, "Enable damage from hot or cold climate to mobs (excluding player).");
 
-			Property sharePotion = cfg.get("entity setting", "Enable Sharing Potion", sharePotionWithRidingMob,
-					"Enable sharing potion effects with riding mob.");
+			Property sharePotion = cfg
+					.get("entity setting", "Enable Sharing Potion", sharePotionWithRidingMob, "Enable sharing potion effects with riding mob.");
 
-			Property entityRate = cfg.get("entity setting", "Entity Update Interval", entityInterval,
-					"Set the number of tick of entity update interval. 20-1200");
+			Property entityRate = cfg
+					.get("entity setting", "Entity Update Interval", entityInterval, "Set the number of tick of entity update interval. 20-1200");
 
-			Property b_list = cfg.get("world setting", "Tick Update Blacklist", updateBlackList,
-					"Please add block registry names you want exclude from climate tick update for reducing lag.");
+			Property b_list = cfg
+					.get("world setting", "Tick Update Blacklist", updateBlackList, "Please add block registry names you want exclude from climate tick update for reducing lag.");
 
-			Property e_list = cfg.get("entity setting", "Climate Damage Blacklist", entityBlackList,
-					"Please add entity registry names you want exclude from climate tick update for reducing lag.");
+			Property e_list = cfg
+					.get("entity setting", "Climate Damage Blacklist", entityBlackList, "Please add entity registry names you want exclude from climate tick update for reducing lag.");
 
-			Property season_d = cfg.get("world setting", "Seasonal Influence of Temperature", seasonEffects,
-					"Setting of the amount of temperature change by each season." + BR
-							+ "default: spr +0.05 / smr +0.4 / aut 0 / wtr -0.4");
+			Property season_d = cfg
+					.get("world setting", "Seasonal Influence of Temperature", seasonEffects, "Setting of the amount of temperature change by each season." + BR + "default: spr +0.05 / smr +0.4 / aut 0 / wtr -0.4");
 
-			Property weather_d = cfg.get("world setting", "Weather Influence of Temperature", weatherEffects,
-					"Setting of the amount of temperature change by weather." + BR
-							+ "default: rain -0.4 / drought +0.4");
+			Property weather_d = cfg
+					.get("world setting", "Weather Influence of Temperature", weatherEffects, "Setting of the amount of temperature change by weather." + BR + "default: rain -0.4 / drought +0.4");
 
-			Property food_a = cfg.get("setting", "Default Food Saturation Amount", food_amount,
-					"Set the magnification of the food effect amount. (0.1-2.0)");
+			Property food_a = cfg
+					.get("setting", "Default Food Saturation Amount", food_amount, "Set the magnification of the food effect amount. (0.1-2.0)");
 
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
@@ -338,6 +394,17 @@ public class CoreConfigDC {
 					weatherEffects[i] = weather_d.getDoubleList()[i];
 				}
 			}
+
+			enableAdvHUD = hud_icon.getBoolean();
+			iconHX = hud_x2.getInt();
+			iconHY = hud_y2.getInt();
+			showBiome = hud_biome.getBoolean();
+			showSeason = hud_season.getBoolean();
+			showDay = hud_day.getBoolean();
+			showClimate = hud_climate.getBoolean();
+			offsetBiome = off_biome.getIntList();
+			offsetSeason = off_season.getIntList();
+			offsetClimate = off_climate.getIntList();
 
 		} catch (Exception e) {
 			e.printStackTrace();

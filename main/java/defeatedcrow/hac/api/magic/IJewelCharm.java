@@ -89,6 +89,7 @@ public interface IJewelCharm extends IJewel {
 	/**
 	 * 効果使用後のダメージor消費処理<br>
 	 */
+	@Deprecated
 	ItemStack consumeCharmItem(ItemStack stack);
 
 }

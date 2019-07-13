@@ -15,6 +15,7 @@ import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.base.DCItem;
 import defeatedcrow.hac.core.climate.WeatherChecker;
 import defeatedcrow.hac.core.util.DCTimeHelper;
+import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -25,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
@@ -63,32 +65,39 @@ public class ItemClimateChecker extends DCItem {
 					player.sendMessage(new TextComponentString("Humidity: " + c.getHumidity().name()));
 					player.sendMessage(new TextComponentString("Airflow: " + c.getAirflow().name()));
 					if (ClimateCore.isDebug) {
-						player.sendMessage(
-								new TextComponentString("Climate int: " + Integer.toBinaryString(c.getClimateInt())));
+						player.sendMessage(new TextComponentString("Climate int: " + Integer.toBinaryString(c
+								.getClimateInt())));
 
 						if (player.isSneaking()) {
-							DCLogger.debugLog("== forced smelting ==");
+							DCLogger.debugInfoLog("== forced smelting ==");
 							IBlockState st = world.getBlockState(pos);
 							Block block = st.getBlock();
 							if (st != null && block != null) {
 								int meta = block.getMetaFromState(st);
-								DCLogger.debugLog("target: " + block.getLocalizedName() + " " + meta);
+								DCLogger.debugInfoLog("target: " + block.getLocalizedName() + " " + meta);
 								IClimate clm = ClimateAPI.calculator.getClimate(world, pos);
-								IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm,
-										new ItemStack(block, 1, meta));
-								if (recipe != null && recipe.matchClimate(clm) && recipe.additionalRequire(world, pos)
-										&& recipe.hasPlaceableOutput() == 1) {
-									if (recipe.getOutput() != null
-											&& recipe.getOutput().getItem() instanceof ItemBlock) {
+								IClimateSmelting recipe = RecipeAPI.registerSmelting.getRecipe(clm, new ItemStack(block,
+										1, meta));
+								if (recipe != null && recipe.matchClimate(clm) && recipe
+										.additionalRequire(world, pos) && recipe.hasPlaceableOutput() == 1) {
+									if (recipe.getOutput() != null && recipe.getOutput()
+											.getItem() instanceof ItemBlock) {
 										Block retB = Block.getBlockFromItem(recipe.getOutput().getItem());
 										int retM = recipe.getOutput().getMetadata();
 										IBlockState ret = retB.getStateFromMeta(retM);
 										world.setBlockState(pos, ret, 2);
 										world.notifyNeighborsOfStateChange(pos, ret.getBlock(), false);
-										DCLogger.debugLog("after: " + ret.getBlock().getLocalizedName() + " " + retM);
+										DCLogger.debugInfoLog("after: " + ret.getBlock()
+												.getLocalizedName() + " " + retM);
 									}
 								}
 							}
+						}
+
+						NonNullList<ItemStack> charms = DCUtil.getPlayerCharm(player, null);
+						DCLogger.debugInfoLog("== Charm List ==");
+						for (ItemStack charm : charms) {
+							DCLogger.debugInfoLog(charm.toString());
 						}
 					}
 				}
@@ -120,14 +129,14 @@ public class ItemClimateChecker extends DCItem {
 
 		player.sendMessage(new TextComponentString("== current weather info =="));
 		player.sendMessage(new TextComponentString("remote world: " + world.isRemote + ". time: " + time));
-		player.sendMessage(
-				new TextComponentString("world rain: " + world.rainingStrength + ", time " + count + ", sun : " + sun));
-		player.sendMessage(new TextComponentString("biome name: " + world.getBiome(pos).getBiomeName()));
 		player.sendMessage(new TextComponentString(
-				"biome temp: " + String.format("%.2f", world.getBiome(pos).getTemperature(pos))));
+				"world rain: " + world.rainingStrength + ", time " + count + ", sun : " + sun));
+		player.sendMessage(new TextComponentString("biome name: " + world.getBiome(pos).getBiomeName()));
+		player.sendMessage(new TextComponentString("biome temp: " + String.format("%.2f", world.getBiome(pos)
+				.getTemperature(pos))));
 		if (CoreConfigDC.enableWeatherEffect) {
-			player.sendMessage(new TextComponentString("weather offset: " + String.format("%.2f",
-					WeatherChecker.getTempOffsetFloat(dim, world.provider.doesWaterVaporize()))));
+			player.sendMessage(new TextComponentString("weather offset: " + String.format("%.2f", WeatherChecker
+					.getTempOffsetFloat(dim, world.provider.doesWaterVaporize()))));
 		}
 	}
 

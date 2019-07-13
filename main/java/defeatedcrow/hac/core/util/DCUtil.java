@@ -3,9 +3,7 @@ package defeatedcrow.hac.core.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import com.google.common.collect.Lists;
@@ -39,6 +37,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -238,6 +237,18 @@ public class DCUtil {
 		return false;
 	}
 
+	public static boolean containItem(NonNullList<ItemStack> list, ItemStack item) {
+		if (list.isEmpty() || isEmpty(item)) {
+			return false;
+		} else {
+			for (ItemStack check : list) {
+				if (OreDictionary.itemMatches(item, check, false))
+					return true;
+			}
+		}
+		return false;
+	}
+
 	public static ArrayList<ItemStack> getProcessedList(Object obj) {
 		ArrayList<ItemStack> ret = Lists.newArrayList();
 		if (obj == null) {
@@ -306,12 +317,15 @@ public class DCUtil {
 
 	// 防具の登録時の並び
 	public static final EntityEquipmentSlot[] SLOTS = new EntityEquipmentSlot[] {
-			EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET
+			EntityEquipmentSlot.HEAD,
+			EntityEquipmentSlot.CHEST,
+			EntityEquipmentSlot.LEGS,
+			EntityEquipmentSlot.FEET
 	};
 
 	// チャームを保持しているかのチェック
-	public static Map<Integer, ItemStack> getPlayerCharm(EntityPlayer player, CharmType type) {
-		Map<Integer, ItemStack> ret = new HashMap<Integer, ItemStack>();
+	public static NonNullList<ItemStack> getPlayerCharm(EntityPlayer player, CharmType type) {
+		NonNullList<ItemStack> ret = NonNullList.create();
 		if (player == null)
 			return ret;
 		for (int i = 9; i < 18; i++) {
@@ -319,20 +333,64 @@ public class DCUtil {
 			if (!isEmpty(check) && check.getItem() instanceof IJewelCharm) {
 				IJewelCharm charm = (IJewelCharm) check.getItem();
 				int m = check.getItemDamage();
-				if (type == null || charm.getCharmType(m) == type)
-					ret.put(i, check);
+				if (type == null || charm.getCharmType(m) == type) {
+					boolean b = false;
+					for (ItemStack c2 : ret) {
+						if (OreDictionary.itemMatches(check, c2, false)) {
+							c2.grow(1);
+							b = true;
+							break;
+						}
+					}
+					if (!b) {
+						ret.add(check.copy());
+					}
+				}
 			}
 		}
+
+		if (Loader.isModLoaded("baubles")) {
+			NonNullList<ItemStack> charms2 = DCPluginBaubles.getBaublesCharm(player, type);
+			if (!charms2.isEmpty()) {
+				for (ItemStack check : charms2) {
+					boolean b = false;
+					for (ItemStack c2 : ret) {
+						if (OreDictionary.itemMatches(check, c2, false)) {
+							c2.grow(1);
+							b = true;
+							break;
+						}
+					}
+					if (!b) {
+						ret.add(check.copy());
+					}
+				}
+			}
+		}
+
 		return ret;
 	}
 
-	public static Map<Integer, ItemStack> getMobCharm(EntityLivingBase living) {
-		Map<Integer, ItemStack> ret = new HashMap<Integer, ItemStack>();
+	public static NonNullList<ItemStack> getMobCharm(EntityLivingBase living) {
+		NonNullList<ItemStack> ret = NonNullList.create();
 		if (living == null || living instanceof EntityPlayer) {
 			return ret;
 		} else {
 			if (Loader.isModLoaded("schr0chastmob") && ChastMobPlugin.isChastMob(living)) {
-				ret.putAll(ChastMobPlugin.getCharms(living));
+				NonNullList<ItemStack> chast = ChastMobPlugin.getCharms(living);
+				for (ItemStack check : chast) {
+					boolean b = false;
+					for (ItemStack c2 : ret) {
+						if (OreDictionary.itemMatches(check, c2, false)) {
+							c2.grow(1);
+							b = true;
+							break;
+						}
+					}
+					if (!b) {
+						ret.add(check.copy());
+					}
+				}
 				return ret;
 			}
 
@@ -341,7 +399,17 @@ public class DCUtil {
 				for (int i = 0; i < handler.getSlots(); i++) {
 					ItemStack check = handler.getStackInSlot(i);
 					if (!isEmpty(check) && check.getItem() instanceof IJewelCharm) {
-						ret.put(i, check);
+						boolean b = false;
+						for (ItemStack c2 : ret) {
+							if (OreDictionary.itemMatches(check, c2, false)) {
+								c2.grow(1);
+								b = true;
+								break;
+							}
+						}
+						if (!b) {
+							ret.add(check.copy());
+						}
 					}
 				}
 			} else if (living instanceof EntityVillager) {
@@ -349,7 +417,17 @@ public class DCUtil {
 				for (int i = 0; i < inv.getSizeInventory(); i++) {
 					ItemStack check = inv.getStackInSlot(i);
 					if (!isEmpty(check) && check.getItem() instanceof IJewelCharm) {
-						ret.put(i, check);
+						boolean b = false;
+						for (ItemStack c2 : ret) {
+							if (OreDictionary.itemMatches(check, c2, false)) {
+								c2.grow(1);
+								b = true;
+								break;
+							}
+						}
+						if (!b) {
+							ret.add(check.copy());
+						}
 					}
 				}
 			}
@@ -374,20 +452,15 @@ public class DCUtil {
 		if (living == null || isEmpty(item))
 			return false;
 		if (living instanceof EntityPlayer) {
-			for (int i = 9; i < 18; i++) {
-				ItemStack check = ((EntityPlayer) living).inventory.getStackInSlot(i);
+			NonNullList<ItemStack> checkList = getPlayerCharm((EntityPlayer) living, null);
+			for (ItemStack check : checkList) {
 				if (!isEmpty(check) && OreDictionary.itemMatches(check, item, false)) {
 					return true;
 				}
 			}
-			if (Loader.isModLoaded("baubles")) {
-				if (DCPluginBaubles.hasBaublesCharm((EntityPlayer) living, item)) {
-					return true;
-				}
-			}
 		} else {
-			Map<Integer, ItemStack> charms = getMobCharm(living);
-			for (ItemStack check : charms.values()) {
+			NonNullList<ItemStack> charms = getMobCharm(living);
+			for (ItemStack check : charms) {
 				if (!isEmpty(check) && OreDictionary.itemMatches(check, item, false)) {
 					return true;
 				}

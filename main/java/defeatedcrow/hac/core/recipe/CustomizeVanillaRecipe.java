@@ -79,8 +79,7 @@ public class CustomizeVanillaRecipe {
 					continue;
 				}
 
-				if (!containsMatch(true, recipe.recipeItems, shapelessOnly)
-						&& containsMatch(true, recipe.recipeItems, replaces)) {
+				if (!containsMatch(true, recipe.recipeItems, shapelessOnly) && containsMatch(true, recipe.recipeItems, replaces)) {
 					addRecipes.add(recipe);
 				}
 			} else if (rec instanceof ShapelessRecipes) {
@@ -113,8 +112,8 @@ public class CustomizeVanillaRecipe {
 					}
 				}
 
-				if (!check.isEmpty() && !containsMatch2(true, check, shapelessOnly)
-						&& containsMatch2(true, check, replaces)) {
+				if (!check
+						.isEmpty() && !containsMatch2(true, check, shapelessOnly) && containsMatch2(true, check, replaces)) {
 					addOreRecipes.add(recipe);
 				}
 			} else if (rec instanceof ShapelessOreRecipe) {
@@ -189,10 +188,26 @@ public class CustomizeVanillaRecipe {
 
 		// 3x3より大きなレシピには全く対応していない
 		String[] s = {
-				"A", "B", "C", "D", "E", "F", "G", "H", "I"
+				"A",
+				"B",
+				"C",
+				"D",
+				"E",
+				"F",
+				"G",
+				"H",
+				"I"
 		};
 		Character[] c = {
-				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'
+				'A',
+				'B',
+				'C',
+				'D',
+				'E',
+				'F',
+				'G',
+				'H',
+				'I'
 		};
 
 		String[] returnArray = new String[y];
@@ -236,9 +251,8 @@ public class CustomizeVanillaRecipe {
 		}
 
 		Object[] newInputs = inputArray.toArray();
-		DCRecipe.addShapedRecipe(
-				new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName().getResourcePath() + "_dcs"), output,
-				newInputs);
+		DCRecipe.addShapedRecipe(new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
+				.getResourcePath() + "_dcs"), output, newInputs);
 		DCLogger.debugLog("Customized ShapdRecipe : " + inputArray.toString());
 	}
 
@@ -271,9 +285,8 @@ public class CustomizeVanillaRecipe {
 		}
 
 		Object[] newInputs = inputs.toArray();
-		DCRecipe.addShapelessRecipe(
-				new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName().getResourcePath() + "_dcs"), output,
-				newInputs);
+		DCRecipe.addShapelessRecipe(new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
+				.getResourcePath() + "_dcs"), output, newInputs);
 		DCLogger.debugLog("Customized ShapelessRecipe : " + inputs.toString());
 
 	}
@@ -307,10 +320,26 @@ public class CustomizeVanillaRecipe {
 
 		// 3x3より大きなレシピには全く対応していない
 		String[] s = {
-				"A", "B", "C", "D", "E", "F", "G", "H", "I"
+				"A",
+				"B",
+				"C",
+				"D",
+				"E",
+				"F",
+				"G",
+				"H",
+				"I"
 		};
 		Character[] c = {
-				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'
+				'A',
+				'B',
+				'C',
+				'D',
+				'E',
+				'F',
+				'G',
+				'H',
+				'I'
 		};
 
 		String[] returnArray = new String[y];
@@ -384,9 +413,8 @@ public class CustomizeVanillaRecipe {
 		}
 
 		Object[] newInputs = inputs.toArray();
-		DCRecipe.addShapedRecipe(
-				new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName().getResourcePath() + "_dcs"), output,
-				newInputs);
+		DCRecipe.addShapedRecipe(new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
+				.getResourcePath() + "_dcs"), output, newInputs);
 		DCLogger.debugLog("Customized ShapedOreRecipe : " + inputs.toString());
 
 	}
@@ -449,22 +477,22 @@ public class CustomizeVanillaRecipe {
 		}
 
 		Object[] newInputs = inputs.toArray();
-		DCRecipe.addShapelessRecipe(
-				new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName().getResourcePath() + "_dcs"), output,
-				newInputs);
+		DCRecipe.addShapelessRecipe(new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
+				.getResourcePath() + "_dcs"), output, newInputs);
 		DCLogger.debugLog("Customized ShapelessOreRecipe : " + inputs.toString());
 
 	}
 
 	private static boolean containsMatch(boolean strict, List<Ingredient> inputs, ItemStack... targets) {
 		for (Ingredient input : inputs) {
-			for (ItemStack item : input.getMatchingStacks()) {
-				for (ItemStack target : targets) {
-					if (itemMatches(target, item, strict)) {
-						return true;
+			if (input.getMatchingStacks() != null && input.getMatchingStacks().length < 2)
+				for (ItemStack item : input.getMatchingStacks()) {
+					for (ItemStack target : targets) {
+						if (itemMatches(target, item, strict)) {
+							return true;
+						}
 					}
 				}
-			}
 		}
 		return false;
 	}
@@ -484,9 +512,9 @@ public class CustomizeVanillaRecipe {
 		if (DCUtil.isEmpty(input) || DCUtil.isEmpty(target)) {
 			return DCUtil.isEmpty(input) && DCUtil.isEmpty(target);
 		}
-		return (target.getItem() == input.getItem()
-				&& ((target.getItemDamage() == OreDictionary.WILDCARD_VALUE && !strict)
-						|| target.getItemDamage() == input.getItemDamage()));
+		return (target.getItem() == input.getItem() && ((target
+				.getItemDamage() == OreDictionary.WILDCARD_VALUE && !strict) || target.getItemDamage() == input
+						.getItemDamage()));
 	}
 
 }

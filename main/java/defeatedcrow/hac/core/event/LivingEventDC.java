@@ -2,8 +2,6 @@ package defeatedcrow.hac.core.event;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.ClimateSupplier;
@@ -18,7 +16,6 @@ import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.packet.MessageCharmKey;
-import defeatedcrow.hac.core.plugin.baubles.DCPluginBaubles;
 import defeatedcrow.hac.core.util.DCTimeHelper;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
@@ -34,13 +31,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -76,173 +73,176 @@ public class LivingEventDC {
 
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
 		EntityLivingBase living = event.getEntityLiving();
-
-		/* Potion */
-
-		ArrayList<PotionEffect> potions = new ArrayList<PotionEffect>();
-
 		if (living != null) {
-
 			if (!living.world.isRemote) {
-
-				if (CoreConfigDC.sharePotionWithRidingMob) {
-					/* Potion */
-					boolean f = false;
-					if (living.isRiding() && !living.getActivePotionMap().isEmpty()) {
-						f = true;
-						if (living instanceof EntityLiving && ((EntityLiving) living).hasCustomName()) {
-
-						} else {
-							if (living instanceof IMob) {
-								f = false;
-							} else if (living.getRidingEntity() != null && living.getRidingEntity() instanceof IMob) {
-								f = false;
-							}
-						}
-					}
-
-					if (f) {
-						// PotionEffectのリスト
-						Iterator iterator = living.getActivePotionEffects().iterator();
-
-						while (iterator.hasNext()) {
-							PotionEffect effect = (PotionEffect) iterator.next();
-
-							Potion potion = effect.getPotion();
-
-							if (potion != null && potion == MobEffects.JUMP_BOOST) {
-								living.fallDistance = 0.0F;
-							}
-
-							// 騎乗関係のMobにポーション効果を分け与える
-							if (living.getRidingEntity() != null
-									&& living.getRidingEntity() instanceof EntityLivingBase) {
-								EntityLivingBase riding = (EntityLivingBase) event.getEntity().getRidingEntity();
-								if (potion != null) {
-									riding.addPotionEffect(effect);
-								}
-							}
-						}
-						iterator = null;
-					}
-				}
 
 				if (living.isPotionActive(MobEffects.JUMP_BOOST)) {
 					living.fallDistance = 0.0F;
 				}
 
-				/* Amulet */
-
-				Map<Integer, ItemStack> charms = DCUtil.getMobCharm(living);
-				for (ItemStack item2 : charms.values()) {
-					int m = item2.getMetadata();
-					IJewelCharm amu = (IJewelCharm) item2.getItem();
-					amu.constantEffect(living, item2);
+				if (CoreConfigDC.sharePotionWithRidingMob) {
+					onLivingPotionUpdate(living);
 				}
-				charms.clear();
 
-				/* climate damage */
+				onLivingCharmUpdate(living);
 
 				if (living instanceof EntityPlayer || CoreConfigDC.mobClimateDamage) {
-					if (DCTimeHelper.getCount(living.world) == 0 && CoreConfigDC.climateDam) {
+					onLivingClimateUpdate(living);
+				}
+			}
+		}
+	}
 
-						// ピースフルではダメージがない
-						if (living.world.getDifficulty() == EnumDifficulty.PEACEFUL && !CoreConfigDC.peacefulDam) {
-							return;
-						}
+	public void onLivingPotionUpdate(EntityLivingBase living) {
+		/* Potion */
+		ArrayList<PotionEffect> potions = new ArrayList<PotionEffect>();
 
-						for (Class<? extends Entity> c : CoreConfigDC.blackListEntity) {
-							if (c.isInstance(living))
-								return;
-						}
+		boolean f = false;
+		if (living.isRiding() && !living.getActivePotionMap().isEmpty()) {
+			f = true;
+			if (living instanceof EntityLiving && ((EntityLiving) living).hasCustomName()) {
 
-						ClimateSupplier clm = new ClimateSupplier(living.world, living.getPosition().up());
-						DCHeatTier heat = clm.get().getHeat();
+			} else {
+				if (living instanceof IMob) {
+					f = false;
+				} else if (living.getRidingEntity() != null && living.getRidingEntity() instanceof IMob) {
+					f = false;
+				}
+			}
+		}
 
-						float prev = 2.0F; // normal
-						if (living instanceof EntityPlayer) {
-							prev = 1.0F * (3 - CoreConfigDC.damageDifficulty); // 1.0F ~ 3.0F
-						}
-						float dam = Math.abs(heat.getTier()) * 1.0F; // hot 0F ~ 8.0F / cold 0F ~ 10.0F
-						boolean isCold = heat.getTier() < 0;
-						DamageSourceClimate source = isCold ? DamageSourceClimate.climateColdDamage
-								: DamageSourceClimate.climateHeatDamage;
+		if (f) {
+			// PotionEffectのリスト
+			Iterator iterator = living.getActivePotionEffects().iterator();
 
-						// 基礎ダメージ
-						if (isCold) {
-							dam -= prev;
-							dam *= 2.0F;
-						} else {
-							dam -= prev;
-						}
+			while (iterator.hasNext()) {
+				PotionEffect effect = (PotionEffect) iterator.next();
+				Potion potion = effect.getPotion();
 
-						// この時点でダメージ無しならスキップ
-						if (dam < 1.0F) {
-							return;
-						}
-
-						// 次に装備と耐性計算
-						prev = 0.0F;
-
-						/* damage判定 */
-						// mobごとの特性
-						if (isCold) {
-							float adj = DamageAPI.resistantData.getColdResistant(living);
-							prev += adj;
-							if (living.isPotionActive(DCInit.prevFreeze)) {
-								prev += 4.0F;
-							}
-							if (living.isImmuneToFire()) {
-								prev -= 2.0F;
-							}
-							if (living.isEntityUndead()) {
-								prev += 2.0F;
-							}
-						} else {
-							float adj = DamageAPI.resistantData.getHeatResistant(living);
-							prev += adj;
-							if (living.isPotionActive(MobEffects.FIRE_RESISTANCE)) {
-								prev += 4.0F;
-							}
-							if (living.isImmuneToFire()) {
-								prev += CoreConfigDC.infernalInferno ? 8.0F : 4.0F;
-							} else if (heat.getTier() > DCHeatTier.OVEN.getTier() && living.isEntityUndead()) {
-								prev /= 2.0F;
-							}
-						}
-
-						// 防具の計算
-						if (living.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) {
-							IItemHandler handler = living.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,
-									EnumFacing.NORTH);
-							if (handler != null) {
-								for (int s = 0; s < handler.getSlots(); s++) {
-									ItemStack item = handler.getStackInSlot(s);
-									if (DCUtil.isEmpty(item))
-										continue;
-
-									float p = DCUtil.getItemResistantData(item, isCold);
-									prev += p;
-								}
-							}
-						}
-
-						dam -= prev;
-
-						ClimateDamageEvent fireEvent = new ClimateDamageEvent(living, source, heat, dam);
-						float result = fireEvent.result();
-						dam = result;
-
-						// 2.0F未満の場合はとどめを刺さない
-						if (dam < 2.0F && living.getHealth() < 2.0F) {
-							dam = 0.0F;
-						}
-
-						if (dam >= 1.0F) {
-							living.attackEntityFrom(source, dam);
-						}
+				// 騎乗関係のMobにポーション効果を分け与える
+				if (living.getRidingEntity() != null && living.getRidingEntity() instanceof EntityLivingBase) {
+					EntityLivingBase riding = (EntityLivingBase) living.getRidingEntity();
+					if (potion != null) {
+						riding.addPotionEffect(effect);
 					}
 				}
+			}
+			iterator = null;
+		}
+
+	}
+
+	public void onLivingCharmUpdate(EntityLivingBase living) {
+		/* Amulet */
+
+		NonNullList<ItemStack> charms = DCUtil.getMobCharm(living);
+		for (ItemStack item2 : charms) {
+			int m = item2.getMetadata();
+			IJewelCharm amu = (IJewelCharm) item2.getItem();
+			amu.constantEffect(living, item2);
+		}
+		charms.clear();
+	}
+
+	public void onLivingClimateUpdate(EntityLivingBase living) {
+		/* climate damage */
+
+		if (DCTimeHelper.getCount(living.world) == 0 && CoreConfigDC.climateDam) {
+
+			// ピースフルではダメージがない
+			if (living.world.getDifficulty() == EnumDifficulty.PEACEFUL && !CoreConfigDC.peacefulDam) {
+				return;
+			}
+
+			for (Class<? extends Entity> c : CoreConfigDC.blackListEntity) {
+				if (c.isInstance(living))
+					return;
+			}
+
+			ClimateSupplier clm = new ClimateSupplier(living.world, living.getPosition().up());
+			DCHeatTier heat = clm.get().getHeat();
+
+			float prev = 2.0F; // normal
+			if (living instanceof EntityPlayer) {
+				prev = 1.0F * (3 - CoreConfigDC.damageDifficulty); // 1.0F ~ 3.0F
+			}
+			float dam = Math.abs(heat.getTier()) * 1.0F; // hot 0F ~ 8.0F / cold 0F ~ 10.0F
+			boolean isCold = heat.getTier() < 0;
+			DamageSourceClimate source = isCold ? DamageSourceClimate.climateColdDamage :
+					DamageSourceClimate.climateHeatDamage;
+
+			// 基礎ダメージ
+			if (isCold) {
+				dam -= prev;
+				dam *= 2.0F;
+			} else {
+				dam -= prev;
+			}
+
+			// この時点でダメージ無しならスキップ
+			if (dam < 1.0F) {
+				return;
+			}
+
+			// 次に装備と耐性計算
+			prev = 0.0F;
+
+			/* damage判定 */
+			// mobごとの特性
+			if (isCold) {
+				float adj = DamageAPI.resistantData.getColdResistant(living);
+				prev += adj;
+				if (living.isPotionActive(DCInit.prevFreeze)) {
+					prev += 4.0F;
+				}
+				if (living.isImmuneToFire()) {
+					prev -= 2.0F;
+				}
+				if (living.isEntityUndead()) {
+					prev += 2.0F;
+				}
+			} else {
+				float adj = DamageAPI.resistantData.getHeatResistant(living);
+				prev += adj;
+				if (living.isPotionActive(MobEffects.FIRE_RESISTANCE)) {
+					prev += 4.0F;
+				}
+				if (living.isImmuneToFire()) {
+					prev += CoreConfigDC.infernalInferno ? 8.0F : 4.0F;
+				} else if (heat.getTier() > DCHeatTier.OVEN.getTier() && living.isEntityUndead()) {
+					prev /= 2.0F;
+				}
+			}
+
+			// 防具の計算
+			if (living.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) {
+				IItemHandler handler = living
+						.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
+				if (handler != null) {
+					for (int s = 0; s < handler.getSlots(); s++) {
+						ItemStack item = handler.getStackInSlot(s);
+						if (DCUtil.isEmpty(item))
+							continue;
+
+						float p = DCUtil.getItemResistantData(item, isCold);
+						prev += p;
+					}
+				}
+			}
+
+			dam -= prev;
+
+			ClimateDamageEvent fireEvent = new ClimateDamageEvent(living, source, heat, dam);
+			float result = fireEvent.result();
+			dam = result;
+
+			// 2.0F未満の場合はとどめを刺さない
+			if (dam < 2.0F && living.getHealth() < 2.0F) {
+				dam = 0.0F;
+			}
+
+			if (dam >= 1.0F) {
+				living.attackEntityFrom(source, dam);
 			}
 		}
 	}
@@ -255,22 +255,11 @@ public class LivingEventDC {
 
 			// charm
 			if (!player.world.isRemote) {
-				Map<Integer, ItemStack> charms = DCUtil.getPlayerCharm(player, null);
-				for (ItemStack item2 : charms.values()) {
+				NonNullList<ItemStack> charms = DCUtil.getPlayerCharm(player, null);
+				for (ItemStack item2 : charms) {
 					int m = item2.getMetadata();
 					IJewelCharm jew = (IJewelCharm) item2.getItem();
 					jew.constantEffect(player, item2);
-				}
-				charms.clear();
-
-				if (Loader.isModLoaded("baubles")) {
-					List<ItemStack> charms2 = DCPluginBaubles.getBaublesCharm(player, null);
-					for (ItemStack item : charms2) {
-						if (!DCUtil.isEmpty(item)) {
-							IJewelCharm charm = (IJewelCharm) item.getItem();
-							charm.constantEffect(player, item);
-						}
-					}
 				}
 			}
 		}
@@ -323,8 +312,8 @@ public class LivingEventDC {
 						while (j < 3) {
 							int x = (cx << 4) + world.rand.nextInt(16);
 							int z = (cz << 4) + world.rand.nextInt(16);
-							int y = world.provider.hasSkyLight() ? MathHelper.floor(player.posY) + 5
-									: world.provider.getActualHeight();
+							int y = world.provider.hasSkyLight() ? MathHelper.floor(player.posY) + 5 : world.provider
+									.getActualHeight();
 							for (int y1 = y; y1 > 1; y1--) {
 								BlockPos pos = new BlockPos(x, y1, z);
 								if (world.isAirBlock(pos) || world.getBlockState(pos).getMaterial().isLiquid()) {

@@ -40,8 +40,8 @@ public class ClimateCore {
 	public static final String MOD_ID = "dcs_lib";
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 3;
-	public static final int MOD_MINOR = 0;
-	public static final int MOD_BUILD = 4;
+	public static final int MOD_MINOR = 1;
+	public static final int MOD_BUILD = 0;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.12,1.12.2]";
 	public static final String PACKAGE_BASE = "dcs";

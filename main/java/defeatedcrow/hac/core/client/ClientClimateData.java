@@ -1,9 +1,5 @@
 package defeatedcrow.hac.core.client;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.damage.DamageSourceClimate;
@@ -11,17 +7,16 @@ import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.DCInit;
-import defeatedcrow.hac.core.plugin.baubles.DCPluginBaubles;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -76,27 +71,15 @@ public class ClientClimateData {
 		}
 
 		// charm
-		Map<Integer, ItemStack> charms = DCUtil.getPlayerCharm(player, CharmType.DEFFENCE);
-		DamageSource source = tempTier > 0 ? DamageSourceClimate.climateHeatDamage
-				: DamageSourceClimate.climateColdDamage;
-		for (Entry<Integer, ItemStack> entry : charms.entrySet()) {
-			IJewelCharm charm = (IJewelCharm) entry.getValue().getItem();
+		NonNullList<ItemStack> charms = DCUtil.getPlayerCharm(player, CharmType.DEFFENCE);
+		DamageSource source = tempTier > 0 ? DamageSourceClimate.climateHeatDamage :
+				DamageSourceClimate.climateColdDamage;
+		for (ItemStack check : charms) {
+			IJewelCharm charm = (IJewelCharm) check.getItem();
 			if (isCold)
-				coldPrev += charm.reduceDamage(source, entry.getValue());
+				coldPrev += charm.reduceDamage(source, check);
 			else
-				heatPrev += charm.reduceDamage(source, entry.getValue());
-		}
-
-		if (Loader.isModLoaded("baubles")) {
-			List<ItemStack> charms2 = DCPluginBaubles.getBaublesCharm(player, CharmType.DEFFENCE);
-			for (ItemStack charm : charms2) {
-				if (!DCUtil.isEmpty(charm)) {
-					if (isCold)
-						coldPrev += ((IJewelCharm) charm.getItem()).reduceDamage(source, charm);
-					else
-						heatPrev += ((IJewelCharm) charm.getItem()).reduceDamage(source, charm);
-				}
-			}
+				heatPrev += charm.reduceDamage(source, check);
 		}
 
 		items = null;
