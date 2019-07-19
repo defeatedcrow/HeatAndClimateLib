@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.1.0 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.1.1 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -50,7 +50,7 @@
 
 # 配布DL先
   非公式フォーラム： http://forum.minecraftuser.jp/viewtopic.php?f=13&t=17657
- CurseForge: https://minecraft.curseforge.com/projects/heat-and-climate-lib
+ CurseForge: https://www.curseforge.com/minecraft/mc-mods/heat-and-climate-lib
  Wiki： http://defeatedcrow.jp/modwiki/HeatAndClimate
 
 
@@ -267,6 +267,11 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.1.1
+　修正
+　　・レシピ変換クラスでのクラッシュ
+　　・追加食材をバニラのタブに表示しないように
 
 ○3.1.0
 　変更

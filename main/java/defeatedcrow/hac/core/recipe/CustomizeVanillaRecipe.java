@@ -213,12 +213,17 @@ public class CustomizeVanillaRecipe {
 		String[] returnArray = new String[y];
 
 		// クラフト欄指定用のString[]の生成
-		for (int i = 1; i < y + 1; i++) {
+		for (int i = 0; i < y; i++) {
 			String f = "";
-			for (int k = 1; k < x + 1; k++) {
-				f += DCUtil.isEmptyIngredient(items.get(k + ((i - 1) * x) - 1)) ? " " : s[k + ((i - 1) * x) - 1];
+			for (int k = 0; k < x; k++) {
+				int num = k + (i * x);
+				if (num < items.size()) {
+					f += DCUtil.isEmptyIngredient(items.get(num)) ? " " : s[num];
+				} else {
+					f += " ";
+				}
 			}
-			returnArray[i - 1] = f;
+			returnArray[i] = f;
 		}
 
 		for (int i = 0; i < returnArray.length; i++) {
@@ -345,12 +350,17 @@ public class CustomizeVanillaRecipe {
 		String[] returnArray = new String[y];
 
 		// クラフト欄指定用のString[]の生成
-		for (int i = 1; i < y + 1; i++) {
+		for (int i = 0; i < y; i++) {
 			String f = "";
-			for (int k = 1; k < x + 1; k++) {
-				f += DCUtil.isEmptyIngredient(objects.get(k + ((i - 1) * x) - 1)) ? " " : s[k + ((i - 1) * x) - 1];
+			for (int k = 0; k < x; k++) {
+				int num = k + (i * x);
+				if (num < objects.size()) {
+					f += DCUtil.isEmptyIngredient(objects.get(num)) ? " " : s[num];
+				} else {
+					f += " ";
+				}
 			}
-			returnArray[i - 1] = f;
+			returnArray[i] = f;
 		}
 
 		for (int i = 0; i < returnArray.length; i++) {

@@ -48,8 +48,8 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		int j = Math.min(stack.getMetadata(), getMaxMeta());
-		return getNameSuffix() != null && j < getNameSuffix().length
-				? super.getUnlocalizedName() + "_" + getNameSuffix()[j] : super.getUnlocalizedName();
+		return getNameSuffix() != null && j < getNameSuffix().length ?
+				super.getUnlocalizedName() + "_" + getNameSuffix()[j] : super.getUnlocalizedName();
 	}
 
 	public int getMaxMeta() {
@@ -65,9 +65,8 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 		if (living instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) living;
 			player.getFoodStats().addStats(this, stack);
-			worldIn.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ,
-					SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F,
-					worldIn.rand.nextFloat() * 0.1F + 0.9F);
+			worldIn.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand
+					.nextFloat() * 0.1F + 0.9F);
 			this.addEffects(stack, worldIn, living);
 			this.dropContainerItem(worldIn, stack, living);
 			DCUtil.reduceStackSize(stack, 1);
@@ -182,7 +181,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		if (this.isInCreativeTab(tab)) {
+		if (this.isInCreativeTab(tab) && tab != CreativeTabs.FOOD) {
 			List<ItemStack> itms = getSubItemList();
 			subItems.addAll(itms);
 		}

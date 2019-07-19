@@ -398,7 +398,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 			 * return new DCBiomeTempEvent(biome, pos).result();
 			 * 確定でresult()を返すのでバニラを完全に上書きする
 			 */
-			overrideList.add(new TypeInsnNode(NEW, "defeatedcrow/hac/api/recipe/DCBiomeTempEvent"));
+			overrideList.add(new TypeInsnNode(NEW, "defeatedcrow/hac/api/hook/DCBiomeTempEvent"));
 			overrideList.add(new InsnNode(DUP));
 			overrideList.add(new VarInsnNode(ALOAD, 0));
 			overrideList.add(new VarInsnNode(ALOAD, 1));
