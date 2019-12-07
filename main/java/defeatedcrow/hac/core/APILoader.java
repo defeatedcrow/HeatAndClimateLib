@@ -78,8 +78,9 @@ public class APILoader {
 
 	public static void registerClimate() {
 		// biome
-		if (CoreConfigDC.infernalInferno)
-			ClimateAPI.register.addBiomeClimate(Biomes.HELL, -1, DCHeatTier.INFERNO, DCHumidity.DRY, DCAirflow.NORMAL);
+		if (CoreConfigDC.infernalInferno) {
+			ClimateAPI.register.addBiomeClimate(Biomes.HELL, DCHeatTier.INFERNO, DCHumidity.DRY, DCAirflow.NORMAL);
+		}
 
 		ClimateAPI.register.setNoSeason(Biomes.MUSHROOM_ISLAND);
 		ClimateAPI.register.setNoSeason(Biomes.HELL);

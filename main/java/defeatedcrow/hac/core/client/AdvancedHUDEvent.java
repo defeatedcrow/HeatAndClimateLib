@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,6 +36,7 @@ public class AdvancedHUDEvent {
 	public static final ResourceLocation TEX1 = new ResourceLocation(ClimateCore.PACKAGE_ID, CoreConfigDC.tex1);
 	public static final ResourceLocation TEX2 = new ResourceLocation(ClimateCore.PACKAGE_ID, CoreConfigDC.tex2);
 	public static final ResourceLocation TEX3 = new ResourceLocation(ClimateCore.PACKAGE_ID, CoreConfigDC.tex3);
+	public static final ResourceLocation TEX4 = new ResourceLocation(ClimateCore.PACKAGE_ID, CoreConfigDC.tex4);
 
 	private int count = 20;
 	private int biomeID = 0;
@@ -82,31 +84,66 @@ public class AdvancedHUDEvent {
 					if (hasAcv && ClientClimateData.INSTANCE.getClimate() != null) {
 						IClimate clm = ClientClimateData.INSTANCE.getClimate();
 						float tempF = biome.getTemperature(player.getPosition());
+						if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER)) {
+							tempF += 1.5F;
+						} else if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.END)) {
+							tempF -= 1.0F;
+						} else if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.WATER)) {
+							tempF += 0.25F;
+						}
 						float we = WeatherChecker.getTempOffsetFloat(world.provider.getDimension(), false);
+						if (CoreConfigDC.enableWeatherEffect) {
+							tempF += we;
+						}
+						float ni = DCTimeHelper.getTimeOffset(world, biome);
+						if (CoreConfigDC.enableTimeEffect) {
+							tempF += ni;
+						}
 
 						FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
 						GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 						GlStateManager.enableBlend();
 
-						int iw = 0;
-						if (we > 0) {
-							Minecraft.getMinecraft().getTextureManager().bindTexture(TEX2);
-						} else if (we < 0) {
-							Minecraft.getMinecraft().getTextureManager().bindTexture(TEX3);
-						} else {
-							Minecraft.getMinecraft().getTextureManager().bindTexture(TEX1);
-						}
 						int offsetX = CoreConfigDC.iconHX;
 						int offsetY = CoreConfigDC.iconHY;
 						int x = offsetX;
 						int y = event.getResolution().getScaledHeight() + offsetY;
-						drawTexturedModalRect(x, y, 0, 0, 48, 48);
 
-						String temp = clm.getHeat().localize();
-						String hum = clm.getHumidity().localize();
-						String air = clm.getAirflow().localize();
-						if (ClimateCore.isDebug) {
-							temp += String.format(" %.2f F", (tempF + we));
+						int fontX = 0;
+						int fontY = 0;
+
+						if (CoreConfigDC.useAnalogueHUD) {
+							Minecraft.getMinecraft().getTextureManager().bindTexture(TEX4);
+							drawTexturedModalRect(x, y - 12, 0, 0, 16, 58);
+							int w = 20;
+							if (!DCTimeHelper.isDayTime(world)) {
+								w += 10;
+							}
+							if (we < 0) {
+								w += 20;
+							}
+							drawTexturedModalRect(x + 4, y - 8, w, 0, 8, 8);
+
+							float temp2 = tempF * 10F;
+							int bar = MathHelper.ceil(temp2) + 1;
+							if (bar > 25) {
+								bar = 25;
+							}
+							if (bar < -10) {
+								bar = -10;
+							}
+							drawTexturedModalRect(x + 1, y + 30 - bar, 20, 10, 9, 1);
+							x += 5;
+						} else {
+
+							if (we > 0) {
+								Minecraft.getMinecraft().getTextureManager().bindTexture(TEX2);
+							} else if (we < 0) {
+								Minecraft.getMinecraft().getTextureManager().bindTexture(TEX3);
+							} else {
+								Minecraft.getMinecraft().getTextureManager().bindTexture(TEX1);
+							}
+							drawTexturedModalRect(x, y, 0, 0, 48, 48);
 						}
 
 						String s = "";
@@ -121,16 +158,30 @@ public class AdvancedHUDEvent {
 							s += " day" + day;
 						}
 						if (s.length() > 1) {
-							fr.drawString(s, x + CoreConfigDC.offsetSeason[0], y + CoreConfigDC.offsetSeason[1], color, true);
+							if (CoreConfigDC.useAnalogueHUD)
+								fr.drawString(s, x + 10 + CoreConfigDC.offsetSeason[0], y + CoreConfigDC.offsetSeason[1], color, true);
+							else
+								fr.drawString(s, x + CoreConfigDC.offsetSeason[0], y + CoreConfigDC.offsetSeason[1], color, true);
 						}
 
 						// Biome biome = Biome.getBiomeForId(biomeID);
 						if (biome != null && CoreConfigDC.showBiome) {
-							fr.drawString(biome
-									.getBiomeName(), x + CoreConfigDC.offsetBiome[0], y + CoreConfigDC.offsetBiome[1], 0xFFFFFF, true);
+							if (CoreConfigDC.useAnalogueHUD)
+								fr.drawString(biome
+										.getBiomeName(), x - 5 + CoreConfigDC.offsetBiome[0], y + CoreConfigDC.offsetBiome[1], 0xFFFFFF, true);
+							else
+								fr.drawString(biome
+										.getBiomeName(), x + CoreConfigDC.offsetBiome[0], y + CoreConfigDC.offsetBiome[1], 0xFFFFFF, true);
 						}
 
 						if (CoreConfigDC.showClimate) {
+							String temp = clm.getHeat().localize();
+							String hum = clm.getHumidity().localize();
+							String air = clm.getAirflow().localize();
+							if (ClimateCore.isDebug) {
+								temp += String.format(" %.2f F", (tempF));
+							}
+
 							fr.drawString(temp, x + CoreConfigDC.offsetClimate[0], y + CoreConfigDC.offsetClimate[1], clm
 									.getHeat().getColorInt(), true);
 							fr.drawString(hum, x + CoreConfigDC.offsetClimate[0], y + CoreConfigDC.offsetClimate[1] + 10, clm

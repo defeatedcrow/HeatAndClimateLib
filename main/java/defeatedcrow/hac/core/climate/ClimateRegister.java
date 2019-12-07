@@ -25,12 +25,12 @@ import defeatedcrow.hac.api.climate.IBiomeClimateRegister;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class ClimateRegister implements IBiomeClimateRegister {
 
@@ -163,38 +163,47 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		IClimate clm = getClimateFromList(i);
 		int id = i & 255;
 		Biome b = Biome.getBiome(id);
+
+		float temp = 0.5F;
 		if (clm != null) {
-			return clm.getHeat();
+			temp = clm.getHeat().getBiomeTemp();
 		} else if (b != null) {
-			float temp = b.getTemperature(pos);
-			if (CoreConfigDC.enableWeatherEffect) {
-				float offset = WeatherChecker.getTempOffsetFloat(dim, world.provider.doesWaterVaporize());
-				temp += offset;
-			}
-
-			if (temp == 0.5F) {
-				float off2 = 0;
-				if (BiomeDictionary.hasType(b, Type.COLD) || BiomeDictionary.hasType(b, Type.SNOWY)) {
-					off2 -= 0.5F;
-				}
-				if (BiomeDictionary.hasType(b, Type.DEAD) || BiomeDictionary.hasType(b, Type.CONIFEROUS)) {
-					off2 -= 0.35F;
-				}
-				if (BiomeDictionary.hasType(b, Type.MESA) || BiomeDictionary.hasType(b, Type.HOT)) {
-					off2 += 1.0F;
-				}
-				temp += off2;
-			}
-
+			temp = b.getTemperature(pos);
 			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
-				return DCHeatTier.OVEN;
+				temp += 1.5F;
 			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
-				return DCHeatTier.COLD;
-			} else {
-				return DCHeatTier.getTypeByBiomeTemp(temp);
+				temp -= 1.0F;
+			}
+			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WATER)) {
+				temp += 0.25F;
 			}
 		}
-		return DCHeatTier.NORMAL;
+
+		if (CoreConfigDC.enableWeatherEffect) {
+			float offset = WeatherChecker.getTempOffsetFloat(dim, world.provider.doesWaterVaporize());
+			temp += offset;
+		}
+
+		if (CoreConfigDC.enableTimeEffect) {
+			float offset = DCTimeHelper.getTimeOffset(world, b);
+			temp += offset;
+		}
+
+		// if (temp == 0.5F) {
+		// float off2 = 0;
+		// if (BiomeDictionary.hasType(b, Type.COLD) || BiomeDictionary.hasType(b, Type.SNOWY)) {
+		// off2 -= 0.5F;
+		// }
+		// if (BiomeDictionary.hasType(b, Type.DEAD) || BiomeDictionary.hasType(b, Type.CONIFEROUS)) {
+		// off2 -= 0.35F;
+		// }
+		// if (BiomeDictionary.hasType(b, Type.MESA) || BiomeDictionary.hasType(b, Type.HOT)) {
+		// off2 += 1.0F;
+		// }
+		// temp += off2;
+		// }
+
+		return DCHeatTier.getTypeByBiomeTemp(temp);
 	}
 
 	@Override
@@ -218,33 +227,41 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		IClimate clm = getClimateFromList(biome);
 		int id = biome & 255;
 		Biome b = Biome.getBiome(id);
-		if (clm != null) {
-			return clm.getHeat();
-		} else if (b != null) {
-			float temp = b.getDefaultTemperature();
-			if (temp == 0.5F) {
-				float off2 = 0;
-				if (BiomeDictionary.hasType(b, Type.COLD) || BiomeDictionary.hasType(b, Type.SNOWY)) {
-					off2 -= 0.5F;
-				}
-				if (BiomeDictionary.hasType(b, Type.DEAD) || BiomeDictionary.hasType(b, Type.CONIFEROUS)) {
-					off2 -= 0.35F;
-				}
-				if (BiomeDictionary.hasType(b, Type.MESA) || BiomeDictionary.hasType(b, Type.HOT)) {
-					off2 += 1.0F;
-				}
-				temp += off2;
-			}
+		float temp = 0.5F;
 
+		if (clm != null) {
+			temp = clm.getHeat().getBiomeTemp();
+		} else if (b != null) {
+			temp = b.getDefaultTemperature();
 			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
-				return DCHeatTier.OVEN;
+				temp += 1.5F;
 			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
-				return DCHeatTier.COLD;
-			} else {
-				return DCHeatTier.getTypeByBiomeTemp(temp);
+				temp -= 1.0F;
+			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WATER)) {
+				temp += 0.25F;
 			}
 		}
-		return DCHeatTier.NORMAL;
+
+		if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WATER)) {
+			temp += 0.25F;
+		}
+
+		// if (temp == 0.5F) {
+		// float off2 = 0;
+		// if (BiomeDictionary.hasType(b, Type.COLD) || BiomeDictionary.hasType(b, Type.SNOWY)) {
+		// off2 -= 0.5F;
+		// }
+		// if (BiomeDictionary.hasType(b, Type.DEAD) || BiomeDictionary.hasType(b, Type.CONIFEROUS)) {
+		// off2 -= 0.35F;
+		// }
+		// if (BiomeDictionary.hasType(b, Type.MESA) || BiomeDictionary.hasType(b, Type.HOT)) {
+		// off2 += 1.0F;
+		// }
+		// temp += off2;
+		// }
+
+		return DCHeatTier.getTypeByBiomeTemp(temp);
+
 	}
 
 	@Override
@@ -255,8 +272,8 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		if (clm != null) {
 			return clm.getAirflow();
 		}
-		if (b != null && (BiomeDictionary.hasType(b, BiomeDictionary.Type.HILLS)
-				|| BiomeDictionary.hasType(b, BiomeDictionary.Type.HILLS))) {
+		if (b != null && (BiomeDictionary.hasType(b, BiomeDictionary.Type.HILLS) || BiomeDictionary
+				.hasType(b, BiomeDictionary.Type.HILLS))) {
 			return DCAirflow.FLOW;
 		}
 		return DCAirflow.NORMAL;
@@ -272,7 +289,8 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		} else if (b != null) {
 			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.DRY) || !b.canRain()) {
 				return DCHumidity.DRY;
-			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WET) || b.getRainfall() > 0.8F) {
+			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WET) || BiomeDictionary
+					.hasType(b, BiomeDictionary.Type.WATER) || b.getRainfall() > 0.8F) {
 				return DCHumidity.WET;
 			}
 		}

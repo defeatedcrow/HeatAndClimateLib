@@ -109,45 +109,50 @@ public class BlockUpdateDC {
 			 * 屋内かつCOOL以下であれば氷が溶けなくなり、COLDより冷たいTierでは周囲を強制凍結
 			 * WARM以上で強制溶解
 			 */
+
 			else if (block == Blocks.ICE) {
-				DCHeatTier h2 = ClimateAPI.register.getHeatTier(world, p);
-				if (clm.get().getHeat().getTier() < 0) {
-					if (clm.get().getHeat().getTier() == DCHeatTier.ABSOLUTE.getTier()) {
-						world.setBlockState(p, Blocks.PACKED_ICE.getDefaultState(), 2);
-						world.notifyNeighborsOfStateChange(p, Blocks.PACKED_ICE, false);
+				if (CoreConfigDC.enableVanilla) {
+					DCHeatTier h2 = ClimateAPI.register.getHeatTier(world, p);
+					if (clm.get().getHeat().getTier() < 0) {
+						if (clm.get().getHeat().getTier() == DCHeatTier.ABSOLUTE.getTier()) {
+							world.setBlockState(p, Blocks.PACKED_ICE.getDefaultState(), 2);
+							world.notifyNeighborsOfStateChange(p, Blocks.PACKED_ICE, false);
+							event.setCanceled(true);
+							return;
+							// DCLogger.debugLog("Freeze!!");
+						} else if (roof) {
+							event.setCanceled(true);
+							return;
+						}
+					}
+					if (!roof && h2.getTier() >= 0) {
+						world.setBlockState(p, Blocks.WATER.getDefaultState(), 2);
+						world.notifyNeighborsOfStateChange(p, Blocks.WATER, false);
 						event.setCanceled(true);
 						return;
-						// DCLogger.debugLog("Freeze!!");
-					} else if (roof) {
+						// DCLogger.debugLog("Melted");
+					}
+					/*
+					 * SNOW
+					 * COOL以下であれば氷が溶けなくなり、WARM以上で強制溶解
+					 */
+					return;
+				}
+			} else if (block == Blocks.SNOW || block == Blocks.SNOW_LAYER) {
+				if (CoreConfigDC.enableVanilla) {
+					DCHeatTier h2 = ClimateAPI.register.getHeatTier(world, p);
+					if (clm.get().getHeat().getTier() < 0 && roof) {
 						event.setCanceled(true);
 						return;
 					}
-				}
-				if (!roof && h2.getTier() >= 0) {
-					world.setBlockState(p, Blocks.WATER.getDefaultState(), 2);
-					world.notifyNeighborsOfStateChange(p, Blocks.WATER, false);
-					event.setCanceled(true);
-					return;
-					// DCLogger.debugLog("Melted");
-				}
-				/*
-				 * SNOW
-				 * COOL以下であれば氷が溶けなくなり、WARM以上で強制溶解
-				 */
-				return;
-			} else if (block == Blocks.SNOW || block == Blocks.SNOW_LAYER) {
-				DCHeatTier h2 = ClimateAPI.register.getHeatTier(world, p);
-				if (clm.get().getHeat().getTier() < 0 && roof) {
-					event.setCanceled(true);
+					if (!roof && h2.getTier() >= 0) {
+						world.setBlockToAir(p);
+						event.setCanceled(true);
+						return;
+						// DCLogger.debugLog("Melted");
+					}
 					return;
 				}
-				if (!roof && h2.getTier() >= 0) {
-					world.setBlockToAir(p);
-					event.setCanceled(true);
-					return;
-					// DCLogger.debugLog("Melted");
-				}
-				return;
 			}
 
 			boolean f2 = false;

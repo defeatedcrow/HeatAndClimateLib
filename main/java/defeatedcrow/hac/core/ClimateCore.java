@@ -35,18 +35,19 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 @Mod(modid = ClimateCore.MOD_ID, name = ClimateCore.MOD_NAME,
 		version = ClimateCore.MOD_MEJOR + "." + ClimateCore.MOD_MINOR + "." + ClimateCore.MOD_BUILD,
 		dependencies = ClimateCore.MOD_DEPENDENCIES, acceptedMinecraftVersions = ClimateCore.MOD_ACCEPTED_MC_VERSIONS,
-		updateJSON = ClimateCore.UPDATE_JSON, useMetadata = true)
+		updateJSON = ClimateCore.UPDATE_JSON, certificateFingerprint = ClimateCore.KEY, useMetadata = true)
 public class ClimateCore {
 	public static final String MOD_ID = "dcs_lib";
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 3;
 	public static final int MOD_MINOR = 1;
-	public static final int MOD_BUILD = 1;
+	public static final int MOD_BUILD = 2;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.12,1.12.2]";
 	public static final String PACKAGE_BASE = "dcs";
 	public static final String PACKAGE_ID = "dcs_climate";
 	public static final String UPDATE_JSON = "https://defeatedcrow.jp/version/haclib.json";
+	public static final String KEY = "4cd12b92959105443b7b694fffe0cea9ed004886";
 
 	@SidedProxy(clientSide = "defeatedcrow.hac.core.client.ClientProxyD",
 			serverSide = "defeatedcrow.hac.core.CommonProxyD")

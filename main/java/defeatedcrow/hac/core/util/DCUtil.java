@@ -605,9 +605,11 @@ public class DCUtil {
 					if (EntityList.getClass(res) != null) {
 						Class<? extends Entity> entity = EntityList.getClass(res);
 						list.add(entity);
-						DCLogger.infoLog("Failed find target: " + name);
+						DCLogger.infoLog("Registered to the update blacklist: " + name);
+						continue;
 					}
 				}
+				DCLogger.infoLog("Failed find target: " + name);
 			}
 		}
 		return list;

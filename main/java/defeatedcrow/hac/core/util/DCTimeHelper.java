@@ -3,6 +3,9 @@ package defeatedcrow.hac.core.util;
 import defeatedcrow.hac.api.climate.EnumSeason;
 import defeatedcrow.hac.config.CoreConfigDC;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class DCTimeHelper {
 
@@ -86,6 +89,31 @@ public class DCTimeHelper {
 		} else {
 			return EnumSeason.SPRING;
 		}
+	}
+
+	public static float getTimeOffset(World world, Biome b) {
+		if (world.provider.isNether()) {
+			return 0F;
+		}
+		float offset = 0F;
+		int t = DCTimeHelper.currentTime(world);
+		if (t < 4 || t > 19) {
+			offset = (float) CoreConfigDC.nightEffect;
+		} else if (t < 6 || t > 17) {
+			offset = (float) CoreConfigDC.nightEffect * 0.5F;
+		}
+		if (BiomeDictionary.hasType(b, Type.WET) || BiomeDictionary.hasType(b, Type.WATER) || BiomeDictionary
+				.hasType(b, Type.DENSE)) {
+			offset *= 0.5F;
+		} else if (BiomeDictionary.hasType(b, Type.DRY) || BiomeDictionary.hasType(b, Type.SANDY) || BiomeDictionary
+				.hasType(b, Type.WASTELAND)) {
+			if (BiomeDictionary.hasType(b, Type.DRY) && (BiomeDictionary.hasType(b, Type.SANDY) || BiomeDictionary
+					.hasType(b, Type.WASTELAND)) && BiomeDictionary.hasType(b, Type.HOT))
+				offset *= 4F;
+			else
+				offset *= 2F;
+		}
+		return offset;
 	}
 
 }

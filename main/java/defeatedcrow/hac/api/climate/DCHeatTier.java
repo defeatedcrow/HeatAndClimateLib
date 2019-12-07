@@ -31,44 +31,46 @@ import net.minecraft.util.math.MathHelper;
  */
 public enum DCHeatTier {
 	// absolute
-	ABSOLUTE(-273, -5, 0, 0x0000A0),
+	ABSOLUTE(-273, -5, 0, 0x0000A0, -6.0F),
 	// extreme cooling
-	CRYOGENIC(-150, -4, 1, 0x0050FF),
+	CRYOGENIC(-150, -4, 1, 0x0050FF, -3.0F),
 	// icecream making and cooling
-	FROSTBITE(-50, -3, 2, 0x00A0FF),
+	FROSTBITE(-50, -3, 2, 0x00A0FF, -1.0F),
 	// cold climate biome
-	COLD(-20, -2, 3, 0x00FFFF),
+	COLD(-20, -2, 3, 0x00FFFF, -0.5F),
 	// cool climate biome
-	COOL(0, -1, 4, 0x70FFFF),
+	COOL(0, -1, 4, 0x70FFFF, 0F),
 	// electric or mechanical energy require
-	NORMAL(20, 0, 5, 0x00E115),
+	NORMAL(20, 0, 5, 0x00E115, 0.5F),
 	// warm climate biome
-	WARM(35, 1, 6, 0xA0FF00),
+	WARM(35, 1, 6, 0xA0FF00, 0.9F),
 	// drying or brewing
-	HOT(50, 2, 7, 0xFFE000),
+	HOT(50, 2, 7, 0xFFE000, 1.3F),
 	// boiling temperature
-	BOIL(100, 3, 8, 0xFFA000),
+	BOIL(100, 3, 8, 0xFFA000, 2.1F),
 	// cooking
-	OVEN(220, 4, 9, 0xFF5000),
+	OVEN(220, 4, 9, 0xFF5000, 4.5F),
 	// making charcoal, bronze, burn dust
-	KILN(800, 5, 10, 0xFF0000),
+	KILN(800, 5, 10, 0xFF0000, 16.0F),
 	// making iron or another metal
-	SMELTING(1500, 6, 11, 0xFF00FF),
+	SMELTING(1500, 6, 11, 0xFF00FF, 30.0F),
 	// special alloy
-	UHT(3000, 7, 12, 0xFFA0FF),
+	UHT(3000, 7, 12, 0xFFA0FF, 30.0F),
 	// only on data
-	INFERNO(8000, 8, 13, 0x500000);
+	INFERNO(8000, 8, 13, 0x500000, 150.0F);
 
 	private final int temp;
 	private final int tier;
 	private final int id;
 	private final int color;
+	private final float biomeTemp;
 
-	private DCHeatTier(int t, int i, int n, int c) {
+	private DCHeatTier(int t, int i, int n, int c, float b) {
 		temp = t;
 		tier = i;
 		id = n;
 		color = c;
+		biomeTemp = b;
 	}
 
 	public static DCHeatTier getHeatEnum(int tier) {
@@ -123,6 +125,10 @@ public enum DCHeatTier {
 
 	public int getID() {
 		return id;
+	}
+
+	public float getBiomeTemp() {
+		return biomeTemp;
 	}
 
 	public static DCHeatTier getTypeByID(int id) {
@@ -195,15 +201,17 @@ public enum DCHeatTier {
 	}
 
 	public static DCHeatTier getTypeByBiomeTemp(float temp) {
-		if (temp > 2.2F)
+		if (temp > 4.0F)
+			return DCHeatTier.OVEN;
+		else if (temp > 2.1F)
 			return DCHeatTier.BOIL;
-		else if (temp > 1.3F)
+		else if (temp > 1.4F)
 			return DCHeatTier.HOT;
 		else if (temp > 0.9F)
 			return DCHeatTier.WARM;
 		else if (temp > 0.4F)
 			return DCHeatTier.NORMAL;
-		else if (temp > 0.1F)
+		else if (temp > 0.0F)
 			return DCHeatTier.COOL;
 		else if (temp > -0.8F)
 			return DCHeatTier.COLD;

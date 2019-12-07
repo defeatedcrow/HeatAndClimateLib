@@ -41,6 +41,7 @@ public class CoreConfigDC {
 			-0.2D,
 			0.2D
 	};
+	public static double nightEffect = -0.2D;
 
 	public static boolean wall = true;
 
@@ -54,11 +55,13 @@ public class CoreConfigDC {
 	public static boolean hudEffect = true;
 
 	public static boolean enableAdvHUD = true;
+	public static boolean useAnalogueHUD = true;
 	public static int iconHX = 0;
 	public static int iconHY = -48;
 	public static String tex1 = "textures/gui/hud_climate_normal.png";
 	public static String tex2 = "textures/gui/hud_climate_drought.png";
 	public static String tex3 = "textures/gui/hud_climate_rain.png";
+	public static String tex4 = "textures/gui/hud_climate_thermometer.png";
 	public static boolean showBiome = true;
 	public static boolean showSeason = true;
 	public static boolean showDay = true;
@@ -110,6 +113,7 @@ public class CoreConfigDC {
 	public static boolean enableSeasonEffect = true;
 	public static boolean enableSeasonTemp = true;
 	public static boolean enableWeatherEffect = true;
+	public static boolean enableTimeEffect = true;
 	public static boolean enableSubmergedCave = false;
 	public static int seasonFrequency = 60;
 
@@ -190,6 +194,9 @@ public class CoreConfigDC {
 			Property hud_icon2 = cfg
 					.get("render setting", "Climate HUD Info", enableAdvHUD, "Enable display the climate info on HUD.");
 
+			Property hud_icon3 = cfg
+					.get("render setting", "Climate HUD Analogue Thermometer", useAnalogueHUD, "Enable display the analogue thermometer on HUD.");
+
 			Property hud_x2 = cfg
 					.get("render setting", "Climate HUD Info Offset X", iconHX, "Set the amount of Xoffset of the climate info.");
 
@@ -261,6 +268,9 @@ public class CoreConfigDC {
 			Property weather = cfg
 					.get("world setting", "Enable Weather Effect", enableWeatherEffect, "Enable temperature change by the weather.");
 
+			Property time = cfg
+					.get("world setting", "Enable Night Effect", enableTimeEffect, "Enable nighttime temperature drop.");
+
 			Property season = cfg
 					.get("world setting", "Enable Season Effect", enableSeasonEffect, "Enable temperature change by the season.");
 
@@ -296,6 +306,9 @@ public class CoreConfigDC {
 			Property weather_d = cfg
 					.get("world setting", "Weather Influence of Temperature", weatherEffects, "Setting of the amount of temperature change by weather." + BR + "default: rain -0.4 / drought +0.4");
 
+			Property night_d = cfg
+					.get("world setting", "Nighttime Influence of Temperature", nightEffect, "Setting of the amount of temperature change by nighttime." + BR + "default: -0.2");
+
 			Property food_a = cfg
 					.get("setting", "Default Food Saturation Amount", food_amount, "Set the magnification of the food effect amount. (0.1-2.0)");
 
@@ -318,6 +331,7 @@ public class CoreConfigDC {
 			enableSuffocation = suffocation.getBoolean();
 			tightUnderworld = tight.getBoolean();
 			enableWeatherEffect = weather.getBoolean();
+			enableTimeEffect = time.getBoolean();
 			enableSeasonEffect = season.getBoolean();
 			enableSeasonTemp = seasonT.getBoolean();
 			hudEffect = hud_effect.getBoolean();
@@ -395,7 +409,11 @@ public class CoreConfigDC {
 				}
 			}
 
-			enableAdvHUD = hud_icon.getBoolean();
+			double d3 = night_d.getDouble();
+			nightEffect = d3;
+
+			enableAdvHUD = hud_icon2.getBoolean();
+			useAnalogueHUD = hud_icon3.getBoolean();
 			iconHX = hud_x2.getInt();
 			iconHY = hud_y2.getInt();
 			showBiome = hud_biome.getBoolean();

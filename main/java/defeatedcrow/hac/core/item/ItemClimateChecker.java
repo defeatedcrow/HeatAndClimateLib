@@ -131,13 +131,17 @@ public class ItemClimateChecker extends DCItem {
 		player.sendMessage(new TextComponentString("remote world: " + world.isRemote + ". time: " + time));
 		player.sendMessage(new TextComponentString(
 				"world rain: " + world.rainingStrength + ", time " + count + ", sun : " + sun));
-		player.sendMessage(new TextComponentString("biome name: " + world.getBiome(pos).getBiomeName()));
-		player.sendMessage(new TextComponentString("biome temp: " + String.format("%.2f", world.getBiome(pos)
-				.getTemperature(pos))));
+		player.sendMessage(new TextComponentString("biome: " + world.getBiome(pos).getBiomeName()));
+		String st = " (temp: " + String.format("%.2f", world.getBiome(pos).getTemperature(pos));
 		if (CoreConfigDC.enableWeatherEffect) {
-			player.sendMessage(new TextComponentString("weather offset: " + String.format("%.2f", WeatherChecker
-					.getTempOffsetFloat(dim, world.provider.doesWaterVaporize()))));
+			st += " weather: " + String.format("%.2f", WeatherChecker.getTempOffsetFloat(dim, world.provider
+					.doesWaterVaporize()));
 		}
+		if (CoreConfigDC.enableTimeEffect) {
+			st += " time: " + String.format("%.2f", DCTimeHelper.getTimeOffset(world, world.getBiome(pos)));
+		}
+		st += ")";
+		player.sendMessage(new TextComponentString(st));
 	}
 
 	@Override
