@@ -1,5 +1,7 @@
 package defeatedcrow.hac.core.client;
 
+import java.util.Calendar;
+
 import org.lwjgl.opengl.GL11;
 
 import defeatedcrow.hac.api.climate.EnumSeason;
@@ -148,14 +150,21 @@ public class AdvancedHUDEvent {
 
 						String s = "";
 						int color = 16383998;
+						EnumSeason season = EnumSeason.SPRING;
 						if (CoreConfigDC.enableSeasonEffect && CoreConfigDC.showSeason) {
-							EnumSeason season = DCTimeHelper.getSeasonEnum(world);
+							season = DCTimeHelper.getSeasonEnum(world);
 							s += season.getName();
 							color = season.color.getColorValue();
 						}
 						if (CoreConfigDC.showDay) {
-							int day = DCTimeHelper.getDay(world);
-							s += " day" + day;
+							if (CoreConfigDC.enableRealSeason) {
+								Calendar cal = Calendar.getInstance();
+								s += " " + (cal.get(cal.MONTH) + 1) + "/" + cal.get(cal.DATE);
+							} else {
+								int day = DCTimeHelper.getDay(world);
+								int sD = DCTimeHelper.seasonPeriod(season)[0] * CoreConfigDC.yearLength / 365;
+								s += " day" + (day - sD);
+							}
 						}
 						if (s.length() > 1) {
 							if (CoreConfigDC.useAnalogueHUD)

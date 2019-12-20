@@ -120,7 +120,7 @@ public abstract class DCFacelessTileBlock extends BlockContainerDC implements IC
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		int i = state.getValue(DCState.TYPE16);
+		int i = DCState.getInt(state, DCState.TYPE16);
 		if (i > maxMeta)
 			i = maxMeta;
 		return i;
@@ -151,7 +151,7 @@ public abstract class DCFacelessTileBlock extends BlockContainerDC implements IC
 	public int getMetaFromState(IBlockState state) {
 		int i = 0;
 
-		i = state.getValue(DCState.TYPE16);
+		i = DCState.getInt(state, DCState.TYPE16);
 		if (i > maxMeta)
 			i = maxMeta;
 

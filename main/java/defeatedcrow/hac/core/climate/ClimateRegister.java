@@ -170,7 +170,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		} else if (b != null) {
 			temp = b.getTemperature(pos);
 			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
-				temp += 1.5F;
+				temp += 2.0F;
 			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
 				temp -= 1.0F;
 			}
@@ -234,7 +234,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		} else if (b != null) {
 			temp = b.getDefaultTemperature();
 			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
-				temp += 1.5F;
+				temp += 2.0F;
 			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
 				temp -= 1.0F;
 			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WATER)) {

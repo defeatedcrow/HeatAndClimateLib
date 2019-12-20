@@ -50,8 +50,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * IGrowableによる骨粉イベント対応、右クリック収穫機能を持つ。
  * 4段階版
  */
-public abstract class ClimateCropBase extends BlockDC
-		implements ISidedTexture, INameSuffix, IClimateCrop, IRapidCollectables, IGrowable, IPlantable {
+public abstract class ClimateCropBase extends BlockDC implements ISidedTexture, INameSuffix, IClimateCrop,
+		IRapidCollectables, IGrowable, IPlantable {
 
 	protected static final AxisAlignedBB CROP_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.875D, 0.875D);
 

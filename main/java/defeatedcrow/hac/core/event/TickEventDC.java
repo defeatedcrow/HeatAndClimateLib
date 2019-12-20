@@ -13,33 +13,23 @@ import net.minecraftforge.fml.relauncher.Side;
 public class TickEventDC {
 
 	private static final Map<Integer, Integer> prevTime = new HashMap<Integer, Integer>();
-	private static final Map<Integer, Integer> counter = new HashMap<Integer, Integer>();
 
 	// Weather checker
 	@SubscribeEvent
 	public void onTickEvent(TickEvent.WorldTickEvent event) {
 		if (event.world != null && !event.world.isRemote && event.side == Side.SERVER) {
 			int dim = event.world.provider.getDimension();
-			if (!counter.containsKey(dim) || !prevTime.containsKey(dim)) {
-				counter.put(dim, 200);
+			if (!prevTime.containsKey(dim)) {
 				prevTime.put(dim, -1);
 			} else {
 				int prev = prevTime.get(dim);
-				int c = counter.get(dim);
-				if (c > 0) {
-					c--;
-					counter.put(dim, c);
-				} else {
-					// update every 200 tick
-					counter.put(dim, 200);
-					int time = DCTimeHelper.currentTime(event.world);
-					if (prev != time) {
-						prevTime.put(dim, time);
+				int time = DCTimeHelper.realMinute();
+				if (prev != time) {
+					prevTime.put(dim, time);
 
-						WeatherChecker.INSTANCE.setWeather(event.world);
-						WeatherChecker.INSTANCE.sendPacket(event.world);
+					WeatherChecker.INSTANCE.setWeather(event.world);
+					WeatherChecker.INSTANCE.sendPacket(event.world);
 
-					}
 				}
 			}
 		}

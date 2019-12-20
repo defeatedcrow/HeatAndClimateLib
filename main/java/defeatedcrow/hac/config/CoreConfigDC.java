@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import defeatedcrow.hac.api.climate.BlockSet;
+import defeatedcrow.hac.api.climate.EnumSeason;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.common.config.Configuration;
@@ -115,7 +116,33 @@ public class CoreConfigDC {
 	public static boolean enableWeatherEffect = true;
 	public static boolean enableTimeEffect = true;
 	public static boolean enableSubmergedCave = false;
-	public static int seasonFrequency = 60;
+
+	// time
+	public static int yearLength = 240;
+	public static boolean enableRealSeason = false;
+	public static boolean enableRealTime = false;
+	public static boolean enableSouthernHemisphere = false;
+	public static int[] springDate = {
+			59,
+			150
+	};
+	public static int[] summerDate = {
+			151,
+			242
+	};
+	public static int[] autumnDate = {
+			243,
+			303
+	};
+	public static int[] winterDate = {
+			304,
+			58
+	};
+	public static int[] dayTime = {
+			6,
+			17
+	};
+	public static EnumSeason overYear = EnumSeason.WINTER;
 
 	// hardmode
 	public static boolean harderVanilla = false;
@@ -145,6 +172,7 @@ public class CoreConfigDC {
 			cfg.addCustomCategoryComment("entity setting", "This setting is for entities.");
 			cfg.addCustomCategoryComment("setting", "This setting is for game play.");
 			cfg.addCustomCategoryComment("hardmode setting", "This may destroy your game play. Be careful!");
+			cfg.addCustomCategoryComment("time setting", "This setting is for time and seasons.");
 
 			Property debug = cfg
 					.get("debug setting", "Debug Mode Pass", debugPass, "Input the password for starting in debug mode. This is only for authors.");
@@ -259,9 +287,6 @@ public class CoreConfigDC {
 			Property drought = cfg
 					.get("world setting", "Drought Frequency", droughtFrequency, "Set the number of days of fine weather required for drought.");
 
-			Property seasonF = cfg
-					.get("world setting", "Season Frequency", seasonFrequency, "Set the number of days of season's length.");
-
 			Property tight = cfg
 					.get("hardmode setting", "Anaerobic Underworld", tightUnderworld, "Set the indoor underground (<Y30) airflow to tight.");
 
@@ -312,6 +337,31 @@ public class CoreConfigDC {
 			Property food_a = cfg
 					.get("setting", "Default Food Saturation Amount", food_amount, "Set the magnification of the food effect amount. (0.1-2.0)");
 
+			Property yearL = cfg
+					.get("time setting", "Year Length", yearLength, "Set the number of days in the year." + BR + "When it is not 365, the season beginning date is converted to 365 days / year.");
+
+			Property realT = cfg
+					.get("time setting", "Enable Real Time", enableRealTime, "Use the real time for the season of HaC.");
+
+			Property realS = cfg
+					.get("time setting", "Enable Real Season", enableRealSeason, "Use the real season for the season of HaC.");
+
+			// Property southern = cfg
+			// .get("time setting", "Enable Southern Hemisphere", enableSouthernHemisphere, "Use the southern hemisphere
+			// season.");
+
+			Property sprPeriod = cfg
+					.get("time setting", "Period of Spring", springDate, "Set the dates for the beginning and end of spring.");
+
+			Property smrPeriod = cfg
+					.get("time setting", "Period of Summer", summerDate, "Set the dates for the beginning and end of summer.");
+
+			Property autPeriod = cfg
+					.get("time setting", "Period of Autumn", autumnDate, "Set the dates for the beginning and end of autumn.");
+
+			Property wtrPeriod = cfg
+					.get("time setting", "Period of Winter", winterDate, "Set the dates for the beginning and end of winter.");
+
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
@@ -358,10 +408,10 @@ public class CoreConfigDC {
 				dr = 120;
 			droughtFrequency = dr;
 
-			int sf = seasonF.getInt();
-			if (sf < 2 || sf > 1000)
-				sf = 90;
-			seasonFrequency = sf;
+			int sf = yearL.getInt();
+			if (sf < 3 || sf > 1000)
+				sf = 120;
+			yearLength = sf;
 
 			iconX = hud_x.getInt();
 			iconY = hud_y.getInt();
@@ -424,12 +474,68 @@ public class CoreConfigDC {
 			offsetSeason = off_season.getIntList();
 			offsetClimate = off_climate.getIntList();
 
+			enableRealTime = realT.getBoolean();
+			enableRealSeason = realS.getBoolean();
+			// enableSouthernHemisphere = southern.getBoolean();
+
+			if (sprPeriod.isIntList() && sprPeriod.getIntList().length == 2) {
+				for (int i = 0; i < 2; i++) {
+					springDate[i] = sprPeriod.getIntList()[i];
+				}
+				if (springDate[0] > springDate[1]) {
+					overYear = EnumSeason.SPRING;
+				}
+			}
+
+			if (smrPeriod.isIntList() && smrPeriod.getIntList().length == 2) {
+				for (int i = 0; i < 2; i++) {
+					summerDate[i] = smrPeriod.getIntList()[i];
+				}
+				if (summerDate[0] > summerDate[1]) {
+					overYear = EnumSeason.SUMMER;
+				}
+			}
+
+			if (autPeriod.isIntList() && autPeriod.getIntList().length == 2) {
+				for (int i = 0; i < 2; i++) {
+					autumnDate[i] = autPeriod.getIntList()[i];
+				}
+				if (autumnDate[0] > autumnDate[1]) {
+					overYear = EnumSeason.AUTUMN;
+				}
+			}
+
+			if (wtrPeriod.isIntList() && wtrPeriod.getIntList().length == 2) {
+				for (int i = 0; i < 2; i++) {
+					winterDate[i] = wtrPeriod.getIntList()[i];
+				}
+				if (winterDate[0] > winterDate[1]) {
+					overYear = EnumSeason.WINTER;
+				}
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			cfg.save();
 		}
 
+	}
+
+	public static double getSeasonTempOffset(EnumSeason season) {
+		switch (season) {
+		case AUTUMN:
+			return seasonEffects[2];
+		case SPRING:
+			return seasonEffects[0];
+		case SUMMER:
+			return seasonEffects[1];
+		case WINTER:
+			return seasonEffects[3];
+		default:
+			return seasonEffects[0];
+
+		}
 	}
 
 	public static void leadBlockNames() {

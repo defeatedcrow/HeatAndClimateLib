@@ -41,8 +41,8 @@ public class DCSidedBlock extends ClimateBlock implements ISidedTexture, INameSu
 		super(m, s, force);
 		this.setHardness(0.5F);
 		this.setResistance(10.0F);
-		this.setDefaultState(
-				this.blockState.getBaseState().withProperty(DCState.FLAG, false).withProperty(DCState.TYPE8, 0));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.FLAG, false)
+				.withProperty(DCState.TYPE8, 0));
 		if (max < 0 || max > 7)
 			max = 7;
 		this.maxMeta = max;
@@ -93,15 +93,15 @@ public class DCSidedBlock extends ClimateBlock implements ISidedTexture, INameSu
 	public IBlockState getPlaceState(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
 			int meta, EntityLivingBase placer, EnumHand hand) {
 		IBlockState state = super.getPlaceState(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
-		boolean face = placer.getHorizontalFacing() == EnumFacing.NORTH
-				|| placer.getHorizontalFacing() == EnumFacing.SOUTH;
+		boolean face = placer.getHorizontalFacing() == EnumFacing.NORTH || placer
+				.getHorizontalFacing() == EnumFacing.SOUTH;
 		state = state.withProperty(DCState.FLAG, face);
 		return state;
 	}
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		int i = state.getValue(DCState.TYPE8);
+		int i = DCState.getInt(state, DCState.TYPE8);
 		if (i > maxMeta)
 			i = maxMeta;
 		return i;
@@ -146,7 +146,8 @@ public class DCSidedBlock extends ClimateBlock implements ISidedTexture, INameSu
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {
-				DCState.FLAG, DCState.TYPE8
+				DCState.FLAG,
+				DCState.TYPE8
 		});
 	}
 

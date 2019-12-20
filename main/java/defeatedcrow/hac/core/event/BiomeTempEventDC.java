@@ -25,11 +25,11 @@ public class BiomeTempEventDC {
 			float temp = event.defaultTemp;
 
 			// season
-			if (ClimateCore.proxy.getWorld() != null
-					&& !ClimateAPI.register.getNoSeasonList().contains(Biome.getIdForBiome(event.biome))) {
+			if (ClimateCore.proxy.getWorld() != null && !ClimateAPI.register.getNoSeasonList().contains(Biome
+					.getIdForBiome(event.biome))) {
 				if (CoreConfigDC.enableWeatherEffect) {
 					EnumSeason season = DCTimeHelper.getSeasonEnum(ClimateCore.proxy.getWorld());
-					temp += season.temp;
+					temp += CoreConfigDC.getSeasonTempOffset(season);
 				}
 			}
 

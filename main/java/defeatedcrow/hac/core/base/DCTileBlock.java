@@ -186,7 +186,8 @@ public abstract class DCTileBlock extends BlockContainerDC implements IClimateOb
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {
-				DCState.FACING, DCState.TYPE4
+				DCState.FACING,
+				DCState.TYPE4
 		});
 	}
 
@@ -197,8 +198,8 @@ public abstract class DCTileBlock extends BlockContainerDC implements IClimateOb
 
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-		return mirrorIn == Mirror.NONE ? state
-				: state.withRotation(mirrorIn.toRotation(state.getValue(DCState.FACING)));
+		return mirrorIn == Mirror.NONE ? state : state.withRotation(mirrorIn.toRotation(state
+				.getValue(DCState.FACING)));
 	}
 
 	/* climate */

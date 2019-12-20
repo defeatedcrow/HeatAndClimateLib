@@ -42,6 +42,10 @@ public class ClimateBlock extends BlockDC implements IClimateObject {
 		return 100;
 	}
 
+	public boolean canClimateUpdate(IBlockState state) {
+		return true;
+	}
+
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) {
@@ -53,7 +57,7 @@ public class ClimateBlock extends BlockDC implements IClimateObject {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(worldIn, pos, state, rand);
-		if (!worldIn.isRemote && state != null && state.getBlock() != null) {
+		if (!worldIn.isRemote && state != null && state.getBlock() != null && canClimateUpdate(state)) {
 			IClimate clm = this.onUpdateClimate(worldIn, pos, state);
 			if (!this.onClimateChange(worldIn, pos, state, clm) && this.isForcedTickUpdate()) {
 				worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn) + rand.nextInt(21));

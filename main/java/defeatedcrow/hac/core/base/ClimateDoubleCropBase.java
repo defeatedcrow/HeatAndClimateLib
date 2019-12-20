@@ -51,8 +51,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * IGrowableによる骨粉イベント対応、右クリック収穫機能を持つ。
  * 8段階、2ブロック作物版
  */
-public abstract class ClimateDoubleCropBase extends BlockDC
-		implements ISidedTexture, INameSuffix, IClimateCrop, IRapidCollectables, IGrowable, IPlantable {
+public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTexture, INameSuffix, IClimateCrop,
+		IRapidCollectables, IGrowable, IPlantable {
 
 	protected static final AxisAlignedBB CROP_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
 
@@ -62,8 +62,8 @@ public abstract class ClimateDoubleCropBase extends BlockDC
 	public ClimateDoubleCropBase(Material material, String s, int max) {
 		super(material, s);
 		this.setTickRandomly(true);
-		this.setDefaultState(
-				this.blockState.getBaseState().withProperty(DCState.STAGE8, 0).withProperty(DCState.DOUBLE, false));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.STAGE8, 0)
+				.withProperty(DCState.DOUBLE, false));
 	}
 
 	@Override
@@ -287,8 +287,8 @@ public abstract class ClimateDoubleCropBase extends BlockDC
 					age++;
 					if (age > 3 && world.getBlockState(pos.down()).getBlock() != this && world.isAirBlock(pos.up())) {
 						// 4段階目で2段になる
-						world.setBlockState(pos.up(),
-								thisState.withProperty(DCState.STAGE8, 4).withProperty(DCState.DOUBLE, false), 2);
+						world.setBlockState(pos.up(), thisState.withProperty(DCState.STAGE8, 4)
+								.withProperty(DCState.DOUBLE, false), 2);
 						world.setBlockState(pos, thisState.withProperty(DCState.DOUBLE, true), 2);
 					}
 					IBlockState next = thisState.withProperty(DCState.STAGE8, age);
@@ -421,7 +421,8 @@ public abstract class ClimateDoubleCropBase extends BlockDC
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {
-				DCState.STAGE8, DCState.DOUBLE
+				DCState.STAGE8,
+				DCState.DOUBLE
 		});
 	}
 

@@ -8,7 +8,7 @@ import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.EnumSeason;
+import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -43,8 +43,8 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 
 		types = BiomeDictionary.getTypes(biome);
 
-		hasSeason = !ClimateAPI.register.getNoSeasonList().isEmpty()
-				&& ClimateAPI.register.getNoSeasonList().contains(id);
+		hasSeason = !ClimateAPI.register.getNoSeasonList().isEmpty() && ClimateAPI.register.getNoSeasonList()
+				.contains(id);
 
 		temps = new ArrayList<DCHeatTier>();
 		if (hasSeason) {
@@ -53,10 +53,10 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 			temps.add(tem);
 			temps.add(tem);
 		} else {
-			float spr = biome.getDefaultTemperature() + (float) EnumSeason.SPRING.temp;
-			float smr = biome.getDefaultTemperature() + (float) EnumSeason.SUMMER.temp;
-			float aut = biome.getDefaultTemperature() + (float) EnumSeason.AUTUMN.temp;
-			float wtr = biome.getDefaultTemperature() + (float) EnumSeason.WINTER.temp;
+			float spr = biome.getDefaultTemperature() + (float) CoreConfigDC.seasonEffects[0];
+			float smr = biome.getDefaultTemperature() + (float) CoreConfigDC.seasonEffects[1];
+			float aut = biome.getDefaultTemperature() + (float) CoreConfigDC.seasonEffects[2];
+			float wtr = biome.getDefaultTemperature() + (float) CoreConfigDC.seasonEffects[3];
 			temps.add(DCHeatTier.getTypeByBiomeTemp(spr));
 			temps.add(DCHeatTier.getTypeByBiomeTemp(smr));
 			temps.add(DCHeatTier.getTypeByBiomeTemp(aut));
@@ -96,8 +96,8 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 			DCHeatTier heat = temps.get(i);
 			if (heat != null) {
 				if (heat.getID() > 6) {
-					mc.currentScreen.drawTexturedModalRect(17 + 21 * i, baseY + 21, heat.getID() * 20 - 140, 174, 20,
-							3);
+					mc.currentScreen.drawTexturedModalRect(17 + 21 * i, baseY + 21, heat
+							.getID() * 20 - 140, 174, 20, 3);
 				} else {
 					mc.currentScreen.drawTexturedModalRect(17 + 21 * i, baseY + 21, heat.getID() * 20, 170, 20, 3);
 				}
@@ -126,13 +126,13 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 		DCHeatTier heat = temps.get(2);
 		String t = heat.name();
 		int heatColor = heat.getTier() < 0 ? 0x5050FF : 0xFF5050;
-		mc.fontRenderer.drawString("BASE TEMP : " + biome.getDefaultTemperature() + " (" + t + ")", 18, baseY + 25,
-				heatColor, false);
+		mc.fontRenderer.drawString("BASE TEMP : " + biome
+				.getDefaultTemperature() + " (" + t + ")", 18, baseY + 25, heatColor, false);
 
 		String h = hum == null ? "  -" : hum.name();
 		int humColor = hum.getID() > 0 ? 0x5050FF : 0xFF5050;
-		mc.fontRenderer.drawString("HUM : Rainfall " + biome.getRainfall() + " (" + h + ")", 18, baseY + 46, humColor,
-				false);
+		mc.fontRenderer.drawString("HUM : Rainfall " + biome
+				.getRainfall() + " (" + h + ")", 18, baseY + 46, humColor, false);
 
 		String a = air == null ? "  -" : air.name();
 		int airColor = air.getID() > 0 ? 0x5050FF : 0xFF5050;

@@ -89,12 +89,14 @@ public class MobResistantRegister implements IMobHeatResistant {
 				coldResistant.put(entityClass, cold);
 			}
 			DCLogger.infoLog("success registering : " + entityClass.getSimpleName() + " " + heat + "/" + cold);
-			String name = EntityList.getKey(entityClass).toString();
-			if (name != null && !name.equalsIgnoreCase("Null")) {
-				Map<String, Float> res = new HashMap<String, Float>();
-				res.put("heat", heat);
-				res.put("cold", cold);
-				floatMap.put(name, res);
+			if (EntityList.getKey(entityClass) != null) {
+				String name = EntityList.getKey(entityClass).toString();
+				if (name != null && !name.equalsIgnoreCase("Null")) {
+					Map<String, Float> res = new HashMap<String, Float>();
+					res.put("heat", heat);
+					res.put("cold", cold);
+					floatMap.put(name, res);
+				}
 			}
 		}
 	}
