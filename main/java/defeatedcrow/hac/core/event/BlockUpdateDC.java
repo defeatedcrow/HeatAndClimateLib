@@ -46,7 +46,7 @@ public class BlockUpdateDC {
 				return;
 			}
 
-			if (block == Blocks.GRASS || block.isLeaves(st, world, p)) {
+			if (st.getMaterial() == Material.GRASS || block.isLeaves(st, world, p)) {
 				return;
 			}
 

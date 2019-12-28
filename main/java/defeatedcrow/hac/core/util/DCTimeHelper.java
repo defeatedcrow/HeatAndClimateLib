@@ -65,7 +65,7 @@ public class DCTimeHelper {
 			d = cal.get(cal.DAY_OF_YEAR);
 		} else {
 			int day = getDay(world);
-			d = day * 365 / CoreConfigDC.yearLength;
+			d = (int) (day * (365D / CoreConfigDC.yearLength));
 			d = d % 365;
 		}
 		for (EnumSeason s : EnumSeason.values()) {
@@ -94,7 +94,7 @@ public class DCTimeHelper {
 			return cal.get(cal.DAY_OF_YEAR);
 		}
 		long day = totalTime(world) / 24000L;
-		day += CoreConfigDC.springDate[0] * CoreConfigDC.yearLength / 365 + 1;
+		day += CoreConfigDC.springDate[0] * (CoreConfigDC.yearLength / 365D) + 1;
 		if (day > Integer.MAX_VALUE)
 			day -= Integer.MAX_VALUE;
 		return (int) day;

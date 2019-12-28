@@ -162,8 +162,15 @@ public class AdvancedHUDEvent {
 								s += " " + (cal.get(cal.MONTH) + 1) + "/" + cal.get(cal.DATE);
 							} else {
 								int day = DCTimeHelper.getDay(world);
-								int sD = DCTimeHelper.seasonPeriod(season)[0] * CoreConfigDC.yearLength / 365;
+								int sD = (int) (DCTimeHelper
+										.seasonPeriod(season)[0] * (CoreConfigDC.yearLength / 365D));
+								if (season == CoreConfigDC.overYear && day < sD) {
+									sD = 0;
+								}
 								s += " day" + (day - sD);
+								// if (ClimateCore.isDebug) {
+								// s += " totalday" + day;
+								// }
 							}
 						}
 						if (s.length() > 1) {

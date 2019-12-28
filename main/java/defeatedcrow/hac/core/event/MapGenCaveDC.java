@@ -23,13 +23,13 @@ public class MapGenCaveDC extends MapGenCaves {
 	@Override
 	protected void digBlock(ChunkPrimer data, int x, int y, int z, int chunkX, int chunkZ, boolean foundTop,
 			IBlockState state, IBlockState up) {
-		net.minecraft.world.biome.Biome biome = world
-				.getBiomeForCoordsBody(new BlockPos(x + chunkX * 16, 0, z + chunkZ * 16));
+		net.minecraft.world.biome.Biome biome = world.getBiomeForCoordsBody(new BlockPos(x + chunkX * 16, 0,
+				z + chunkZ * 16));
 		IBlockState top = biome.topBlock;
 		IBlockState filler = biome.fillerBlock;
 
-		if (this.canReplaceBlock(state, up) || state.getBlock() == top.getBlock()
-				|| state.getBlock() == filler.getBlock()) {
+		if (this.canReplaceBlock(state, up) || state.getBlock() == top.getBlock() || state.getBlock() == filler
+				.getBlock()) {
 			if (y - 1 < 10) {
 				if (biome.getRainfall() >= 0.85F || BiomeDictionary.hasType(biome, BiomeDictionary.Type.WET)) {
 					data.setBlockState(x, y, z, BLK_WATER);

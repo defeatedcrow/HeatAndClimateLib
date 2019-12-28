@@ -409,7 +409,7 @@ public class CoreConfigDC {
 			droughtFrequency = dr;
 
 			int sf = yearL.getInt();
-			if (sf < 3 || sf > 1000)
+			if (sf < 3 || sf > 3650)
 				sf = 120;
 			yearLength = sf;
 

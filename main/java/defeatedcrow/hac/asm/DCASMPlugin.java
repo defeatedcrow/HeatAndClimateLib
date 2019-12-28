@@ -3,6 +3,7 @@ package defeatedcrow.hac.asm;
 import java.io.File;
 import java.util.Map;
 
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
@@ -31,16 +32,16 @@ public class DCASMPlugin implements IFMLLoadingPlugin, IFMLCallHook {
 
 	@Override
 	public void injectData(Map<String, Object> data) {
-		if (data.containsKey("coremodLocation")) {
-			file = (File) data.get("coremodLocation");
+		if (data.containsKey("mcLocation")) {
+			file = (File) data.get("mcLocation");
 		}
 
-		if (file == null) {
-
-			file = new File((File) data.get("mcLocation"), "../bin");
-
-			file.mkdir();
-
+		if (file != null) {
+			File config = new File(file, "config/defeatedcrow/climate/dcs_asm.cfg");
+			loadConfig(config);
+			// LogManager.getLogger("dcs_asm").debug("loaded config:" + config.toPath().toString());
+		} else {
+			// LogManager.getLogger("dcs_asm").debug("failed to load config");
 		}
 	}
 
@@ -52,6 +53,10 @@ public class DCASMPlugin implements IFMLLoadingPlugin, IFMLCallHook {
 	@Override
 	public Void call() throws Exception {
 		return null;
+	}
+
+	private void loadConfig(File configFile) {
+		ClimateAsmConfig.INSTANCE.load(new Configuration(configFile));
 	}
 
 }

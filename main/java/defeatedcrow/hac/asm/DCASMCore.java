@@ -21,7 +21,7 @@ public class DCASMCore extends DummyModContainer {
 		ModMetadata meta = super.getMetadata();
 		meta.modId = "dcs_asm";
 		meta.name = "HeatAndClimateASM";
-		meta.version = "2.0.1";
+		meta.version = "2.1.0";
 		// 以下は省略可
 		meta.authorList = Arrays.asList(new String[] {
 				"defeatedcrow"

@@ -9,8 +9,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
-import net.minecraftforge.event.terraingen.InitMapGenEvent;
-import net.minecraftforge.event.terraingen.InitMapGenEvent.EventType;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,17 +16,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class CaveGenLavaDC {
 
 	private Random rand = new Random();
-
-	@SubscribeEvent
-	public void initMapGen(InitMapGenEvent event) {
-		if (CoreConfigDC.enableDeepWater) {
-			if (event.getType() == EventType.CAVE) {
-				event.setNewGen(new MapGenCaveDC());
-			} else if (event.getType() == EventType.RAVINE) {
-				event.setNewGen(new MapGenRavineDC());
-			}
-		}
-	}
 
 	@SubscribeEvent
 	public void initLakeGen(PopulateChunkEvent.Populate event) {

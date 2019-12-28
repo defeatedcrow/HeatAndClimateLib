@@ -8,6 +8,7 @@ import defeatedcrow.hac.core.climate.WeatherChecker;
 import defeatedcrow.hac.core.event.BiomeTempEventDC;
 import defeatedcrow.hac.core.event.BlockFreezeEventDC;
 import defeatedcrow.hac.core.event.BlockUpdateDC;
+import defeatedcrow.hac.core.event.CaveDigEventDC;
 import defeatedcrow.hac.core.event.CaveGenLavaDC;
 import defeatedcrow.hac.core.event.ClickEventDC;
 import defeatedcrow.hac.core.event.CoreAnvilEvent;
@@ -62,6 +63,9 @@ public class CommonProxyD {
 		MinecraftForge.EVENT_BUS.register(new ClickEventDC());
 		MinecraftForge.TERRAIN_GEN_BUS.register(new CaveGenLavaDC());
 		MinecraftForge.EVENT_BUS.register(new TickEventDC());
+		if (CoreConfigDC.enableDeepWater) {
+			MinecraftForge.EVENT_BUS.register(new CaveDigEventDC());
+		}
 		if (CoreConfigDC.enableSuffocation) {
 			MinecraftForge.EVENT_BUS.register(new SuffocationEventDC());
 		}
