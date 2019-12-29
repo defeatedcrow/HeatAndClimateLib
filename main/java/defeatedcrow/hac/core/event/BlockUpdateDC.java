@@ -63,7 +63,7 @@ public class BlockUpdateDC {
 			boolean roof = hasRoof(world, p);
 
 			// 直接指定の仕様
-			if (BlockFarmland.class.isInstance(block)) {
+			if (CoreConfigDC.enableFarmland && BlockFarmland.class.isInstance(block)) {
 				DCHumidity hum = ClimateAPI.calculator.getHumidity(world, p, 4, true);
 				DCHumidity hum2 = ClimateAPI.calculator.getHumidity(world, p);
 				// 耕地はWET以上の湿度では湿る
@@ -74,7 +74,7 @@ public class BlockUpdateDC {
 					event.setCanceled(true);
 				}
 				return;
-			} else if (block instanceof IGrowable) {
+			} else if (CoreConfigDC.enableVanillaCrop && block instanceof IGrowable) {
 				// WETの参照posを真下に
 				if (block == Blocks.TALLGRASS) {
 					// WARMかつWETの場合に成長が促進される
@@ -86,7 +86,6 @@ public class BlockUpdateDC {
 							grow.grow(world, world.rand, p, st);
 						}
 					}
-					return;
 				} else if (block != Blocks.DOUBLE_PLANT) {
 					// WARMかつWETの場合に成長が促進され、COLD以下の場合は成長が遅くなる
 					IGrowable grow = (IGrowable) block;
@@ -101,8 +100,8 @@ public class BlockUpdateDC {
 							// DCLogger.debugLog("Grow Canceled");
 						}
 					}
-					return;
 				}
+				return;
 			}
 			/*
 			 * ICE

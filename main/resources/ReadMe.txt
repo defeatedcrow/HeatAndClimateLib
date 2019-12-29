@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.2.1 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.2.2 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -268,6 +268,10 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.2.2
+　変更
+　　・WETによる農地の湿り機能、バニラ作物のHaC式成長をOFFするコンフィグを追加
 
 ○3.2.1
 　変更

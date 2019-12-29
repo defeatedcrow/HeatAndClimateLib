@@ -101,6 +101,8 @@ public class CoreConfigDC {
 
 	// recipe
 	public static boolean enableVanilla = false;
+	public static boolean enableVanillaCrop = true;
+	public static boolean enableFarmland = true;
 	public static int updateFrequency = 5;
 	public static boolean disableCustomRecipe = false;
 	public static boolean enableDropItemSmelting = false;
@@ -191,6 +193,12 @@ public class CoreConfigDC {
 
 			Property vanilla_block = cfg
 					.get("world setting", "Enable Vanilla Block Recipe", enableVanilla, "Enable climate change of vanilla blocks.");
+
+			Property vanilla_crop = cfg
+					.get("world setting", "Enable Vanilla Crop Growth", enableVanillaCrop, "Enable HaC growth of vanilla crops.");
+
+			Property vanilla_farmland = cfg
+					.get("world setting", "Enable Moisture Farmland", enableFarmland, "Enable to moisture farmland in WET humidity.");
 
 			Property update_block = cfg
 					.get("world setting", "Set Update Frequency", updateFrequency, "Set the number of the update times per sec.");
@@ -329,7 +337,7 @@ public class CoreConfigDC {
 					.get("world setting", "Seasonal Influence of Temperature", seasonEffects, "Setting of the amount of temperature change by each season." + BR + "default: spr +0.05 / smr +0.4 / aut 0 / wtr -0.4");
 
 			Property weather_d = cfg
-					.get("world setting", "Weather Influence of Temperature", weatherEffects, "Setting of the amount of temperature change by weather." + BR + "default: rain -0.4 / drought +0.4");
+					.get("world setting", "Weather Influence of Temperature", weatherEffects, "Setting of the amount of temperature change by weather." + BR + "default: rain -0.2 / drought +0.2");
 
 			Property night_d = cfg
 					.get("world setting", "Nighttime Influence of Temperature", nightEffect, "Setting of the amount of temperature change by nighttime." + BR + "default: -0.2");
@@ -368,6 +376,8 @@ public class CoreConfigDC {
 			showAltTips = alt_tips.getBoolean();
 			charmWarpKey = warp_key.getInt();
 			enableVanilla = vanilla_block.getBoolean();
+			enableVanillaCrop = vanilla_crop.getBoolean();
+			enableFarmland = vanilla_farmland.getBoolean();
 			burntFood = burnt_food.getBoolean();
 			showDamageIcon = hud_icon.getBoolean();
 			enableDeepWater = water_cave.getBoolean();
