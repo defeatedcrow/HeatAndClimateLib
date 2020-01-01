@@ -336,6 +336,21 @@ public class ClimateRegister implements IBiomeClimateRegister {
 			return code;
 		}
 
+		@Override
+		public IClimate addTempTier(int tier) {
+			return new DCClimate(temp.addTier(tier), hum, flow);
+		}
+
+		@Override
+		public IClimate addHumTier(int tier) {
+			return new DCClimate(temp, hum.addTier(tier), flow);
+		}
+
+		@Override
+		public IClimate addAirTier(int tier) {
+			return new DCClimate(temp, hum, flow.addTier(tier));
+		}
+
 	}
 
 	private static final Map<String, DCClimate> jsonMap = new HashMap<String, DCClimate>();

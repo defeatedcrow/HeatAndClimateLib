@@ -116,13 +116,10 @@ public abstract class BlockContainerDC extends BlockContainer {
 	}
 
 	/** solid side */
-	public boolean isSolidFace(IBlockState state, BlockPos pos, EnumFacing face) {
-		return state.getMaterial().isSolid();
-	}
 
 	@Override
 	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
-		return isSolidFace(state, pos, face) ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+		return isSideSolid(state, world, pos, face) ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
 	}
 
 }

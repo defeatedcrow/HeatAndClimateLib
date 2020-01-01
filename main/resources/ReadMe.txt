@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.2.2 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.2.3 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -268,6 +268,13 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.2.3
+　修正
+　　・ブロックのSolid面判定を修正
+　　・HUDの日数表示を修正
+　API
+　　・ClimateAPIを少し修正
 
 ○3.2.2
 　変更

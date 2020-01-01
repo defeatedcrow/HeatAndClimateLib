@@ -473,7 +473,7 @@ public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTex
 	}
 
 	@Override
-	public boolean isSolidFace(IBlockState state, BlockPos pos, EnumFacing face) {
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return false;
 	}
 

@@ -51,6 +51,11 @@ public enum DCHumidity {
 		return I18n.format("dcs.tip.hum." + name());
 	}
 
+	public DCHumidity addTier(int i) {
+		int ret = id + i;
+		return getTypeByID(ret);
+	}
+
 	public static DCHumidity getTypeByID(int i) {
 		MathHelper.clamp(i, 0, 3);
 		for (DCHumidity e : values()) {

@@ -51,6 +51,11 @@ public enum DCAirflow {
 		return color;
 	}
 
+	public DCAirflow addTier(int i) {
+		int ret = id + i;
+		return getTypeByID(ret);
+	}
+
 	public static DCAirflow getTypeByID(int i) {
 		MathHelper.clamp(i, 0, 3);
 		for (DCAirflow e : values()) {

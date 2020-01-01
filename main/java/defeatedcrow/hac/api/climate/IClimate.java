@@ -14,4 +14,10 @@ public interface IClimate {
 
 	int getClimateInt();
 
+	IClimate addTempTier(int tier);
+
+	IClimate addHumTier(int tier);
+
+	IClimate addAirTier(int tier);
+
 }

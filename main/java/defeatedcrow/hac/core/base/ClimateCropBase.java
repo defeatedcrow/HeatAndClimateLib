@@ -438,7 +438,7 @@ public abstract class ClimateCropBase extends BlockDC implements ISidedTexture, 
 	}
 
 	@Override
-	public boolean isSolidFace(IBlockState state, BlockPos pos, EnumFacing face) {
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return false;
 	}
 

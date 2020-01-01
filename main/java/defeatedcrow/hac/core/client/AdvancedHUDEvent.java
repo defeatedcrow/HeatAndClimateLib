@@ -167,7 +167,7 @@ public class AdvancedHUDEvent {
 								if (season == CoreConfigDC.overYear && day < sD) {
 									sD = 0;
 								}
-								s += " day" + (day - sD);
+								s += " Day " + (day - sD);
 								// if (ClimateCore.isDebug) {
 								// s += " totalday" + day;
 								// }
