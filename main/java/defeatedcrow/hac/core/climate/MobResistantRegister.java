@@ -35,7 +35,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 			String n = name.toString();
 			DCLogger.debugLog("register target: " + name.toString());
 			Class<? extends Entity> entity = EntityList.getClass(name);
-			if (entity != null && heatResistant.containsKey(name.toString())) {
+			if (entity != null && heatResistant.containsKey(entity)) {
 				return heatResistant.get(entity);
 			}
 		}
@@ -47,7 +47,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 		if (name != null) {
 			DCLogger.debugLog("register target: " + name.toString());
 			Class<? extends Entity> entity = EntityList.getClass(name);
-			if (entity != null && coldResistant.containsKey(name.toString())) {
+			if (entity != null && coldResistant.containsKey(entity)) {
 				return coldResistant.get(entity);
 			}
 		}

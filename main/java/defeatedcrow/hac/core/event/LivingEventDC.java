@@ -8,6 +8,7 @@ import defeatedcrow.hac.api.climate.ClimateSupplier;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.damage.ClimateDamageEvent;
+import defeatedcrow.hac.api.damage.ClimateDamageEvent.DamageSet;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.damage.DamageSourceClimate;
 import defeatedcrow.hac.api.magic.IJewelCharm;
@@ -30,6 +31,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -232,9 +234,10 @@ public class LivingEventDC {
 
 			dam -= prev;
 
-			ClimateDamageEvent fireEvent = new ClimateDamageEvent(living, source, heat, dam);
-			float result = fireEvent.result();
-			dam = result;
+			ClimateDamageEvent fireEvent = new ClimateDamageEvent(living, source, clm.get(), dam);
+			DamageSet result = fireEvent.result();
+			dam = result.damage;
+			DamageSource source2 = result.source;
 
 			// 2.0F未満の場合はとどめを刺さない
 			if (dam < 2.0F && living.getHealth() < 2.0F) {
@@ -242,7 +245,7 @@ public class LivingEventDC {
 			}
 
 			if (dam >= 1.0F) {
-				living.attackEntityFrom(source, dam);
+				living.attackEntityFrom(source2, dam);
 			}
 		}
 	}

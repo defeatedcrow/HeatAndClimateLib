@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.2.3 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.2.4 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -268,6 +268,12 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.2.4
+　変更
+　　・HaCModが持っていたバニラへの辞書名追加機能をLibに移動
+　API
+　　・エンティティの気候ダメージ計算Eventの内容を改修
 
 ○3.2.3
 　修正

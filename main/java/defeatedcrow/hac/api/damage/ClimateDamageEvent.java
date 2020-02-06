@@ -1,6 +1,6 @@
 package defeatedcrow.hac.api.damage;
 
-import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.IClimate;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,25 +15,24 @@ import net.minecraftforge.fml.common.eventhandler.Cancelable;
 @Cancelable
 public class ClimateDamageEvent extends LivingEvent {
 
-	private final DamageSourceClimate source;
+	private DamageSource source;
 	private float amount;
-	private final DCHeatTier heatTier;
+	private final IClimate climate;
 
-	public ClimateDamageEvent(EntityLivingBase livingIn, DamageSourceClimate sourceIn, DCHeatTier tierIn,
-			float amountIn) {
+	public ClimateDamageEvent(EntityLivingBase livingIn, DamageSource sourceIn, IClimate climateIn, float amountIn) {
 		super(livingIn);
 		source = sourceIn;
 		amount = amountIn;
-		heatTier = tierIn;
+		climate = climateIn;
 	}
 
-	public float result() {
+	public DamageSet result() {
 		MinecraftForge.EVENT_BUS.post(this);
 		if (isCanceled()) {
-			return 0;
+			return new DamageSet(0, source);
 		}
 
-		return amount;
+		return new DamageSet(amount, source);
 	}
 
 	public DamageSource getSource() {
@@ -44,11 +43,27 @@ public class ClimateDamageEvent extends LivingEvent {
 		return amount;
 	}
 
-	public DCHeatTier getHeatTier() {
-		return heatTier;
+	public IClimate getClimate() {
+		return climate;
 	}
 
-	public void setAmount(float amount) {
-		this.amount = amount;
+	public void setAmount(float amountIn) {
+		this.amount = amountIn;
+	}
+
+	public void setDamageSource(DamageSource sourceIn) {
+		source = sourceIn;
+	}
+
+	public final class DamageSet {
+
+		public final float damage;
+		public final DamageSource source;
+
+		public DamageSet(float d, DamageSource s) {
+			damage = d;
+			source = s;
+		}
+
 	}
 }

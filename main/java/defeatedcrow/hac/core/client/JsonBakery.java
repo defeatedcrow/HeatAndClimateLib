@@ -108,7 +108,7 @@ public class JsonBakery {
 		textureMap.registerSprite(new ResourceLocation("dcs_climate:blocks/destroy_effect"));
 	}
 
-	@SubscribeEvent
+	// @SubscribeEvent
 	public void onBakingModelEvent(ModelBakeEvent event) throws Exception {
 		// 生
 		ResourceLocation rawSided = new ResourceLocation("dcs_climate:block/dcs_cube_sided");
@@ -182,20 +182,20 @@ public class JsonBakery {
 					ImmutableMap<String, String> textures = new ImmutableMap.Builder<String, String>()
 							.put("particle", top).put("down1", clear).put("up1", clear).put("ns1", ns).put("we1", we)
 							.put("down2", down).put("up2", top).build();
-					IBakedModel baked = retexturableModel.retexture(textures).bake(retexturableModel.getDefaultState(),
-							Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+					IBakedModel baked = retexturableModel.retexture(textures).bake(retexturableModel
+							.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 					return baked.getQuads(state, side, rand);
 				} else {
 					ImmutableMap<String, String> textures = new ImmutableMap.Builder<String, String>()
 							.put("particle", top).put("down1", down).put("up1", top).put("ns1", ns).put("we1", we)
 							.put("down2", clear).put("up2", clear).build();
-					IBakedModel baked = retexturableModel.retexture(textures).bake(retexturableModel.getDefaultState(),
-							Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+					IBakedModel baked = retexturableModel.retexture(textures).bake(retexturableModel
+							.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 					return baked.getQuads(state, side, rand);
 				}
 			}
-			IBakedModel defModel = retexturableModel.bake(retexturableModel.getDefaultState(),
-					Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+			IBakedModel defModel = retexturableModel.bake(retexturableModel
+					.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 			return defModel.getQuads(state, side, rand);
 		}
 
@@ -249,13 +249,13 @@ public class JsonBakery {
 				String top = sided.getTexture(meta, 0, false);
 				String down = sided.getTexture(meta, 1, false);
 				String side = sided.getTexture(meta, 2, false);
-				IBakedModel baked = retexturableModel
-						.retexture(ImmutableMap.of("particle", top, "down", down, "up", top, "side", side))
-						.bake(retexturableModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+				IBakedModel baked = retexturableModel.retexture(ImmutableMap
+						.of("particle", top, "down", down, "up", top, "side", side)).bake(retexturableModel
+								.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 				return baked.getQuads(state, face, rand);
 			}
-			IBakedModel defModel = retexturableModel.bake(retexturableModel.getDefaultState(),
-					Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+			IBakedModel defModel = retexturableModel.bake(retexturableModel
+					.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 			return defModel.getQuads(state, face, rand);
 		}
 
@@ -311,8 +311,8 @@ public class JsonBakery {
 						.bake(retexturableModel.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 				return baked.getQuads(state, face, rand);
 			}
-			IBakedModel defModel = retexturableModel.bake(retexturableModel.getDefaultState(),
-					Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
+			IBakedModel defModel = retexturableModel.bake(retexturableModel
+					.getDefaultState(), Attributes.DEFAULT_BAKED_FORMAT, textureGetter);
 			return defModel.getQuads(state, face, rand);
 		}
 

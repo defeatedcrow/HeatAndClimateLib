@@ -65,6 +65,42 @@ public class OreRegister {
 		OreDictionary.registerOre("bucketEmpty", new ItemStack(Items.BUCKET));
 
 		OreDictionary.registerOre("blockWool", new ItemStack(Blocks.WOOL, 1, 32767));
+
+		OreDictionary.registerOre("blockTallgrass", new ItemStack(Blocks.TALLGRASS, 1, 0));
+		OreDictionary.registerOre("blockTallgrass", new ItemStack(Blocks.TALLGRASS, 1, 1));
+		OreDictionary.registerOre("blockTallgrass", new ItemStack(Blocks.TALLGRASS, 1, 2));
+		OreDictionary.registerOre("blockTallgrass", new ItemStack(Blocks.DOUBLE_PLANT, 1, 2));
+		OreDictionary.registerOre("blockTallgrass", new ItemStack(Blocks.DOUBLE_PLANT, 1, 3));
+
+		OreDictionary.registerOre("listAllseeds", new ItemStack(Items.WHEAT_SEEDS, 1, 0));
+		OreDictionary.registerOre("listAllseeds", new ItemStack(Items.MELON_SEEDS, 1, 0));
+		OreDictionary.registerOre("listAllseeds", new ItemStack(Items.PUMPKIN_SEEDS, 1, 0));
+		OreDictionary.registerOre("listAllseeds", new ItemStack(Items.BEETROOT_SEEDS, 1, 0));
+
+		OreDictionary.registerOre("cobblestone", new ItemStack(Blocks.STONE, 1, 1));
+		OreDictionary.registerOre("cobblestone", new ItemStack(Blocks.STONE, 1, 3));
+		OreDictionary.registerOre("cobblestone", new ItemStack(Blocks.STONE, 1, 5));
+
+		OreDictionary.registerOre("egg", new ItemStack(Items.EGG));
+
+		OreDictionary.registerOre("listAllveggie", new ItemStack(Items.CARROT, 1, 0));
+		OreDictionary.registerOre("listAllveggie", new ItemStack(Items.POTATO, 1, 0));
+		OreDictionary.registerOre("listAllveggie", new ItemStack(Items.BEETROOT, 1, 0));
+		OreDictionary.registerOre("listAllveggie", new ItemStack(Blocks.PUMPKIN, 1, 0));
+		OreDictionary.registerOre("bread", new ItemStack(Items.BREAD, 1, 0));
+
+		OreDictionary.registerOre("listAllmeatcooked", new ItemStack(Items.COOKED_BEEF, 1, 0));
+		OreDictionary.registerOre("listAllmeatcooked", new ItemStack(Items.COOKED_CHICKEN, 1, 0));
+		OreDictionary.registerOre("listAllmeatcooked", new ItemStack(Items.COOKED_MUTTON, 1, 0));
+		OreDictionary.registerOre("listAllmeatcooked", new ItemStack(Items.COOKED_PORKCHOP, 1, 0));
+		OreDictionary.registerOre("listAllmeatcooked", new ItemStack(Items.COOKED_RABBIT, 1, 0));
+		OreDictionary.registerOre("listAllbeefcooked", new ItemStack(Items.COOKED_BEEF, 1, 0));
+		OreDictionary.registerOre("listAllchickencooked", new ItemStack(Items.COOKED_CHICKEN, 1, 0));
+		OreDictionary.registerOre("listAllmuttoncooked", new ItemStack(Items.COOKED_MUTTON, 1, 0));
+		OreDictionary.registerOre("listAllporkcooked", new ItemStack(Items.COOKED_PORKCHOP, 1, 0));
+		OreDictionary.registerOre("listAllrabbitcooked", new ItemStack(Items.COOKED_RABBIT, 1, 0));
+
+		OreDictionary.registerOre("vineLeaves", new ItemStack(Blocks.VINE, 1, 0));
 	}
 
 	static void addConversion() {

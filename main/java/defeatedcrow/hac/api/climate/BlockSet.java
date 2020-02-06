@@ -5,7 +5,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
 /** ItemStackのようなBlock、metaのセットが欲しかったので作成 */
-public class BlockSet {
+public final class BlockSet {
 
 	public final Block block;
 	public final int meta;

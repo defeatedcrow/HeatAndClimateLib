@@ -109,7 +109,6 @@ public class TorqueHandlerWrapper implements ITorqueHandler, ICapabilityProvider
 		return capability == TorqueCapabilityHandler.TORQUE_HANDLER_CAPABILITY;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return capability == TorqueCapabilityHandler.TORQUE_HANDLER_CAPABILITY ? (T) this : null;

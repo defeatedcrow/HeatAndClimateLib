@@ -110,16 +110,15 @@ public class ShapelessNBTRecipe extends IForgeRegistryEntry.Impl<IRecipe> implem
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	protected boolean checkMatch(ItemStack slot, Ingredient target) {
 		if (target.apply(slot)) {
 			if (target != Ingredient.EMPTY && target.getMatchingStacks().length == 1) {
 				ItemStack stack = target.getMatchingStacks()[0];
 				if (!DCUtil.isEmpty(stack) && !DCUtil.isEmpty(slot)) {
-					if (stack.getItem() == ForgeModContainer.getInstance().universalBucket
-							&& slot.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
-						IFluidHandler handler = slot.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY,
-								null);
+					if (stack.getItem() == ForgeModContainer.getInstance().universalBucket && slot
+							.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+						IFluidHandler handler = slot
+								.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 						FluidStack f = handler.drain(Fluid.BUCKET_VOLUME, false);
 						IFluidHandler handler2 = stack
 								.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
