@@ -51,16 +51,16 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	private byte sideInt = 0;
 	private int individual;
 
-	private static final DataParameter<Boolean> RAW = EntityDataManager.<Boolean>createKey(FoodEntityBase.class,
-			DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> BURNT = EntityDataManager.<Boolean>createKey(FoodEntityBase.class,
-			DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> AGE = EntityDataManager.<Integer>createKey(FoodEntityBase.class,
-			DataSerializers.VARINT);
-	private static final DataParameter<EnumFacing> SIDE = EntityDataManager.<EnumFacing>createKey(FoodEntityBase.class,
-			DataSerializers.FACING);
-	private static final DataParameter<Integer> INDIVIDUAL = EntityDataManager.<Integer>createKey(FoodEntityBase.class,
-			DataSerializers.VARINT);
+	private static final DataParameter<Boolean> RAW = EntityDataManager
+			.<Boolean>createKey(FoodEntityBase.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> BURNT = EntityDataManager
+			.<Boolean>createKey(FoodEntityBase.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> AGE = EntityDataManager
+			.<Integer>createKey(FoodEntityBase.class, DataSerializers.VARINT);
+	private static final DataParameter<EnumFacing> SIDE = EntityDataManager
+			.<EnumFacing>createKey(FoodEntityBase.class, DataSerializers.FACING);
+	private static final DataParameter<Integer> INDIVIDUAL = EntityDataManager
+			.<Integer>createKey(FoodEntityBase.class, DataSerializers.VARINT);
 
 	private final Random rand = new Random();
 
@@ -149,10 +149,10 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 		}
 
-		if ((this.getRaw() || CoreConfigDC.burntFood) && !this.getBURNT() && this.getAge() > 0
-				&& this.rand.nextInt(4) == 0) {
-			this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D,
-					0.0D, new int[0]);
+		if ((this.getRaw() || CoreConfigDC.burntFood) && !this.getBURNT() && this.getAge() > 0 && this.rand
+				.nextInt(4) == 0) {
+			this.world
+					.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
 		}
 
 		if (this.isFallable()) {
@@ -225,8 +225,8 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	}
 
 	protected void collideWithNearbyEntities() {
-		List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox(),
-				EntitySelectors.IS_STANDALONE);
+		List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this
+				.getEntityBoundingBox(), EntitySelectors.IS_STANDALONE);
 
 		if (!list.isEmpty()) {
 			for (int i = 0; i < list.size(); ++i) {
@@ -435,8 +435,8 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 
 	public static float getBlockLiquidHeight(IBlockState state, IBlockAccess world, BlockPos pos) {
 		int i = state.getValue(BlockLiquid.LEVEL).intValue();
-		return (i & 7) == 0 && world.getBlockState(pos.up()).getMaterial() == Material.WATER ? 1.0F
-				: 1.0F - BlockLiquid.getLiquidHeightPercent(i);
+		return (i & 7) == 0 && world.getBlockState(pos.up()).getMaterial() == Material.WATER ? 1.0F : 1.0F - BlockLiquid
+				.getLiquidHeightPercent(i);
 	}
 
 	public static float getLiquidHeight(IBlockState state, IBlockAccess world, BlockPos pos) {
@@ -486,6 +486,12 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 	// }
 
 	/* IRapidCollectable */
+
+	@Override
+	public String getCollectableTool() {
+		return "shovel";
+	}
+
 	@Override
 	public boolean isCollectable(@Nullable ItemStack item) {
 		return !DCUtil.isEmpty(item) && item.getItem() instanceof ItemSpade;

@@ -41,10 +41,10 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 	private int count = 0;
 	private byte sideInt = 0;
 
-	private static final DataParameter<Integer> AGE = EntityDataManager.<Integer>createKey(DCEntityBase.class,
-			DataSerializers.VARINT);
-	private static final DataParameter<EnumFacing> SIDE = EntityDataManager.<EnumFacing>createKey(DCEntityBase.class,
-			DataSerializers.FACING);
+	private static final DataParameter<Integer> AGE = EntityDataManager
+			.<Integer>createKey(DCEntityBase.class, DataSerializers.VARINT);
+	private static final DataParameter<EnumFacing> SIDE = EntityDataManager
+			.<EnumFacing>createKey(DCEntityBase.class, DataSerializers.FACING);
 
 	private final Random rand = new Random();
 
@@ -155,8 +155,8 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 	}
 
 	protected void collideWithNearbyEntities() {
-		List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox(),
-				EntitySelectors.IS_STANDALONE);
+		List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this
+				.getEntityBoundingBox(), EntitySelectors.IS_STANDALONE);
 
 		if (!list.isEmpty()) {
 			for (int i = 0; i < list.size(); ++i) {
@@ -336,8 +336,8 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 
 	public static float getBlockLiquidHeight(IBlockState state, IBlockAccess world, BlockPos pos) {
 		int i = state.getValue(BlockLiquid.LEVEL).intValue();
-		return (i & 7) == 0 && world.getBlockState(pos.up()).getMaterial() == Material.WATER ? 1.0F
-				: 1.0F - BlockLiquid.getLiquidHeightPercent(i);
+		return (i & 7) == 0 && world.getBlockState(pos.up()).getMaterial() == Material.WATER ? 1.0F : 1.0F - BlockLiquid
+				.getLiquidHeightPercent(i);
 	}
 
 	public static float getLiquidHeight(IBlockState state, IBlockAccess world, BlockPos pos) {
@@ -376,6 +376,12 @@ public abstract class DCEntityBase extends Entity implements IItemDropEntity, IR
 	}
 
 	/* IRapidCollectable */
+
+	@Override
+	public String getCollectableTool() {
+		return "shovel";
+	}
+
 	@Override
 	public boolean isCollectable(@Nullable ItemStack item) {
 		return !DCUtil.isEmpty(item) && item.getItem() instanceof ItemSpade;

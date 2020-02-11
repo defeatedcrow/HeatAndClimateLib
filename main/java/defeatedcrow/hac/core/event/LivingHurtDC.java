@@ -52,7 +52,7 @@ public class LivingHurtDC {
 					for (ItemStack check : charms2) {
 						// DCLogger.debugLog("attack charm");
 						IJewelCharm charm = (IJewelCharm) check.getItem();
-						add *= charm.increaceDamage(living, check);
+						add *= charm.increaceDamage(living, source, check);
 						charm.onPlayerAttacking(attacker, living, source, newDam - prev, check);
 					}
 				} else if (source.getTrueSource() instanceof EntityLivingBase) {
@@ -60,7 +60,7 @@ public class LivingHurtDC {
 					NonNullList<ItemStack> charms2 = DCUtil.getMobCharm(attacker);
 					for (ItemStack check : charms2) {
 						IJewelCharm amu = (IJewelCharm) check.getItem();
-						add2 += amu.increaceDamage(living, check);
+						add2 += amu.increaceDamage(living, source, check);
 						amu.onAttacking(attacker, living, source, newDam - prev, check);
 					}
 				}

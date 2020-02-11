@@ -23,7 +23,6 @@ public interface IJewelCharm extends IJewel {
 	/**
 	 * DIFFENCE<br>
 	 * プレイヤーがダメージを受けたときに呼ばれ、被弾時のアクションを起こす。<br>
-	 * trueの場合、チャームアイテムのダメージ処理を呼ぶ(消費、耐久値減少など)
 	 */
 	boolean onDiffence(DamageSource source, EntityLivingBase owner, float damage, ItemStack charm);
 
@@ -32,12 +31,11 @@ public interface IJewelCharm extends IJewel {
 	 * ATTACK<br>
 	 * プレイヤーがダメージを与えたときに呼ばれ、ダメージ増加倍率を返す。
 	 */
-	float increaceDamage(EntityLivingBase target, ItemStack charm);
+	float increaceDamage(EntityLivingBase target, DamageSource source, ItemStack charm);
 
 	/**
 	 * ATTACK<br>
 	 * ダメージを与えたときに呼ばれ、アクションを起こす。<br>
-	 * trueの場合、チャームアイテムのダメージ処理を呼ぶ(消費、耐久値減少など)
 	 */
 	boolean onAttacking(EntityLivingBase owner, EntityLivingBase target, DamageSource source, float damage,
 			ItemStack charm);
@@ -45,7 +43,6 @@ public interface IJewelCharm extends IJewel {
 	/**
 	 * PLAYER_ATTACK<br>
 	 * プレイヤーがダメージを与えたときに呼ばれ、アクションを起こす。<br>
-	 * trueの場合、チャームアイテムのダメージ処理を呼ぶ(消費、耐久値減少など)
 	 */
 	boolean onPlayerAttacking(EntityPlayer owner, EntityLivingBase target, DamageSource source, float damage,
 			ItemStack charm);
@@ -54,7 +51,7 @@ public interface IJewelCharm extends IJewel {
 	/**
 	 * TOOL<br>
 	 * プレイヤーがブロックを破壊した時に呼ばれる。<br>
-	 * trueの場合、チャームアイテムのダメージ処理を呼ぶ(消費、耐久値減少など)
+	 * trueの場合、BreakEventをキャンセルする
 	 */
 	boolean onToolUsing(EntityLivingBase owner, BlockPos pos, IBlockState state, ItemStack charm);
 

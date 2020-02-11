@@ -15,6 +15,8 @@ import net.minecraft.world.World;
  */
 public interface IRapidCollectables {
 
+	String getCollectableTool();
+
 	boolean isCollectable(@Nullable ItemStack item);
 
 	int getCollectArea(@Nullable ItemStack item);

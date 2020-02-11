@@ -376,6 +376,11 @@ public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTex
 	/* IRapidCollectables */
 
 	@Override
+	public String getCollectableTool() {
+		return "shears";
+	}
+
+	@Override
 	public boolean isCollectable(ItemStack item) {
 		if (DCUtil.isEmpty(item))
 			return false;
