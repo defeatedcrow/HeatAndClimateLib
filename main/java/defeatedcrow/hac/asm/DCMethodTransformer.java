@@ -26,6 +26,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 	private static final String TARGET_PACKAGE_5 = "net.minecraft.world.biome.Biome";
 	private static final String TARGET_PACKAGE_6 = "net.minecraft.world.gen.MapGenCaves";
 	private static final String TARGET_PACKAGE_7 = "net.minecraft.world.gen.MapGenRavine";
+	private static final String TARGET_PACKAGE_8 = "net.minecraft.item.Item";
 	private static final String TARGET_IGNORE1 = "net.minecraft.block.Block";
 
 	public static boolean enableBlockUpdate = true;

@@ -253,7 +253,7 @@ public abstract class ClimateCropBase extends BlockDC implements ISidedTexture, 
 		if (thisState != null && thisState.getBlock() instanceof ClimateCropBase) {
 			GrowingStage stage = this.getCurrentStage(thisState);
 			if (stage == GrowingStage.DEAD) {
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 				return false;
 			} else if (stage == GrowingStage.GROWN) {
 				return false;
@@ -262,7 +262,7 @@ public abstract class ClimateCropBase extends BlockDC implements ISidedTexture, 
 				if (age >= 0 && age < 3) {
 					age++;
 					IBlockState next = thisState.withProperty(DCState.STAGE4, age);
-					return world.setBlockState(pos, next, 2);
+					return world.setBlockState(pos, next, 3);
 				}
 			}
 		}

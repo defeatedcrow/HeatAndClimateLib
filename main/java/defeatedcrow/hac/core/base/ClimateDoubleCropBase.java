@@ -277,7 +277,7 @@ public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTex
 		if (thisState != null && thisState.getBlock() instanceof ClimateDoubleCropBase) {
 			GrowingStage stage = this.getCurrentStage(thisState);
 			if (stage == GrowingStage.DEAD) {
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 				return false;
 			} else if (stage == GrowingStage.GROWN) {
 				return false;
@@ -288,13 +288,13 @@ public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTex
 					if (age > 3 && world.getBlockState(pos.down()).getBlock() != this && world.isAirBlock(pos.up())) {
 						// 4段階目で2段になる
 						world.setBlockState(pos.up(), thisState.withProperty(DCState.STAGE8, 4)
-								.withProperty(DCState.DOUBLE, false), 2);
-						world.setBlockState(pos, thisState.withProperty(DCState.DOUBLE, true), 2);
+								.withProperty(DCState.DOUBLE, false), 3);
+						world.setBlockState(pos, thisState.withProperty(DCState.DOUBLE, true), 3);
 					}
 					IBlockState next = thisState.withProperty(DCState.STAGE8, age);
 					boolean db = this.isDouble(next, world, pos);
 					next.withProperty(DCState.DOUBLE, db);
-					return world.setBlockState(pos, next, 2);
+					return world.setBlockState(pos, next, 3);
 				}
 			}
 		}

@@ -49,8 +49,8 @@ public abstract class BlockTorqueBase extends BlockContainerDC {
 			}
 			return true;
 		}
-		if (ClimateCore.isDebug && state.getBlock() instanceof BlockTorqueBase && world.isRemote
-				&& hand == EnumHand.MAIN_HAND) {
+		if (ClimateCore.isDebug && state
+				.getBlock() instanceof BlockTorqueBase && world.isRemote && hand == EnumHand.MAIN_HAND) {
 			DCLogger.debugLog("current side: " + DCState.getSide(state, DCState.SIDE));
 		}
 		return false;
@@ -69,6 +69,15 @@ public abstract class BlockTorqueBase extends BlockContainerDC {
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+	}
+
+	public static void changeState(World world, BlockPos pos, boolean b) {
+		IBlockState state = world.getBlockState(pos);
+		boolean m = DCState.getBool(state, DCState.POWERED);
+		if (m != b) {
+			world.setBlockState(pos, state.withProperty(DCState.POWERED, b), 3);
+			world.notifyNeighborsOfStateChange(pos, state.getBlock(), true);
+		}
 	}
 
 	// 設置・破壊処理
@@ -113,7 +122,8 @@ public abstract class BlockTorqueBase extends BlockContainerDC {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {
-				DCState.SIDE, DCState.POWERED
+				DCState.SIDE,
+				DCState.POWERED
 		});
 
 	}

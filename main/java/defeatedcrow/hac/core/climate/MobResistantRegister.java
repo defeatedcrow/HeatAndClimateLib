@@ -79,7 +79,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 	@Override
 	public void registerEntityResistant(Class<? extends Entity> entityClass, float heat, float cold) {
 		if (entityClass != null) {
-			if (heatResistant.containsKey(entityClass) && coldResistant.containsKey(entityClass)) {
+			if (heatResistant.containsKey(entityClass) || coldResistant.containsKey(entityClass)) {
 				return;
 			}
 			if (heat != 0) {

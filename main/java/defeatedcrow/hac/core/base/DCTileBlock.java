@@ -85,6 +85,17 @@ public abstract class DCTileBlock extends BlockContainerDC implements IClimateOb
 		return list;
 	}
 
+	public static void changeState(World world, BlockPos pos, int i) {
+		IBlockState state = world.getBlockState(pos);
+		int m = DCState.getInt(state, DCState.TYPE4);
+		if (m >= 0) {
+			if (m != i) {
+				world.setBlockState(pos, state.withProperty(DCState.TYPE4, i), 3);
+				world.notifyNeighborsOfStateChange(pos, state.getBlock(), true);
+			}
+		}
+	}
+
 	// 設置・破壊処理
 	@Override
 	public IBlockState getPlaceState(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,

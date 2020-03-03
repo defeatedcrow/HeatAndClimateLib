@@ -64,10 +64,12 @@ public class DCItemBlock extends ItemBlock implements ITexturePath {
 		this.addInformation2(stack, world, tooltip);
 		if (block instanceof IRapidCollectables) {
 			IRapidCollectables col = (IRapidCollectables) block;
-			int a = col.getCollectArea(ItemStack.EMPTY) * 2 + 1;
-			tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD.toString() + "=== Tips ===");
-			tooltip.add("Right-click with " + col.getCollectableTool() + " : " + I18n
-					.format("dcs.tip.rapid_collect") + " " + a + "x" + a + "x" + a);
+			if (col.getCollectableTool() != null) {
+				int a = col.getCollectArea(ItemStack.EMPTY) * 2 + 1;
+				tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD.toString() + "=== Tips ===");
+				tooltip.add("Right-click with " + col.getCollectableTool() + " : " + I18n
+						.format("dcs.tip.rapid_collect") + " " + a + "x" + a + "x" + a);
+			}
 		}
 	}
 

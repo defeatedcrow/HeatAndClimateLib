@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.core.base.DCInventory;
-import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -109,25 +108,6 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	public abstract boolean onProcess();
 
-	/** itemの減少数を返す */
-	public int insertResult(ItemStack item) {
-		if (DCUtil.isEmpty(item))
-			return 0;
-		for (int i = 1; i < this.getSizeInventory(); i++) {
-			if (DCUtil.isEmpty(getStackInSlot(i))) {
-				this.incrStackInSlot(i, item.copy());
-				return item.getCount();
-			} else {
-				int size = inventory.isItemStackable(item, this.getStackInSlot(i));
-				if (size > 0) {
-					DCUtil.addStackSize(this.getStackInSlot(i), size);
-					return size;
-				}
-			}
-		}
-		return 0;
-	}
-
 	/* ========== 以下、ISidedInventoryのメソッド ========== */
 
 	protected int[] slotsTop() {
@@ -138,13 +118,16 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	protected int[] slotsBottom() {
 		return new int[] {
-				1, 2
+				1,
+				2
 		};
 	};
 
 	protected int[] slotsSides() {
 		return new int[] {
-				0, 1, 2
+				0,
+				1,
+				2
 		};
 	};
 

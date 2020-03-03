@@ -140,7 +140,7 @@ public class DCInventory implements IInventory {
 	public static int isItemStackable(ItemStack target, ItemStack current) {
 		if (DCUtil.isSameItem(target, current, false)) {
 			int i1 = DCUtil.getSize(current) + DCUtil.getSize(target);
-			if (!DCUtil.isEmpty(current) && i1 > current.getMaxStackSize()) {
+			if (!DCUtil.isEmpty(current) && i1 >= current.getMaxStackSize()) {
 				return current.getMaxStackSize() - DCUtil.getSize(current);
 			} else {
 				return DCUtil.getSize(target);
@@ -185,6 +185,52 @@ public class DCInventory implements IInventory {
 			}
 		}
 		return ItemStack.EMPTY;
+	}
+
+	public int canInsertResult(ItemStack item, int s1, int s2) {
+		if (DCUtil.isEmpty(item))
+			return -1;
+		ItemStack ret = item.copy();
+		int count = 0;
+		for (int i = s1; i < s2; i++) {
+			int l = 0;
+			if (DCUtil.isEmpty(this.getStackInSlot(i))) {
+				l += ret.getCount();
+			} else {
+				l += this.isItemStackable(item, this.getStackInSlot(i));
+			}
+			ret.splitStack(l);
+			count += l;
+			if (ret.isEmpty())
+				break;
+		}
+		return count;
+	}
+
+	/** itemの減少数を返す */
+	public int insertResult(ItemStack item, int s1, int s2) {
+		if (DCUtil.isEmpty(item))
+			return 0;
+		ItemStack ret = item.copy();
+		int count = 0;
+		for (int i = s1; i < s2; i++) {
+			int l = 0;
+			if (DCUtil.isEmpty(this.getStackInSlot(i))) {
+				this.incrStackInSlot(i, ret.copy());
+				l += ret.getCount();
+			} else {
+				int size = this.isItemStackable(ret, this.getStackInSlot(i));
+				if (size > 0) {
+					DCUtil.addStackSize(this.getStackInSlot(i), size);
+					l += size;
+				}
+			}
+			ret.splitStack(l);
+			count += l;
+			if (ret.isEmpty())
+				break;
+		}
+		return count;
 	}
 
 	@Override
