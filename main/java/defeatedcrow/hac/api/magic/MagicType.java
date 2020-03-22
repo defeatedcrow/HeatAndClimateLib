@@ -5,6 +5,8 @@ public enum MagicType {
 	PENDANT,
 	BADGE,
 	RING,
-	AMULET;
+	AMULET,
+	ARMOR,
+	OFFHAND;
 
 }

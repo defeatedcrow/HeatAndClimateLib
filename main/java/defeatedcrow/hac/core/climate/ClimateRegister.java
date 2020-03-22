@@ -23,6 +23,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IBiomeClimateRegister;
 import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.climate.WorldHeatTierEvent;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.util.DCTimeHelper;
@@ -189,21 +190,11 @@ public class ClimateRegister implements IBiomeClimateRegister {
 			temp += offset;
 		}
 
-		// if (temp == 0.5F) {
-		// float off2 = 0;
-		// if (BiomeDictionary.hasType(b, Type.COLD) || BiomeDictionary.hasType(b, Type.SNOWY)) {
-		// off2 -= 0.5F;
-		// }
-		// if (BiomeDictionary.hasType(b, Type.DEAD) || BiomeDictionary.hasType(b, Type.CONIFEROUS)) {
-		// off2 -= 0.35F;
-		// }
-		// if (BiomeDictionary.hasType(b, Type.MESA) || BiomeDictionary.hasType(b, Type.HOT)) {
-		// off2 += 1.0F;
-		// }
-		// temp += off2;
-		// }
+		DCHeatTier current = DCHeatTier.getTypeByBiomeTemp(temp);
+		WorldHeatTierEvent event = new WorldHeatTierEvent(world, pos, current, true);
+		current = event.result();
 
-		return DCHeatTier.getTypeByBiomeTemp(temp);
+		return current;
 	}
 
 	@Override
@@ -245,20 +236,6 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WATER)) {
 			temp += 0.25F;
 		}
-
-		// if (temp == 0.5F) {
-		// float off2 = 0;
-		// if (BiomeDictionary.hasType(b, Type.COLD) || BiomeDictionary.hasType(b, Type.SNOWY)) {
-		// off2 -= 0.5F;
-		// }
-		// if (BiomeDictionary.hasType(b, Type.DEAD) || BiomeDictionary.hasType(b, Type.CONIFEROUS)) {
-		// off2 -= 0.35F;
-		// }
-		// if (BiomeDictionary.hasType(b, Type.MESA) || BiomeDictionary.hasType(b, Type.HOT)) {
-		// off2 += 1.0F;
-		// }
-		// temp += off2;
-		// }
 
 		return DCHeatTier.getTypeByBiomeTemp(temp);
 

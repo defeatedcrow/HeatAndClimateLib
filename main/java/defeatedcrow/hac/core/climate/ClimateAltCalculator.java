@@ -32,7 +32,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	@Override
 	public IClimate getClimate(World world, BlockPos pos) {
 		int[] r = new int[] {
-				2, 1, 1
+				2,
+				1,
+				1
 		};
 		return getClimate(world, pos, r);
 	}
@@ -56,7 +58,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	public IClimate getClimate(World world, BlockPos pos, int[] r) {
 		if (r == null || r.length < 3)
 			r = new int[] {
-					2, 1, 1
+					2,
+					1,
+					1
 			};
 		DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos, r[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, r[1], false);
@@ -104,8 +108,6 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		/*
 		 * biomeの気温
 		 * 屋根あり: Tierが1段階Normalに近づく
-		 * 屋根無し: Biome気温そのまま
-		 * 標高100以上: Tireが1段階下がる
 		 */
 		DCHeatTier hot = temp;
 		if (hasRoof(world, pos)) {
@@ -180,9 +182,6 @@ public class ClimateAltCalculator implements IClimateCalculator {
 							wall = true;
 						}
 
-						BlockHeatTierEvent event = new BlockHeatTierEvent(world, p2, current, true);
-						current = event.result();
-
 						if (current.getTier() > hot.getTier()) {
 							if (wall) {
 								int pre = ThermalInsulationUtil.getInsulation(world, new BlockPos(xi, yi, zi));
@@ -211,10 +210,13 @@ public class ClimateAltCalculator implements IClimateCalculator {
 							}
 							hot = current;
 						}
-					} else {
-						if (current.getTier() > hot.getTier()) {
-							hot = current;
-						}
+					}
+
+					BlockHeatTierEvent event = new BlockHeatTierEvent(world, p2, current, true);
+					current = event.result();
+
+					if (current.getTier() > hot.getTier()) {
+						hot = current;
 					}
 
 				}
@@ -235,9 +237,6 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		/*
 		 * biomeの気温
 		 * 屋根あり: Tierが1段階Normalに近づく
-		 * 屋根無し: 天候によって変化
-		 * 晴れ: Biome気温のまま
-		 * 雨: Tierが1段階低い物になる (夜雨はクライアント側でうまく検知できないため廃止)
 		 */
 		DCHeatTier cold = temp;
 		if (hasRoof(world, pos)) {
@@ -246,11 +245,6 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			} else if (temp.getTier() > 0) {
 				cold = cold.addTier(-1);
 			}
-		}
-
-		if (cold == DCHeatTier.ABSOLUTE || cold == DCHeatTier.CRYOGENIC) {
-			// 自然発生しない
-			cold = DCHeatTier.FROSTBITE;
 		}
 
 		/*
@@ -317,9 +311,6 @@ public class ClimateAltCalculator implements IClimateCalculator {
 							wall = true;
 						}
 
-						BlockHeatTierEvent event = new BlockHeatTierEvent(world, p2, current, false);
-						current = event.result();
-
 						if (current.getTier() < cold.getTier()) {
 							if (wall) {
 								int pre = ThermalInsulationUtil.getInsulation(world, new BlockPos(xi, yi, zi));
@@ -347,9 +338,14 @@ public class ClimateAltCalculator implements IClimateCalculator {
 								}
 							}
 							cold = current;
-
 						}
+					}
 
+					BlockHeatTierEvent event = new BlockHeatTierEvent(world, p2, current, false);
+					current = event.result();
+
+					if (current.getTier() < cold.getTier()) {
+						cold = current;
 					}
 				}
 			}
@@ -393,8 +389,8 @@ public class ClimateAltCalculator implements IClimateCalculator {
 
 		// 周囲
 		for (EnumFacing face : EnumFacing.VALUES) {
-			BlockPos p1 = new BlockPos(pos.getX() + face.getFrontOffsetX(), pos.getY() + face.getFrontOffsetY(),
-					pos.getZ() + face.getFrontOffsetZ());
+			BlockPos p1 = new BlockPos(pos.getX() + face.getFrontOffsetX(), pos.getY() + face.getFrontOffsetY(), pos
+					.getZ() + face.getFrontOffsetZ());
 			Block block = world.getBlockState(p1).getBlock();
 			int m = block.getMetaFromState(world.getBlockState(p1));
 			if (block instanceof IHumidityTile) {
@@ -534,8 +530,8 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			DCAirflow ret = air;
 			if (hasWind) {
 				ret = DCAirflow.FLOW;
-				if (WeatherChecker.getWindOffset(world.provider.getDimension(),
-						world.provider.doesWaterVaporize()) > 0) {
+				if (WeatherChecker.getWindOffset(world.provider.getDimension(), world.provider
+						.doesWaterVaporize()) > 0) {
 					ret = DCAirflow.getTypeByID(ret.getID() + 1);
 				}
 			} else {
@@ -558,8 +554,8 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		while (pos2.getY() < lim && pos2.getY() < world.getActualHeight()) {
 			IBlockState state = world.getBlockState(pos2);
 			Block block = world.getBlockState(pos2).getBlock();
-			if (!world.isAirBlock(pos2) && (block.getLightOpacity(state, world, pos2) > 0.0F
-					|| state.getMobilityFlag() == EnumPushReaction.NORMAL)) {
+			if (!world.isAirBlock(pos2) && (block.getLightOpacity(state, world, pos2) > 0.0F || state
+					.getMobilityFlag() == EnumPushReaction.NORMAL)) {
 				return true;
 			}
 			pos2 = pos2.up();
@@ -581,8 +577,8 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			BlockPos p2 = pos.up(i);
 			IBlockState state = world.getBlockState(p2);
 			Block block = world.getBlockState(p2).getBlock();
-			if (!world.isAirBlock(p2) && (block.getLightOpacity(state, world, p2) > 0.0F
-					|| state.getMobilityFlag() == EnumPushReaction.NORMAL)) {
+			if (!world.isAirBlock(p2) && (block.getLightOpacity(state, world, p2) > 0.0F || state
+					.getMobilityFlag() == EnumPushReaction.NORMAL)) {
 				break;
 			} else {
 				count++;
@@ -595,8 +591,8 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			BlockPos p2 = pos.down(i);
 			IBlockState state = world.getBlockState(p2);
 			Block block = world.getBlockState(p2).getBlock();
-			if (!world.isAirBlock(p2) && (block.getLightOpacity(state, world, p2) > 0.0F
-					|| state.getMobilityFlag() == EnumPushReaction.NORMAL)) {
+			if (!world.isAirBlock(p2) && (block.getLightOpacity(state, world, p2) > 0.0F || state
+					.getMobilityFlag() == EnumPushReaction.NORMAL)) {
 				break;
 			} else {
 				count++;

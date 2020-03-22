@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.2.6 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.3.0 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod

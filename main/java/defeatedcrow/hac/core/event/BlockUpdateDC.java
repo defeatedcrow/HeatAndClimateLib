@@ -5,7 +5,6 @@ import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.ClimateSupplier;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
-import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.hook.DCBlockUpdateEvent;
 import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
@@ -60,12 +59,13 @@ public class BlockUpdateDC {
 			}
 
 			ClimateSupplier clm = new ClimateSupplier(world, p);
+			ClimateSupplier clm_down = new ClimateSupplier(world, p.down());
 			boolean roof = hasRoof(world, p);
 
 			// 直接指定の仕様
 			if (CoreConfigDC.enableFarmland && BlockFarmland.class.isInstance(block)) {
 				DCHumidity hum = ClimateAPI.calculator.getHumidity(world, p, 4, true);
-				DCHumidity hum2 = ClimateAPI.calculator.getHumidity(world, p);
+				DCHumidity hum2 = clm.get().getHumidity();
 				// 耕地はWET以上の湿度では湿る
 				if (hum.getID() > 1 || hum2.getID() > 1) {
 					IBlockState next = Blocks.FARMLAND.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7);
@@ -80,9 +80,8 @@ public class BlockUpdateDC {
 					// WARMかつWETの場合に成長が促進される
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
-						IClimate clm2 = ClimateAPI.calculator.getClimate(world, p.down());
-						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT) && clm2
-								.getHumidity() == DCHumidity.WET) {
+						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get()
+								.getHeat() == DCHeatTier.HOT) && clm_down.get().getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
 						}
 					}
@@ -90,9 +89,8 @@ public class BlockUpdateDC {
 					// WARMかつWETの場合に成長が促進され、COLD以下の場合は成長が遅くなる
 					IGrowable grow = (IGrowable) block;
 					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
-						IClimate clm2 = ClimateAPI.calculator.getClimate(world, p.down());
-						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT) && clm2
-								.getHumidity() == DCHumidity.WET) {
+						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get()
+								.getHeat() == DCHeatTier.HOT) && clm_down.get().getHumidity() == DCHumidity.WET) {
 							grow.grow(world, world.rand, p, st);
 							// DCLogger.debugLog("Grow!");
 						} else if (clm.get().getHeat().getTier() < -1) {
@@ -109,9 +107,9 @@ public class BlockUpdateDC {
 			 * WARM以上で強制溶解
 			 */
 
-			else if (block == Blocks.ICE) {
-				if (CoreConfigDC.enableVanilla) {
-					DCHeatTier h2 = ClimateAPI.register.getHeatTier(world, p);
+			if (CoreConfigDC.enableVanilla) {
+				if (block == Blocks.ICE) {
+					DCHeatTier h2 = clm.get().getHeat();
 					if (clm.get().getHeat().getTier() < 0) {
 						if (clm.get().getHeat().getTier() == DCHeatTier.ABSOLUTE.getTier()) {
 							world.setBlockState(p, Blocks.PACKED_ICE.getDefaultState(), 2);
@@ -124,27 +122,25 @@ public class BlockUpdateDC {
 							return;
 						}
 					}
-					if (!roof && h2.getTier() >= 0) {
+					if (!roof && h2.getTier() > 0) {
 						world.setBlockState(p, Blocks.WATER.getDefaultState(), 2);
 						world.notifyNeighborsOfStateChange(p, Blocks.WATER, false);
 						event.setCanceled(true);
 						return;
 						// DCLogger.debugLog("Melted");
 					}
+					return;
+				} else if (block == Blocks.SNOW || block == Blocks.SNOW_LAYER) {
 					/*
 					 * SNOW
 					 * COOL以下であれば氷が溶けなくなり、WARM以上で強制溶解
 					 */
-					return;
-				}
-			} else if (block == Blocks.SNOW || block == Blocks.SNOW_LAYER) {
-				if (CoreConfigDC.enableVanilla) {
-					DCHeatTier h2 = ClimateAPI.register.getHeatTier(world, p);
+					DCHeatTier h2 = clm.get().getHeat();
 					if (clm.get().getHeat().getTier() < 0 && roof) {
 						event.setCanceled(true);
 						return;
 					}
-					if (!roof && h2.getTier() >= 0) {
+					if (!roof && h2.getTier() > 0) {
 						world.setBlockToAir(p);
 						event.setCanceled(true);
 						return;
@@ -191,16 +187,16 @@ public class BlockUpdateDC {
 				}
 			}
 
-			if (f2 && CoreConfigDC.enableVanilla && !block.getTickRandomly()) {
-
-				for (BlockPos p3 : BlockPos.getAllInBox(p.east().north(), p.west().south())) {
-					if (!world.isAirBlock(p3)) {
-						Block target = world.getBlockState(p3).getBlock();
-						if (!world.isUpdateScheduled(p3, target) && world.rand.nextBoolean())
-							world.scheduleUpdate(p3, target, 600 + world.rand.nextInt(600));
-					}
-				}
-			}
+			// if (f2 && CoreConfigDC.enableVanilla && !block.getTickRandomly()) {
+			//
+			// for (BlockPos p3 : BlockPos.getAllInBox(p.east().north(), p.west().south())) {
+			// if (!world.isAirBlock(p3)) {
+			// Block target = world.getBlockState(p3).getBlock();
+			// if (!world.isUpdateScheduled(p3, target) && world.rand.nextBoolean())
+			// world.scheduleUpdate(p3, target, 600 + world.rand.nextInt(600));
+			// }
+			// }
+			// }
 		}
 	}
 
