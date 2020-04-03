@@ -43,7 +43,7 @@ public class CaveDigEventDC {
 			try {
 				IBlockState state = e.data.getBlockState(e.x, e.y, e.z);
 				World world = ReflectionHelper.getPrivateValue(MapGenBase.class, e.event, "world", "field_75039_c");
-				Biome biome = world.getBiomeForCoordsBody(new BlockPos(e.x + e.cx * 16, 0, e.z + e.cz * 16));
+				Biome biome = world.getBiome(new BlockPos(e.x + e.cx * 16, 0, e.z + e.cz * 16));
 				IBlockState top = biome.topBlock;
 				IBlockState filler = biome.fillerBlock;
 
@@ -77,7 +77,7 @@ public class CaveDigEventDC {
 				IBlockState state = e.data.getBlockState(e.x, e.y, e.z);
 				IBlockState up = MoreObjects.firstNonNull(e.data.getBlockState(e.x, e.y + 1, e.z), BLK_AIR);
 				World world = ReflectionHelper.getPrivateValue(MapGenBase.class, e.event, "world", "field_75039_c");
-				Biome biome = world.getBiomeForCoordsBody(new BlockPos(e.x + e.cx * 16, 0, e.z + e.cz * 16));
+				Biome biome = world.getBiome(new BlockPos(e.x + e.cx * 16, 0, e.z + e.cz * 16));
 				IBlockState top = biome.topBlock;
 				IBlockState filler = biome.fillerBlock;
 

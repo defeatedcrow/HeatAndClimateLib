@@ -70,9 +70,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		IClimate clm = ClimateAPI.register.getClimateFromInt(code);
 
 		ClimateCalculateEvent event = new ClimateCalculateEvent(world, pos, clm);
-		IClimate result = event.result();
+		clm = event.result();
 
-		return result == null ? clm : result;
+		return clm;
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 
 	@Override
 	public DCHeatTier getHeat(World world, BlockPos pos, int r, boolean h) {
-		if (world == null || pos == null) {
+		if (world == null || pos == null || !world.isAreaLoaded(pos, r)) {
 			return DCHeatTier.NORMAL;
 		}
 		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
@@ -227,7 +227,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 
 	@Override
 	public DCHeatTier getCold(World world, BlockPos pos, int r, boolean h) {
-		if (world == null || pos == null) {
+		if (world == null || pos == null || !world.isAreaLoaded(pos, r)) {
 			return DCHeatTier.NORMAL;
 		}
 		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
@@ -356,7 +356,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	// 合計値で考える
 	@Override
 	public DCHumidity getHumidity(World world, BlockPos pos, int r, boolean h) {
-		if (world == null || pos == null) {
+		if (world == null || pos == null || !world.isAreaLoaded(pos, r)) {
 			return DCHumidity.NORMAL;
 		}
 		if (r < 0 || r > 15)
@@ -457,7 +457,7 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	// Airの数をカウントして決定
 	@Override
 	public DCAirflow getAirflow(World world, BlockPos pos, int r, boolean h) {
-		if (world == null || pos == null) {
+		if (world == null || pos == null || !world.isAreaLoaded(pos, r)) {
 			return DCAirflow.NORMAL;
 		}
 		if (r < 0 || r > 15)
@@ -546,6 +546,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	}
 
 	boolean hasRoof(World world, BlockPos pos) {
+		if (!world.isBlockLoaded(pos)) {
+			return false;
+		}
 		BlockPos pos2 = pos.up();
 		int lim = pos.getY() + 16;
 		if (world.provider.hasSkyLight()) {
@@ -564,6 +567,9 @@ public class ClimateAltCalculator implements IClimateCalculator {
 	}
 
 	boolean hasRoof2(World world, BlockPos pos) {
+		if (!world.isBlockLoaded(pos)) {
+			return false;
+		}
 		int count = 0;
 		int lim = 16;
 		if (!world.provider.hasSkyLight()) {

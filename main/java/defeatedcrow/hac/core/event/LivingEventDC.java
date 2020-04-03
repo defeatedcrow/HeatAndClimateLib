@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
-import defeatedcrow.hac.api.climate.ClimateSupplier;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.damage.ClimateDamageEvent;
@@ -62,6 +61,9 @@ public class LivingEventDC {
 					this.onPlayerUpdate(event);
 					if (!living.world.isRemote) {
 						this.playerChunkUpdate(event);
+						if (CoreConfigDC.sharePotionWithRidingMob) {
+							onLivingPotionUpdate(living);
+						}
 					} else {
 						this.onPlayerKeyUpdate(event);
 					}
@@ -81,11 +83,6 @@ public class LivingEventDC {
 				if (living.isPotionActive(MobEffects.JUMP_BOOST)) {
 					living.fallDistance = 0.0F;
 				}
-
-				if (CoreConfigDC.sharePotionWithRidingMob) {
-					onLivingPotionUpdate(living);
-				}
-
 				onLivingCharmUpdate(living);
 
 				if (living instanceof EntityPlayer || CoreConfigDC.mobClimateDamage) {
@@ -161,8 +158,8 @@ public class LivingEventDC {
 					return;
 			}
 
-			ClimateSupplier clm = new ClimateSupplier(living.world, living.getPosition().up());
-			DCHeatTier heat = clm.get().getHeat();
+			IClimate clm = ClimateAPI.calculator.getClimate(living.world, living.getPosition());
+			DCHeatTier heat = clm.getHeat();
 
 			float prev = 2.0F; // normal
 			if (living instanceof EntityPlayer) {
@@ -234,7 +231,7 @@ public class LivingEventDC {
 
 			dam -= prev;
 
-			ClimateDamageEvent fireEvent = new ClimateDamageEvent(living, source, clm.get(), dam);
+			ClimateDamageEvent fireEvent = new ClimateDamageEvent(living, source, clm, dam);
 			DamageSet result = fireEvent.result();
 			dam = result.damage;
 			DamageSource source2 = result.source;

@@ -7,6 +7,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.hook.DCItemDisplayNameEvent;
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.fluid.FluidDic;
 import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import defeatedcrow.hac.core.util.DCUtil;
@@ -54,6 +55,13 @@ public class AdvancedTooltipEvent {
 					}
 				}
 
+				// 耐久値
+				if (tI.isDamageable() && target.getMetadata() == 0) {
+					int max = target.getMaxDamage();
+					String ret = I18n.format("dcs_climate.tip.durability") + ": " + max;
+					event.getToolTip().add(ret);
+				}
+
 				// climate reg
 				float regH = DamageAPI.itemRegister.getHeatPreventAmount(target);
 				float regC = DamageAPI.itemRegister.getColdPreventAmount(target);
@@ -68,14 +76,7 @@ public class AdvancedTooltipEvent {
 					event.getToolTip().add(ret);
 				}
 
-				if (event.getFlags().isAdvanced()) {
-					// まず耐久値
-					if (tI.isDamageable() && target.getMetadata() == 0) {
-						int max = target.getMaxDamage();
-						String ret = I18n.format("dcs_climate.tip.durability") + ": " + max;
-						event.getToolTip().add(ret);
-					}
-
+				if (event.getFlags().isAdvanced() || ClimateCore.isDebug) {
 					// universal bucket
 					if (tI instanceof UniversalBucket) {
 						UniversalBucket bucket = (UniversalBucket) tI;

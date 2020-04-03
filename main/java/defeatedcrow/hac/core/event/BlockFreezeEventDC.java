@@ -16,30 +16,34 @@ public class BlockFreezeEventDC {
 
 	@SubscribeEvent
 	public void onFreeze(DCBlockFreezeEvent event) {
-		if (!event.world.isRemote && event.pos != null) {
+		if (!event.world.isRemote && event.pos != null && event.world.isBlockLoaded(event.pos)) {
 			World world = event.world;
 			BlockPos pos = event.pos;
 			IBlockState st = world.getBlockState(pos);
 
-			if (st.getMaterial() == Material.WATER && world.isAirBlock(pos.up()) && canFreezePos(world, pos)) {
+			if (st.getMaterial() == Material.WATER && world.isAirBlock(pos
+					.up()) && isStaticWater(world, pos) && canFreezePos(world, pos)) {
 				world.setBlockState(pos, Blocks.ICE.getDefaultState(), 2);
-				world.notifyNeighborsOfStateChange(pos, Blocks.ICE, false);
 				event.setResult(Result.ALLOW);
 				// DCLogger.debugLog("Success to freeze!!");
 			}
 		}
 	}
 
-	boolean canFreezePos(World world, BlockPos pos) {
+	boolean isStaticWater(World world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
 		if (!world.isRemote && pos != null && state != null) {
 			Block block = state.getBlock();
 			if ((block == Blocks.WATER || block == Blocks.FLOWING_WATER) && block.getMetaFromState(state) == 0) {
-				DCHeatTier clm = ClimateAPI.calculator.getAverageTemp(world, pos);
-				return clm.getTier() < DCHeatTier.COLD.getTier();
+				return true;
 			}
 		}
 		return false;
+	}
+
+	boolean canFreezePos(World world, BlockPos pos) {
+		DCHeatTier clm = ClimateAPI.calculator.getAverageTemp(world, pos);
+		return clm.getTier() < DCHeatTier.COLD.getTier();
 	}
 
 }

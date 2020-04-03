@@ -204,8 +204,12 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		return i > 0 ? false : true;
+	public boolean isItemValidForSlot(int index, ItemStack stack) {
+		for (int i : slotsBottom()) {
+			if (i == index)
+				return false;
+		}
+		return true;
 	}
 
 	// ホッパーにアイテムの受け渡しをする際の優先度
@@ -216,18 +220,18 @@ public abstract class TileTorqueProcessor extends TileTorqueLockable implements 
 
 	// ホッパーからアイテムを入れられるかどうか
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-		return this.isItemValidForSlot(index, itemStackIn);
+	public boolean canInsertItem(int index, ItemStack item, EnumFacing direction) {
+		return this.isItemValidForSlot(index, item);
 	}
 
 	// 隣接するホッパーにアイテムを送れるかどうか
 	@Override
 	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-		if (index == 0) {
-			return false;
+		for (int i : slotsBottom()) {
+			if (i == index)
+				return true;
 		}
-
-		return true;
+		return false;
 	}
 
 	// 追加メソッド

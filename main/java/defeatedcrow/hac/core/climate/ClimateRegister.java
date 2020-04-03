@@ -119,10 +119,14 @@ public class ClimateRegister implements IBiomeClimateRegister {
 
 	@Override
 	public IClimate getClimateFromBiome(World world, BlockPos pos) {
-		Biome biome = world.getBiomeForCoordsBody(pos);
-		int dim = world.provider.getDimension();
-		int i = getKey(biome, dim);
-		return getClimateFromBiome(i);
+		if (world.isBlockLoaded(pos)) {
+			Biome biome = world.getBiomeForCoordsBody(pos);
+			int dim = world.provider.getDimension();
+			int i = getKey(biome, dim);
+			return getClimateFromBiome(i);
+		} else {
+			return new DCClimate(DCHeatTier.NORMAL, DCHumidity.NORMAL, DCAirflow.NORMAL);
+		}
 	}
 
 	@Override
@@ -158,59 +162,72 @@ public class ClimateRegister implements IBiomeClimateRegister {
 
 	@Override
 	public DCHeatTier getHeatTier(World world, BlockPos pos) {
-		Biome biome = world.getBiomeForCoordsBody(pos);
-		int dim = world.provider.getDimension();
-		int i = getKey(biome, dim);
-		IClimate clm = getClimateFromList(i);
-		int id = i & 255;
-		Biome b = Biome.getBiome(id);
+		if (world.isBlockLoaded(pos)) {
+			Biome biome = world.getBiomeForCoordsBody(pos);
+			int dim = world.provider.getDimension();
+			int i = getKey(biome, dim);
+			IClimate clm = getClimateFromList(i);
+			int id = i & 255;
+			Biome b = Biome.getBiome(id);
 
-		float temp = 0.5F;
-		if (clm != null) {
-			temp = clm.getHeat().getBiomeTemp();
-		} else if (b != null) {
-			temp = b.getTemperature(pos);
-			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
-				temp += 2.0F;
-			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
-				temp -= 1.0F;
+			float temp = 0.5F;
+			if (clm != null) {
+				temp = clm.getHeat().getBiomeTemp();
+			} else if (b != null) {
+				temp = b.getTemperature(pos);
+				if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
+					temp += 2.0F;
+				} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
+					temp -= 1.0F;
+				}
+				if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WATER)) {
+					temp += 0.25F;
+				}
 			}
-			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WATER)) {
-				temp += 0.25F;
+
+			if (CoreConfigDC.enableWeatherEffect) {
+				float offset = WeatherChecker.getTempOffsetFloat(dim, world.provider.doesWaterVaporize());
+				temp += offset;
 			}
+
+			if (CoreConfigDC.enableTimeEffect) {
+				float offset = DCTimeHelper.getTimeOffset(world, b);
+				temp += offset;
+			}
+
+			DCHeatTier current = DCHeatTier.getTypeByBiomeTemp(temp);
+			WorldHeatTierEvent event = new WorldHeatTierEvent(world, pos, current, true);
+			current = event.result();
+
+			return current;
+
+		} else {
+			return DCHeatTier.NORMAL;
 		}
-
-		if (CoreConfigDC.enableWeatherEffect) {
-			float offset = WeatherChecker.getTempOffsetFloat(dim, world.provider.doesWaterVaporize());
-			temp += offset;
-		}
-
-		if (CoreConfigDC.enableTimeEffect) {
-			float offset = DCTimeHelper.getTimeOffset(world, b);
-			temp += offset;
-		}
-
-		DCHeatTier current = DCHeatTier.getTypeByBiomeTemp(temp);
-		WorldHeatTierEvent event = new WorldHeatTierEvent(world, pos, current, true);
-		current = event.result();
-
-		return current;
 	}
 
 	@Override
 	public DCAirflow getAirflow(World world, BlockPos pos) {
-		Biome biome = world.getBiomeForCoordsBody(pos);
-		int dim = world.provider.getDimension();
-		int i = getKey(biome, dim);
-		return getAirflow(i);
+		if (world.isBlockLoaded(pos)) {
+			Biome biome = world.getBiomeForCoordsBody(pos);
+			int dim = world.provider.getDimension();
+			int i = getKey(biome, dim);
+			return getAirflow(i);
+		} else {
+			return DCAirflow.NORMAL;
+		}
 	}
 
 	@Override
 	public DCHumidity getHumidity(World world, BlockPos pos) {
-		Biome biome = world.getBiomeForCoordsBody(pos);
-		int dim = world.provider.getDimension();
-		int i = getKey(biome, dim);
-		return getHumidity(i);
+		if (world.isBlockLoaded(pos)) {
+			Biome biome = world.getBiomeForCoordsBody(pos);
+			int dim = world.provider.getDimension();
+			int i = getKey(biome, dim);
+			return getHumidity(i);
+		} else {
+			return DCHumidity.NORMAL;
+		}
 	}
 
 	@Override
