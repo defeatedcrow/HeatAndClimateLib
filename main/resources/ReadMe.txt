@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.3.0 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.3.1 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -269,9 +269,14 @@ Z=赤石
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
 
+○3.3.1
+　変更
+　　・日付の表記を変更
+　　・ゲーム開始時の季節を変えられるようにした
+
 ○3.3.0
 　変更
-　　・気候計算時のイベント(WorldHeatTierEventの追加
+　　・気候計算時のイベント(WorldHeatTierEvent)の追加
 　　・宝石アイテムのタイプを増やした
 　修正
  　　・ClimateCalculaterにブロックのロード判定を追加

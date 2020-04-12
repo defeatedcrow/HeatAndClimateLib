@@ -184,8 +184,8 @@ public class FluidCraftRecipe implements IFluidRecipe {
 			if (fluid == null)
 				b1 = true;
 		} else if (fluid != null) {
-			if (inputF.getFluid() == fluid.getFluid()
-					|| FluidDictionaryDC.matchFluid(fluid.getFluid(), inputF.getFluid())) {
+			if (inputF.getFluid() == fluid.getFluid() || FluidDictionaryDC.matchFluid(fluid.getFluid(), inputF
+					.getFluid())) {
 				b1 = inputF.amount <= fluid.amount;
 			}
 		}

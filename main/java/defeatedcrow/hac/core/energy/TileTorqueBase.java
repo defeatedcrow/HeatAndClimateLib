@@ -413,14 +413,13 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == TorqueCapabilityHandler.TORQUE_HANDLER_CAPABILITY ? true
-				: super.hasCapability(capability, facing);
+		return capability == TorqueCapabilityHandler.TORQUE_HANDLER_CAPABILITY ? true :
+				super.hasCapability(capability, facing);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == TorqueCapabilityHandler.TORQUE_HANDLER_CAPABILITY ? (T) torqueWrapper
-				: super.getCapability(capability, facing);
+		return capability == TorqueCapabilityHandler.TORQUE_HANDLER_CAPABILITY ? (T) torqueWrapper :
+				super.getCapability(capability, facing);
 	}
 }

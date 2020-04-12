@@ -1,9 +1,8 @@
 package defeatedcrow.hac.core.client;
 
-import java.util.Calendar;
-
 import org.lwjgl.opengl.GL11;
 
+import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.EnumSeason;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.config.CoreConfigDC;
@@ -26,7 +25,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -85,20 +83,13 @@ public class AdvancedHUDEvent {
 
 					if (hasAcv && ClientClimateData.INSTANCE.getClimate() != null) {
 						IClimate clm = ClientClimateData.INSTANCE.getClimate();
-						float tempF = biome.getTemperature(player.getPosition());
-						if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER)) {
-							tempF += 1.5F;
-						} else if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.END)) {
-							tempF -= 1.0F;
-						} else if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.WATER)) {
-							tempF += 0.25F;
-						}
+						float tempF = ClimateAPI.register.getBiomeTemp(world, player.getPosition());
 						float we = WeatherChecker.getTempOffsetFloat(world.provider.getDimension(), false);
 						if (CoreConfigDC.enableWeatherEffect) {
 							tempF += we;
 						}
-						float ni = DCTimeHelper.getTimeOffset(world, biome);
 						if (CoreConfigDC.enableTimeEffect) {
+							float ni = DCTimeHelper.getTimeOffset(world, biome);
 							tempF += ni;
 						}
 
@@ -148,36 +139,26 @@ public class AdvancedHUDEvent {
 							drawTexturedModalRect(x, y, 0, 0, 48, 48);
 						}
 
-						String s = "";
+						String s1 = "";
+						String s2 = "";
 						int color = 16383998;
 						EnumSeason season = EnumSeason.SPRING;
 						if (CoreConfigDC.enableSeasonEffect && CoreConfigDC.showSeason) {
 							season = DCTimeHelper.getSeasonEnum(world);
-							s += season.getName();
+							s1 += season.getName();
 							color = season.color.getColorValue();
 						}
 						if (CoreConfigDC.showDay) {
-							if (CoreConfigDC.enableRealSeason) {
-								Calendar cal = Calendar.getInstance();
-								s += " " + (cal.get(cal.MONTH) + 1) + "/" + cal.get(cal.DATE);
-							} else {
-								int day = DCTimeHelper.getDay(world);
-								int sD = (int) (DCTimeHelper
-										.seasonPeriod(season)[0] * (CoreConfigDC.yearLength / 365D));
-								if (season == CoreConfigDC.overYear && day < sD) {
-									sD = 0;
-								}
-								s += " Day " + (day - sD);
-								// if (ClimateCore.isDebug) {
-								// s += " totalday" + day;
-								// }
-							}
+							s2 = DCTimeHelper.getDate(world);
 						}
-						if (s.length() > 1) {
-							if (CoreConfigDC.useAnalogueHUD)
-								fr.drawString(s, x + 10 + CoreConfigDC.offsetSeason[0], y + CoreConfigDC.offsetSeason[1], color, true);
-							else
-								fr.drawString(s, x + CoreConfigDC.offsetSeason[0], y + CoreConfigDC.offsetSeason[1], color, true);
+						if (s1.length() > 1 && s2.length() > 1) {
+							if (CoreConfigDC.useAnalogueHUD) {
+								fr.drawString(s1, x + 10 + CoreConfigDC.offsetSeason[0], y - 10 + CoreConfigDC.offsetSeason[1], color, true);
+								fr.drawString(s2, x + 10 + CoreConfigDC.offsetSeason[0], y + CoreConfigDC.offsetSeason[1], color, true);
+							} else {
+								fr.drawString(s1, x + CoreConfigDC.offsetSeason[0], y - 10 + CoreConfigDC.offsetSeason[1], color, true);
+								fr.drawString(s2, x + CoreConfigDC.offsetSeason[0], y + CoreConfigDC.offsetSeason[1], color, true);
+							}
 						}
 
 						// Biome biome = Biome.getBiomeForId(biomeID);

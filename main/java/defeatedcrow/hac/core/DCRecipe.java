@@ -32,17 +32,17 @@ public class DCRecipe {
 		// ABS
 
 		// CRYOGENIC
-		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.PACKED_ICE, 1, 0), DCHeatTier.CRYOGENIC, null,
-				DCAirflow.FLOW, false, new ItemStack(Blocks.ICE, 1, 0));
+		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.PACKED_ICE, 1,
+				0), DCHeatTier.CRYOGENIC, null, DCAirflow.FLOW, false, new ItemStack(Blocks.ICE, 1, 0));
 
 		// COLD
 
 		// NORMAL
-		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.MOSSY_COBBLESTONE, 1, 0), DCHeatTier.NORMAL,
-				DCHumidity.WET, null, false, new ItemStack(Blocks.COBBLESTONE, 1, 0));
+		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.MOSSY_COBBLESTONE, 1,
+				0), DCHeatTier.NORMAL, DCHumidity.WET, null, false, new ItemStack(Blocks.COBBLESTONE, 1, 0));
 
-		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONEBRICK, 1, 1), DCHeatTier.NORMAL, DCHumidity.WET,
-				null, false, new ItemStack(Blocks.STONEBRICK, 1, 0));
+		RecipeAPI.registerSmelting.addRecipe(new ItemStack(Blocks.STONEBRICK, 1,
+				1), DCHeatTier.NORMAL, DCHumidity.WET, null, false, new ItemStack(Blocks.STONEBRICK, 1, 0));
 
 		// HOT
 
@@ -70,46 +70,98 @@ public class DCRecipe {
 		// コンパス
 
 		jsonShapedRecipe("core", new ItemStack(Items.COMPASS, 1, 0), new Object[] {
-				" X ", "XYX", " X ", 'X', "ingotIron", 'Y', "dustMagnetite"
+				" X ",
+				"XYX",
+				" X ",
+				'X',
+				"ingotIron",
+				'Y',
+				"dustMagnetite"
 		});
 
 		// 火打ち石のアナザー
 		jsonShapelessRecipe("core", new ItemStack(Items.FLINT_AND_STEEL, 1, 0), new Object[] {
-				new ItemStack(Items.IRON_INGOT, 1, 0), "gemChalcedony"
+				new ItemStack(Items.IRON_INGOT, 1, 0),
+				"gemChalcedony"
 		});
 
 		// 火薬
 		jsonShapelessRecipe("core", new ItemStack(Items.GUNPOWDER, 4, 0), new Object[] {
-				"dustGraphite", "dustGraphite", "dustGraphite", "gemNiter", "gemNiter", "gemSulfur"
+				"dustGraphite",
+				"dustGraphite",
+				"dustGraphite",
+				"gemNiter",
+				"gemNiter",
+				"gemSulfur"
 		});
 
 		jsonShapelessRecipe("core", new ItemStack(Items.GUNPOWDER, 4, 0), new Object[] {
-				"dustGraphite", "dustGraphite", "dustGraphite", "dustNiter", "dustNiter", "dustSulfur"
+				"dustGraphite",
+				"dustGraphite",
+				"dustGraphite",
+				"dustNiter",
+				"dustNiter",
+				"dustSulfur"
 		});
 
 		// 代替系
 		jsonShapedRecipe("core", new ItemStack(Items.CAKE, 1, 0), new Object[] {
-				"XXX", "YZY", "WWW", 'X', "bucketMilk", 'Y', "dustSugar", 'Z', "egg", 'W', "foodFlour"
+				"XXX",
+				"YZY",
+				"WWW",
+				'X',
+				"bucketMilk",
+				'Y',
+				"dustSugar",
+				'Z',
+				"egg",
+				'W',
+				"foodFlour"
 		});
 
 		jsonShapedRecipe("core", new ItemStack(Items.COOKIE, 8, 0), new Object[] {
-				"YZY", 'Y', "foodFlour", 'Z', "cropCocoa"
+				"YZY",
+				'Y',
+				"foodFlour",
+				'Z',
+				"cropCocoa"
 		});
 
 		jsonShapedRecipe("core", new ItemStack(Items.BREAD, 1, 0), new Object[] {
-				"YYY", 'Y', "foodFlour"
+				"YYY",
+				'Y',
+				"foodFlour"
 		});
 
 		jsonShapedRecipe("core", new ItemStack(Items.BED, 1, 0), new Object[] {
-				"XXX", "YYY", 'X', "itemCloth", 'Y', "plankWood"
+				"XXX",
+				"YYY",
+				'X',
+				"itemCloth",
+				'Y',
+				"plankWood"
 		});
 
 		jsonShapedRecipe("core", new ItemStack(Items.PAINTING, 1, 0), new Object[] {
-				"XXX", "XYX", "XXX", 'X', "stickWood", 'Y', "itemCloth"
+				"XXX",
+				"XYX",
+				"XXX",
+				'X',
+				"stickWood",
+				'Y',
+				"itemCloth"
 		});
 
 		jsonShapedRecipe("core", new ItemStack(Items.SADDLE, 1, 0), new Object[] {
-				"X", "Y", "Z", 'X', "leather", 'Y', "itemCloth", 'Z', "ingotIron"
+				"X",
+				"Y",
+				"Z",
+				'X',
+				"leather",
+				'Y',
+				"itemCloth",
+				'Z',
+				"ingotIron"
 		});
 
 	}
@@ -120,22 +172,32 @@ public class DCRecipe {
 		// 紙魚抹殺
 		ClimateSmelting silverfish5 = new ClimateSmelting(new ItemStack(Blocks.STONEBRICK, 1, 2), null, DCHeatTier.KILN,
 				null, null, 0, false, new ItemStack(Blocks.MONSTER_EGG, 1, 4));
+		silverfish5.requiredHeat().add(DCHeatTier.UHT);
+		silverfish5.requiredHeat().add(DCHeatTier.INFERNO);
 		RecipeAPI.registerSmelting.addRecipe(silverfish5);
 
 		ClimateSmelting silverfish4 = new ClimateSmelting(new ItemStack(Blocks.STONEBRICK, 1, 1), null, DCHeatTier.KILN,
 				null, null, 0, false, new ItemStack(Blocks.MONSTER_EGG, 1, 3));
+		silverfish4.requiredHeat().add(DCHeatTier.UHT);
+		silverfish4.requiredHeat().add(DCHeatTier.INFERNO);
 		RecipeAPI.registerSmelting.addRecipe(silverfish4);
 
 		ClimateSmelting silverfish3 = new ClimateSmelting(new ItemStack(Blocks.STONEBRICK, 1, 0), null, DCHeatTier.KILN,
 				null, null, 0, false, new ItemStack(Blocks.MONSTER_EGG, 1, 2));
+		silverfish3.requiredHeat().add(DCHeatTier.UHT);
+		silverfish3.requiredHeat().add(DCHeatTier.INFERNO);
 		RecipeAPI.registerSmelting.addRecipe(silverfish3);
 
 		ClimateSmelting silverfish2 = new ClimateSmelting(new ItemStack(Blocks.COBBLESTONE, 1, 0), null,
 				DCHeatTier.KILN, null, null, 0, false, new ItemStack(Blocks.MONSTER_EGG, 1, 1));
+		silverfish2.requiredHeat().add(DCHeatTier.UHT);
+		silverfish2.requiredHeat().add(DCHeatTier.INFERNO);
 		RecipeAPI.registerSmelting.addRecipe(silverfish2);
 
 		ClimateSmelting silverfish1 = new ClimateSmelting(new ItemStack(Blocks.STONE, 1, 1), null, DCHeatTier.KILN,
 				null, null, 0, false, new ItemStack(Blocks.MONSTER_EGG, 1, 0));
+		silverfish1.requiredHeat().add(DCHeatTier.UHT);
+		silverfish1.requiredHeat().add(DCHeatTier.INFERNO);
 		RecipeAPI.registerSmelting.addRecipe(silverfish1);
 
 		// grassとsandの風化
@@ -179,8 +241,8 @@ public class DCRecipe {
 				DCHumidity.WET, null, 0, false, new ItemStack(Blocks.DEADBUSH, 1, 0)) {
 			@Override
 			public boolean additionalRequire(World world, BlockPos pos) {
-				if (world.getBlockState(pos.down()).getBlock() instanceof BlockDirt
-						|| world.getBlockState(pos.down()).getBlock() instanceof BlockGrass)
+				if (world.getBlockState(pos.down()).getBlock() instanceof BlockDirt || world.getBlockState(pos.down())
+						.getBlock() instanceof BlockGrass)
 					return true;
 				return false;
 			}
@@ -191,9 +253,9 @@ public class DCRecipe {
 				DCHumidity.DRY, null, 0, false, new ItemStack(Blocks.SAPLING, 1, 32767)) {
 			@Override
 			public boolean additionalRequire(World world, BlockPos pos) {
-				if (world.getBlockState(pos.down()).getBlock() instanceof BlockDirt
-						|| world.getBlockState(pos.down()).getMaterial() == Material.SAND
-						|| world.getBlockState(pos.down()).getMaterial() == Material.GRASS)
+				if (world.getBlockState(pos.down()).getBlock() instanceof BlockDirt || world.getBlockState(pos.down())
+						.getMaterial() == Material.SAND || world.getBlockState(pos.down())
+								.getMaterial() == Material.GRASS)
 					return true;
 				return false;
 			}

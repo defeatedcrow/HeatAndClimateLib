@@ -163,26 +163,16 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	@Override
 	public DCHeatTier getHeatTier(World world, BlockPos pos) {
 		if (world.isBlockLoaded(pos)) {
-			Biome biome = world.getBiomeForCoordsBody(pos);
+			Biome b = world.getBiomeForCoordsBody(pos);
 			int dim = world.provider.getDimension();
-			int i = getKey(biome, dim);
+			int i = getKey(b, dim);
 			IClimate clm = getClimateFromList(i);
-			int id = i & 255;
-			Biome b = Biome.getBiome(id);
 
 			float temp = 0.5F;
 			if (clm != null) {
 				temp = clm.getHeat().getBiomeTemp();
-			} else if (b != null) {
-				temp = b.getTemperature(pos);
-				if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
-					temp += 2.0F;
-				} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
-					temp -= 1.0F;
-				}
-				if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WATER)) {
-					temp += 0.25F;
-				}
+			} else {
+				temp = getBiomeTemp(world, pos);
 			}
 
 			if (CoreConfigDC.enableWeatherEffect) {
@@ -231,15 +221,32 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	}
 
 	@Override
-	public DCHeatTier getHeatTier(int biome) {
-		IClimate clm = getClimateFromList(biome);
-		int id = biome & 255;
-		Biome b = Biome.getBiome(id);
-		float temp = 0.5F;
+	public float getBiomeTemp(World world, BlockPos pos) {
+		if (world.isBlockLoaded(pos)) {
+			Biome b = world.getBiomeForCoordsBody(pos);
+			float temp = 0.5F;
+			if (b != null) {
+				temp = b.getTemperature(pos);
+				if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
+					temp += 2.0F;
+				} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
+					temp -= 1.0F;
+				} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WATER)) {
+					temp += 0.25F;
+				}
+			}
+			return temp;
+		} else {
+			return 0.5F;
+		}
+	}
 
-		if (clm != null) {
-			temp = clm.getHeat().getBiomeTemp();
-		} else if (b != null) {
+	@Override
+	public float getBiomeTemp(int biome) {
+		int id = biome & 255;
+		Biome b = Biome.getBiome(biome);
+		float temp = 0.5F;
+		if (b != null) {
 			temp = b.getDefaultTemperature();
 			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
 				temp += 2.0F;
@@ -249,9 +256,19 @@ public class ClimateRegister implements IBiomeClimateRegister {
 				temp += 0.25F;
 			}
 		}
+		return temp;
+	}
 
-		if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WATER)) {
-			temp += 0.25F;
+	@Override
+	public DCHeatTier getHeatTier(int biome) {
+		IClimate clm = getClimateFromList(biome);
+		int id = biome & 255;
+		float temp = 0.5F;
+
+		if (clm != null) {
+			temp = clm.getHeat().getBiomeTemp();
+		} else {
+			temp = getBiomeTemp(id);
 		}
 
 		return DCHeatTier.getTypeByBiomeTemp(temp);

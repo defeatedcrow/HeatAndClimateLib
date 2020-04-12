@@ -1,6 +1,8 @@
 package defeatedcrow.hac.core.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import defeatedcrow.hac.api.climate.EnumSeason;
 import defeatedcrow.hac.config.CoreConfigDC;
@@ -57,59 +59,6 @@ public class DCTimeHelper {
 		return (int) (time % 1000) * 60 / 1000;
 	}
 
-	public static int getSeason(World world) {
-		int season = 0;
-		int d = 0;
-		if (CoreConfigDC.enableRealTime) {
-			Calendar cal = Calendar.getInstance();
-			d = cal.get(cal.DAY_OF_YEAR);
-		} else {
-			int day = getDay(world);
-			d = (int) (day * (365D / CoreConfigDC.yearLength));
-			d = d % 365;
-		}
-		for (EnumSeason s : EnumSeason.values()) {
-			if (s == CoreConfigDC.overYear && seasonPeriod(s)[0] > seasonPeriod(s)[1]) {
-				if (d <= seasonPeriod(s)[0] || d >= seasonPeriod(s)[1]) {
-					season = s.id;
-					break;
-				}
-			} else {
-				if (d >= seasonPeriod(s)[0] && d <= seasonPeriod(s)[1]) {
-					season = s.id;
-					break;
-				}
-			}
-		}
-		if (CoreConfigDC.enableSouthernHemisphere) {
-			season = EnumSeason.getSouthernId(season);
-		}
-		return season;
-	}
-
-	/* int上限でカンスト */
-	public static int getDay(World world) {
-		if (CoreConfigDC.enableRealTime) {
-			Calendar cal = Calendar.getInstance();
-			return cal.get(cal.DAY_OF_YEAR);
-		}
-		long day = totalTime(world) / 24000L;
-		day += CoreConfigDC.springDate[0] * (CoreConfigDC.yearLength / 365D) + 1;
-		if (day > Integer.MAX_VALUE)
-			day -= Integer.MAX_VALUE;
-		return (int) day;
-	}
-
-	public static int getWeek(World world) {
-		if (CoreConfigDC.enableRealTime) {
-			Calendar cal = Calendar.getInstance();
-			return cal.get(cal.DAY_OF_WEEK);
-		}
-		int day = getDay(world);
-		int week = (((day - 1) / 7));
-		return week;
-	}
-
 	public static int getCount(World world) {
 		long i = (totalTime(world) % CoreConfigDC.entityInterval);
 		return (int) i;
@@ -119,6 +68,64 @@ public class DCTimeHelper {
 		long f = 1200L / CoreConfigDC.updateFrequency;
 		long i = (totalTime(world) % f);
 		return (int) i;
+	}
+
+	// 表示用
+	public static String getDate(World world) {
+		if (CoreConfigDC.enableRealTime) {
+			Calendar cal = Calendar.getInstance();
+			Date date = cal.getTime();
+			SimpleDateFormat format = new SimpleDateFormat(CoreConfigDC.dateFormat);
+			String s = format.format(date);
+			return s;
+		} else {
+			int day = getDay(world);
+			if (day > CoreConfigDC.yearLength) {
+				day %= CoreConfigDC.yearLength;
+			}
+			int year = getYear(world);
+			return "Year " + year + " / Day " + day;
+		}
+	}
+
+	public static int getDay(World world) {
+		if (CoreConfigDC.enableRealTime) {
+			Calendar cal = Calendar.getInstance();
+			return cal.get(cal.DAY_OF_YEAR);
+		}
+		long day = totalTime(world) / 24000L;
+		return DCDay.getDay(day);
+	}
+
+	public static int getWeek(World world) {
+		if (CoreConfigDC.enableRealTime) {
+			Calendar cal = Calendar.getInstance();
+			return cal.get(cal.DAY_OF_WEEK);
+		}
+		int day = getDay(world);
+		return DCDay.getWeek(day);
+	}
+
+	public static int getYear(World world) {
+		if (CoreConfigDC.enableRealTime) {
+			Calendar cal = Calendar.getInstance();
+			return cal.get(cal.YEAR);
+		}
+		int day = getDay(world);
+		return DCDay.getYear(day);
+	}
+
+	public static int getSeason(World world) {
+		int season = 0;
+		int d = 0;
+		if (CoreConfigDC.enableRealTime) {
+			Calendar cal = Calendar.getInstance();
+			d = cal.get(cal.DAY_OF_YEAR);
+			return DCDay.getSeason(d, true);
+		} else {
+			d = getDay(world);
+			return DCDay.getSeason(d, false);
+		}
 	}
 
 	public static EnumSeason getSeasonEnum(World world) {

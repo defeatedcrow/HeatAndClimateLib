@@ -145,6 +145,8 @@ public class CoreConfigDC {
 			17
 	};
 	public static EnumSeason overYear = EnumSeason.WINTER;
+	public static int startDate = 40;
+	public static String dateFormat = "yyyy/MM/dd";
 
 	// hardmode
 	public static boolean harderVanilla = false;
@@ -354,9 +356,8 @@ public class CoreConfigDC {
 			Property realS = cfg
 					.get("time setting", "Enable Real Season", enableRealSeason, "Use the real season for the season of HaC.");
 
-			// Property southern = cfg
-			// .get("time setting", "Enable Southern Hemisphere", enableSouthernHemisphere, "Use the southern hemisphere
-			// season.");
+			Property startD = cfg
+					.get("time setting", "Start Date", startDate, "Set the date of the world beginning." + BR + "Default: first day of spring.");
 
 			Property sprPeriod = cfg
 					.get("time setting", "Period of Spring", springDate, "Set the dates for the beginning and end of spring.");
@@ -369,6 +370,9 @@ public class CoreConfigDC {
 
 			Property wtrPeriod = cfg
 					.get("time setting", "Period of Winter", winterDate, "Set the dates for the beginning and end of winter.");
+
+			Property dateF = cfg
+					.get("time setting", "Realtime Date Format", dateFormat, "Set the date format used in  real-time settings.");
 
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
@@ -486,7 +490,6 @@ public class CoreConfigDC {
 
 			enableRealTime = realT.getBoolean();
 			enableRealSeason = realS.getBoolean();
-			// enableSouthernHemisphere = southern.getBoolean();
 
 			if (sprPeriod.isIntList() && sprPeriod.getIntList().length == 2) {
 				for (int i = 0; i < 2; i++) {
@@ -524,6 +527,15 @@ public class CoreConfigDC {
 				}
 			}
 
+			int sd = startD.getInt();
+			if (sd < 0 || sd > yearLength) {
+				sd = springDate[0];
+			}
+			startDate = sd;
+
+			String df = dateF.getString();
+			dateFormat = getFormat(df);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -553,6 +565,18 @@ public class CoreConfigDC {
 		blackListEntity.clear();
 		blackListBlock.addAll(DCUtil.getListFromStrings(updateBlackList, "Tick Update Invalid List"));
 		blackListEntity.addAll(DCUtil.getEntityListFromStrings(entityBlackList, "Climate Damage Invalid List"));
+	}
+
+	static String getFormat(String s) {
+		if (s == null) {
+			return "yyyy/MM/dd";
+		} else {
+			if (s.contains("yyyy") && s.contains("MM") && s.contains("dd")) {
+				return s;
+			} else {
+				return "yyyy/MM/dd";
+			}
+		}
 	}
 
 }

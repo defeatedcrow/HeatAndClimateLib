@@ -67,11 +67,15 @@ public interface IBiomeClimateRegister {
 
 	DCHumidity getHumidity(World world, BlockPos pos);
 
+	float getBiomeTemp(World world, BlockPos pos);
+
 	DCHeatTier getHeatTier(int biomeID);
 
 	DCAirflow getAirflow(int biomeID);
 
 	DCHumidity getHumidity(int biomeID);
+
+	float getBiomeTemp(int biomeID);
 
 	/**
 	 * climateを0bAABBCCCのintとして表現したものと互換性を持たせる。

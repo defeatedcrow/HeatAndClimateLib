@@ -604,8 +604,10 @@ public class DCUtil {
 					ResourceLocation res = new ResourceLocation(name);
 					if (EntityList.getClass(res) != null) {
 						Class<? extends Entity> entity = EntityList.getClass(res);
-						list.add(entity);
-						DCLogger.infoLog("Registered to the update blacklist: " + name);
+						if (entity != null) {
+							list.add(entity);
+							DCLogger.infoLog("Registered to the update blacklist: " + name);
+						}
 						continue;
 					}
 				}

@@ -138,7 +138,7 @@ public class APILoader {
 		DamageAPI.resistantData.registerEntityResistant(EntityRabbit.class, 2.0F, 4.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityWolf.class, 2.0F, 4.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityPolarBear.class, 1.0F, 8.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 0.0F, 8.0F);
+		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 8.0F, 8.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityShulker.class, 0.0F, 8.0F);
 		DamageAPI.resistantData.registerEntityResistant(EntityLlama.class, 2.0F, 6.0F);
 	}
