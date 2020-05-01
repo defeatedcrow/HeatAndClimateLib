@@ -165,15 +165,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		if (world.isBlockLoaded(pos)) {
 			Biome b = world.getBiomeForCoordsBody(pos);
 			int dim = world.provider.getDimension();
-			int i = getKey(b, dim);
-			IClimate clm = getClimateFromList(i);
-
-			float temp = 0.5F;
-			if (clm != null) {
-				temp = clm.getHeat().getBiomeTemp();
-			} else {
-				temp = getBiomeTemp(world, pos);
-			}
+			float temp = getBiomeTemp(world, pos);
 
 			if (CoreConfigDC.enableWeatherEffect) {
 				float offset = WeatherChecker.getTempOffsetFloat(dim, world.provider.doesWaterVaporize());
@@ -186,6 +178,7 @@ public class ClimateRegister implements IBiomeClimateRegister {
 			}
 
 			DCHeatTier current = DCHeatTier.getTypeByBiomeTemp(temp);
+
 			WorldHeatTierEvent event = new WorldHeatTierEvent(world, pos, current, true);
 			current = event.result();
 
@@ -224,17 +217,29 @@ public class ClimateRegister implements IBiomeClimateRegister {
 	public float getBiomeTemp(World world, BlockPos pos) {
 		if (world.isBlockLoaded(pos)) {
 			Biome b = world.getBiomeForCoordsBody(pos);
+			int dim = world.provider.getDimension();
+			int i = getKey(b, dim);
+			IClimate clm = getClimateFromList(i);
+
 			float temp = 0.5F;
-			if (b != null) {
-				temp = b.getTemperature(pos);
-				if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
-					temp += 2.0F;
-				} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
-					temp -= 1.0F;
-				} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WATER)) {
-					temp += 0.25F;
+			if (clm != null) {
+				temp = clm.getHeat().getBiomeTemp();
+			} else {
+				if (CoreConfigDC.infernalInferno && dim == -1) {
+					temp = DCHeatTier.INFERNO.getBiomeTemp();
+				} else {
+					temp = b.getTemperature(pos);
 				}
 			}
+
+			if (BiomeDictionary.hasType(b, BiomeDictionary.Type.NETHER)) {
+				temp += 2.0F;
+			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.END)) {
+				temp -= 1.0F;
+			} else if (BiomeDictionary.hasType(b, BiomeDictionary.Type.WATER)) {
+				temp += 0.25F;
+			}
+
 			return temp;
 		} else {
 			return 0.5F;

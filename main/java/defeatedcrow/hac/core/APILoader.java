@@ -7,7 +7,6 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.cultivate.CropAPI;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
-import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.ArmorMaterialRegister;
 import defeatedcrow.hac.core.climate.ArmorResistantRegister;
 import defeatedcrow.hac.core.climate.ClimateAltCalculator;
@@ -80,10 +79,6 @@ public class APILoader {
 
 	public static void registerClimate() {
 		// biome
-		if (CoreConfigDC.infernalInferno) {
-			ClimateAPI.register.addBiomeClimate(Biomes.HELL, DCHeatTier.INFERNO, DCHumidity.DRY, DCAirflow.NORMAL);
-		}
-
 		ClimateAPI.register.setNoSeason(Biomes.MUSHROOM_ISLAND);
 		ClimateAPI.register.setNoSeason(Biomes.HELL);
 		ClimateAPI.register.setNoSeason(Biomes.SKY);

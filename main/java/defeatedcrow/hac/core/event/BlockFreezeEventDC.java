@@ -43,7 +43,10 @@ public class BlockFreezeEventDC {
 
 	boolean canFreezePos(World world, BlockPos pos) {
 		DCHeatTier clm = ClimateAPI.calculator.getAverageTemp(world, pos);
-		return clm.getTier() < DCHeatTier.COLD.getTier();
+		if (clm.getTier() < DCHeatTier.COLD.getTier())
+			return true;
+		float f2 = ClimateAPI.register.getBiomeTemp(world, pos);
+		return clm.getTier() < DCHeatTier.NORMAL.getTier() && world.canSeeSky(pos) && f2 <= 0.3F;
 	}
 
 }

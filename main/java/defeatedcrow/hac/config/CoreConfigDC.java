@@ -103,6 +103,8 @@ public class CoreConfigDC {
 	public static boolean enableVanilla = false;
 	public static boolean enableVanillaCrop = true;
 	public static boolean enableFarmland = true;
+	public static boolean enableIce = true;
+	public static boolean enableSnow = true;
 	public static int updateFrequency = 5;
 	public static boolean disableCustomRecipe = false;
 	public static boolean enableDropItemSmelting = false;
@@ -201,6 +203,12 @@ public class CoreConfigDC {
 
 			Property vanilla_farmland = cfg
 					.get("world setting", "Enable Moisture Farmland", enableFarmland, "Enable to moisture farmland in WET humidity.");
+
+			Property vanilla_ice = cfg
+					.get("world setting", "Enable Ice Effect", enableIce, "Enables the climate to affect the ice.");
+
+			Property vanilla_snow = cfg
+					.get("world setting", "Enable Snow Effect", enableSnow, "Enables the climate to affect the snow layer.");
 
 			Property update_block = cfg
 					.get("world setting", "Set Update Frequency", updateFrequency, "Set the number of the update times per sec.");
@@ -382,6 +390,8 @@ public class CoreConfigDC {
 			enableVanilla = vanilla_block.getBoolean();
 			enableVanillaCrop = vanilla_crop.getBoolean();
 			enableFarmland = vanilla_farmland.getBoolean();
+			enableIce = vanilla_ice.getBoolean();
+			enableSnow = vanilla_snow.getBoolean();
 			burntFood = burnt_food.getBoolean();
 			showDamageIcon = hud_icon.getBoolean();
 			enableDeepWater = water_cave.getBoolean();

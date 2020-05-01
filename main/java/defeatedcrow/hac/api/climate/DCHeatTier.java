@@ -55,7 +55,7 @@ public enum DCHeatTier {
 	// making iron or another metal
 	SMELTING(1500, 6, 11, 0xFF00FF, 30.0F),
 	// special alloy
-	UHT(3000, 7, 12, 0xFFA0FF, 30.0F),
+	UHT(3000, 7, 12, 0xFFA0FF, 60.0F),
 	// only on data
 	INFERNO(8000, 8, 13, 0x500000, 150.0F);
 
@@ -201,7 +201,15 @@ public enum DCHeatTier {
 	}
 
 	public static DCHeatTier getTypeByBiomeTemp(float temp) {
-		if (temp > 4.0F)
+		if (temp > 149.5F)
+			return DCHeatTier.INFERNO;
+		else if (temp > 59.5F)
+			return DCHeatTier.UHT;
+		else if (temp > 29.5F)
+			return DCHeatTier.SMELTING;
+		else if (temp > 15.5F)
+			return DCHeatTier.KILN;
+		else if (temp > 3.9F)
 			return DCHeatTier.OVEN;
 		else if (temp > 2.1F)
 			return DCHeatTier.BOIL;
@@ -213,10 +221,12 @@ public enum DCHeatTier {
 			return DCHeatTier.NORMAL;
 		else if (temp > 0.0F)
 			return DCHeatTier.COOL;
-		else if (temp > -0.8F)
+		else if (temp > -3.0F)
 			return DCHeatTier.COLD;
-		else
+		else if (temp > -6.0F)
 			return DCHeatTier.FROSTBITE;
+		else
+			return DCHeatTier.ABSOLUTE;
 	}
 
 	public static DCHeatTier getFromName(String name) {

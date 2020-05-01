@@ -21,7 +21,7 @@ public class DCDay {
 	}
 
 	public static int getYear(int day) {
-		int y = (day + 1) / CoreConfigDC.yearLength;
+		int y = (day - 1) / CoreConfigDC.yearLength;
 		return y + 1;
 	}
 
