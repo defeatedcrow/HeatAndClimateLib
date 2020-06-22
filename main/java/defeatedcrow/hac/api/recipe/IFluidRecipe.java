@@ -110,4 +110,8 @@ public interface IFluidRecipe {
 	 */
 	int recipeCoincidence();
 
+	DCHeatTier getMaxHeat();
+
+	DCHeatTier getMinHeat();
+
 }

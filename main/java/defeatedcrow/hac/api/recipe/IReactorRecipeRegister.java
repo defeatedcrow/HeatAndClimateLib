@@ -58,6 +58,8 @@ public interface IReactorRecipeRegister {
 	IReactorRecipe getRecipe(DCHeatTier tier, List<ItemStack> inputs, FluidStack inFluid1, FluidStack inFluid2,
 			ItemStack catalyst);
 
+	IReactorRecipe getSimpleRecipe(DCHeatTier tier, List<ItemStack> inputs, FluidStack inFluid1, ItemStack catalyst);
+
 	boolean removeRecipe(DCHeatTier tier, List<ItemStack> inputs, FluidStack inFluid1, FluidStack inFluid2,
 			ItemStack catalyst);
 

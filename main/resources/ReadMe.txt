@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.3.2 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.3.3 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -268,6 +268,11 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.3.3
+　変更
+　　・化学反応槽レシピと液体レシピのJEIレシピ表示を改良
+　　・jsonレシピ生成クラスの内部仕様変更
 
 ○3.3.2
 　変更

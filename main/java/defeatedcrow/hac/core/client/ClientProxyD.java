@@ -170,13 +170,13 @@ public class ClientProxyD extends CommonProxyD {
 	}
 
 	@Override
-	public void addShapedRecipeJson(String name, @Nonnull ItemStack result, Object... recipe) {
-		RecipeJsonMaker.buildShapedRecipe(name, result, recipe);
+	public void addShapedRecipeJson(String name, int num, @Nonnull ItemStack result, Object... recipe) {
+		RecipeJsonMaker.buildShapedRecipe(name, num, result, recipe);
 	}
 
 	@Override
-	public void addShapelessRecipeJson(String name, @Nonnull ItemStack result, Object... recipe) {
-		RecipeJsonMaker.buildShapelessRecipe(name, result, recipe);
+	public void addShapelessRecipeJson(String name, int num, @Nonnull ItemStack result, Object... recipe) {
+		RecipeJsonMaker.buildShapelessRecipe(name, num, result, recipe);
 	}
 
 	@Override

@@ -3,12 +3,15 @@ package defeatedcrow.hac.core.plugin.jei;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IFluidRecipe;
+import defeatedcrow.hac.core.plugin.DCsJEIPluginLists;
 import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import defeatedcrow.hac.core.util.DCUtil;
 import mezz.jei.api.ingredients.IIngredients;
@@ -22,6 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class FluidRecipeWrapper implements IRecipeWrapper {
 
 	private final List<List<ItemStack>> input;
+	private final List<List<ItemStack>> input2;
 	private final List<ItemStack> output;
 	private final IFluidRecipe rec;
 	private final List<FluidStack> inF;
@@ -32,12 +36,14 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 	private final List<DCHumidity> hums;
 	private final List<DCAirflow> airs;
 	public final float chance;
+	private final List<ItemStack> machine;
 
 	@SuppressWarnings("unchecked")
 	public FluidRecipeWrapper(IFluidRecipe recipe) {
 		type = recipe.additionalString();
 		rec = recipe;
 		input = new ArrayList<List<ItemStack>>();
+		input2 = Lists.newArrayList();
 		if (!recipe.getProcessedInput().isEmpty()) {
 			for (Object obj : recipe.getProcessedInput()) {
 				if (obj instanceof ItemStack) {
@@ -83,6 +89,26 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 		if (airs.isEmpty()) {
 			airs.addAll(DCAirflow.createList());
 		}
+
+		machine = new ArrayList<ItemStack>();
+		machine.addAll(DCsJEIPluginLists.fluidcrafters_steel);
+		if (recipe.getMinHeat().getTier() > DCHeatTier.HOT.getTier()) {
+			machine.addAll(DCsJEIPluginLists.fluidcrafters_skillet);
+		}
+		if (recipe.getMaxHeat().getTier() < DCHeatTier.SMELTING.getTier() && recipe.getMinHeat()
+				.getTier() > DCHeatTier.FROSTBITE.getTier()) {
+			machine.addAll(DCsJEIPluginLists.fluidcrafters_pot);
+		}
+		if (DCUtil.isEmpty(recipe.getOutput()) && DCUtil.isEmpty(recipe.getSecondary())) {
+			machine.addAll(DCsJEIPluginLists.fluidcrafters_drink);
+		}
+
+		input2.addAll(input);
+		input2.add(machine);
+	}
+
+	public List<List<ItemStack>> getRecipeInputs() {
+		return input;
 	}
 
 	public List<DCAirflow> getAirs() {
@@ -97,9 +123,13 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 		return temps;
 	}
 
+	public List<ItemStack> getMachine() {
+		return machine;
+	}
+
 	@Override
 	public void getIngredients(IIngredients ing) {
-		ing.setInputLists(VanillaTypes.ITEM, input);
+		ing.setInputLists(VanillaTypes.ITEM, input2);
 		ing.setInputs(VanillaTypes.FLUID, inF);
 		ing.setOutputs(VanillaTypes.ITEM, output);
 		ing.setOutputs(VanillaTypes.FLUID, outF);

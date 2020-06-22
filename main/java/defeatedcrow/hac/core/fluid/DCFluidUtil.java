@@ -25,20 +25,20 @@ public class DCFluidUtil {
 	 */
 	public static boolean onActivateDCTank(TileEntity tile, ItemStack item, World world, IBlockState state,
 			EnumFacing side, EntityPlayer player) {
-		if (!DCUtil.isEmpty(item) && tile != null
-				&& item.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, side)
-				&& tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
+		if (!DCUtil.isEmpty(item) && tile != null && item
+				.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, side) && tile
+						.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
 			ItemStack copy = item.copy();
 			if (item.getCount() > 1)
 				copy.setCount(1);
 			IFluidHandlerItem dummy = copy.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 			IFluidHandler intank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP);
-			IFluidHandler outtank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY,
-					EnumFacing.DOWN);
+			IFluidHandler outtank = tile
+					.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN);
 
 			// dummyを使った検証
-			if (dummy != null && dummy.getTankProperties() != null && intank instanceof DCTank
-					&& outtank instanceof DCTank) {
+			if (dummy != null && dummy
+					.getTankProperties() != null && intank instanceof DCTank && outtank instanceof DCTank) {
 				int max = dummy.getTankProperties()[0].getCapacity();
 				FluidStack f1 = dummy.drain(max, false);
 				DCTank dc_in = (DCTank) intank;
@@ -72,7 +72,7 @@ public class DCFluidUtil {
 					}
 					tile.markDirty();
 					player.inventory.markDirty();
-					if (!DCUtil.isEmpty(ret)) {
+					if (!DCUtil.isEmpty(ret) && !world.isRemote) {
 						EntityItem drop = new EntityItem(world, player.posX, player.posY + 0.25D, player.posZ, ret);
 						world.spawnEntity(drop);
 					}
@@ -84,8 +84,8 @@ public class DCFluidUtil {
 	}
 
 	public static ItemStack getEmptyCont(ItemStack target) {
-		if (!DCUtil.isEmpty(target)
-				&& target.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+		if (!DCUtil.isEmpty(target) && target
+				.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
 			ItemStack copy = target.copy();
 			copy.setCount(1);
 			IFluidHandlerItem handler = copy.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
@@ -131,8 +131,8 @@ public class DCFluidUtil {
 					fill = dummy.drain(rem, true);
 					ret = dummy.getContainer();
 
-					if (fill != null
-							&& (DCUtil.isEmpty(ret) || DCUtil.isEmpty(out) || inv.isItemStackable(ret, out) > 0)) {
+					if (fill != null && (DCUtil.isEmpty(ret) || DCUtil.isEmpty(out) || inv
+							.isItemStackable(ret, out) > 0)) {
 						loose = true;
 						tank.fill(fill, true);
 					}

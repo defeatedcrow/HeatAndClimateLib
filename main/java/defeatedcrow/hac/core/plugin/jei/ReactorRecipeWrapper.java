@@ -11,6 +11,7 @@ import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.recipe.IReactorRecipe;
+import defeatedcrow.hac.core.plugin.DCsJEIPluginLists;
 import defeatedcrow.hac.core.plugin.jei.ingredients.ClimateTypes;
 import defeatedcrow.hac.core.util.DCUtil;
 import mezz.jei.api.ingredients.IIngredients;
@@ -32,6 +33,7 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 	private final List<FluidStack> outF;
 	private final List<DCHeatTier> temps;
 	public final float chance;
+	private final List<ItemStack> machine;
 
 	@SuppressWarnings("unchecked")
 	public ReactorRecipeWrapper(IReactorRecipe recipe) {
@@ -49,10 +51,6 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 				}
 			}
 		}
-		catalyst = new ArrayList<>();
-		catalyst.addAll(recipe.getCatalyst());
-		input2.addAll(input);
-		input2.add(catalyst);
 
 		output = new ArrayList<>();
 		output.add(recipe.getOutput());
@@ -81,6 +79,20 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 		if (temps.isEmpty()) {
 			temps.addAll(DCHeatTier.createList());
 		}
+
+		catalyst = new ArrayList<>();
+		catalyst.addAll(recipe.getCatalyst());
+
+		machine = new ArrayList<>();
+		if (!recipe.isSimpleRecipe()) {
+			machine.add(DCsJEIPluginLists.reactors.get(0));
+		} else {
+			machine.addAll(DCsJEIPluginLists.reactors);
+		}
+
+		input2.addAll(input);
+		input2.add(catalyst);
+		input2.add(machine);
 	}
 
 	public List<DCHeatTier> getTemps() {
@@ -106,6 +118,10 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 
 	public List<ItemStack> getCatalyst() {
 		return catalyst;
+	}
+
+	public List<ItemStack> getMachine() {
+		return machine;
 	}
 
 	public List<FluidStack> getFluidInputs() {

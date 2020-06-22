@@ -308,11 +308,19 @@ public class DCRecipe {
 	}
 
 	public static void jsonShapedRecipe(String name, @Nonnull ItemStack result, Object... recipe) {
-		ClimateCore.proxy.addShapedRecipeJson(name, result, recipe);
+		ClimateCore.proxy.addShapedRecipeJson(name, 0, result, recipe);
+	}
+
+	public static void jsonShapedRecipe(String name, int num, @Nonnull ItemStack result, Object... recipe) {
+		ClimateCore.proxy.addShapedRecipeJson(name, num, result, recipe);
 	}
 
 	public static void jsonShapelessRecipe(String name, @Nonnull ItemStack result, Object... recipe) {
-		ClimateCore.proxy.addShapelessRecipeJson(name, result, recipe);
+		ClimateCore.proxy.addShapelessRecipeJson(name, 0, result, recipe);
+	}
+
+	public static void jsonShapelessRecipe(String name, int num, @Nonnull ItemStack result, Object... recipe) {
+		ClimateCore.proxy.addShapelessRecipeJson(name, num, result, recipe);
 	}
 
 }

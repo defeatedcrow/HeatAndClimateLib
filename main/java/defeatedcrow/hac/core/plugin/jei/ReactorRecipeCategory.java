@@ -68,6 +68,7 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 		List<FluidStack> inF1 = wrapper.getFluidInputs();
 		List<FluidStack> outF1 = wrapper.getFluidOutputs();
 		List<ItemStack> catalyst = wrapper.getCatalyst();
+		List<ItemStack> machine = wrapper.getMachine();
 
 		if (!inputs.isEmpty()) {
 			for (int i = 0; i < 4; i++) {
@@ -93,6 +94,11 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 		if (!catalyst.isEmpty()) {
 			recipeLayout.getItemStacks().init(6, false, 93, 10);
 			recipeLayout.getItemStacks().set(6, catalyst);
+		}
+
+		if (!machine.isEmpty()) {
+			recipeLayout.getItemStacks().init(7, false, 142, 10);
+			recipeLayout.getItemStacks().set(7, machine);
 		}
 
 		if (!inF1.isEmpty() && inF1.get(0) != null) {
@@ -138,8 +144,8 @@ public class ReactorRecipeCategory implements IRecipeCategory {
 		List<DCHeatTier> temps = wrapper.getTemps();
 		int i = 0;
 		for (DCHeatTier temp : temps) {
-			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).init(i, true, new HeatTierRenderer(),
-					2 + temp.getID() * 6, 103, 6, 5, 0, 0);
+			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).init(i, true, new HeatTierRenderer(), 2 + temp
+					.getID() * 6, 103, 6, 5, 0, 0);
 			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).set(i, temp);
 			i++;
 		}

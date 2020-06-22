@@ -42,11 +42,11 @@ public class DCsJEIPlugin implements IModPlugin {
 	public void registerCategories(IRecipeCategoryRegistration registry) {
 		final IJeiHelpers jeiHelpers = registry.getJeiHelpers();
 		final IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
-		registry.addRecipeCategories(new ClimateBiomeCategory(guiHelper), new ClimateEffectiveCategory(guiHelper),
-				new ClimateSmeltingCategory(guiHelper), new SpinningRecipeCategory(guiHelper),
-				new MillRecipeCategory(guiHelper), new FluidRecipeCategory(guiHelper),
-				new ReactorRecipeCategory(guiHelper), new ClimateCropCategory(guiHelper),
-				new CrusherRecipeCategory(guiHelper));
+		registry.addRecipeCategories(new ClimateBiomeCategory(guiHelper), new ClimateEffectiveCategory(
+				guiHelper), new ClimateSmeltingCategory(guiHelper), new SpinningRecipeCategory(
+						guiHelper), new MillRecipeCategory(guiHelper), new FluidRecipeCategory(
+								guiHelper), new ReactorRecipeCategory(guiHelper), new ClimateCropCategory(
+										guiHelper), new CrusherRecipeCategory(guiHelper));
 	}
 
 	@Override
@@ -73,27 +73,27 @@ public class DCsJEIPlugin implements IModPlugin {
 		SpinningRecipeMaker.register(registry);
 		CrusherRecipeMaker.register(registry);
 
-		registry.handleRecipes(ShapedNBTRecipe.class, recipe -> new ShapedNBTWrapper(jeiHelpers, recipe),
-				VanillaRecipeCategoryUid.CRAFTING);
-		registry.handleRecipes(ShapelessNBTRecipe.class, recipe -> new ShapelessNBTWrapper(jeiHelpers, recipe),
-				VanillaRecipeCategoryUid.CRAFTING);
+		registry.handleRecipes(ShapedNBTRecipe.class, recipe -> new ShapedNBTWrapper(jeiHelpers,
+				recipe), VanillaRecipeCategoryUid.CRAFTING);
+		registry.handleRecipes(ShapelessNBTRecipe.class, recipe -> new ShapelessNBTWrapper(jeiHelpers,
+				recipe), VanillaRecipeCategoryUid.CRAFTING);
 
 		if (!DCsJEIPluginLists.climateIcons.isEmpty()) {
 			for (ItemStack item : DCsJEIPluginLists.climateIcons) {
 				registry.addRecipeCatalyst(item, CLIMATE_UID);
 			}
 		}
+
 		registry.addRecipeCatalyst(new ItemStack(Blocks.SAPLING), BIOME_UID);
 		registry.addRecipeCatalyst(new ItemStack(DCInit.climate_checker), SMELTING_UID);
-		if (!DCsJEIPluginLists.fluidcrafters.isEmpty()) {
-			for (ItemStack item : DCsJEIPluginLists.fluidcrafters) {
+
+		if (!DCsJEIPluginLists.fluidcrafters_steel.isEmpty()) {
+			for (ItemStack item : DCsJEIPluginLists.fluidcrafters_steel) {
 				registry.addRecipeCatalyst(item, FLUID_UID);
 			}
 		}
 		if (!DCsJEIPluginLists.reactors.isEmpty()) {
-			for (ItemStack item : DCsJEIPluginLists.reactors) {
-				registry.addRecipeCatalyst(item, REACTOR_UID);
-			}
+			registry.addRecipeCatalyst(DCsJEIPluginLists.reactors.get(0), REACTOR_UID);
 		}
 		if (!DCsJEIPluginLists.millstones.isEmpty()) {
 			for (ItemStack item : DCsJEIPluginLists.millstones) {

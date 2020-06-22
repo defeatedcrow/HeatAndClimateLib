@@ -67,10 +67,11 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		FluidRecipeWrapper wrapper = ((FluidRecipeWrapper) recipeWrapper);
 		// wrapper.getIngredients(ingredients);
 
-		List<List<ItemStack>> inputs = wrapper.getInputs();
+		List<List<ItemStack>> inputs = wrapper.getRecipeInputs();
 		List<ItemStack> outputs = wrapper.getOutputs();
 		List<FluidStack> inF = wrapper.getFluidInputs();
 		List<FluidStack> outF = wrapper.getFluidOutputs();
+		List<ItemStack> machine = wrapper.getMachine();
 
 		if (!inputs.isEmpty()) {
 			for (int i = 0; i < 3; i++) {
@@ -89,6 +90,11 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		if (outputs.size() > 1) {
 			recipeLayout.getItemStacks().init(5, false, 93, 31);
 			recipeLayout.getItemStacks().set(5, outputs.get(1));
+		}
+
+		if (!machine.isEmpty()) {
+			recipeLayout.getItemStacks().init(6, false, 138, 9);
+			recipeLayout.getItemStacks().set(6, machine);
 		}
 
 		if (!inF.isEmpty() && inF.get(0) != null) {
@@ -115,8 +121,8 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		List<DCHeatTier> temps = wrapper.getTemps();
 		int i = 0;
 		for (DCHeatTier temp : temps) {
-			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).init(i, true, new HeatTierRenderer(),
-					38 + temp.getID() * 6, 74, 6, 5, 0, 0);
+			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).init(i, true, new HeatTierRenderer(), 38 + temp
+					.getID() * 6, 74, 6, 5, 0, 0);
 			recipeLayout.getIngredientsGroup(ClimateTypes.TEMP).set(i, temp);
 			i++;
 		}
@@ -124,8 +130,8 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		List<DCHumidity> hums = wrapper.getHums();
 		int j = 0;
 		for (DCHumidity hum : hums) {
-			recipeLayout.getIngredientsGroup(ClimateTypes.HUM).init(j, true, new HumidityRenderer(),
-					38 + hum.getID() * 21, 84, 21, 5, 0, 0);
+			recipeLayout.getIngredientsGroup(ClimateTypes.HUM).init(j, true, new HumidityRenderer(), 38 + hum
+					.getID() * 21, 84, 21, 5, 0, 0);
 			recipeLayout.getIngredientsGroup(ClimateTypes.HUM).set(j, hum);
 			j++;
 		}
@@ -133,8 +139,8 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		List<DCAirflow> airs = wrapper.getAirs();
 		int k = 0;
 		for (DCAirflow air : airs) {
-			recipeLayout.getIngredientsGroup(ClimateTypes.AIR).init(k, true, new AirflowRenderer(),
-					38 + air.getID() * 21, 94, 21, 5, 0, 0);
+			recipeLayout.getIngredientsGroup(ClimateTypes.AIR).init(k, true, new AirflowRenderer(), 38 + air
+					.getID() * 21, 94, 21, 5, 0, 0);
 			recipeLayout.getIngredientsGroup(ClimateTypes.AIR).set(k, air);
 			k++;
 		}

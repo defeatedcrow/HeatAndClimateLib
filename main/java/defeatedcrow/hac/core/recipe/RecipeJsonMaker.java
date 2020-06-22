@@ -26,7 +26,7 @@ public class RecipeJsonMaker {
 
 	public static Path dir = null;
 
-	public static void buildShapedRecipe(String domain, ItemStack result, Object... keys) {
+	public static void buildShapedRecipe(String domain, int num, ItemStack result, Object... keys) {
 		int count = 0;
 		for (Object o : keys) {
 			if (o instanceof String) {
@@ -49,10 +49,10 @@ public class RecipeJsonMaker {
 			// DCLogger.infoLog("**** pair " + pair.ch + " " + pair.obj.toString());
 			obj[i1] = pair;
 		}
-		buildShapedRecipe(domain, result, pat, obj);
+		buildShapedRecipe(domain, num, result, pat, obj);
 	}
 
-	public static void buildShapedRecipe(String domain, ItemStack result, String[] pattern, Pairs... keys) {
+	public static void buildShapedRecipe(String domain, int num, ItemStack result, String[] pattern, Pairs... keys) {
 		if (dir != null && canUse && !DCUtil.isEmpty(result)) {
 			Map<String, Map<String, Object>> key = keys(keys);
 			Map<String, Object> res = result(result);
@@ -65,13 +65,11 @@ public class RecipeJsonMaker {
 
 			dir.normalize();
 			File f = new File(dir + "/" + domain + "/" + filename + ".json");
+			if (num > 0) {
+				f = new File(dir + "/" + domain + "/" + filename + "_" + num + ".json");
+			}
 			if (!canDeprecate && f.exists())
 				return;
-			int a = 2;
-			while (f.exists()) {
-				f = new File(dir + "/" + domain + "/" + filename + "_" + a + ".json");
-				a++;
-			}
 
 			if (!f.getParentFile().exists()) {
 				f.getParentFile().mkdirs();
@@ -103,7 +101,7 @@ public class RecipeJsonMaker {
 		}
 	}
 
-	public static void buildShapelessRecipe(String domain, ItemStack result, Object... keys) {
+	public static void buildShapelessRecipe(String domain, int num, ItemStack result, Object... keys) {
 		if (dir != null && canUse && !DCUtil.isEmpty(result)) {
 			// DCLogger.infoLog("**** start 2 ****");
 			List<Map<String, Object>> key = ing(keys);
@@ -117,13 +115,11 @@ public class RecipeJsonMaker {
 
 			dir.normalize();
 			File f = new File(dir + "/" + domain + "/" + filename + ".json");
+			if (num > 0) {
+				f = new File(dir + "/" + domain + "/" + filename + "_" + num + ".json");
+			}
 			if (!canDeprecate && f.exists())
 				return;
-			int a = 2;
-			while (f.exists()) {
-				f = new File(dir + "/" + domain + "/" + filename + "_" + a + ".json");
-				a++;
-			}
 
 			if (!f.getParentFile().exists()) {
 				f.getParentFile().mkdirs();

@@ -353,4 +353,26 @@ public class FluidCraftRecipe implements IFluidRecipe {
 	public int recipeCoincidence() {
 		return count;
 	}
+
+	@Override
+	public DCHeatTier getMaxHeat() {
+		DCHeatTier ret = DCHeatTier.ABSOLUTE;
+		for (DCHeatTier h : heat) {
+			if (h.getTier() > ret.getTier()) {
+				ret = h;
+			}
+		}
+		return ret;
+	}
+
+	@Override
+	public DCHeatTier getMinHeat() {
+		DCHeatTier ret = DCHeatTier.INFERNO;
+		for (DCHeatTier h : heat) {
+			if (h.getTier() < ret.getTier()) {
+				ret = h;
+			}
+		}
+		return ret;
+	}
 }

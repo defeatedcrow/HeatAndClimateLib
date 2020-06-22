@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableList;
 
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.recipe.IReactorRecipe;
+import defeatedcrow.hac.api.recipe.IRecipeCatalyst;
 import defeatedcrow.hac.api.recipe.IRecipePanel;
 import defeatedcrow.hac.core.fluid.DCFluidUtil;
 import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
@@ -214,8 +215,8 @@ public class ReactorRecipe implements IReactorRecipe {
 			if (fluid1 == null)
 				b1 = true;
 		} else if (fluid1 != null) {
-			if (inputF1.getFluid() == fluid1.getFluid()
-					|| FluidDictionaryDC.matchFluid(fluid1.getFluid(), inputF1.getFluid())) {
+			if (inputF1.getFluid() == fluid1.getFluid() || FluidDictionaryDC.matchFluid(fluid1.getFluid(), inputF1
+					.getFluid())) {
 				b1 = inputF1.amount <= fluid1.amount;
 			}
 		}
@@ -225,8 +226,8 @@ public class ReactorRecipe implements IReactorRecipe {
 			if (fluid2 == null)
 				b2 = true;
 		} else if (fluid2 != null) {
-			if (inputF2.getFluid() == fluid2.getFluid()
-					|| FluidDictionaryDC.matchFluid(fluid2.getFluid(), inputF2.getFluid())) {
+			if (inputF2.getFluid() == fluid2.getFluid() || FluidDictionaryDC.matchFluid(fluid2.getFluid(), inputF2
+					.getFluid())) {
 				b2 = inputF2.amount <= fluid2.amount;
 			}
 		}
@@ -381,5 +382,14 @@ public class ReactorRecipe implements IReactorRecipe {
 	@Override
 	public int recipeCoincidence() {
 		return count;
+	}
+
+	@Override
+	public boolean isSimpleRecipe() {
+		if (this.getSubInputFluid() == null && this.getSubOutputFluid() == null && this.getRecipeSize() <= 2 && (this
+				.getCatalyst().isEmpty() || !(this.getCatalyst().get(0).getItem() instanceof IRecipeCatalyst)))
+			return true;
+		else
+			return false;
 	}
 }

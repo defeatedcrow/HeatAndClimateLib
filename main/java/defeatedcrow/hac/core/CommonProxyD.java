@@ -147,11 +147,11 @@ public class CommonProxyD {
 		return 0;
 	}
 
-	public void addShapedRecipeJson(String name, @Nonnull ItemStack result, Object... recipe) {
+	public void addShapedRecipeJson(String name, int num, @Nonnull ItemStack result, Object... recipe) {
 
 	}
 
-	public void addShapelessRecipeJson(String name, @Nonnull ItemStack result, Object... recipe) {
+	public void addShapelessRecipeJson(String name, int num, @Nonnull ItemStack result, Object... recipe) {
 
 	}
 

@@ -155,4 +155,25 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 		return false;
 	}
 
+	@Override
+	public IReactorRecipe getSimpleRecipe(DCHeatTier tier, List<ItemStack> inputs, FluidStack inFluid1,
+			ItemStack catalyst) {
+		IReactorRecipe ret = null;
+		int c = 0;
+		for (IReactorRecipe recipe : list) {
+			if (recipe.matches(inputs, inFluid1, null) && recipe.matchHeatTier(tier) && recipe
+					.matchCatalyst(catalyst) && recipe.isSimpleRecipe()) {
+				if (recipe.recipeCoincidence() >= c) {
+					ret = recipe;
+					c = recipe.recipeCoincidence();
+				}
+			}
+		}
+
+		if (ret != null) {
+			return ret;
+		}
+		return null;
+	}
+
 }

@@ -105,4 +105,10 @@ public interface IReactorRecipe {
 	 */
 	int recipeCoincidence();
 
+	/**
+	 * シンプルレシピ<br>
+	 * 簡易反応槽で扱えるサイズであるかどうか
+	 */
+	boolean isSimpleRecipe();
+
 }
