@@ -79,6 +79,7 @@ public class DCTimeHelper {
 			String s = format.format(date);
 			return s;
 		} else {
+			int displayDay = getDisplayDay(world);
 			int day = getDay(world);
 			if (day > CoreConfigDC.yearLength) {
 				day %= CoreConfigDC.yearLength;
@@ -95,6 +96,15 @@ public class DCTimeHelper {
 		}
 		long day = totalTime(world) / 24000L;
 		return DCDay.getDay(day);
+	}
+
+	public static int getDisplayDay(World world) {
+		if (CoreConfigDC.enableRealTime) {
+			Calendar cal = Calendar.getInstance();
+			return cal.get(cal.DAY_OF_YEAR);
+		}
+		long day = totalTime(world) / 24000L;
+		return DCDay.getDisplayDay(day);
 	}
 
 	public static int getWeek(World world) {

@@ -57,7 +57,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 	@Override
 	public void registerEntityResistant(ResourceLocation name, float heat, float cold) {
 		if (name != null) {
-			DCLogger.debugLog("register target: " + name);
+			DCLogger.debugLog("Trying register target: " + name);
 			if (EntityList.getClass(name) != null) {
 				Class<? extends Entity> entity = EntityList.getClass(name);
 				registerEntityResistant(entity, heat, cold);
@@ -68,7 +68,7 @@ public class MobResistantRegister implements IMobHeatResistant {
 	public void registerEntityResistant(String name, float heat, float cold) {
 		if (name != null) {
 			ResourceLocation res = new ResourceLocation(name);
-			DCLogger.debugLog("register target from json: " + name);
+			DCLogger.debugLog("Trying register target from json: " + name);
 			if (EntityList.getClass(res) != null) {
 				Class<? extends Entity> entity = EntityList.getClass(res);
 				registerEntityResistant(entity, heat, cold);

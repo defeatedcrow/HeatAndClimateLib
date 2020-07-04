@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.3.3 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.3.4 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -268,6 +268,12 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.3.4
+　修正
+　　・一部バニラアイテムへの鉱石辞書名追加
+　EX
+　　・ライセンスの更新
 
 ○3.3.3
 　変更

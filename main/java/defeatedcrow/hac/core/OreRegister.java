@@ -45,6 +45,7 @@ public class OreRegister {
 		OreDictionary.registerOre("listAllchickenraw", new ItemStack(Items.CHICKEN));
 		OreDictionary.registerOre("listAllmuttonraw", new ItemStack(Items.MUTTON));
 		OreDictionary.registerOre("listAllrabbitraw", new ItemStack(Items.RABBIT));
+		OreDictionary.registerOre("listAllsugar", new ItemStack(Items.SUGAR));
 
 		OreDictionary.registerOre("cropApple", new ItemStack(Items.APPLE));
 		OreDictionary.registerOre("cropCocoa", new ItemStack(Items.DYE, 1, 3));
@@ -80,6 +81,9 @@ public class OreRegister {
 		OreDictionary.registerOre("cobblestone", new ItemStack(Blocks.STONE, 1, 1));
 		OreDictionary.registerOre("cobblestone", new ItemStack(Blocks.STONE, 1, 3));
 		OreDictionary.registerOre("cobblestone", new ItemStack(Blocks.STONE, 1, 5));
+		OreDictionary.registerOre("stoneGranite", new ItemStack(Blocks.STONE, 1, 1));
+		OreDictionary.registerOre("stoneDiorite", new ItemStack(Blocks.STONE, 1, 3));
+		OreDictionary.registerOre("stoneAndesite", new ItemStack(Blocks.STONE, 1, 5));
 
 		OreDictionary.registerOre("egg", new ItemStack(Items.EGG));
 

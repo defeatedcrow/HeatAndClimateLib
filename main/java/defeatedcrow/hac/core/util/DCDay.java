@@ -15,6 +15,14 @@ public class DCDay {
 		return (int) d;
 	}
 
+	public static int getDisplayDay(long day) {
+		long d = day + 1;
+		if (d > Integer.MAX_VALUE) {
+			d %= Integer.MAX_VALUE;
+		}
+		return (int) d;
+	}
+
 	public static int getWeek(int day) {
 		int week = (day - 1) % 7;
 		return week;

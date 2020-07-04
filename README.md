@@ -15,17 +15,25 @@ This mod is API and core mod necessary for defeatedcrow's mod in 1.9+. Of course
 このmodは以下のライセンスの元で公開されます。 <br>
 This mod is distributed under the following license:
 ### Code: All Rights Reserved
-#### Permissions
-- ソースコードを改変したり、あなたのmodプロジェクトに利用することができます。<br>You can fork, modify, or use the code in your project.
-- このmodの非改変パッケージをmodpackに同梱したり、マルチプレイサーバー内で再配布することができます。<br>You can redistribute this mod's unmodified package to modpack or multiplayer server.
-
 #### Conditions
 - 著作権者の表示 Copyright notice
 - 商用利用禁止 Commercial use prohibition
 
+#### Permissions
+- ソースコードを改変したり、あなたのmodプロジェクトに利用することができます。
+  You can fork, modify, or use the code in your project.
+- このmodの非改変バイナリパッケージをmodpackに同梱したり、マルチプレイサーバー内で再配布することができます。
+  You can redistribute this mod's unmodified binary package to modpack or multiplayer server.
+- このmodを導入したマインクラフトのサーバー、modpack、およびゲームプレイの映像については、作者の同意を得ることなく、商用目的で利用することができます。
+  You can use Minecraft server, modpack, and gameplay footage that introduced this mod for commercial purposes without consent of the author.
+
 #### Limitations
-- このmodは「現状のまま」提供され、一切の動作を保証しません。<br>This mod is provided "as is" without warranty of any kind.
-- 作者および著作権者は、いかなる場合でも、このmodの使用その他によって生じる責任を負いません。<br>In any case, the author or copyright holder is not responsible for any claims, damages or other liabilities arising out of this mod or its use.
+- このmodは「現状のまま」提供され、一切の動作を保証しません。
+  This mod is provided "as is" without warranty of any kind.
+- 作者および著作権者は、いかなる場合でも、このmodの使用その他によって生じる責任を負いません。
+  In any case, the author or copyright holder is not responsible for any claims, damages or other liabilities arising out of this mod or its use.
+- このライセンスは、Mojang社のEULA条項に代わって適用されるものではありません。ユーザーがマインクラフトを利用するにあたっては、Mojang社のEULAを遵守する必要があります。
+  This license does not replace Mojang's EULA terms. Users must comply with Mojang's EULA to use this mod.
 
 ### Assets: CC-BY-NC-SA 4.0 <br>
  https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
@@ -46,4 +54,4 @@ This mod is distributed under the following license:
 <br>
 3. Climate damage and prevent material. <br>Too high or low temp will hurt player and mobs. It can prevent easily by armors or charms.<br> 極度の高温・低温でプレイヤーやMOBがダメージを受けるようになります。ダメージは防具やアクセサリーで簡単に防ぐことができます。(防具を身につける動機付けです。)<br><br>
 
-Copyright (c) defeatedcrow 2016
+Copyright (c) defeatedcrow 2020
