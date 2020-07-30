@@ -150,6 +150,11 @@ public class TileTorqueBase extends DCTileEntity implements ITorqueDC {
 	}
 
 	@Override
+	public boolean hasFaceSide() {
+		return false;
+	}
+
+	@Override
 	public EnumFacing getFaceSide() {
 		return this.faceFromID();
 	}

@@ -16,7 +16,8 @@ public final class BlockSet {
 	}
 
 	public IBlockState getState() {
-		return block == null ? Blocks.AIR.getDefaultState() : block.getStateFromMeta(meta);
+		return block == null ? Blocks.AIR.getDefaultState() : meta == 32767 ? block.getDefaultState() : block
+				.getStateFromMeta(meta);
 	}
 
 	/**
@@ -39,7 +40,7 @@ public final class BlockSet {
 
 	@Override
 	public String toString() {
-		String name = block == null ? "null" : block.toString();
+		String name = block == null ? "null" : block.getRegistryName().toString();
 		return name + ":" + meta;
 	}
 }

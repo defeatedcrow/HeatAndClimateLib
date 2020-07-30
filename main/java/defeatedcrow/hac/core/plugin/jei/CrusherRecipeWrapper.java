@@ -22,7 +22,6 @@ public class CrusherRecipeWrapper implements IRecipeWrapper {
 	private final List<FluidStack> outF;
 	public final ICrusherRecipe rec;
 
-	@SuppressWarnings("unchecked")
 	public CrusherRecipeWrapper(ICrusherRecipe recipe) {
 		rec = recipe;
 

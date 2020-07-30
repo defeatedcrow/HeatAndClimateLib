@@ -27,7 +27,6 @@ public class ClimateSmeltingWrapper implements IRecipeWrapper {
 	private final List<DCHumidity> hums;
 	private final List<DCAirflow> airs;
 
-	@SuppressWarnings("unchecked")
 	public ClimateSmeltingWrapper(IClimateSmelting recipe) {
 		rec = recipe;
 		input = recipe.getProcessedInput();

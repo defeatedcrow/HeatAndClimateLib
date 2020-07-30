@@ -35,7 +35,6 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 	public final float chance;
 	private final List<ItemStack> machine;
 
-	@SuppressWarnings("unchecked")
 	public ReactorRecipeWrapper(IReactorRecipe recipe) {
 		rec = recipe;
 		input = Lists.newArrayList();

@@ -3,33 +3,13 @@ package defeatedcrow.hac.api.blockstate;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 
-public enum EnumSide
-		implements
-		IStringSerializable {
-	DOWN(
-			0,
-			"down",
-			EnumFacing.DOWN),
-	UP(
-			1,
-			"up",
-			EnumFacing.UP),
-	NORTH(
-			2,
-			"north",
-			EnumFacing.NORTH),
-	SOUTH(
-			3,
-			"south",
-			EnumFacing.SOUTH),
-	WEST(
-			4,
-			"west",
-			EnumFacing.WEST),
-	EAST(
-			5,
-			"east",
-			EnumFacing.EAST);
+public enum EnumSide implements IStringSerializable {
+	DOWN(0, "down", EnumFacing.DOWN),
+	UP(1, "up", EnumFacing.UP),
+	NORTH(2, "north", EnumFacing.NORTH),
+	SOUTH(3, "south", EnumFacing.SOUTH),
+	WEST(4, "west", EnumFacing.WEST),
+	EAST(5, "east", EnumFacing.EAST);
 
 	public final String name;
 	public final int index;
@@ -91,5 +71,43 @@ public enum EnumSide
 
 	public EnumFacing getFacing() {
 		return face;
+	}
+
+	public EnumSide rotatSide() {
+		switch (this) {
+		case DOWN:
+			return EnumSide.UP;
+		case EAST:
+			return EnumSide.SOUTH;
+		case NORTH:
+			return EnumSide.EAST;
+		case SOUTH:
+			return EnumSide.DOWN;
+		case UP:
+			return EnumSide.WEST;
+		case WEST:
+			return EnumSide.NORTH;
+		default:
+			return EnumSide.NORTH;
+		}
+	}
+
+	public EnumSide rotatedHorizontalSide() {
+		switch (this) {
+		case DOWN:
+			return EnumSide.NORTH;
+		case EAST:
+			return EnumSide.SOUTH;
+		case NORTH:
+			return EnumSide.EAST;
+		case SOUTH:
+			return EnumSide.WEST;
+		case UP:
+			return EnumSide.NORTH;
+		case WEST:
+			return EnumSide.NORTH;
+		default:
+			return EnumSide.NORTH;
+		}
 	}
 }

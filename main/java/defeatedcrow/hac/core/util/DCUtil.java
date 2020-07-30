@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 
 import defeatedcrow.hac.api.climate.BlockSet;
 import defeatedcrow.hac.api.damage.DamageAPI;
+import defeatedcrow.hac.api.energy.IWrenchDC;
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.core.ClimateCore;
@@ -467,6 +468,12 @@ public class DCUtil {
 			}
 		}
 		return false;
+	}
+
+	// レンチアイテム
+	public static boolean isHeldWrench(EntityLivingBase player, EnumHand hand) {
+		ItemStack main = player.getHeldItem(hand);
+		return !DCUtil.isEmpty(main) && main.getItem() instanceof IWrenchDC;
 	}
 
 	// Itemクラスのやつがprotectedだった

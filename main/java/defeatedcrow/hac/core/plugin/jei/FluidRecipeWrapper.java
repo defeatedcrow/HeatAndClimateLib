@@ -38,7 +38,6 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 	public final float chance;
 	private final List<ItemStack> machine;
 
-	@SuppressWarnings("unchecked")
 	public FluidRecipeWrapper(IFluidRecipe recipe) {
 		type = recipe.additionalString();
 		rec = recipe;

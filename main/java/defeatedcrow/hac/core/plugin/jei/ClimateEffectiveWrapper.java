@@ -24,7 +24,6 @@ public class ClimateEffectiveWrapper implements IRecipeWrapper {
 	private final List<DCHumidity> hums;
 	private final List<DCAirflow> airs;
 
-	@SuppressWarnings("unchecked")
 	public ClimateEffectiveWrapper(ClimateEffectiveTile recipe) {
 		rec = recipe;
 		input = new ArrayList<ItemStack>();

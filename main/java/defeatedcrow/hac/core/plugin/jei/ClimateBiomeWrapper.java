@@ -27,7 +27,6 @@ public class ClimateBiomeWrapper implements IRecipeWrapper {
 	private final Set<Type> types;
 	private final boolean hasSeason;
 
-	@SuppressWarnings("unchecked")
 	public ClimateBiomeWrapper(Biome recipe) {
 		biome = recipe;
 		int id = Biome.getIdForBiome(biome);

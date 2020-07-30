@@ -24,6 +24,9 @@ public abstract interface ITorqueDC {
 	// 設置時の向き設定
 	void setBaseSide(EnumFacing side);
 
+	// 上部の向きを持つかどうか
+	boolean hasFaceSide();
+
 	// 上部の向き設定
 	void setFaceSide(EnumFacing side);
 

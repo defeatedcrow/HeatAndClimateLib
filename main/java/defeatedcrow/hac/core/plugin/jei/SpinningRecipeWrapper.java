@@ -16,7 +16,6 @@ public class SpinningRecipeWrapper implements IRecipeWrapper {
 	private final List<ItemStack> output;
 	private final ISpinningRecipe rec;
 
-	@SuppressWarnings("unchecked")
 	public SpinningRecipeWrapper(ISpinningRecipe recipe) {
 		rec = recipe;
 		input = recipe.getProcessedInput();

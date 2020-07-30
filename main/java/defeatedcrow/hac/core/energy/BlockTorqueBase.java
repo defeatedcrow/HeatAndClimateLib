@@ -2,9 +2,6 @@ package defeatedcrow.hac.core.energy;
 
 import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.blockstate.EnumSide;
-import defeatedcrow.hac.api.energy.IWrenchDC;
-import defeatedcrow.hac.core.ClimateCore;
-import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.base.BlockContainerDC;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.material.Material;
@@ -28,30 +25,46 @@ import net.minecraft.world.World;
  */
 public abstract class BlockTorqueBase extends BlockContainerDC {
 
+	private boolean isHorizontal = false;
+
 	public BlockTorqueBase(Material m, String s, int max) {
 		super(m, s);
 		this.setHardness(1.5F);
-		this.setResistance(15.0F);
+		this.setResistance(30.0F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(DCState.SIDE, EnumSide.DOWN)
 				.withProperty(DCState.POWERED, false));
 		this.fullBlock = false;
 		this.lightOpacity = 0;
 	}
 
+	public BlockTorqueBase setHorizontal() {
+		isHorizontal = true;
+		return this;
+	}
+
+	public boolean isHorizontal() {
+		return isHorizontal;
+	}
+
 	@Override
 	public boolean onRightClick(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
 			EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (!DCUtil.isEmpty(heldItem) && heldItem.getItem() instanceof IWrenchDC) {
+		if (DCUtil.isHeldWrench(player, hand)) {
 			TileEntity tile = world.getTileEntity(pos);
-			if (tile instanceof TileTorqueBase) {
+			if (tile instanceof TileTorqueBase && ((TileTorqueBase) tile).hasFaceSide()) {
 				((TileTorqueBase) tile).rotateFace();
+			} else {
+				EnumSide current = DCState.getSide(state, DCState.SIDE);
+				EnumSide next = EnumSide.NORTH;
+				if (isHorizontal()) {
+					next = current.rotatedHorizontalSide();
+				} else {
+					next = current.rotatSide();
+				}
+				world.setBlockState(pos, state.withProperty(DCState.SIDE, next));
 			}
 			return true;
-		}
-		if (ClimateCore.isDebug && state
-				.getBlock() instanceof BlockTorqueBase && world.isRemote && hand == EnumHand.MAIN_HAND) {
-			DCLogger.debugLog("current side: " + DCState.getSide(state, DCState.SIDE));
 		}
 		return false;
 	}
@@ -85,7 +98,17 @@ public abstract class BlockTorqueBase extends BlockContainerDC {
 	public IBlockState getPlaceState(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
 			int meta, EntityLivingBase placer, EnumHand hand) {
 		IBlockState state = super.getPlaceState(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
-		state = state.withProperty(DCState.SIDE, EnumSide.fromFacing(facing.getOpposite()));
+		if (placer != null && isHorizontal()) {
+			EnumFacing face = placer.getHorizontalFacing();
+			state = state.withProperty(DCState.SIDE, EnumSide.fromFacing(face.getOpposite()));
+		} else {
+			if (isHorizontal()) {
+				if (facing == EnumFacing.DOWN || facing == EnumFacing.UP) {
+					facing = EnumFacing.SOUTH;
+				}
+			}
+			state = state.withProperty(DCState.SIDE, EnumSide.fromFacing(facing.getOpposite()));
+		}
 		return state;
 	}
 

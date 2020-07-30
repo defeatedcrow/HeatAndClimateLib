@@ -18,7 +18,6 @@ public class MillRecipeWrapper implements IRecipeWrapper {
 	private final IMillRecipe rec;
 	public final float chance;
 
-	@SuppressWarnings("unchecked")
 	public MillRecipeWrapper(IMillRecipe recipe) {
 		rec = recipe;
 		input = recipe.getProcessedInput();
