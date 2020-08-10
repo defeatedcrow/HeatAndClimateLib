@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.3.5 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.3.6 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -49,9 +49,8 @@
 
 
 # 配布DL先
-  非公式フォーラム： http://forum.minecraftuser.jp/viewtopic.php?f=13&t=17657
- CurseForge: https://www.curseforge.com/minecraft/mc-mods/heat-and-climate-lib
  Wiki： http://defeatedcrow.jp/modwiki/HeatAndClimate
+ CurseForge: https://www.curseforge.com/minecraft/mc-mods/heat-and-climate-lib
 
 
 # 概要
@@ -268,6 +267,11 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.3.6
+　変更
+　　・Blockの気候パラメータの参照用メソッドをAPIに追加
+　　・液体の同期仕様を変更
 
 ○3.3.5
 　修正

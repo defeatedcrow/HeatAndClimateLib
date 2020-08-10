@@ -25,7 +25,7 @@ import net.minecraft.world.World;
  */
 public abstract class BlockTorqueBase extends BlockContainerDC {
 
-	private boolean isHorizontal = false;
+	protected boolean isHorizontal = false;
 
 	public BlockTorqueBase(Material m, String s, int max) {
 		super(m, s);

@@ -6,6 +6,6 @@ import net.minecraft.world.World;
 /** Blockに実装するもの */
 public interface IHumidityTile {
 
-	DCHumidity getHumdiity(World world, BlockPos targrt, BlockPos thisTile);
+	DCHumidity getHumidity(World world, BlockPos targrt, BlockPos source);
 
 }

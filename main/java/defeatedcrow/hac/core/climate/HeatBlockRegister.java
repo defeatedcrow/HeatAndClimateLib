@@ -171,8 +171,8 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 		} else {
 			boolean flag = false;
 			for (ClimateEffectiveTile tile : DCsJEIPluginLists.climate) {
-				if (tile.isSameBlock(block)
-						&& (tile.getInputMeta() == OreDictionary.WILDCARD_VALUE || tile.getInputMeta() == meta)) {
+				if (tile.isSameBlock(block) && (tile.getInputMeta() == OreDictionary.WILDCARD_VALUE || tile
+						.getInputMeta() == meta)) {
 					tile.setHeat(t);
 					flag = true;
 					break;
@@ -190,8 +190,8 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 		} else {
 			boolean flag = false;
 			for (ClimateEffectiveTile tile : DCsJEIPluginLists.climate) {
-				if (tile.isSameBlock(block)
-						&& (tile.getInputMeta() == OreDictionary.WILDCARD_VALUE || tile.getInputMeta() == meta)) {
+				if (tile.isSameBlock(block) && (tile.getInputMeta() == OreDictionary.WILDCARD_VALUE || tile
+						.getInputMeta() == meta)) {
 					tile.setHumidity(h);
 					flag = true;
 					break;
@@ -209,8 +209,8 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 		} else {
 			boolean flag = false;
 			for (ClimateEffectiveTile tile : DCsJEIPluginLists.climate) {
-				if (tile.isSameBlock(block)
-						&& (tile.getInputMeta() == OreDictionary.WILDCARD_VALUE || tile.getInputMeta() == meta)) {
+				if (tile.isSameBlock(block) && (tile.getInputMeta() == OreDictionary.WILDCARD_VALUE || tile
+						.getInputMeta() == meta)) {
 					tile.setAirflow(a);
 					flag = true;
 					break;

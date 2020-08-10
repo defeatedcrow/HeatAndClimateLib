@@ -6,6 +6,6 @@ import net.minecraft.world.World;
 /** Blockに実装するもの */
 public interface IAirflowTile {
 
-	DCAirflow getAirflow(World world, BlockPos targrt, BlockPos thisTile);
+	DCAirflow getAirflow(World world, BlockPos targrt, BlockPos source);
 
 }

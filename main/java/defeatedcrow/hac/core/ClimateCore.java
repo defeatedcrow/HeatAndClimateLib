@@ -15,7 +15,6 @@ import defeatedcrow.hac.core.climate.ArmorResistantRegister;
 import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
 import defeatedcrow.hac.core.climate.MobResistantRegister;
-import defeatedcrow.hac.core.fluid.FluidIDRegisterDC;
 import defeatedcrow.hac.core.packet.command.DCServerCommand;
 import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
@@ -41,7 +40,7 @@ public class ClimateCore {
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 3;
 	public static final int MOD_MINOR = 3;
-	public static final int MOD_BUILD = 5;
+	public static final int MOD_BUILD = 6;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.12,1.12.2]";
 	public static final String PACKAGE_BASE = "dcs";
@@ -103,7 +102,6 @@ public class ClimateCore {
 		APILoader.registerMaterial();
 		APILoader.registerMobResistant();
 
-		FluidIDRegisterDC.post();
 		MobResistantRegister.post();
 		ArmorResistantRegister.post();
 		HeatBlockRegister.post();

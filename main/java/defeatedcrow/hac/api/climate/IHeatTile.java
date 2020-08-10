@@ -6,5 +6,6 @@ import net.minecraft.world.World;
 /** Blockに実装するもの。 */
 public interface IHeatTile {
 
-	DCHeatTier getHeatTier(World world, BlockPos targrt, BlockPos thisTile);
+	DCHeatTier getHeatTier(World world, BlockPos targrt, BlockPos source);
+
 }

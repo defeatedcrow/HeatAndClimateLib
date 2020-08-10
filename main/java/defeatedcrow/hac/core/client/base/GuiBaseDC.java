@@ -2,7 +2,6 @@ package defeatedcrow.hac.core.client.base;
 
 import org.lwjgl.opengl.GL11;
 
-import defeatedcrow.hac.core.fluid.FluidIDRegisterDC;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -30,8 +29,7 @@ public abstract class GuiBaseDC extends GuiContainer {
 		return defaultGuiTex;
 	}
 
-	protected void renderFluid(int id, int amo, int x, int y, int width, int height) {
-		Fluid fluid = FluidIDRegisterDC.getFluid(id);
+	protected void renderFluid(Fluid fluid, int amo, int x, int y, int width, int height) {
 		if (fluid != null) {
 			TextureMap textureMapBlocks = mc.getTextureMapBlocks();
 			ResourceLocation res = fluid.getStill();

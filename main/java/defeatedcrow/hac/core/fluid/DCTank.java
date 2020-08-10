@@ -1,8 +1,11 @@
 package defeatedcrow.hac.core.fluid;
 
+import java.util.Map.Entry;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidTank;
@@ -74,13 +77,40 @@ public class DCTank implements IFluidTank, IFluidHandler {
 		}
 	}
 
-	public void setFluidById(int par1) {
-		Fluid f = FluidIDRegisterDC.getFluid(par1);
-		if (f != null) {
-			fluid = new FluidStack(f, this.getFluidAmount());
-		} else {
-			fluid = null;
+	public void setFluidByIdName(String id) {
+		FluidStack ret = null;
+		if (FluidRegistry.isFluidRegistered(id)) {
+			Fluid f = FluidRegistry.getFluid(id);
+			ret = new FluidStack(f, getFluidAmount());
 		}
+		fluid = ret;
+	}
+
+	public String getFluidIdName() {
+		Fluid fluid = getFluidType();
+		if (fluid != null) {
+			return fluid.getName();
+		}
+		return "Empty";
+	}
+
+	public void setFluidById(int id) {
+		FluidStack ret = null;
+		for (Entry<Fluid, Integer> e : FluidRegistry.getRegisteredFluidIDs().entrySet()) {
+			if (e.getValue() != null) {
+				ret = new FluidStack(e.getKey(), getFluidAmount());
+			}
+		}
+		fluid = ret;
+	}
+
+	public int getFluidIdNum() {
+		Fluid fluid = getFluidType();
+		if (fluid != null) {
+			int i = FluidRegistry.getRegisteredFluidIDs().get(fluid);
+			return i;
+		}
+		return -1;
 	}
 
 	@Override
