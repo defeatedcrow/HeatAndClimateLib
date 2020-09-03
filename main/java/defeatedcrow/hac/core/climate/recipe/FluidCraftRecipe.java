@@ -66,7 +66,7 @@ public class FluidCraftRecipe implements IFluidRecipe {
 			hum.add(h);
 		if (a != null)
 			air.add(a);
-		if (inputs != null && input.length > 0) {
+		if (inputs != null && inputs.length > 0) {
 			for (int i = 0; i < inputs.length; i++) {
 				if (inputs[i] instanceof String) {
 					List<ItemStack> ret = new ArrayList<ItemStack>();
@@ -92,10 +92,10 @@ public class FluidCraftRecipe implements IFluidRecipe {
 				}
 			}
 			int i1 = iF == null ? 0 : 1;
-			i1 += input.length;
+			i1 += processedInput.size();
 			count = i1;
 		} else {
-			count = 0;
+			count = iF == null ? 0 : 1;
 		}
 	}
 

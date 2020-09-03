@@ -24,15 +24,22 @@ public class DCTank implements IFluidTank, IFluidHandler {
 	}
 
 	public DCTank readFromNBT(NBTTagCompound nbt, String key) {
+		DCTank ret = this;
+		if (nbt.hasKey("cap")) {
+			int c = nbt.getInteger("cap");
+			if (c != capacity) {
+				ret = new DCTank(c);
+			}
+		}
 		NBTTagList list = nbt.getTagList(key, 10);
 		NBTTagCompound nbt2 = list.getCompoundTagAt(0);
 		if (!nbt2.hasKey("Empty")) {
 			FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt2);
-			setFluid(fluid);
+			ret.setFluid(fluid);
 		} else {
-			setFluid(null);
+			ret.setFluid(null);
 		}
-		return this;
+		return ret;
 	}
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt, String key) {
@@ -45,6 +52,7 @@ public class DCTank implements IFluidTank, IFluidHandler {
 		}
 		list.appendTag(nbt2);
 		nbt.setTag(key, list);
+		nbt.setInteger("cap", capacity);
 		return nbt;
 	}
 

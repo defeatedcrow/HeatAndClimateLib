@@ -91,15 +91,17 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 
 		machine = new ArrayList<ItemStack>();
 		machine.addAll(DCsJEIPluginLists.fluidcrafters_steel);
-		if (recipe.getMinHeat().getTier() > DCHeatTier.HOT.getTier()) {
-			machine.addAll(DCsJEIPluginLists.fluidcrafters_skillet);
-		}
-		if (recipe.getMaxHeat().getTier() < DCHeatTier.SMELTING.getTier() && recipe.getMinHeat()
-				.getTier() > DCHeatTier.FROSTBITE.getTier()) {
-			machine.addAll(DCsJEIPluginLists.fluidcrafters_pot);
-		}
-		if (DCUtil.isEmpty(recipe.getOutput()) && DCUtil.isEmpty(recipe.getSecondary())) {
-			machine.addAll(DCsJEIPluginLists.fluidcrafters_drink);
+		if (input.size() < 4) {
+			if (recipe.getMinHeat().getTier() > DCHeatTier.HOT.getTier()) {
+				machine.addAll(DCsJEIPluginLists.fluidcrafters_skillet);
+			}
+			if (recipe.getMaxHeat().getTier() < DCHeatTier.SMELTING.getTier() && recipe.getMinHeat()
+					.getTier() > DCHeatTier.FROSTBITE.getTier()) {
+				machine.addAll(DCsJEIPluginLists.fluidcrafters_pot);
+			}
+			if (DCUtil.isEmpty(recipe.getOutput()) && DCUtil.isEmpty(recipe.getSecondary())) {
+				machine.addAll(DCsJEIPluginLists.fluidcrafters_drink);
+			}
 		}
 
 		input2.addAll(input);
@@ -200,7 +202,7 @@ public class FluidRecipeWrapper implements IRecipeWrapper {
 		IClimate clm = ClimateAPI.register.getClimateFromParam(minT, maxH, maxA);
 		FluidStack fluid = inF.isEmpty() ? null : inF.get(0);
 		String message = FRecipeType.getType(clm, cooling, fluid).name();
-		mc.fontRenderer.drawString(message + " " + type, 30, 0, 0x0099FF, false);
+		mc.fontRenderer.drawString(message + " " + type, 12, 0, 0x0099FF, false);
 	}
 
 	@Override

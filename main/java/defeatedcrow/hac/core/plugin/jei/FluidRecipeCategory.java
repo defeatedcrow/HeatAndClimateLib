@@ -74,10 +74,12 @@ public class FluidRecipeCategory implements IRecipeCategory {
 		List<ItemStack> machine = wrapper.getMachine();
 
 		if (!inputs.isEmpty()) {
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 6; i++) {
 				int l = i;
 				if (l < inputs.size()) {
-					recipeLayout.getItemStacks().init(l, true, 48, 13 + i * 18);
+					int j = l / 3;
+					int k = l % 3;
+					recipeLayout.getItemStacks().init(l, true, 30 + j * 18, 13 + k * 18);
 					if (inputs.get(l) instanceof List) {
 						recipeLayout.getItemStacks().set(l, inputs.get(l));
 					}
@@ -85,21 +87,21 @@ public class FluidRecipeCategory implements IRecipeCategory {
 			}
 		}
 
-		recipeLayout.getItemStacks().init(4, false, 93, 13);
-		recipeLayout.getItemStacks().set(4, outputs.get(0));
+		recipeLayout.getItemStacks().init(7, false, 93, 13);
+		recipeLayout.getItemStacks().set(7, outputs.get(0));
 		if (outputs.size() > 1) {
-			recipeLayout.getItemStacks().init(5, false, 93, 31);
-			recipeLayout.getItemStacks().set(5, outputs.get(1));
+			recipeLayout.getItemStacks().init(8, false, 93, 31);
+			recipeLayout.getItemStacks().set(8, outputs.get(1));
 		}
 
 		if (!machine.isEmpty()) {
-			recipeLayout.getItemStacks().init(6, false, 138, 9);
-			recipeLayout.getItemStacks().set(6, machine);
+			recipeLayout.getItemStacks().init(9, false, 138, 9);
+			recipeLayout.getItemStacks().set(9, machine);
 		}
 
 		if (!inF.isEmpty() && inF.get(0) != null) {
 			FluidStack f1 = inF.get(0);
-			recipeLayout.getFluidStacks().init(0, false, 30, 16, 12, 50, 5000, false, null);
+			recipeLayout.getFluidStacks().init(0, false, 12, 16, 12, 50, 5000, false, null);
 			FluidDic dic = FluidDictionaryDC.getDic(f1);
 			if (dic != null && !dic.fluids.isEmpty()) {
 				List<FluidStack> ret = Lists.newArrayList();
