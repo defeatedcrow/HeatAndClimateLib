@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.4.0 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.4.1 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -267,6 +267,10 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.4.1
+　変更
+　　・追加作物の成長速度をコンフィグで調整可能にした
 
 ○3.4.0
 　変更

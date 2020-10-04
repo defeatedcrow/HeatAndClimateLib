@@ -78,7 +78,7 @@ public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTex
 
 	@Override
 	public int tickRate(World world) {
-		return 80;
+		return CoreConfigDC.cropUpdateInterval;
 	}
 
 	@Override

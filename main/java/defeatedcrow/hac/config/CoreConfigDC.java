@@ -120,6 +120,7 @@ public class CoreConfigDC {
 	public static boolean enableWeatherEffect = true;
 	public static boolean enableTimeEffect = true;
 	public static boolean enableSubmergedCave = false;
+	public static int cropUpdateInterval = 80;
 
 	// time
 	public static int yearLength = 240;
@@ -325,6 +326,9 @@ public class CoreConfigDC {
 			Property submerged = cfg
 					.get("world setting", "Enable Submerged Ocean Cave", enableSubmergedCave, "Enable the submerged cave in ocean biomes.");
 
+			Property cropInterval = cfg
+					.get("world setting", "Update Interval of Crop Growing", cropUpdateInterval, "Set interval tick of HaC crop growing. 20-1200");
+
 			Property dropSmelting = cfg
 					.get("setting", "Enable DropItem Recipe", enableDropItemSmelting, "Enable all climate smelting and vanilla smelting in drop item state.");
 
@@ -461,7 +465,12 @@ public class CoreConfigDC {
 			int ei = entityRate.getInt();
 			if (ei < 20 || ei > 1200)
 				ei = 100;
-			entityInterval = sf;
+			entityInterval = ei;
+
+			int ci = cropInterval.getInt();
+			if (ci < 20 || ci > 1200)
+				ci = 100;
+			entityInterval = ci;
 
 			food_amount = food_a.getDouble();
 			if (food_amount < 0) {

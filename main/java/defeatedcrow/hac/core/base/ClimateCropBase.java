@@ -76,7 +76,7 @@ public abstract class ClimateCropBase extends BlockDC implements ISidedTexture, 
 
 	@Override
 	public int tickRate(World world) {
-		return 80;
+		return CoreConfigDC.cropUpdateInterval;
 	}
 
 	@Override
