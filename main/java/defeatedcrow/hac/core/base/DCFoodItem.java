@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
+import defeatedcrow.hac.api.hook.DCItemEatEvent;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.client.util.ITooltipFlag;
@@ -63,6 +64,15 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 		int meta = stack.getMetadata();
 
 		if (living instanceof EntityPlayer) {
+
+			PotionEffect potion = null;
+			if (!getPotionEffect(meta).isEmpty()) {
+				potion = getPotionEffect(meta).get(0);
+			}
+			if (new DCItemEatEvent(stack, worldIn, living, potion).result()) {
+				return stack;
+			}
+
 			EntityPlayer player = (EntityPlayer) living;
 			player.getFoodStats().addStats(this, stack);
 			worldIn.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand

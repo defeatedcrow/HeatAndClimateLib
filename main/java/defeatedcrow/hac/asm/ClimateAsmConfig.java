@@ -27,6 +27,8 @@ public class ClimateAsmConfig {
 					.get("asm setting", "Cave Gen Override", true, "Enable override the vanilla method: MapGenCave#digBlock.");
 			Property p_7 = cfg
 					.get("asm setting", "Ravine Gen Override", true, "Enable override the vanilla method: MapGenRavine#digBlock.");
+			Property p_8 = cfg
+					.get("asm setting", "ItemFood Override", true, "Enable override the vanilla method: ItemFood#onItemUseFinish.");
 
 			DCMethodTransformer.enableBlockUpdate = p_1.getBoolean();
 			DCMethodTransformer.enableBlockFreeze = p_2.getBoolean();
@@ -35,6 +37,7 @@ public class ClimateAsmConfig {
 			DCMethodTransformer.enableBiomeTemp = p_5.getBoolean();
 			DCMethodTransformer.enableCaveWater = p_6.getBoolean();
 			DCMethodTransformer.enableRavineWater = p_7.getBoolean();
+			DCMethodTransformer.enableEatFood = p_8.getBoolean();
 
 		} catch (Exception e) {
 			e.printStackTrace();

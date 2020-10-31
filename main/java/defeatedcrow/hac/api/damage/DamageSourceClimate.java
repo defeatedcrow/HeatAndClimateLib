@@ -8,8 +8,9 @@ import net.minecraft.util.DamageSource;
  */
 public class DamageSourceClimate extends DamageSource {
 
-	public static DamageSourceClimate climateHeatDamage = (new DamageSourceClimate("dcs_heat")).setHeatDamage();
-	public static DamageSourceClimate climateColdDamage = (new DamageSourceClimate("dcs_cold"));
+	public static DamageSourceClimate climateHeatDamage = new DamageSourceClimate("dcs_heat").setHeatDamage();
+	public static DamageSourceClimate climateColdDamage = new DamageSourceClimate("dcs_cold");
+	public static DamageSource machineDamage = new DamageSource("dcs_machine");
 
 	public DamageSourceClimate(String damageTypeIn) {
 		super(damageTypeIn);

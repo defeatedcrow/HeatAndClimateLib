@@ -2,12 +2,15 @@ package defeatedcrow.hac.core.energy;
 
 import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.blockstate.EnumSide;
+import defeatedcrow.hac.api.damage.DamageSourceClimate;
+import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.base.BlockContainerDC;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -148,6 +151,31 @@ public abstract class BlockTorqueBase extends BlockContainerDC {
 				DCState.SIDE,
 				DCState.POWERED
 		});
+	}
 
+	/* HardMode */
+
+	@Override
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+		if (!world.isRemote && CoreConfigDC.harderMachine && entity instanceof EntityLivingBase) {
+			TileEntity tile = world.getTileEntity(pos);
+			if (tile instanceof TileTorqueBase) {
+				TileTorqueBase machine = (TileTorqueBase) tile;
+				float t = machine.getCurrentTorque();
+				float m = machine.maxTorque();
+				float g = machine.getGearTier();
+				float d = (t / m) * g;
+				float d2 = d * 0.01F;
+
+				EntityLivingBase living = (EntityLivingBase) entity;
+				if (d > 2F && living.attackEntityFrom(DamageSourceClimate.machineDamage, d * 0.25F)) {
+					double x = pos.getX() + 0.5D - living.posX;
+					double z = pos.getZ() + 0.5D - living.posZ;
+					x *= d2;
+					z *= d2;
+					living.knockBack(living, 0.5F, x, z);
+				}
+			}
+		}
 	}
 }

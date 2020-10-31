@@ -21,7 +21,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -43,6 +45,11 @@ public class ItemClimateChecker extends DCItem {
 	@Override
 	public EnumActionResult onItemUse2(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
 			float hitX, float hitY, float hitZ) {
+
+		if (Items.ROTTEN_FLESH instanceof ItemFood) {
+			Items.ROTTEN_FLESH.onItemUseFinish(new ItemStack(Items.ROTTEN_FLESH), world, player).isEmpty();
+		}
+
 		if (!world.isAirBlock(pos)) {
 			if (!world.isRemote) {
 				IBlockState state = world.getBlockState(pos);

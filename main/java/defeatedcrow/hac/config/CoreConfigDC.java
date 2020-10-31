@@ -156,6 +156,7 @@ public class CoreConfigDC {
 	public static boolean infernalInferno = false;
 	public static boolean enableSuffocation = false;
 	public static boolean tightUnderworld = false;
+	public static boolean harderMachine = false;
 
 	public static String[] updateBlackList = new String[] {
 			"minecraft:leaves:32767",
@@ -303,6 +304,9 @@ public class CoreConfigDC {
 			Property suffocation = cfg
 					.get("hardmode setting", "Enable Suffocation Damage", enableSuffocation, "Enable the suffocation effect when creatures or players in tight space.");
 
+			Property harderM = cfg
+					.get("hardmode setting", "Occupational Accident Machine", harderMachine, "Adds contact damage to the torque machine.");
+
 			Property drought = cfg
 					.get("world setting", "Drought Frequency", droughtFrequency, "Set the number of days of fine weather required for drought.");
 
@@ -408,6 +412,7 @@ public class CoreConfigDC {
 			infernalInferno = inferno.getBoolean();
 			enableSuffocation = suffocation.getBoolean();
 			tightUnderworld = tight.getBoolean();
+			harderMachine = harderM.getBoolean();
 			enableWeatherEffect = weather.getBoolean();
 			enableTimeEffect = time.getBoolean();
 			enableSeasonEffect = season.getBoolean();

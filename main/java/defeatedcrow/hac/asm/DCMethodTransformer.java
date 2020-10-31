@@ -5,6 +5,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
@@ -27,6 +28,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 	private static final String TARGET_PACKAGE_6 = "net.minecraft.world.gen.MapGenCaves";
 	private static final String TARGET_PACKAGE_7 = "net.minecraft.world.gen.MapGenRavine";
 	private static final String TARGET_PACKAGE_8 = "net.minecraft.item.Item";
+	private static final String TARGET_PACKAGE_9 = "net.minecraft.item.ItemFood";
 	private static final String TARGET_IGNORE1 = "net.minecraft.block.Block";
 
 	public static boolean enableBlockUpdate = true;
@@ -36,6 +38,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 	public static boolean enableBiomeTemp = true;
 	public static boolean enableCaveWater = true;
 	public static boolean enableRavineWater = true;
+	public static boolean enableEatFood = true;
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
@@ -46,45 +49,51 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 			} catch (Exception e) {
 				throw new RuntimeException("failed : DCMethodTransformer loading: Block#updateTick", e);
 			}
-		} else if (enableBlockFreeze && transformedName.contains(TARGET_PACKAGE_2)) {
+		}
+		if (enableBlockFreeze && transformedName.contains(TARGET_PACKAGE_2)) {
 			try {
 				return hookOnBlockFreeze(name, basicClass);
 			} catch (Exception e) {
 				throw new RuntimeException("failed : DCMethodTransformer loading: World#canBlockFreezeBody", e);
 			}
-		} else if (enableEntityInAir && transformedName.contains(TARGET_PACKAGE_3)) {
+		}
+		if (enableEntityInAir && transformedName.contains(TARGET_PACKAGE_3)) {
 			try {
 				return hookOnEntitySetAir(name, basicClass);
 			} catch (Exception e) {
 				throw new RuntimeException("failed : DCMethodTransformer loading: Entity#isInsideOfMaterial", e);
 			}
-		} else if (enableDropUpdate && transformedName.contains(TARGET_PACKAGE_4)) {
+		}
+		if (enableDropUpdate && transformedName.contains(TARGET_PACKAGE_4)) {
 			try {
-				return hookOnItemUpdate(name, basicClass);
+				return hookOnItemMethod(name, basicClass);
 			} catch (Exception e) {
-				throw new RuntimeException("failed : DCMethodTransformer loading: Item#onEntityItemUpdate", e);
+				throw new RuntimeException("failed : DCMethodTransformer loading: ItemFood#onItemUseFinish", e);
 			}
-		} else if (enableBiomeTemp && transformedName.contains(TARGET_PACKAGE_5)) {
+		}
+		if (enableBiomeTemp && transformedName.contains(TARGET_PACKAGE_5)) {
 			try {
 				return biomeTempUpdate(name, basicClass);
 			} catch (Exception e) {
 				throw new RuntimeException("failed : DCMethodTransformer loading: Biome#getTemperature", e);
 			}
-		} else if (enableCaveWater && transformedName.contains(TARGET_PACKAGE_6)) {
+		}
+		if (enableCaveWater && transformedName.contains(TARGET_PACKAGE_6)) {
 			try {
 				return digCaveBlock(name, basicClass);
 			} catch (Exception e) {
 				throw new RuntimeException("failed : DCMethodTransformer loading: MapGenCave#digBlock", e);
 			}
-		} else if (enableRavineWater && transformedName.contains(TARGET_PACKAGE_7)) {
+		}
+		if (enableRavineWater && transformedName.contains(TARGET_PACKAGE_7)) {
 			try {
 				return digRavineBlock(name, basicClass);
 			} catch (Exception e) {
 				throw new RuntimeException("failed : DCMethodTransformer loading: MapGenRavine#digBlock", e);
 			}
-		} else {
-			return basicClass;
 		}
+
+		return basicClass;
 	}
 
 	private byte[] hookOnUpdateTick(String className, byte[] bytes) {
@@ -293,73 +302,6 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 		} catch (Exception e) {
 			LogManager.getLogger("dcs_asm")
 					.fatal("Failed to load DCMethodTransformer:Entity#isInsideOfMaterial. It's not work correctly.");
-		}
-		return bytes;
-	}
-
-	private byte[] hookOnItemUpdate(String className, byte[] bytes) {
-		try {
-			ClassNode cnode = new ClassNode();
-			ClassReader reader = new ClassReader(bytes);
-			reader.accept(cnode, 0);
-
-			String targetMethodName = "onEntityItemUpdate";
-			String targetMethodNameSRG = "onEntityItemUpdate";
-
-			String targetMethoddesc = "(Lnet/minecraft/entity/item/EntityItem;)Z";
-			String targetMethoddescSRG = "(Lnet/minecraft/entity/item/EntityItem;)Z";
-
-			MethodNode mnode = null;
-			String mdesc = null;
-
-			for (MethodNode curMnode : cnode.methods) {
-
-				String mName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(className, curMnode.name, curMnode.desc);
-				String mdName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(curMnode.desc);
-
-				if ((targetMethodName.equals(curMnode.name) && targetMethoddesc
-						.equals(curMnode.desc)) || (targetMethodNameSRG.equals(mName) && targetMethoddescSRG
-								.equals(mdName))) {
-					mnode = curMnode;
-					mdesc = curMnode.desc;
-					break;
-				}
-			}
-
-			if (mnode != null) {
-
-				InsnList overrideList = new InsnList();
-				final LabelNode lavel = new LabelNode();
-				final LabelNode lavel2 = new LabelNode();
-
-				/*
-				 * eventをよぶ
-				 * if (new DCEntityItemUpdateEvent(entityItem).result()){
-				 * return true;
-				 * }
-				 * resultはResult == ARROW時のみtrueを返す。
-				 */
-				overrideList.add(new TypeInsnNode(NEW, "defeatedcrow/hac/api/hook/DCEntityItemUpdateEvent"));
-				overrideList.add(new InsnNode(DUP));
-				overrideList.add(new VarInsnNode(ALOAD, 1));
-				overrideList.add(new MethodInsnNode(INVOKESPECIAL, "defeatedcrow/hac/api/hook/DCEntityItemUpdateEvent",
-						"<init>", "(Lnet/minecraft/entity/item/EntityItem;)V", false));
-				overrideList.add(new MethodInsnNode(INVOKEVIRTUAL, "defeatedcrow/hac/api/hook/DCEntityItemUpdateEvent",
-						"result", "()Z", false));
-				overrideList.add(new JumpInsnNode(IFEQ, lavel));
-				overrideList.add(new InsnNode(ICONST_1));
-				overrideList.add(new InsnNode(IRETURN));
-				overrideList.add(lavel);
-
-				mnode.instructions.insert(overrideList);
-
-				ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-				cnode.accept(cw);
-				bytes = cw.toByteArray();
-			}
-		} catch (Exception e) {
-			LogManager.getLogger("dcs_asm")
-					.fatal("Failed to load DCMethodTransformer:EntityItem#onEntityItemUpdate. It's not work correctly.");
 		}
 		return bytes;
 	}
@@ -672,6 +614,134 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 		} catch (Exception e) {
 			LogManager.getLogger("dcs_asm")
 					.fatal("Failed to load DCMethodTransformer:MapGenRavine#digBlock. It's not work correctly.");
+		}
+		return bytes;
+	}
+
+	private byte[] hookOnItemMethod(String className, byte[] bytes) {
+		try {
+			ClassNode cnode = new ClassNode();
+			ClassReader reader = new ClassReader(bytes);
+			reader.accept(cnode, 0);
+
+			// 改変対象のメソッド名
+			String targetMethodName = "onItemUseFinish";
+			String targetMethodNameSRG = "func_77654_b";
+
+			String targetMethoddesc = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/EntityLivingBase;)Lnet/minecraft/item/ItemStack;";
+			String targetMethoddescSRG = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/EntityLivingBase;)Lnet/minecraft/item/ItemStack;";
+
+			MethodNode mnode = null;
+			String mdesc = null;
+
+			String targetMethodName2 = "onEntityItemUpdate";
+			String targetMethodNameSRG2 = "onEntityItemUpdate";
+
+			String targetMethoddesc2 = "(Lnet/minecraft/entity/item/EntityItem;)Z";
+			String targetMethoddescSRG2 = "(Lnet/minecraft/entity/item/EntityItem;)Z";
+
+			MethodNode mnode2 = null;
+			String mdesc2 = null;
+
+			if (className.contains("ItemFood")) {
+				for (MethodNode curMnode : cnode.methods) {
+
+					String mName = FMLDeobfuscatingRemapper.INSTANCE
+							.mapMethodName(className, curMnode.name, curMnode.desc);
+					String mdName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(curMnode.desc);
+
+					if ((targetMethodName.equals(curMnode.name) && targetMethoddesc
+							.equals(curMnode.desc)) || (targetMethodNameSRG.equals(mName) && targetMethoddescSRG
+									.equals(mdName))) {
+						mnode = curMnode;
+						mdesc = curMnode.desc;
+						break;
+					}
+
+					if ((targetMethodName2.equals(curMnode.name) && targetMethoddesc2
+							.equals(curMnode.desc)) || (targetMethodNameSRG2.equals(mName) && targetMethoddescSRG2
+									.equals(mdName))) {
+						mnode2 = curMnode;
+						mdesc2 = curMnode.desc;
+						break;
+					}
+				}
+			}
+
+			if (mnode != null) {
+
+				InsnList overrideList = new InsnList();
+				final LabelNode lavel = new LabelNode();
+				final LabelNode lavel2 = new LabelNode();
+
+				/*
+				 * eventをよぶ
+				 * if (new DCItemEatEvent(ItemStack stack, World worldIn, EntityLivingBase livingIn, PotionEffect
+				 * potionIn).result()){
+				 * return;
+				 * }
+				 * resultはResult == ARROW時のみtrueを返す。
+				 */
+				overrideList.add(new TypeInsnNode(NEW, "defeatedcrow/hac/api/hook/DCItemEatEvent"));
+				overrideList.add(new InsnNode(DUP));
+				overrideList.add(new VarInsnNode(ALOAD, 1));
+				overrideList.add(new VarInsnNode(ALOAD, 2));
+				overrideList.add(new VarInsnNode(ALOAD, 3));
+				overrideList.add(new VarInsnNode(ALOAD, 0));
+				overrideList.add(new FieldInsnNode(GETFIELD, "net/minecraft/item/ItemFood", "potionId",
+						"Lnet/minecraft/potion/PotionEffect;"));
+				overrideList.add(new MethodInsnNode(INVOKESPECIAL, "defeatedcrow/hac/api/hook/DCItemEatEvent", "<init>",
+						"(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/potion/PotionEffect;)V",
+						false));
+				overrideList.add(new MethodInsnNode(INVOKEVIRTUAL, "defeatedcrow/hac/api/hook/DCItemEatEvent", "result",
+						"()Z", false));
+				overrideList.add(new JumpInsnNode(IFEQ, lavel));
+				overrideList.add(new InsnNode(ICONST_1));
+				overrideList.add(new VarInsnNode(ALOAD, 1));
+				overrideList.add(new InsnNode(ARETURN));
+				overrideList.add(lavel);
+
+				mnode.instructions.insert(overrideList);
+
+				ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+				cnode.accept(cw);
+				bytes = cw.toByteArray();
+			}
+
+			if (mnode2 != null) {
+
+				InsnList overrideList = new InsnList();
+				final LabelNode lavel = new LabelNode();
+				final LabelNode lavel2 = new LabelNode();
+
+				/*
+				 * eventをよぶ
+				 * if (new DCEntityItemUpdateEvent(entityItem).result()){
+				 * return true;
+				 * }
+				 * resultはResult == ARROW時のみtrueを返す。
+				 */
+				overrideList.add(new TypeInsnNode(NEW, "defeatedcrow/hac/api/hook/DCEntityItemUpdateEvent"));
+				overrideList.add(new InsnNode(DUP));
+				overrideList.add(new VarInsnNode(ALOAD, 1));
+				overrideList.add(new MethodInsnNode(INVOKESPECIAL, "defeatedcrow/hac/api/hook/DCEntityItemUpdateEvent",
+						"<init>", "(Lnet/minecraft/entity/item/EntityItem;)V", false));
+				overrideList.add(new MethodInsnNode(INVOKEVIRTUAL, "defeatedcrow/hac/api/hook/DCEntityItemUpdateEvent",
+						"result", "()Z", false));
+				overrideList.add(new JumpInsnNode(IFEQ, lavel));
+				overrideList.add(new InsnNode(ICONST_1));
+				overrideList.add(new InsnNode(IRETURN));
+				overrideList.add(lavel);
+
+				mnode2.instructions.insert(overrideList);
+
+				ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+				cnode.accept(cw);
+				bytes = cw.toByteArray();
+			}
+		} catch (Exception e) {
+			LogManager.getLogger("dcs_asm")
+					.fatal("Failed to load DCMethodTransformer:ItemFood#onItemUseFinish. It's not work correctly.");
 		}
 		return bytes;
 	}

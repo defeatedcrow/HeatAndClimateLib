@@ -24,6 +24,7 @@ dcs_climate.crusher=Crusher Recipe
 
 death.attack.dcs_heat=%1$s was burnt browned.
 death.attack.dcs_cold=%1$s became a sherbet.
+death.attack.dcs_machine=%1$s was suffered an occupational accident.
 
 dcs.potion.freeze_res=Cold Resistance
 potion.effect.dcs.freeze_res=Potion of Cold Resistance
