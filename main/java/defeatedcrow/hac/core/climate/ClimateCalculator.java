@@ -27,7 +27,7 @@ import net.minecraftforge.fluids.IFluidBlock;
 /**
  * BlockPosの走査方法を変更したバージョン
  */
-public class ClimateAltCalculator implements IClimateCalculator {
+public class ClimateCalculator implements IClimateCalculator {
 
 	@Override
 	public IClimate getClimate(World world, BlockPos pos) {
@@ -137,73 +137,75 @@ public class ClimateAltCalculator implements IClimateCalculator {
 					}
 
 					BlockPos p2 = new BlockPos(x, y, z);
-					DCHeatTier current = getBlockHeatTier(world, pos, p2);
-					if (current == null) {
-						current = hot;
-					}
-
-					if (CoreConfigDC.wall) {
-						boolean wall = false;
-						int xi = x;
-						int yi = y;
-						int zi = z;
-						if (x > pos.getX() + 1) {
-							xi = x - 1;
-							wall = true;
-						} else if (x < pos.getX() - 1) {
-							xi = x + 1;
-							wall = true;
-						}
-						if (y > pos.getY() + 1) {
-							yi = y - 1;
-							wall = true;
-						} else if (y < pos.getY() - 1) {
-							yi = y + 1;
-							wall = true;
-						}
-						if (z > pos.getZ() + 1) {
-							zi = z - 1;
-							wall = true;
-						} else if (z < pos.getZ() - 1) {
-							zi = z + 1;
-							wall = true;
+					if (world.isBlockLoaded(p2)) {
+						DCHeatTier current = getBlockHeatTier(world, pos, p2);
+						if (current == null) {
+							current = hot;
 						}
 
-						if (current.getTier() > hot.getTier()) {
-							if (wall) {
-								int pre = ThermalInsulationUtil.getInsulation(world, new BlockPos(xi, yi, zi));
-								if (pre != 0) {
-									if (pre == -1) {
-										continue;
-									} else {
-										int curT = current.getTier();
-										if (curT < 0) {
-											curT += pre;
-											if (curT < 0 && curT > hot.getTier()) {
-												current = DCHeatTier.getHeatEnum(curT);
-											} else {
-												continue;
-											}
+						if (CoreConfigDC.wall) {
+							boolean wall = false;
+							int xi = x;
+							int yi = y;
+							int zi = z;
+							if (x > pos.getX() + 1) {
+								xi = x - 1;
+								wall = true;
+							} else if (x < pos.getX() - 1) {
+								xi = x + 1;
+								wall = true;
+							}
+							if (y > pos.getY() + 1) {
+								yi = y - 1;
+								wall = true;
+							} else if (y < pos.getY() - 1) {
+								yi = y + 1;
+								wall = true;
+							}
+							if (z > pos.getZ() + 1) {
+								zi = z - 1;
+								wall = true;
+							} else if (z < pos.getZ() - 1) {
+								zi = z + 1;
+								wall = true;
+							}
+
+							if (current.getTier() > hot.getTier()) {
+								if (wall) {
+									int pre = ThermalInsulationUtil.getInsulation(world, new BlockPos(xi, yi, zi));
+									if (pre != 0) {
+										if (pre == -1) {
+											continue;
 										} else {
-											curT -= pre;
-											if (curT > hot.getTier()) {
-												current = DCHeatTier.getHeatEnum(curT);
+											int curT = current.getTier();
+											if (curT < 0) {
+												curT += pre;
+												if (curT < 0 && curT > hot.getTier()) {
+													current = DCHeatTier.getHeatEnum(curT);
+												} else {
+													continue;
+												}
 											} else {
-												continue;
+												curT -= pre;
+												if (curT > hot.getTier()) {
+													current = DCHeatTier.getHeatEnum(curT);
+												} else {
+													continue;
+												}
 											}
 										}
 									}
 								}
+								hot = current;
 							}
+						}
+
+						BlockHeatTierEvent event = new BlockHeatTierEvent(world, p2, current, true);
+						current = event.result();
+
+						if (current.getTier() > hot.getTier()) {
 							hot = current;
 						}
-					}
-
-					BlockHeatTierEvent event = new BlockHeatTierEvent(world, p2, current, true);
-					current = event.result();
-
-					if (current.getTier() > hot.getTier()) {
-						hot = current;
 					}
 
 				}
@@ -253,74 +255,76 @@ public class ClimateAltCalculator implements IClimateCalculator {
 					}
 
 					BlockPos p2 = new BlockPos(x, y, z);
-					DCHeatTier current = getBlockHeatTier(world, pos, p2);
+					if (world.isBlockLoaded(p2)) {
+						DCHeatTier current = getBlockHeatTier(world, pos, p2);
 
-					if (current == null) {
-						current = cold;
-					}
-
-					if (CoreConfigDC.wall) {
-						boolean wall = false;
-						int xi = x;
-						int yi = y;
-						int zi = z;
-						if (x > pos.getX() + 1) {
-							xi = x - 1;
-							wall = true;
-						} else if (x < pos.getX() - 1) {
-							xi = x + 1;
-							wall = true;
-						}
-						if (y > pos.getY() + 1) {
-							yi = y - 1;
-							wall = true;
-						} else if (y < pos.getY() - 1) {
-							yi = y + 1;
-							wall = true;
-						}
-						if (z > pos.getZ() + 1) {
-							zi = z - 1;
-							wall = true;
-						} else if (z < pos.getZ() - 1) {
-							zi = z + 1;
-							wall = true;
+						if (current == null) {
+							current = cold;
 						}
 
-						if (current.getTier() < cold.getTier()) {
-							if (wall) {
-								int pre = ThermalInsulationUtil.getInsulation(world, new BlockPos(xi, yi, zi));
-								if (pre != 0) {
-									if (pre == -1) {
-										continue;
-									} else {
-										int curT = current.getTier();
-										if (curT < 0) {
-											curT += pre;
-											if (curT < cold.getTier()) {
-												current = DCHeatTier.getHeatEnum(curT);
-											} else {
-												continue;
-											}
+						if (CoreConfigDC.wall) {
+							boolean wall = false;
+							int xi = x;
+							int yi = y;
+							int zi = z;
+							if (x > pos.getX() + 1) {
+								xi = x - 1;
+								wall = true;
+							} else if (x < pos.getX() - 1) {
+								xi = x + 1;
+								wall = true;
+							}
+							if (y > pos.getY() + 1) {
+								yi = y - 1;
+								wall = true;
+							} else if (y < pos.getY() - 1) {
+								yi = y + 1;
+								wall = true;
+							}
+							if (z > pos.getZ() + 1) {
+								zi = z - 1;
+								wall = true;
+							} else if (z < pos.getZ() - 1) {
+								zi = z + 1;
+								wall = true;
+							}
+
+							if (current.getTier() < cold.getTier()) {
+								if (wall) {
+									int pre = ThermalInsulationUtil.getInsulation(world, new BlockPos(xi, yi, zi));
+									if (pre != 0) {
+										if (pre == -1) {
+											continue;
 										} else {
-											curT -= pre;
-											if (curT > 0 && curT < cold.getTier()) {
-												current = DCHeatTier.getHeatEnum(curT);
+											int curT = current.getTier();
+											if (curT < 0) {
+												curT += pre;
+												if (curT < cold.getTier()) {
+													current = DCHeatTier.getHeatEnum(curT);
+												} else {
+													continue;
+												}
 											} else {
-												continue;
+												curT -= pre;
+												if (curT > 0 && curT < cold.getTier()) {
+													current = DCHeatTier.getHeatEnum(curT);
+												} else {
+													continue;
+												}
 											}
 										}
 									}
 								}
+								cold = current;
 							}
+						}
+
+						BlockHeatTierEvent event = new BlockHeatTierEvent(world, p2, current, false);
+						current = event.result();
+
+						if (current.getTier() < cold.getTier()) {
 							cold = current;
 						}
-					}
-
-					BlockHeatTierEvent event = new BlockHeatTierEvent(world, p2, current, false);
-					current = event.result();
-
-					if (current.getTier() < cold.getTier()) {
-						cold = current;
 					}
 				}
 			}
@@ -355,13 +359,15 @@ public class ClimateAltCalculator implements IClimateCalculator {
 		for (EnumFacing face : EnumFacing.VALUES) {
 			BlockPos p1 = new BlockPos(pos.getX() + face.getFrontOffsetX(), pos.getY() + face.getFrontOffsetY(), pos
 					.getZ() + face.getFrontOffsetZ());
-			Block block = world.getBlockState(p1).getBlock();
-			DCHumidity target2 = getBlockHumidity(world, pos, p1);
-			if (target2 == DCHumidity.UNDERWATER) {
-				hasWater = true;
-			}
-			if (!world.getBlockState(p1).isNormalCube()) {
-				hasAir = true;
+			if (world.isBlockLoaded(p1)) {
+				Block block = world.getBlockState(p1).getBlock();
+				DCHumidity target2 = getBlockHumidity(world, pos, p1);
+				if (target2 == DCHumidity.UNDERWATER) {
+					hasWater = true;
+				}
+				if (!world.getBlockState(p1).isNormalCube()) {
+					hasAir = true;
+				}
 			}
 		}
 		if (hasWater && !hasAir) {
@@ -381,12 +387,14 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			for (int z = pos.getZ() - r; z <= pos.getZ() + r; z++) {
 				for (int y = pos.getY() - h1; y <= pos.getY() + h1; y++) {
 					BlockPos p2 = new BlockPos(x, y, z);
-					DCHumidity current = getBlockHumidity(world, pos, p2);
-					if (current != null) {
-						if (current == DCHumidity.DRY) {
-							ret--;
-						} else if (current.getID() > 1) {
-							ret++;
+					if (world.isBlockLoaded(p2)) {
+						DCHumidity current = getBlockHumidity(world, pos, p2);
+						if (current != null) {
+							if (current == DCHumidity.DRY) {
+								ret--;
+							} else if (current.getID() > 1) {
+								ret++;
+							}
 						}
 					}
 				}
@@ -439,17 +447,19 @@ public class ClimateAltCalculator implements IClimateCalculator {
 			for (int z = pos.getZ() - r; z <= pos.getZ() + r; z++) {
 				for (int y = pos.getY() - h1; y <= pos.getY() + h1; y++) {
 					BlockPos p2 = new BlockPos(x, y, z);
-					DCAirflow current = getBlockAirflow(world, pos, p2);
-					if (current == null)
-						continue;
-					if (current.getID() > 0) {
-						if (current.getID() > 1) {
-							if (current == DCAirflow.WIND) {
-								hasBlow = true;
+					if (world.isBlockLoaded(p2)) {
+						DCAirflow current = getBlockAirflow(world, pos, p2);
+						if (current == null)
+							continue;
+						if (current.getID() > 0) {
+							if (current.getID() > 1) {
+								if (current == DCAirflow.WIND) {
+									hasBlow = true;
+								}
+								hasWind = true;
 							}
-							hasWind = true;
+							count++;
 						}
-						count++;
 					}
 				}
 			}

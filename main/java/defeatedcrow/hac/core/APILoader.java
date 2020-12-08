@@ -9,7 +9,7 @@ import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.core.climate.ArmorMaterialRegister;
 import defeatedcrow.hac.core.climate.ArmorResistantRegister;
-import defeatedcrow.hac.core.climate.ClimateAltCalculator;
+import defeatedcrow.hac.core.climate.ClimateCalculator;
 import defeatedcrow.hac.core.climate.ClimateHelper;
 import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
@@ -47,7 +47,7 @@ public class APILoader {
 
 	public static void loadAPI() {
 		ClimateAPI.register = new ClimateRegister();
-		ClimateAPI.calculator = new ClimateAltCalculator();
+		ClimateAPI.calculator = new ClimateCalculator();
 		ClimateAPI.registerBlock = new HeatBlockRegister();
 		ClimateAPI.helper = new ClimateHelper();
 		ClimateAPI.isLoaded = true;

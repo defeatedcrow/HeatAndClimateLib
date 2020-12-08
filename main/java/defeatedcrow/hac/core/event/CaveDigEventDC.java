@@ -6,12 +6,12 @@ import defeatedcrow.hac.api.hook.DCCaveOceanBlock;
 import defeatedcrow.hac.api.hook.DCCaveWaterEvent;
 import defeatedcrow.hac.api.hook.DCRavineWaterEvent;
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.util.BiomeCatchDC;
 import net.minecraft.block.BlockEmptyDrops;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.MapGenBase;
@@ -43,7 +43,7 @@ public class CaveDigEventDC {
 			try {
 				IBlockState state = e.data.getBlockState(e.x, e.y, e.z);
 				World world = ReflectionHelper.getPrivateValue(MapGenBase.class, e.event, "world", "field_75039_c");
-				Biome biome = world.getBiome(new BlockPos(e.x + e.cx * 16, 0, e.z + e.cz * 16));
+				Biome biome = BiomeCatchDC.getBiomeForCoords(e.cx, e.cz, e.x, e.z, world);
 				IBlockState top = biome.topBlock;
 				IBlockState filler = biome.fillerBlock;
 
@@ -77,7 +77,7 @@ public class CaveDigEventDC {
 				IBlockState state = e.data.getBlockState(e.x, e.y, e.z);
 				IBlockState up = MoreObjects.firstNonNull(e.data.getBlockState(e.x, e.y + 1, e.z), BLK_AIR);
 				World world = ReflectionHelper.getPrivateValue(MapGenBase.class, e.event, "world", "field_75039_c");
-				Biome biome = world.getBiome(new BlockPos(e.x + e.cx * 16, 0, e.z + e.cz * 16));
+				Biome biome = BiomeCatchDC.getBiomeForCoords(e.cx, e.cz, e.x, e.z, world);
 				IBlockState top = biome.topBlock;
 				IBlockState filler = biome.fillerBlock;
 

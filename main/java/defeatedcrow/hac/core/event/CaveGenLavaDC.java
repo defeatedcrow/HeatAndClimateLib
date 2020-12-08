@@ -3,6 +3,7 @@ package defeatedcrow.hac.core.event;
 import java.util.Random;
 
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.util.BiomeCatchDC;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -20,13 +21,13 @@ public class CaveGenLavaDC {
 	@SubscribeEvent
 	public void initLakeGen(PopulateChunkEvent.Populate event) {
 		if (event.getType() == net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.LAVA) {
+			BlockPos pos = new BlockPos(8 + event.getChunkX() * 16, 0, 8 + event.getChunkZ() * 16);
+			Biome biome = BiomeCatchDC.getBiome(pos, event.getWorld());
 			if (CoreConfigDC.enableUnderLake) {
-				BlockPos pos = new BlockPos(8 + event.getChunkX() * 16, 0, 8 + event.getChunkZ() * 16);
-				Biome biome = event.getWorld().getBiome(pos);
 				if (biome.getRainfall() > 0.8F || BiomeDictionary.hasType(biome, BiomeDictionary.Type.WET)) {
-					int x = rand.nextInt(16) + 8;
+					int x = rand.nextInt(8) + 4;
 					int y = rand.nextInt(256);
-					int z = rand.nextInt(16) + 8;
+					int z = rand.nextInt(8) + 4;
 					BlockPos pos1 = pos.add(x, y, z);
 					if (y < event.getWorld().getSeaLevel()) {
 						(new WorldGenLakes(Blocks.MAGMA)).generate(event.getWorld(), rand, pos1);
@@ -37,8 +38,6 @@ public class CaveGenLavaDC {
 				}
 			}
 			if (CoreConfigDC.enableForestLake) {
-				BlockPos pos = new BlockPos(8 + event.getChunkX() * 16, 64, 8 + event.getChunkZ() * 16);
-				Biome biome = event.getWorld().getBiome(pos);
 				if (pos.getY() > 45 && (BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST) || BiomeDictionary
 						.hasType(biome, BiomeDictionary.Type.DENSE)) || BiomeDictionary
 								.hasType(biome, BiomeDictionary.Type.CONIFEROUS)) {
@@ -52,7 +51,7 @@ public class CaveGenLavaDC {
 	public void initFluid(DecorateBiomeEvent.Decorate event) {
 		if (CoreConfigDC.enableUnderLake && event
 				.getType() == net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA) {
-			Biome biome = event.getWorld().getBiome(event.getChunkPos().getBlock(8, 0, 8));
+			Biome biome = BiomeCatchDC.getBiome(event.getChunkPos().x, event.getChunkPos().z, event.getWorld());
 			Random random = event.getWorld().rand;
 			boolean flag = false;
 			if (biome.getRainfall() > 0.8F || BiomeDictionary.hasType(biome, BiomeDictionary.Type.WET)) {
@@ -61,7 +60,7 @@ public class CaveGenLavaDC {
 			}
 		} else if (CoreConfigDC.enableUnderLake && event
 				.getType() == net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.LAKE_WATER) {
-			Biome biome = event.getWorld().getBiome(event.getChunkPos().getBlock(8, 0, 8));
+			Biome biome = BiomeCatchDC.getBiome(event.getChunkPos().x, event.getChunkPos().z, event.getWorld());
 			Random random = event.getWorld().rand;
 			boolean flag = false;
 			if (biome.getRainfall() <= 0.2F) {
