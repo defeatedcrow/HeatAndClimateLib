@@ -157,6 +157,7 @@ public class CoreConfigDC {
 	public static boolean enableSuffocation = false;
 	public static boolean tightUnderworld = false;
 	public static boolean harderMachine = false;
+	public static boolean harderCrop = false;
 
 	public static String[] updateBlackList = new String[] {
 			"minecraft:leaves:32767",
@@ -307,6 +308,9 @@ public class CoreConfigDC {
 			Property harderM = cfg
 					.get("hardmode setting", "Occupational Accident Machine", harderMachine, "Adds contact damage to the torque machine.");
 
+			Property harderC = cfg
+					.get("hardmode setting", "Harder Crop Mode", harderCrop, "The growing conditions of the crop become very narrow.");
+
 			Property drought = cfg
 					.get("world setting", "Drought Frequency", droughtFrequency, "Set the number of days of fine weather required for drought.");
 
@@ -413,6 +417,7 @@ public class CoreConfigDC {
 			enableSuffocation = suffocation.getBoolean();
 			tightUnderworld = tight.getBoolean();
 			harderMachine = harderM.getBoolean();
+			harderCrop = harderC.getBoolean();
 			enableWeatherEffect = weather.getBoolean();
 			enableTimeEffect = time.getBoolean();
 			enableSeasonEffect = season.getBoolean();

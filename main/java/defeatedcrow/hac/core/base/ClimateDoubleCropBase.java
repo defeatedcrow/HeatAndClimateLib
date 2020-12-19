@@ -141,9 +141,11 @@ public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTex
 			IClimate clm = this.getClimate(world, pos, state);
 			DCHumidity underHum = ClimateAPI.calculator.getHumidity(world, pos.down());
 			GrowingStage stage = this.getCurrentStage(state);
-			int chance = this.isSuitableClimate(clm, state) ? 6 : 30;
-			if ((clm.getHeat() == DCHeatTier.WARM || clm.getHeat() == DCHeatTier.HOT) && underHum == DCHumidity.WET) {
-				chance /= 2;
+			int chance = 30;
+			if (this.isSuitableClimate(clm, state)) {
+				chance = 6;
+			} else if (CoreConfigDC.harderCrop) {
+				return;
 			}
 			if (stage != GrowingStage.GROWN && rand.nextInt(chance) == 0) {
 				this.grow(world, pos, state);
@@ -345,7 +347,7 @@ public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTex
 		ret.add(DCHeatTier.COOL);
 		ret.add(DCHeatTier.NORMAL);
 		ret.add(DCHeatTier.WARM);
-		return ret;
+		return CoreConfigDC.harderCrop ? getHardmodeTemp(thisState) : ret;
 	}
 
 	@Override
@@ -353,13 +355,32 @@ public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTex
 		List<DCHumidity> ret = new ArrayList<DCHumidity>();
 		ret.add(DCHumidity.NORMAL);
 		ret.add(DCHumidity.WET);
-		return ret;
+		return CoreConfigDC.harderCrop ? getHardmodeHum(thisState) : ret;
 	}
 
 	@Override
 	public List<DCAirflow> getSuitableAir(IBlockState thisState) {
 		List<DCAirflow> ret = new ArrayList<DCAirflow>();
 		ret.add(DCAirflow.NORMAL);
+		ret.add(DCAirflow.FLOW);
+		ret.add(DCAirflow.WIND);
+		return CoreConfigDC.harderCrop ? getHardmodeAir(thisState) : ret;
+	}
+
+	public List<DCHeatTier> getHardmodeTemp(IBlockState thisState) {
+		List<DCHeatTier> ret = new ArrayList<DCHeatTier>();
+		ret.add(DCHeatTier.WARM);
+		return ret;
+	}
+
+	public List<DCHumidity> getHardmodeHum(IBlockState thisState) {
+		List<DCHumidity> ret = new ArrayList<DCHumidity>();
+		ret.add(DCHumidity.WET);
+		return ret;
+	}
+
+	public List<DCAirflow> getHardmodeAir(IBlockState thisState) {
+		List<DCAirflow> ret = new ArrayList<DCAirflow>();
 		ret.add(DCAirflow.FLOW);
 		ret.add(DCAirflow.WIND);
 		return ret;
