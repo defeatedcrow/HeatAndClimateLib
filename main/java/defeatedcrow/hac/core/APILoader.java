@@ -22,21 +22,6 @@ import defeatedcrow.hac.core.climate.recipe.FluidCraftRegister;
 import defeatedcrow.hac.core.climate.recipe.MillRecipeRegister;
 import defeatedcrow.hac.core.climate.recipe.ReactorRecipeRegister;
 import defeatedcrow.hac.core.climate.recipe.SpinningRecipeRegister;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityPolarBear;
-import net.minecraft.entity.monster.EntityShulker;
-import net.minecraft.entity.monster.EntitySnowman;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityLlama;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -108,6 +93,7 @@ public class APILoader {
 		ClimateAPI.registerBlock.registerHumBlock(Blocks.SOUL_SAND, 0, DCHumidity.DRY);
 
 		ClimateAPI.registerBlock.registerHumBlock(Blocks.SPONGE, 1, DCHumidity.WET);
+		ClimateAPI.registerBlock.registerHumBlock(Blocks.SLIME_BLOCK, 0, DCHumidity.WET);
 		ClimateAPI.registerBlock.registerHumBlock(Blocks.CAULDRON, 1, DCHumidity.WET);
 		ClimateAPI.registerBlock.registerHumBlock(Blocks.CAULDRON, 2, DCHumidity.WET);
 		ClimateAPI.registerBlock.registerHumBlock(Blocks.CAULDRON, 3, DCHumidity.UNDERWATER);
@@ -118,24 +104,6 @@ public class APILoader {
 		// air
 		ClimateAPI.registerBlock.registerAirBlock(Blocks.AIR, 32767, DCAirflow.NORMAL);
 
-	}
-
-	public static void registerMobResistant() {
-		DamageAPI.resistantData.registerEntityResistant(EntityVillager.class, 3.0F, 4.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityIronGolem.class, 4.0F, 8.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntitySnowman.class, 0.0F, 8.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityWither.class, 8.0F, 2.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityDragon.class, 2.0F, 8.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntitySheep.class, 2.0F, 4.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityPig.class, 4.0F, 2.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityCow.class, 3.0F, 3.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityChicken.class, 4.0F, 2.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityRabbit.class, 2.0F, 4.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityWolf.class, 2.0F, 4.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityPolarBear.class, 1.0F, 8.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityEnderman.class, 8.0F, 8.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityShulker.class, 0.0F, 8.0F);
-		DamageAPI.resistantData.registerEntityResistant(EntityLlama.class, 2.0F, 6.0F);
 	}
 
 }

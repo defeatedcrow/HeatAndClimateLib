@@ -512,6 +512,14 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 		return false;
 	}
 
+	/* 描画距離のfix */
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean isInRangeToRenderDist(double distance) {
+		double d0 = 64.0D;
+		return distance < d0 * d0;
+	}
+
 	/* パラメータ各種 */
 
 	@Override

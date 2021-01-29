@@ -3,7 +3,9 @@ package defeatedcrow.hac.core;
 import defeatedcrow.hac.core.recipe.ConvertTargetList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class OreRegister {
@@ -29,9 +31,10 @@ public class OreRegister {
 		OreDictionary.registerOre("leather", new ItemStack(Items.LEATHER));
 		OreDictionary.registerOre("feather", new ItemStack(Items.FEATHER));
 		OreDictionary.registerOre("string", new ItemStack(Items.STRING));
-		OreDictionary.registerOre("rabbithide", new ItemStack(Items.RABBIT_HIDE, 1, 0));
+		OreDictionary.registerOre("rabbithide", new ItemStack(Items.RABBIT_HIDE));
 
 		OreDictionary.registerOre("listAllfishraw", new ItemStack(Items.FISH));
+		OreDictionary.registerOre("foodCodraw", new ItemStack(Items.FISH));
 		OreDictionary.registerOre("listAllfishraw", new ItemStack(Items.FISH, 1, 1));
 		OreDictionary.registerOre("foodSalmonraw", new ItemStack(Items.FISH, 1, 1));
 
@@ -105,6 +108,11 @@ public class OreRegister {
 		OreDictionary.registerOre("listAllrabbitcooked", new ItemStack(Items.COOKED_RABBIT, 1, 0));
 
 		OreDictionary.registerOre("vineLeaves", new ItemStack(Blocks.VINE, 1, 0));
+
+		Item cod = Item.REGISTRY.getObject(new ResourceLocation("minecraft:cod"));
+		if (cod != null) {
+			OreDictionary.registerOre("foodCodraw", new ItemStack(cod, 1, 0));
+		}
 	}
 
 	static void addConversion() {
@@ -119,6 +127,8 @@ public class OreRegister {
 		ConvertTargetList.addReplaceTarget(new ItemStack(Blocks.WOOL, 1, 32767), "itemCloth");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.RABBIT_HIDE), "rabbithide");
 		ConvertTargetList.addReplaceTarget(new ItemStack(Items.LEATHER), "leather");
+		ConvertTargetList.addReplaceTarget(new ItemStack(Items.FISH), "foodCodraw");
+		ConvertTargetList.addReplaceTarget(new ItemStack(Items.FISH, 1, 1), "foodSalmonraw");
 
 	}
 

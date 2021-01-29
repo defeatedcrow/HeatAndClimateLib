@@ -1,6 +1,14 @@
 package defeatedcrow.hac.core.client;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import defeatedcrow.hac.api.climate.BlockSet;
 import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.damage.DamageSourceClimate;
 import defeatedcrow.hac.api.magic.CharmType;
@@ -8,8 +16,10 @@ import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.util.DCUtil;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
@@ -17,6 +27,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,9 +52,65 @@ public class ClientClimateData {
 		BlockPos pos = new BlockPos(px, py, pz);
 		if (pos != null && world.isAreaLoaded(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
 			climate = ClimateAPI.calculator.getClimate(world, pos);
+
+			if (CoreConfigDC.heldItem && climate != null) {
+				List<ItemStack> hands = Lists.newArrayList();
+				if (!DCUtil.isEmpty(player.getHeldItemMainhand())) {
+					hands.add(player.getHeldItemMainhand());
+				}
+				if (!DCUtil.isEmpty(player.getHeldItemOffhand())) {
+					hands.add(player.getHeldItemOffhand());
+				}
+				for (ItemStack item : hands) {
+					if (DCUtil.isEmpty(item))
+						continue;
+
+					Block target = null;
+					int meta = 0;
+
+					if (item.getItem() instanceof ItemBlock) {
+						target = ((ItemBlock) item.getItem()).getBlock();
+						meta = item.getItemDamage();
+					} else if (item
+							.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) instanceof FluidBucketWrapper) {
+						FluidBucketWrapper bucket = (FluidBucketWrapper) item
+								.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+						if (bucket.getFluid() != null && bucket.getFluid().getFluid().getBlock() != null) {
+							target = bucket.getFluid().getFluid().getBlock();
+						}
+					}
+
+					if (target == null)
+						continue;
+
+					DCHeatTier nT = climate.getHeat();
+					DCHumidity nH = climate.getHumidity();
+					DCAirflow nA = climate.getAirflow();
+
+					DCHeatTier cT = DCUtil.getBlockTemp(new BlockSet(target, meta), player.world, pos);
+					if (nT != cT) {
+						nT = nT.getAverageTemp(cT);
+					}
+
+					DCHumidity cH = DCUtil.getBlockHum(new BlockSet(target, meta), player.world, pos);
+					if (nH != cH) {
+						nH = nH.getAverageHumidity(cH);
+					}
+
+					DCAirflow cA = DCUtil.getBlockAir(new BlockSet(target, meta), player.world, pos);
+					if (nA != cA) {
+						nA = nA.getAverageAirflow(cA);
+					}
+
+					climate = ClimateAPI.register.getClimateFromParam(nT, nH, nA);
+
+				}
+			}
+
 			if (climate != null) {
 				tempTier = climate.getHeat().getTier();
 			}
+
 		}
 
 		float conf_prev = 3F - CoreConfigDC.damageDifficulty;

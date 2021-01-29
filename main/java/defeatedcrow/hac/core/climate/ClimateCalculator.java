@@ -601,7 +601,8 @@ public class ClimateCalculator implements IClimateCalculator {
 				ret = ClimateAPI.registerBlock.getAirflow(block, m);
 			} else if (block instanceof IAirflowTile) {
 				ret = ((IAirflowTile) block).getAirflow(world, target, source);
-			} else if (state.getMaterial() == Material.PLANTS || state.getMaterial() == Material.VINE) {
+			} else if (state.getMaterial() == Material.PLANTS || state.getMaterial() == Material.VINE || state
+					.getMaterial() == Material.WEB) {
 				ret = DCAirflow.NORMAL;
 			}
 			return ret;

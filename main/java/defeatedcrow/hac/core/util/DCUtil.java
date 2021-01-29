@@ -9,6 +9,11 @@ import java.util.Random;
 import com.google.common.collect.Lists;
 
 import defeatedcrow.hac.api.climate.BlockSet;
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCAirflow;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.climate.IHeatTile;
 import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.energy.IWrenchDC;
 import defeatedcrow.hac.api.magic.CharmType;
@@ -18,6 +23,7 @@ import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.plugin.ChastMobPlugin;
 import defeatedcrow.hac.core.plugin.baubles.DCPluginBaubles;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -45,6 +51,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -474,6 +482,37 @@ public class DCUtil {
 	public static boolean isHeldWrench(EntityLivingBase player, EnumHand hand) {
 		ItemStack main = player.getHeldItem(hand);
 		return !DCUtil.isEmpty(main) && main.getItem() instanceof IWrenchDC;
+	}
+
+	// 気候チェック
+	public static DCHeatTier getBlockTemp(BlockSet set, World world, BlockPos pos) {
+		if (ClimateAPI.registerBlock.isRegisteredHeat(set.block, set.meta)) {
+			return ClimateAPI.registerBlock.getHeatTier(set.block, set.meta);
+		} else if (set.block instanceof IHeatTile) {
+			return ((IHeatTile) set.block).getHeatTier(world, pos, pos);
+		} else if (set.block instanceof IFluidBlock) {
+			Fluid f = ((IFluidBlock) set.block).getFluid();
+			if (f != null) {
+				return DCHeatTier.getTypeByTemperature(f.getTemperature(world, pos));
+			}
+		}
+		return DCHeatTier.NORMAL;
+	}
+
+	public static DCHumidity getBlockHum(BlockSet set, World world, BlockPos pos) {
+		if (ClimateAPI.registerBlock.isRegisteredHum(set.block, set.meta)) {
+			return ClimateAPI.registerBlock.getHumidity(set.block, set.meta);
+		} else if (set.block.getDefaultState().getMaterial() == Material.WATER) {
+			return DCHumidity.WET;
+		}
+		return DCHumidity.NORMAL;
+	}
+
+	public static DCAirflow getBlockAir(BlockSet set, World world, BlockPos pos) {
+		if (ClimateAPI.registerBlock.isRegisteredAir(set.block, set.meta)) {
+			return ClimateAPI.registerBlock.getAirflow(set.block, set.meta);
+		}
+		return DCAirflow.NORMAL;
 	}
 
 	// Itemクラスのやつがprotectedだった

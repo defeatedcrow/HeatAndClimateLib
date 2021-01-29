@@ -65,6 +65,14 @@ public enum DCAirflow {
 		return NORMAL;
 	}
 
+	public DCAirflow getAverageAirflow(DCAirflow another) {
+		if (another != null && another != NORMAL) {
+			int i = another.getID() - 1;
+			return addTier(i);
+		}
+		return this;
+	}
+
 	public static List<DCAirflow> createList() {
 		List<DCAirflow> tiers = new ArrayList<DCAirflow>();
 

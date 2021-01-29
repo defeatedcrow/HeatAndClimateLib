@@ -2,9 +2,15 @@ package defeatedcrow.hac.core.event;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import defeatedcrow.hac.api.climate.BlockSet;
 import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.damage.ClimateDamageEvent;
 import defeatedcrow.hac.api.damage.ClimateDamageEvent.DamageSet;
@@ -13,7 +19,6 @@ import defeatedcrow.hac.api.damage.DamageSourceClimate;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
-import defeatedcrow.hac.core.DCInit;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.packet.MessageCharmKey;
 import defeatedcrow.hac.core.util.DCTimeHelper;
@@ -27,6 +32,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -39,6 +45,8 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -159,90 +167,144 @@ public class LivingEventDC {
 			}
 
 			IClimate clm = ClimateAPI.calculator.getClimate(living.world, living.getPosition());
+
+			if (CoreConfigDC.heldItem) {
+				List<ItemStack> hands = Lists.newArrayList();
+				if (!DCUtil.isEmpty(living.getHeldItemMainhand())) {
+					hands.add(living.getHeldItemMainhand());
+				}
+				if (!DCUtil.isEmpty(living.getHeldItemOffhand())) {
+					hands.add(living.getHeldItemOffhand());
+				}
+				for (ItemStack item : hands) {
+					if (DCUtil.isEmpty(item))
+						continue;
+
+					Block target = null;
+					int meta = 0;
+
+					if (item.getItem() instanceof ItemBlock) {
+						target = ((ItemBlock) item.getItem()).getBlock();
+						meta = item.getItemDamage();
+					} else if (item
+							.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) instanceof FluidBucketWrapper) {
+						FluidBucketWrapper bucket = (FluidBucketWrapper) item
+								.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+						if (bucket.getFluid() != null && bucket.getFluid().getFluid().getBlock() != null) {
+							target = bucket.getFluid().getFluid().getBlock();
+						}
+					}
+
+					if (target == null)
+						continue;
+
+					DCHeatTier nT = clm.getHeat();
+					DCHumidity nH = clm.getHumidity();
+					DCAirflow nA = clm.getAirflow();
+
+					DCHeatTier cT = DCUtil.getBlockTemp(new BlockSet(target, meta), living.world, living.getPosition());
+					if (nT != cT) {
+						nT = nT.getAverageTemp(cT);
+					}
+
+					DCHumidity cH = DCUtil.getBlockHum(new BlockSet(target, meta), living.world, living.getPosition());
+					if (nH != cH) {
+						nH = nH.getAverageHumidity(cH);
+					}
+
+					DCAirflow cA = DCUtil.getBlockAir(new BlockSet(target, meta), living.world, living.getPosition());
+					if (nA != cA) {
+						nA = nA.getAverageAirflow(cA);
+					}
+
+					clm = ClimateAPI.register.getClimateFromParam(nT, nH, nA);
+
+				}
+			}
+
 			DCHeatTier heat = clm.getHeat();
 
-			float prev = 2.0F; // normal
+			float prevTemp = 2.0F; // normal
 			if (living instanceof EntityPlayer) {
-				prev = 1.0F * (3 - CoreConfigDC.damageDifficulty); // 1.0F ~ 3.0F
+				prevTemp = 1.0F * (3 - CoreConfigDC.damageDifficulty); // 1.0F ~ 3.0F
 			}
-			float dam = Math.abs(heat.getTier()) * 1.0F; // hot 0F ~ 8.0F / cold 0F ~ 10.0F
+			float damTemp = Math.abs(heat.getTier()) * 1.0F; // hot 0F ~ 8.0F / cold 0F ~ 10.0F
 			boolean isCold = heat.getTier() < 0;
 			DamageSourceClimate source = isCold ? DamageSourceClimate.climateColdDamage :
 					DamageSourceClimate.climateHeatDamage;
 
 			// 基礎ダメージ
 			if (isCold) {
-				dam -= prev;
-				dam *= 2.0F;
+				damTemp -= prevTemp;
+				damTemp *= 2.0F;
 			} else {
-				dam -= prev;
+				damTemp -= prevTemp;
 			}
 
 			// この時点でダメージ無しならスキップ
-			if (dam < 1.0F) {
-				return;
-			}
+			if (damTemp >= 1.0F) {
+				// 次に装備と耐性計算
 
-			// 次に装備と耐性計算
-			prev = 0.0F;
+				/* damage判定 */
+				// mobごとの特性
+				prevTemp = DamageAPI.resistantData.getHeatResistant(living, heat);
 
-			/* damage判定 */
-			// mobごとの特性
-			if (isCold) {
-				float adj = DamageAPI.resistantData.getColdResistant(living);
-				prev += adj;
-				if (living.isPotionActive(DCInit.prevFreeze)) {
-					prev += 4.0F;
-				}
-				if (living.isImmuneToFire()) {
-					prev -= 2.0F;
-				}
-				if (living.isEntityUndead()) {
-					prev += 2.0F;
-				}
-			} else {
-				float adj = DamageAPI.resistantData.getHeatResistant(living);
-				prev += adj;
-				if (living.isPotionActive(MobEffects.FIRE_RESISTANCE)) {
-					prev += 4.0F;
-				}
-				if (living.isImmuneToFire()) {
-					prev += CoreConfigDC.infernalInferno ? 8.0F : 4.0F;
-				} else if (heat.getTier() > DCHeatTier.OVEN.getTier() && living.isEntityUndead()) {
-					prev /= 2.0F;
-				}
-			}
+				// 防具の計算
+				if (living.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) {
+					IItemHandler handler = living
+							.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
+					if (handler != null) {
+						for (int s = 0; s < handler.getSlots(); s++) {
+							ItemStack item = handler.getStackInSlot(s);
+							if (DCUtil.isEmpty(item))
+								continue;
 
-			// 防具の計算
-			if (living.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH)) {
-				IItemHandler handler = living
-						.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
-				if (handler != null) {
-					for (int s = 0; s < handler.getSlots(); s++) {
-						ItemStack item = handler.getStackInSlot(s);
-						if (DCUtil.isEmpty(item))
-							continue;
-
-						float p = DCUtil.getItemResistantData(item, isCold);
-						prev += p;
+							float p = DCUtil.getItemResistantData(item, isCold);
+							prevTemp += p;
+						}
 					}
 				}
+
+				damTemp -= prevTemp;
+
+				ClimateDamageEvent fireEvent = new ClimateDamageEvent(living, source, clm, damTemp);
+				DamageSet result = fireEvent.result();
+				damTemp = result.damage;
+				DamageSource source2 = result.source;
+
+				// 2.0F未満の場合はとどめを刺さない
+				if (damTemp < 2.0F && living.getHealth() < 2.0F) {
+					damTemp = 0.0F;
+				}
+
+				if (damTemp >= 1.0F) {
+					living.attackEntityFrom(source2, damTemp);
+				}
+
 			}
 
-			dam -= prev;
+			// normal以上は湿度・通気ダメージを受ける
+			if (CoreConfigDC.damageDifficulty > 0) {
+				float damHum = CoreConfigDC.damageDifficulty;
+				float damAir = CoreConfigDC.damageDifficulty;
+				float prevHum = DamageAPI.resistantData.getHumResistant(living, clm.getHumidity());
+				float prevAir = DamageAPI.resistantData.getAirResistant(living, clm.getAirflow());
+				damHum -= prevHum;
+				damAir -= prevAir;
 
-			ClimateDamageEvent fireEvent = new ClimateDamageEvent(living, source, clm, dam);
-			DamageSet result = fireEvent.result();
-			dam = result.damage;
-			DamageSource source2 = result.source;
+				if (prevHum <= 0F && CoreConfigDC.enableHumidity) {
+					DamageSourceClimate sourceHum = clm.getHumidity() == DCHumidity.DRY ?
+							DamageSourceClimate.climateDryDamage : DamageSourceClimate.climateWaterDamage;
+					living.hurtResistantTime = 0;
+					living.attackEntityFrom(sourceHum, damHum);
+				}
 
-			// 2.0F未満の場合はとどめを刺さない
-			if (dam < 2.0F && living.getHealth() < 2.0F) {
-				dam = 0.0F;
-			}
-
-			if (dam >= 1.0F) {
-				living.attackEntityFrom(source2, dam);
+				if (prevAir <= 0F && CoreConfigDC.enableSuffocation) {
+					DamageSourceClimate sourceAir = clm.getAirflow() == DCAirflow.TIGHT ?
+							DamageSourceClimate.climateSuffocationDamage : DamageSourceClimate.climateWindDamage;
+					living.hurtResistantTime = 0;
+					living.attackEntityFrom(sourceAir, damAir);
+				}
 			}
 		}
 	}

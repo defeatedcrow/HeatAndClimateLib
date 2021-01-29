@@ -24,6 +24,10 @@ dcs_climate.crusher=破砕機レシピ
 
 death.attack.dcs_heat=%1$sはこんがり焼き上がった。
 death.attack.dcs_cold=%1$sはシャーベットになった。
+death.attack.dcs_water=%1$sはびしょ濡れになった。
+death.attack.dcs_dry=%1$sはカサカサに乾いてしまった。
+death.attack.dcs_wind=%1$sは風に煽られた。
+death.attack.dcs_suffocation=%1$sは窒息してしまった。
 death.attack.dcs_machine=%1$sは労働災害に遭った。ご安全に!
 
 dcs.potion.freeze_resistance=冷気耐性

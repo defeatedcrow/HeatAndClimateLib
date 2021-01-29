@@ -24,6 +24,10 @@ dcs_climate.crusher=Crusher Recipe
 
 death.attack.dcs_heat=%1$s was burnt browned.
 death.attack.dcs_cold=%1$s became a sherbet.
+death.attack.dcs_water=%1$s got soaked.
+death.attack.dcs_dry=%1$s was dehydrated.
+death.attack.dcs_wind=%1$s was fanned by a strong wind.
+death.attack.dcs_suffocation=%1$s suffocated.
 death.attack.dcs_machine=%1$s was suffered an occupational accident.
 
 dcs.potion.freeze_res=Cold Resistance

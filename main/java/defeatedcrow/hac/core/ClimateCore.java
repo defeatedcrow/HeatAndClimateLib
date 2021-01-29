@@ -39,7 +39,7 @@ public class ClimateCore {
 	public static final String MOD_ID = "dcs_lib";
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 3;
-	public static final int MOD_MINOR = 5;
+	public static final int MOD_MINOR = 6;
 	public static final int MOD_BUILD = 0;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.12,1.12.2]";
@@ -100,7 +100,6 @@ public class ClimateCore {
 		// default property
 		APILoader.registerClimate();
 		APILoader.registerMaterial();
-		APILoader.registerMobResistant();
 
 		MobResistantRegister.post();
 		ArmorResistantRegister.post();

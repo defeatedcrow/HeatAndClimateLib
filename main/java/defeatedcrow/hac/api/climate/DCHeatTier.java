@@ -127,6 +127,10 @@ public enum DCHeatTier {
 		return id;
 	}
 
+	public boolean isCold() {
+		return tier < 0;
+	}
+
 	public float getBiomeTemp() {
 		return biomeTemp;
 	}
@@ -138,6 +142,20 @@ public enum DCHeatTier {
 				return e;
 		}
 		return NORMAL;
+	}
+
+	public DCHeatTier getAverageTemp(DCHeatTier another) {
+		if (another != null) {
+			DCHeatTier nT = this;
+			if (isCold() != another.isCold()) {
+				int i = getTier() + another.getTier();
+				nT = DCHeatTier.getHeatEnum(i);
+			} else if (Math.abs(getTier()) < Math.abs(another.getTier())) {
+				nT = another;
+			}
+			return nT;
+		}
+		return this;
 	}
 
 	public int[] getColor() {

@@ -126,6 +126,9 @@ public abstract class ClimateCropBase extends BlockDC implements ISidedTexture, 
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(world, pos, state, rand);
 		if (!world.isRemote && state != null && state.getBlock() instanceof ClimateCropBase) {
+			if (CoreConfigDC.harderCrop && world.getLight(pos) < 8) {
+				return;
+			}
 			IClimate clm = this.getClimate(world, pos, state);
 			DCHumidity underHum = ClimateAPI.calculator.getHumidity(world, pos.down());
 			GrowingStage stage = this.getCurrentStage(state);
@@ -357,8 +360,8 @@ public abstract class ClimateCropBase extends BlockDC implements ISidedTexture, 
 
 	public List<DCAirflow> getHardmodeAir(IBlockState thisState) {
 		List<DCAirflow> ret = new ArrayList<DCAirflow>();
+		ret.add(DCAirflow.NORMAL);
 		ret.add(DCAirflow.FLOW);
-		ret.add(DCAirflow.WIND);
 		return ret;
 	}
 

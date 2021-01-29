@@ -41,30 +41,30 @@ public class ClickEventDC {
 		EntityPlayer player = event.getEntityPlayer();
 		BlockPos pos = event.getPos();
 		ItemStack held = event.getItemStack();
-		if (player != null && !player.world.isRemote) {
+		if (player != null) {
 			IBlockState state = player.world.getBlockState(pos);
 			if (state != null && state.getBlock() != null) {
 				// IRapidCollectables
 				if (state.getBlock() instanceof IRapidCollectables && ((IRapidCollectables) state.getBlock())
 						.isCollectable(held)) {
-					IRapidCollectables current = (IRapidCollectables) state.getBlock();
-					int area = current.getCollectArea(held);
-					BlockPos min = new BlockPos(pos.add(-area, -area, -area));
-					BlockPos max = new BlockPos(pos.add(area, area, area));
-					Iterable<BlockPos> itr = pos.getAllInBox(min, max);
-					boolean flag = false;
-					for (BlockPos p : itr) {
-						IBlockState block = event.getWorld().getBlockState(p);
-						if (block.getBlock() == state.getBlock()) {
-							IRapidCollectables target = (IRapidCollectables) block.getBlock();
-							if (target.doCollect(event.getWorld(), p, block, player, held))
-								flag = true;
+					if (!player.world.isRemote) {
+						IRapidCollectables current = (IRapidCollectables) state.getBlock();
+						int area = current.getCollectArea(held);
+						BlockPos min = new BlockPos(pos.add(-area, -area, -area));
+						BlockPos max = new BlockPos(pos.add(area, area, area));
+						Iterable<BlockPos> itr = pos.getAllInBox(min, max);
+						boolean flag = false;
+						for (BlockPos p : itr) {
+							IBlockState block = event.getWorld().getBlockState(p);
+							if (block.getBlock() == state.getBlock()) {
+								IRapidCollectables target = (IRapidCollectables) block.getBlock();
+								if (target.doCollect(event.getWorld(), p, block, player, held))
+									flag = true;
+							}
 						}
 					}
 
-					if (flag) {
-						event.setUseBlock(Result.ALLOW);
-					}
+					event.setUseBlock(Result.ALLOW);
 				}
 			}
 		}

@@ -86,6 +86,7 @@ public class CoreConfigDC {
 	public static int damageDifficulty = 1; // 0-2
 	public static boolean burntFood = false;
 	public static double food_amount = 1.0D;
+	public static boolean heldItem = true;
 
 	// entity
 	public static boolean mobClimateDamage = true;
@@ -155,6 +156,7 @@ public class CoreConfigDC {
 	public static boolean harderVanilla = false;
 	public static boolean infernalInferno = false;
 	public static boolean enableSuffocation = false;
+	public static boolean enableHumidity = false;
 	public static boolean tightUnderworld = false;
 	public static boolean harderMachine = false;
 	public static boolean harderCrop = false;
@@ -197,6 +199,9 @@ public class CoreConfigDC {
 
 			Property burnt_food = cfg
 					.get("difficulty setting", "Enable Burnt Food", burntFood, "Enable burnt food by high tier heat.");
+
+			Property helditem_dam = cfg
+					.get("difficulty setting", "Enable Helditem Climate Effect", heldItem, "The held item (ItemBlock) affect the climate damage calculation.");
 
 			Property vanilla_block = cfg
 					.get("world setting", "Enable Vanilla Block Recipe", enableVanilla, "Enable climate change of vanilla blocks.");
@@ -305,6 +310,9 @@ public class CoreConfigDC {
 			Property suffocation = cfg
 					.get("hardmode setting", "Enable Suffocation Damage", enableSuffocation, "Enable the suffocation effect when creatures or players in tight space.");
 
+			Property humidity = cfg
+					.get("hardmode setting", "Enable Humidity Damage", enableHumidity, "Enable the humidity damage to creatures or players.");
+
 			Property harderM = cfg
 					.get("hardmode setting", "Occupational Accident Machine", harderMachine, "Adds contact damage to the torque machine.");
 
@@ -397,6 +405,7 @@ public class CoreConfigDC {
 			debugPass = debug.getString();
 			climateDam = climate_dam.getBoolean();
 			peacefulDam = peace_dam.getBoolean();
+			heldItem = helditem_dam.getBoolean();
 			showAltTips = alt_tips.getBoolean();
 			charmWarpKey = warp_key.getInt();
 			enableVanilla = vanilla_block.getBoolean();
@@ -415,6 +424,7 @@ public class CoreConfigDC {
 			harderVanilla = vanilla_harder.getBoolean();
 			infernalInferno = inferno.getBoolean();
 			enableSuffocation = suffocation.getBoolean();
+			enableHumidity = humidity.getBoolean();
 			tightUnderworld = tight.getBoolean();
 			harderMachine = harderM.getBoolean();
 			harderCrop = harderC.getBoolean();

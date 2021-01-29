@@ -65,6 +65,14 @@ public enum DCHumidity {
 		return NORMAL;
 	}
 
+	public DCHumidity getAverageHumidity(DCHumidity another) {
+		if (another != null && another != NORMAL) {
+			int i = another == DRY ? -1 : 1;
+			return addTier(i);
+		}
+		return this;
+	}
+
 	public static List<DCHumidity> createList() {
 		List<DCHumidity> tiers = new ArrayList<DCHumidity>();
 
