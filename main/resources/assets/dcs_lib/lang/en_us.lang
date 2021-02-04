@@ -34,6 +34,7 @@ dcs.potion.freeze_res=Cold Resistance
 potion.effect.dcs.freeze_res=Potion of Cold Resistance
 splash_potion.effect.dcs.freeze_res=Splash Potion of Cold Resistance
 lingering_potion.effect.dcs.freeze_res=Lingering Potion of Cold Resistance
+tipped_arrow.effect.dcs.freeze_res=Arrow of Freeze Resistance
 
 dcs.tip.spring=SPRING
 dcs.tip.summer=SUMMER

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * 湿度。
@@ -57,7 +56,10 @@ public enum DCHumidity {
 	}
 
 	public static DCHumidity getTypeByID(int i) {
-		MathHelper.clamp(i, 0, 3);
+		if (i < 0)
+			i = 0;
+		if (i > 3)
+			i = 3;
 		for (DCHumidity e : values()) {
 			if (i == e.id)
 				return e;

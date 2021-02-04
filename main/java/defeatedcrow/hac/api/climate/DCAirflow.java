@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * エアフロー。
@@ -57,7 +56,10 @@ public enum DCAirflow {
 	}
 
 	public static DCAirflow getTypeByID(int i) {
-		MathHelper.clamp(i, 0, 3);
+		if (i < 0)
+			i = 0;
+		if (i > 3)
+			i = 3;
 		for (DCAirflow e : values()) {
 			if (i == e.id)
 				return e;
@@ -67,7 +69,7 @@ public enum DCAirflow {
 
 	public DCAirflow getAverageAirflow(DCAirflow another) {
 		if (another != null && another != NORMAL) {
-			int i = another.getID() - 1;
+			int i = another == TIGHT ? -1 : 1;
 			return addTier(i);
 		}
 		return this;

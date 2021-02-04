@@ -14,6 +14,7 @@ import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.base.DCItem;
 import defeatedcrow.hac.core.climate.WeatherChecker;
+import defeatedcrow.hac.core.util.BiomeCatchDC;
 import defeatedcrow.hac.core.util.DCTimeHelper;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
@@ -21,9 +22,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -32,6 +31,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -45,10 +45,6 @@ public class ItemClimateChecker extends DCItem {
 	@Override
 	public EnumActionResult onItemUse2(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
 			float hitX, float hitY, float hitZ) {
-
-		if (Items.ROTTEN_FLESH instanceof ItemFood) {
-			Items.ROTTEN_FLESH.onItemUseFinish(new ItemStack(Items.ROTTEN_FLESH), world, player).isEmpty();
-		}
 
 		if (!world.isAirBlock(pos)) {
 			if (!world.isRemote) {
@@ -124,6 +120,7 @@ public class ItemClimateChecker extends DCItem {
 		int count = 0;
 		int sun = 0;
 		float rain = 0F;
+		Biome biome = BiomeCatchDC.getBiome(pos, world);
 		if (WeatherChecker.rainPowerMap.containsKey(dim)) {
 			rain = WeatherChecker.rainPowerMap.get(dim);
 		}
@@ -134,21 +131,23 @@ public class ItemClimateChecker extends DCItem {
 			sun = WeatherChecker.sunCountMap.get(dim);
 		}
 
-		player.sendMessage(new TextComponentString("== current weather info =="));
-		player.sendMessage(new TextComponentString("remote world: " + world.isRemote + ". time: " + time));
-		player.sendMessage(new TextComponentString(
-				"world rain: " + world.rainingStrength + ", time " + count + ", sun : " + sun));
-		player.sendMessage(new TextComponentString("biome: " + world.getBiome(pos).getBiomeName()));
-		String st = " (temp: " + String.format("%.2f", world.getBiome(pos).getTemperature(pos));
-		if (CoreConfigDC.enableWeatherEffect) {
-			st += " weather: " + String.format("%.2f", WeatherChecker.getTempOffsetFloat(dim, world.provider
-					.doesWaterVaporize()));
+		if (biome != null) {
+			player.sendMessage(new TextComponentString("== current weather info =="));
+			player.sendMessage(new TextComponentString("remote world: " + world.isRemote + ". time: " + time));
+			player.sendMessage(new TextComponentString(
+					"world rain: " + world.rainingStrength + ", time " + count + ", sun : " + sun));
+			player.sendMessage(new TextComponentString("biome: " + biome.getBiomeName()));
+			String st = " (temp: " + String.format("%.2f", biome.getTemperature(pos));
+			if (CoreConfigDC.enableWeatherEffect) {
+				st += " weather: " + String.format("%.2f", WeatherChecker.getTempOffsetFloat(dim, world.provider
+						.doesWaterVaporize()));
+			}
+			if (CoreConfigDC.enableTimeEffect) {
+				st += " time: " + String.format("%.2f", DCTimeHelper.getTimeOffset(world, biome));
+			}
+			st += ")";
+			player.sendMessage(new TextComponentString(st));
 		}
-		if (CoreConfigDC.enableTimeEffect) {
-			st += " time: " + String.format("%.2f", DCTimeHelper.getTimeOffset(world, world.getBiome(pos)));
-		}
-		st += ")";
-		player.sendMessage(new TextComponentString(st));
 	}
 
 	@Override

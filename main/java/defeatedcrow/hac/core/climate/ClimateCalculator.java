@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -434,8 +435,7 @@ public class ClimateCalculator implements IClimateCalculator {
 				air = DCAirflow.FLOW;
 				hasWind = true;
 			}
-		}
-		if (CoreConfigDC.tightUnderworld && pos.getY() < 30) {
+		} else if (CoreConfigDC.tightUnderworld && pos.getY() < 30) {
 			air = DCAirflow.TIGHT;
 		}
 
@@ -464,6 +464,7 @@ public class ClimateCalculator implements IClimateCalculator {
 				}
 			}
 		}
+
 		if (hasBlow) {
 			return DCAirflow.WIND;
 		}
@@ -597,16 +598,18 @@ public class ClimateCalculator implements IClimateCalculator {
 			Block block = state.getBlock();
 			int m = block.getMetaFromState(state);
 			DCAirflow ret = null;
-			if (ClimateAPI.registerBlock.isRegisteredAir(block, m)) {
+			if (block == Blocks.AIR) {
+				ret = DCAirflow.NORMAL;
+			} else if (ClimateAPI.registerBlock.isRegisteredAir(block, m)) {
 				ret = ClimateAPI.registerBlock.getAirflow(block, m);
 			} else if (block instanceof IAirflowTile) {
 				ret = ((IAirflowTile) block).getAirflow(world, target, source);
-			} else if (state.getMaterial() == Material.PLANTS || state.getMaterial() == Material.VINE || state
-					.getMaterial() == Material.WEB) {
+			} else if (state.getMaterial() == Material.AIR || state.getMaterial() == Material.PLANTS || state
+					.getMaterial() == Material.VINE || state.getMaterial() == Material.WEB) {
 				ret = DCAirflow.NORMAL;
 			}
 			return ret;
 		}
-		return DCAirflow.NORMAL;
+		return DCAirflow.TIGHT;
 	}
 }

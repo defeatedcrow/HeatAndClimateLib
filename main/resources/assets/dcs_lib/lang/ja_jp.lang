@@ -37,3 +37,4 @@ dcs.potion.freeze_res=冷気耐性
 potion.effect.dcs.freeze_res=冷気耐性のポーション
 splash_potion.effect.dcs.freeze_res=冷気耐性のスプラッシュポーション
 lingering_potion.effect.dcs.freeze_res=冷気耐性の残留ポーション
+tipped_arrow.effect.dcs.freeze_res=冷気耐性の矢
