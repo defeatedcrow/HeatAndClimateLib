@@ -3,8 +3,10 @@ package defeatedcrow.hac.core.client;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonWriter;
 
 import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.placeable.ISidedTexture;
@@ -57,8 +61,8 @@ public class JsonRegisterHelper {
 		while (m < max + 1) {
 			if (active)
 				this.checkAndBuildJson(item, domein, name, dir, m, true);
-			ModelLoader.setCustomModelResourceLocation(item, m,
-					new ModelResourceLocation(domein + ":" + dir + "/" + name + m, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(item, m, new ModelResourceLocation(
+					domein + ":" + dir + "/" + name + m, "inventory"));
 			m++;
 		}
 	}
@@ -74,8 +78,8 @@ public class JsonRegisterHelper {
 		while (m < max + 1) {
 			if (active)
 				this.checkAndBuildJson(block, domein, name, dir, m, true);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), m,
-					new ModelResourceLocation(domein + ":" + dir + "/" + name + m, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), m, new ModelResourceLocation(
+					domein + ":" + dir + "/" + name + m, "inventory"));
 			m++;
 		}
 	}
@@ -84,23 +88,34 @@ public class JsonRegisterHelper {
 	 * 汎用Tile使用メソッド
 	 * 外見は仮のJsonファイルに紐付け、TESRで描画する
 	 */
-	public void regTEBlock(Block block, String domein, String name, String dir, int maxMeta) {
+	public void regTEBlock(Block block, String domein, String name, String dir, int maxMeta, boolean useFacing) {
 		if (block == null)
 			return;
-		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.FACING, DCState.TYPE4).build());
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(block),
-				new ModelResourceLocation(domein + ":" + "basetile"));
+
+		if (useFacing) {
+			ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.TYPE4).build());
+			this.checkAndBuildJsonBlockStateB(domein, name);
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
+					domein + ":" + "basetile"));
+		} else {
+			ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.FACING, DCState.TYPE4)
+					.build());
+			this.checkAndBuildJsonBlockStateC(domein, name);
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
+					domein + ":" + "basetile"));
+		}
+
 		if (maxMeta == 0) {
 			if (active)
 				this.checkAndBuildJson(block, domein, name, dir, 0, false);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
-					new ModelResourceLocation(domein + ":" + dir + "/" + name, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
+					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
 				if (active)
 					this.checkAndBuildJson(block, domein, name, dir, i, true);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i,
-						new ModelResourceLocation(domein + ":" + dir + "/" + name + i, "inventory"));
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
+						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
 		}
 	}
@@ -113,19 +128,19 @@ public class JsonRegisterHelper {
 		if (block == null)
 			return;
 		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.TYPE16).build());
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(block),
-				new ModelResourceLocation(domein + ":" + "basetile"));
+		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
+				domein + ":" + "basetile"));
 		if (maxMeta == 0) {
 			if (active)
 				this.checkAndBuildJson(block, domein, name, dir, 0, false);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
-					new ModelResourceLocation(domein + ":" + dir + "/" + name, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
+					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
 				if (active)
 					this.checkAndBuildJson(block, domein, name, dir, i, true);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i,
-						new ModelResourceLocation(domein + ":" + dir + "/" + name + i, "inventory"));
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
+						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
 		}
 	}
@@ -134,23 +149,34 @@ public class JsonRegisterHelper {
 	 * 汎用Tile使用メソッド3
 	 * SIDEをもつ、TorqueTile用
 	 */
-	public void regTETorqueBlock(Block block, String domein, String name, String dir, int maxMeta) {
+	public void regTETorqueBlock(Block block, String domein, String name, String dir, int maxMeta, boolean useSide) {
 		if (block == null)
 			return;
-		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.SIDE, DCState.POWERED).build());
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(block),
-				new ModelResourceLocation(domein + ":" + "basetile"));
+
+		if (useSide) {
+			ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.POWERED).build());
+			this.checkAndBuildJsonBlockStateA(domein, name);
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
+					domein + ":" + "basetile"));
+		} else {
+			ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.SIDE, DCState.POWERED)
+					.build());
+			this.checkAndBuildJsonBlockStateC(domein, name);
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
+					domein + ":" + "basetile"));
+		}
+
 		if (maxMeta == 0) {
 			if (active)
 				this.checkAndBuildJson(block, domein, name, dir, 0, false);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
-					new ModelResourceLocation(domein + ":" + dir + "/" + name, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
+					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
 				if (active)
 					this.checkAndBuildJson(block, domein, name, dir, i, true);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i,
-						new ModelResourceLocation(domein + ":" + dir + "/" + name + i, "inventory"));
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
+						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
 		}
 	}
@@ -163,12 +189,12 @@ public class JsonRegisterHelper {
 		if (block == null)
 			return;
 		if (maxMeta == 0) {
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(block),
-					new ModelResourceLocation(domein + ":" + dir + "/" + name, "type"));
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
+					domein + ":" + dir + "/" + name, "type"));
 			if (active)
 				this.checkAndBuildJsonItemBlock(domein, name, dir, 0, false);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
-					new ModelResourceLocation(domein + ":" + dir + "/" + name, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
+					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			ModelResourceLocation[] models = new ModelResourceLocation[maxMeta + 1];
 			for (int i = 0; i < maxMeta + 1; i++) {
@@ -178,8 +204,8 @@ public class JsonRegisterHelper {
 			for (int i = 0; i < maxMeta + 1; i++) {
 				if (active)
 					this.checkAndBuildJsonItemBlock(domein, name, dir, i, true);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i,
-						new ModelResourceLocation(domein + ":" + dir + "/" + name + i, "inventory"));
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
+						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
 		}
 	}
@@ -531,6 +557,228 @@ public class JsonRegisterHelper {
 		}
 	}
 
+	/**
+	 * Jsonあれ 6<br>
+	 * basetileを指定するシンプルなblockstate用jsonファイルを生成する。<br>
+	 * こちらはTorqueBlock用6方向版。
+	 */
+	public void checkAndBuildJsonBlockStateA(String domein, String name) {
+
+		String filePath = null;
+		File gj = null;
+		boolean find = false;
+
+		try {
+			Path path = Paths.get(basePath);
+			path.normalize();
+			filePath = path.toString() + "\\assets\\" + domein + "\\blockstates\\";
+			// DCLogger.debugLog("dcs_climate", "current pass " + filePath.toString());
+			if (filePath != null) {
+				gj = new File(filePath + name + ".json");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (gj.exists()) {
+			find = true;
+			DCLogger.debugTrace("File is found! " + gj.getName());
+		}
+
+		if (!find) {
+
+			try {
+				if (gj.getParentFile() != null) {
+					gj.getParentFile().mkdirs();
+				}
+				Map<String, Object> jsonMap = new HashMap<String, Object>();
+
+				Map<String, Object> variants = new HashMap<String, Object>();
+				variants.put("side=north", new ModelsA(0));
+				variants.put("side=south", new ModelsA(180));
+				variants.put("side=west", new ModelsA(270));
+				variants.put("side=east", new ModelsA(90));
+				variants.put("side=up", new ModelsB(90));
+				variants.put("side=down", new ModelsB(270));
+
+				jsonMap.put("variants", variants);
+				// jsonMap.put("display", display);
+
+				FileOutputStream fos = new FileOutputStream(gj.getPath());
+				OutputStreamWriter osw = new OutputStreamWriter(fos);
+				JsonWriter jsw = new JsonWriter(osw);
+				jsw.setIndent(" ");
+				Gson gson = new GsonBuilder().serializeNulls().disableHtmlEscaping().create();
+				gson.toJson(jsonMap, Map.class, jsw);
+
+				osw.close();
+				fos.close();
+				jsw.close();
+				DCLogger.debugTrace("File writed! " + gj.getPath());
+
+			} catch (FileNotFoundException e) {
+				DCLogger.warnLog("File not found! " + gj.getPath());
+			} catch (IOException e) {
+				DCLogger.warnLog("Failed to register blockstate.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * Jsonあれ 7<br>
+	 * basetileを指定するシンプルなblockstate用jsonファイルを生成する。<br>
+	 * こちらはTEBlock用4方向版。
+	 */
+	public void checkAndBuildJsonBlockStateB(String domein, String name) {
+
+		String filePath = null;
+		File gj = null;
+		boolean find = false;
+
+		try {
+			Path path = Paths.get(basePath);
+			path.normalize();
+			filePath = path.toString() + "\\assets\\" + domein + "\\blockstates\\";
+			// DCLogger.debugLog("dcs_climate", "current pass " + filePath.toString());
+			if (filePath != null) {
+				gj = new File(filePath + name + ".json");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (gj.exists()) {
+			find = true;
+			DCLogger.debugTrace("File is found! " + gj.getName());
+		}
+
+		if (!find) {
+
+			try {
+				if (gj.getParentFile() != null) {
+					gj.getParentFile().mkdirs();
+				}
+				Map<String, Object> jsonMap = new HashMap<String, Object>();
+
+				Map<String, Object> variants = new HashMap<String, Object>();
+				variants.put("facing=north", new ModelsA(0));
+				variants.put("facing=south", new ModelsA(180));
+				variants.put("facing=west", new ModelsA(270));
+				variants.put("facing=east", new ModelsA(90));
+
+				jsonMap.put("variants", variants);
+				// jsonMap.put("display", display);
+
+				FileOutputStream fos = new FileOutputStream(gj.getPath());
+				OutputStreamWriter osw = new OutputStreamWriter(fos);
+				JsonWriter jsw = new JsonWriter(osw);
+				jsw.setIndent(" ");
+				Gson gson = new GsonBuilder().serializeNulls().disableHtmlEscaping().create();
+				gson.toJson(jsonMap, Map.class, jsw);
+
+				osw.close();
+				fos.close();
+				jsw.close();
+				DCLogger.debugTrace("File writed! " + gj.getPath());
+
+			} catch (FileNotFoundException e) {
+				DCLogger.warnLog("File not found! " + gj.getPath());
+			} catch (IOException e) {
+				DCLogger.warnLog("Failed to register blockstate.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * Jsonあれ 7<br>
+	 * basetileを指定するシンプルなblockstate用jsonファイルを生成する。<br>
+	 * こちらは無方向版。
+	 */
+	public void checkAndBuildJsonBlockStateC(String domein, String name) {
+
+		String filePath = null;
+		File gj = null;
+		boolean find = false;
+
+		try {
+			Path path = Paths.get(basePath);
+			path.normalize();
+			filePath = path.toString() + "\\assets\\" + domein + "\\blockstates\\";
+			// DCLogger.debugLog("dcs_climate", "current pass " + filePath.toString());
+			if (filePath != null) {
+				gj = new File(filePath + name + ".json");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (gj.exists()) {
+			find = true;
+			DCLogger.debugTrace("File is found! " + gj.getName());
+		}
+
+		if (!find) {
+
+			try {
+				if (gj.getParentFile() != null) {
+					gj.getParentFile().mkdirs();
+				}
+				Map<String, Object> jsonMap = new HashMap<String, Object>();
+
+				Map<String, Object> variants = new HashMap<String, Object>();
+				variants.put("normal", new ModelsC());
+
+				jsonMap.put("variants", variants);
+				// jsonMap.put("display", display);
+
+				FileOutputStream fos = new FileOutputStream(gj.getPath());
+				OutputStreamWriter osw = new OutputStreamWriter(fos);
+				JsonWriter jsw = new JsonWriter(osw);
+				jsw.setIndent(" ");
+				Gson gson = new Gson();
+				gson.toJson(jsonMap, Map.class, jsw);
+
+				osw.close();
+				fos.close();
+				jsw.close();
+				DCLogger.debugTrace("File writed! " + gj.getPath());
+
+			} catch (FileNotFoundException e) {
+				DCLogger.warnLog("File not found! " + gj.getPath());
+			} catch (IOException e) {
+				DCLogger.warnLog("Failed to register blockstate.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private class ModelsA {
+		String model = "dcs_climate:basetile";
+		int y;
+
+		private ModelsA(int i) {
+			y = i;
+		}
+	}
+
+	private class ModelsB {
+		String model = "dcs_climate:basetile";
+		int x;
+
+		private ModelsB(int i) {
+			x = i;
+		}
+	}
+
+	private class ModelsC {
+		String model = "dcs_climate:basetile";
+	}
+
 	private class Textures {
 		String layer0;
 
@@ -571,33 +819,51 @@ public class JsonRegisterHelper {
 
 	private class Disp {
 		Third thirdperson = new Third(new int[] {
-				-90, 0, 0
+				-90,
+				0,
+				0
 		}, new double[] {
-				0, 1, -3
+				0,
+				1,
+				-3
 		}, new double[] {
-				0.55D, 0.55D, 0.55D
+				0.55D,
+				0.55D,
+				0.55D
 		});
 		First firstperson = new First();
 	}
 
 	private class Disp2 {
 		Third thirdperson = new Third(new int[] {
-				0, 90, -35
+				0,
+				90,
+				-35
 		}, new double[] {
-				0, 1.25D, -3.5D
+				0,
+				1.25D,
+				-3.5D
 		}, new double[] {
-				0.85D, 0.85D, 0.85D
+				0.85D,
+				0.85D,
+				0.85D
 		});
 		First firstperson = new First();
 	}
 
 	private class Disp3 {
 		Third thirdperson = new Third(new int[] {
-				10, 45, 170
+				10,
+				45,
+				170
 		}, new double[] {
-				0, 1.5D, -2.75D
+				0,
+				1.5D,
+				-2.75D
 		}, new double[] {
-				0.35D, 0.35D, 0.35D
+				0.35D,
+				0.35D,
+				0.35D
 		});
 	}
 
@@ -615,13 +881,19 @@ public class JsonRegisterHelper {
 
 	private class First {
 		int[] rotation = new int[] {
-				0, -135, 25
+				0,
+				-135,
+				25
 		};
 		int[] translation = new int[] {
-				0, 4, 2
+				0,
+				4,
+				2
 		};
 		double[] scale = new double[] {
-				1.7D, 1.7D, 1.7D
+				1.7D,
+				1.7D,
+				1.7D
 		};
 	}
 
