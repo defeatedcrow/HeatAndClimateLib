@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.climate.recipe;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +51,30 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 	}
 
 	@Override
+	public void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, FluidStack outFluid,
+			List<DCHeatTier> heat, DCHumidity hum, DCAirflow air, boolean needCooling, FluidStack inFluid,
+			Object... input) {
+		if (secondary == null) {
+			secondary = ItemStack.EMPTY;
+		}
+		boolean b1 = input == null && inFluid == null;
+		boolean b2 = DCUtil.isEmpty(output) && outFluid == null;
+		boolean b3 = hasEmptyInput(input);
+		if (!b1 && !b2 && !b3) {
+			FluidCraftRecipe recipe = new FluidCraftRecipe(output, secondary, outFluid, null, hum, air, secondaryChance,
+					needCooling, inFluid, input);
+			for (DCHeatTier h : heat) {
+				recipe.requiredHeat().add(h);
+			}
+			list.add(recipe);
+		}
+	}
+
+	@Override
 	public void addRecipe(IFluidRecipe recipe, DCHeatTier heat) {
-		this.addRecipe(recipe);
+		Class clazz = recipe.getClass();
+		if (!Modifier.isAbstract(clazz.getModifiers()))
+			this.addRecipe(recipe);
 	}
 
 	private boolean hasEmptyInput(Object... inputs) {
@@ -109,7 +132,7 @@ public class FluidCraftRegister implements IFluidRecipeRegister {
 
 	@Override
 	public void addRecipe(IFluidRecipe recipe) {
-		if (recipe instanceof FluidCraftRecipe && !hasEmptyInput(recipe.getInput()))
+		if (!hasEmptyInput(recipe.getInput()))
 			list.add(recipe);
 	}
 

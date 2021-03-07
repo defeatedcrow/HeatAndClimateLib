@@ -14,7 +14,7 @@ public interface IFluidRecipeRegister {
 	/**
 	 * Recipeのリストを得る。HeatTierごとに別リストになっている。
 	 */
-	List<? extends IFluidRecipe> getRecipeList();
+	List<IFluidRecipe> getRecipeList();
 
 	/**
 	 * Recipe登録<br>
@@ -38,9 +38,10 @@ public interface IFluidRecipeRegister {
 	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, FluidStack outFluid, DCHeatTier heat,
 			DCHumidity hum, DCAirflow air, boolean needCooling, FluidStack inFluid, Object... input);
 
-	/**
-	 * FluidRecipe.class以外受け付けないのでご注意を(要本体)
-	 */
+	void addRecipe(ItemStack output, ItemStack secondary, float secondaryChance, FluidStack outFluid,
+			List<DCHeatTier> heat, DCHumidity hum, DCAirflow air, boolean needCooling, FluidStack inFluid,
+			Object... input);
+
 	void addRecipe(IFluidRecipe recipe);
 
 	@Deprecated

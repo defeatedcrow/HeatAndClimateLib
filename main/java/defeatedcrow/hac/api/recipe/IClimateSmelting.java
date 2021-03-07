@@ -23,8 +23,10 @@ public interface IClimateSmelting {
 
 	ItemStack getOutput();
 
+	@Deprecated
 	ItemStack getSecondary();
 
+	@Deprecated
 	float getSecondaryChance();
 
 	/**

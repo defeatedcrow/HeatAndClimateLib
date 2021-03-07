@@ -9,7 +9,7 @@ public interface ISpinningRecipeRegister {
 	/**
 	 * Recipeのリストを得る。
 	 */
-	List<? extends ISpinningRecipe> getRecipeList();
+	List<ISpinningRecipe> getRecipeList();
 
 	/**
 	 * Recipe登録<br>
@@ -25,9 +25,6 @@ public interface ISpinningRecipeRegister {
 
 	void addRecipe(ItemStack output, Object input);
 
-	/**
-	 * SpinningRecipe.class以外受け付けないのでご注意を(要本体)
-	 */
 	void addRecipe(ISpinningRecipe recipe);
 
 	/**

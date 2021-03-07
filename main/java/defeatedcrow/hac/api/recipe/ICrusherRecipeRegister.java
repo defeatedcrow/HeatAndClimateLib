@@ -10,7 +10,7 @@ public interface ICrusherRecipeRegister {
 	/**
 	 * Recipeのリストを得る。
 	 */
-	List<? extends ICrusherRecipe> getRecipeList();
+	List<ICrusherRecipe> getRecipeList();
 
 	/**
 	 * Recipe登録<br>
@@ -45,9 +45,6 @@ public interface ICrusherRecipeRegister {
 
 	void addRecipe(ItemStack output, ItemStack catalyst, Object input);
 
-	/**
-	 * CrusherRecipe.class以外受け付けないのでご注意を(要本体)
-	 */
 	void addRecipe(ICrusherRecipe recipe);
 
 	/**

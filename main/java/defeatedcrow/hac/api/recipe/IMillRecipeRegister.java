@@ -9,7 +9,7 @@ public interface IMillRecipeRegister {
 	/**
 	 * Recipeのリストを得る。
 	 */
-	List<? extends IMillRecipe> getRecipeList();
+	List<IMillRecipe> getRecipeList();
 
 	/**
 	 * Recipe登録<br>
@@ -29,9 +29,6 @@ public interface IMillRecipeRegister {
 
 	void addRecipe(ItemStack output, Object input);
 
-	/**
-	 * MillRecipe.class以外受け付けないのでご注意を(要本体)
-	 */
 	void addRecipe(IMillRecipe recipe);
 
 	/**

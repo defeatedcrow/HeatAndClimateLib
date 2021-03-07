@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.climate.recipe;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,9 +59,9 @@ public class MillRecipeRegister implements IMillRecipeRegister {
 
 	@Override
 	public void addRecipe(IMillRecipe recipe) {
-		if (recipe instanceof MillRecipe) {
+		Class clazz = recipe.getClass();
+		if (!Modifier.isAbstract(clazz.getModifiers()))
 			list.add(recipe);
-		}
 	}
 
 	@Override

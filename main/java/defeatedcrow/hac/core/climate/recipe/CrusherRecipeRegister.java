@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.climate.recipe;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,9 +84,9 @@ public class CrusherRecipeRegister implements ICrusherRecipeRegister {
 
 	@Override
 	public void addRecipe(ICrusherRecipe recipe) {
-		if (recipe instanceof CrusherRecipe) {
+		Class clazz = recipe.getClass();
+		if (!Modifier.isAbstract(clazz.getModifiers()))
 			list.add(recipe);
-		}
 	}
 
 	@Override

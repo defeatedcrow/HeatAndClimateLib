@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.climate.recipe;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,9 +52,9 @@ public class SpinningRecipeRegister implements ISpinningRecipeRegister {
 
 	@Override
 	public void addRecipe(ISpinningRecipe recipe) {
-		if (recipe instanceof SpinningRecipe) {
+		Class clazz = recipe.getClass();
+		if (!Modifier.isAbstract(clazz.getModifiers()))
 			list.add(recipe);
-		}
 	}
 
 	@Override

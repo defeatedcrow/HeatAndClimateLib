@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.climate.recipe;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -37,8 +38,7 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	}
 
 	@Override
-	public void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air,
-			float secondaryChance, boolean cooling, Object input) {
+	public void addRecipe(ItemStack output, DCHeatTier heat, DCHumidity hum, DCAirflow air, Object input) {
 		if (input != null && !DCUtil.isEmpty(output) && heat != null) {
 			if (input instanceof String && OreDictionary.getOres((String) input).isEmpty()) {
 				DCLogger.infoLog("ClimateSmelting Accepted empty input: " + input);
@@ -48,12 +48,26 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 				DCLogger.infoLog("ClimateSmelting Accepted empty input list");
 				return;
 			}
-			if (secondary == null) {
-				secondary = ItemStack.EMPTY;
+			getRecipeList().add(new ClimateSmelting(output, ItemStack.EMPTY, heat, hum, air, 1.0F, false, input));
+		}
+	}
+
+	@Override
+	public void addRecipe(ItemStack output, List<DCHeatTier> heat, DCHumidity hum, DCAirflow air, Object input) {
+		if (input != null && !DCUtil.isEmpty(output) && heat != null && !heat.isEmpty()) {
+			if (input instanceof String && OreDictionary.getOres((String) input).isEmpty()) {
+				DCLogger.infoLog("ClimateSmelting Accepted empty input: " + input);
+				return;
 			}
-			boolean drop = false;
-			getRecipeList()
-					.add(new ClimateSmelting(output, secondary, heat, hum, air, secondaryChance, cooling, input));
+			if (input instanceof List && ((List) input).isEmpty()) {
+				DCLogger.infoLog("ClimateSmelting Accepted empty input list");
+				return;
+			}
+			ClimateSmelting recipe = new ClimateSmelting(output, ItemStack.EMPTY, null, hum, air, 1.0F, false, input);
+			for (DCHeatTier h : heat) {
+				recipe.requiredHeat().add(h);
+			}
+			getRecipeList().add(recipe);
 		}
 	}
 
@@ -61,14 +75,16 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	public void addRecipe(ItemStack output, DCHeatTier heat, DCHumidity hum, DCAirflow air, boolean needCooling,
 			Object input) {
 		if (input != null && !DCUtil.isEmpty(output) && heat != null) {
-			getRecipeList().add(new ClimateSmelting(output, ItemStack.EMPTY, heat, hum, air, 1.0F, false, input));
+			if (input instanceof String && OreDictionary.getOres((String) input).isEmpty()) {
+				DCLogger.infoLog("ClimateSmelting Accepted empty input: " + input);
+				return;
+			}
+			if (input instanceof List && ((List) input).isEmpty()) {
+				DCLogger.infoLog("ClimateSmelting Accepted empty input list");
+				return;
+			}
+			getRecipeList().add(new ClimateSmelting(output, ItemStack.EMPTY, heat, hum, air, 1.0F, needCooling, input));
 		}
-	}
-
-	@Override
-	public void addRecipe(ItemStack output, ItemStack secondary, IClimate clm, float secondaryChance, Object input) {
-		this.addRecipe(output, secondary, clm.getHeat(), clm.getHumidity(), clm.getAirflow(), secondaryChance, false,
-				input);
 	}
 
 	@Override
@@ -78,8 +94,29 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 
 	@Override
 	public void addRecipe(IClimateSmelting recipe) {
-		if (recipe instanceof ClimateSmelting)
+		Class clazz = recipe.getClass();
+		if (!Modifier.isAbstract(clazz.getModifiers()))
 			getRecipeList().add(recipe);
+	}
+
+	@Deprecated
+	@Override
+	public void addRecipe(ItemStack output, ItemStack secondary, IClimate clm, float secondaryChance, Object input) {
+		this.addRecipe(output, secondary, clm.getHeat(), clm.getHumidity(), clm
+				.getAirflow(), secondaryChance, false, input);
+	}
+
+	@Deprecated
+	@Override
+	public void addRecipe(ItemStack output, ItemStack secondary, DCHeatTier heat, DCHumidity hum, DCAirflow air,
+			float secondaryChance, boolean cooling, Object input) {
+		this.addRecipe(output, secondary, heat, hum, air, secondaryChance, false, input);
+	}
+
+	@Deprecated
+	@Override
+	public void addRecipe(IClimateSmelting recipe, DCHeatTier heat) {
+		this.addRecipe(recipe);
 	}
 
 	@Override
@@ -104,11 +141,6 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 	}
 
 	@Override
-	public void addRecipe(IClimateSmelting recipe, DCHeatTier heat) {
-		this.addRecipe(recipe);
-	}
-
-	@Override
 	public boolean removeRecipe(IClimate clm, ItemStack input) {
 		IClimateSmelting recipe = getRecipe(clm, input);
 		if (recipe != null) {
@@ -116,4 +148,5 @@ public class ClimateSmeltingRegister implements IClimateSmeltingRegister {
 		}
 		return false;
 	}
+
 }

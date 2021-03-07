@@ -1,5 +1,6 @@
 package defeatedcrow.hac.core.climate.recipe;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +81,9 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 
 	@Override
 	public void addRecipe(IReactorRecipe recipe, DCHeatTier heat) {
-		this.addRecipe(recipe);
+		Class clazz = recipe.getClass();
+		if (!Modifier.isAbstract(clazz.getModifiers()))
+			this.addRecipe(recipe);
 	}
 
 	private boolean hasEmptyInput(Object... inputs) {
@@ -141,7 +144,7 @@ public class ReactorRecipeRegister implements IReactorRecipeRegister {
 
 	@Override
 	public void addRecipe(IReactorRecipe recipe) {
-		if (recipe instanceof ReactorRecipe && !hasEmptyInput(recipe.getInput()))
+		if (!hasEmptyInput(recipe.getInput()))
 			list.add(recipe);
 	}
 
