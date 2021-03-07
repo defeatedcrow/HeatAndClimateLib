@@ -19,6 +19,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -75,27 +76,33 @@ public class BlockUpdateDC {
 				}
 				return;
 			} else if (CoreConfigDC.enableVanillaCrop && block instanceof IGrowable) {
-				// WETの参照posを真下に
-				if (block == Blocks.TALLGRASS) {
-					// WARMかつWETの場合に成長が促進される
-					IGrowable grow = (IGrowable) block;
-					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
-						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get()
-								.getHeat() == DCHeatTier.HOT) && clm_down.get().getHumidity() == DCHumidity.WET) {
+				// 寒冷地では枯れる
+				if (clm.get().getHeat().isCold()) {
+					if (CoreConfigDC.harderCrop && world.getLight(p) < 8) {
+						event.setCanceled(true);
+					}
+					if (CoreConfigDC.harderVanilla && clm.get().getHeat().getTier() < DCHeatTier.FROSTBITE.getTier()) {
+						if (block == Blocks.TALLGRASS && world.rand.nextInt(3) == 0) {
+							world.setBlockState(p, Blocks.DEADBUSH.getDefaultState(), 2);
+						} else {
+							world.setBlockToAir(p);
+						}
+					} else {
+						event.setCanceled(true);
+					}
+				} else if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT) && clm_down
+						.get().getHumidity() == DCHumidity.WET) {
+					// WETの参照posを真下に
+					if (block == Blocks.TALLGRASS) {
+						// WARMかつWETの場合に成長が促進される
+						IGrowable grow = (IGrowable) block;
+						if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
 							grow.grow(world, world.rand, p, st);
 						}
-					}
-				} else if (block != Blocks.DOUBLE_PLANT) {
-					// WARMかつWETの場合に成長が促進され、COLD以下の場合は成長が遅くなる
-					IGrowable grow = (IGrowable) block;
-					if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
-						if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get()
-								.getHeat() == DCHeatTier.HOT) && clm_down.get().getHumidity() == DCHumidity.WET) {
+					} else if (block != Blocks.DOUBLE_PLANT) {
+						IGrowable grow = (IGrowable) block;
+						if (grow.canGrow(world, p, st, false) && world.rand.nextInt(5) == 0) {
 							grow.grow(world, world.rand, p, st);
-							// DCLogger.debugLog("Grow!");
-						} else if (clm.get().getHeat().getTier() < -1) {
-							event.setCanceled(true);
-							// DCLogger.debugLog("Grow Canceled");
 						}
 					}
 				}
@@ -111,8 +118,8 @@ public class BlockUpdateDC {
 				if (block == Blocks.ICE) {
 					DCHeatTier h2 = clm.get().getHeat();
 					float f2 = ClimateAPI.register.getBiomeTemp(world, p);
-					if (clm.get().getHeat().getTier() < 0) {
-						if (clm.get().getHeat().getTier() == DCHeatTier.ABSOLUTE.getTier()) {
+					if (clm.get().getHeat().isCold()) {
+						if (clm.get().getHeat() == DCHeatTier.ABSOLUTE) {
 							world.setBlockState(p, Blocks.PACKED_ICE.getDefaultState(), 2);
 							world.notifyNeighborsOfStateChange(p, Blocks.PACKED_ICE, false);
 							event.setCanceled(true);
@@ -141,7 +148,7 @@ public class BlockUpdateDC {
 					 * SNOW
 					 * COOL以下であれば氷が溶けなくなり、WARM以上で強制溶解
 					 */
-					if ((clm.get().getHeat().getTier() < 0 && roof) || f2 < 0.3F) {
+					if ((clm.get().getHeat().isCold() && roof) || f2 < 0.0F) {
 						event.setCanceled(true);
 						return;
 					}
@@ -176,7 +183,7 @@ public class BlockUpdateDC {
 
 			// ハードモード
 			if (CoreConfigDC.harderVanilla) {
-				if (clm.get().getHeat().getTier() > DCHeatTier.SMELTING.getTier()) {
+				if (clm.get().getHeat().getTier() > DCHeatTier.SMELTING.getTier() && world.rand.nextInt(3) == 0) {
 
 					if (clm.get().getHeat() == DCHeatTier.INFERNO) {
 						// 融解
@@ -184,24 +191,17 @@ public class BlockUpdateDC {
 								.getMaterial() == Material.GROUND) {
 							if (st.getBlock() != Blocks.OBSIDIAN && !ThermalInsulationUtil.BLOCK_MAP
 									.containsKey(block)) {
-								world.setBlockState(p, Blocks.LAVA.getDefaultState(), 2);
-								world.notifyNeighborsOfStateChange(p, Blocks.LAVA, false);
+								world.setBlockState(p, Blocks.LAVA.getDefaultState(), 3);
 							}
 						}
 					}
+
+					if (st.getBlock().isFlammable(world, p, EnumFacing.UP) && world.isAirBlock(p.up()) && Blocks.FIRE
+							.canPlaceBlockAt(world, p.up())) {
+						world.setBlockState(p.up(), Blocks.FIRE.getDefaultState());
+					}
 				}
 			}
-
-			// if (f2 && CoreConfigDC.enableVanilla && !block.getTickRandomly()) {
-			//
-			// for (BlockPos p3 : BlockPos.getAllInBox(p.east().north(), p.west().south())) {
-			// if (!world.isAirBlock(p3)) {
-			// Block target = world.getBlockState(p3).getBlock();
-			// if (!world.isUpdateScheduled(p3, target) && world.rand.nextBoolean())
-			// world.scheduleUpdate(p3, target, 600 + world.rand.nextInt(600));
-			// }
-			// }
-			// }
 		}
 	}
 

@@ -219,7 +219,7 @@ public enum DCHeatTier {
 	}
 
 	public static DCHeatTier getTypeByBiomeTemp(float temp) {
-		if (temp > 149.5F)
+		if (temp > 99.5F)
 			return DCHeatTier.INFERNO;
 		else if (temp > 59.5F)
 			return DCHeatTier.UHT;
@@ -239,10 +239,12 @@ public enum DCHeatTier {
 			return DCHeatTier.NORMAL;
 		else if (temp > 0.0F)
 			return DCHeatTier.COOL;
-		else if (temp > -3.0F)
+		else if (temp > -0.5F)
 			return DCHeatTier.COLD;
-		else if (temp > -6.0F)
+		else if (temp > -1.0F)
 			return DCHeatTier.FROSTBITE;
+		else if (temp > -3.0F)
+			return DCHeatTier.CRYOGENIC;
 		else
 			return DCHeatTier.ABSOLUTE;
 	}

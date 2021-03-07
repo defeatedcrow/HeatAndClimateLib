@@ -232,7 +232,7 @@ public abstract class ClimateCropBase extends BlockDC implements ISidedTexture, 
 		if (targetState == null)
 			return false;
 		boolean farm = targetState.getBlock() instanceof BlockFarmland;
-		return farm;
+		return farm || targetState.getBlock().canSustainPlant(targetState, world, pos, EnumFacing.UP, this);
 	}
 
 	@Override

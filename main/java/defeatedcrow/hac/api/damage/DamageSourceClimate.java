@@ -8,26 +8,33 @@ import net.minecraft.util.DamageSource;
  */
 public class DamageSourceClimate extends DamageSource {
 
-	public static DamageSourceClimate climateHeatDamage = new DamageSourceClimate("dcs_heat").setHeatDamage();
+	public static DamageSourceClimate climateHeatDamage = new DamageSourceClimate("dcs_heat").setHeatDamage()
+			.setBypassesArmor();
 	public static DamageSourceClimate climateColdDamage = new DamageSourceClimate("dcs_cold").setHeatDamage()
-			.setNegativeDamage();
-	public static DamageSourceClimate climateWaterDamage = new DamageSourceClimate("dcs_water").setHumDamage();
+			.setNegativeDamage().setBypassesArmor();
+	public static DamageSourceClimate climateWaterDamage = new DamageSourceClimate("dcs_water").setHumDamage()
+			.setBypassesArmor();
 	public static DamageSourceClimate climateDryDamage = new DamageSourceClimate("dcs_dry").setHumDamage()
-			.setNegativeDamage();
-	public static DamageSourceClimate climateWindDamage = new DamageSourceClimate("dcs_wind").setAirDamage();
+			.setNegativeDamage().setBypassesArmor();
+	public static DamageSourceClimate climateWindDamage = new DamageSourceClimate("dcs_wind").setAirDamage()
+			.setBypassesArmor();
 	public static DamageSourceClimate climateSuffocationDamage = new DamageSourceClimate("dcs_suffocation")
-			.setAirDamage().setNegativeDamage();
+			.setAirDamage().setNegativeDamage().setBypassesArmor();
 	public static DamageSource machineDamage = new DamageSource("dcs_machine");
 
 	public DamageSourceClimate(String damageTypeIn) {
 		super(damageTypeIn);
-		this.setDamageBypassesArmor();
 	}
 
 	public boolean isHeat;
 	public boolean isNegative;
 	public boolean isHum;
 	public boolean isAir;
+
+	private DamageSourceClimate setBypassesArmor() {
+		this.setDamageBypassesArmor();
+		return this;
+	}
 
 	private DamageSourceClimate setHeatDamage() {
 		this.isHeat = true;

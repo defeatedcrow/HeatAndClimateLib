@@ -256,7 +256,7 @@ public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTex
 			return false;
 		boolean same = targetState.getBlock() == this;
 		boolean farm = targetState.getBlock() instanceof BlockFarmland;
-		return same || farm;
+		return same || farm || targetState.getBlock().canSustainPlant(targetState, world, pos, EnumFacing.UP, this);
 	}
 
 	@Override

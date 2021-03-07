@@ -22,12 +22,16 @@ public class BiomeTempEventDC {
 	public void onTemp(DCBiomeTempEvent event) {
 		if (event.biome != null && event.pos != null) {
 			BlockPos pos = event.pos;
+			int id = Biome.getIdForBiome(event.biome);
 			float temp = event.defaultTemp;
 
+			if (ClimateAPI.register.getClimateList().containsKey(id)) {
+				temp = ClimateAPI.register.getHeatTier(id).getBiomeTemp();
+			}
+
 			// season
-			if (ClimateCore.proxy.getWorld() != null && !ClimateAPI.register.getNoSeasonList().contains(Biome
-					.getIdForBiome(event.biome))) {
-				if (CoreConfigDC.enableWeatherEffect) {
+			if (ClimateCore.proxy.getWorld() != null && !ClimateAPI.register.getNoSeasonList().contains(id)) {
+				if (CoreConfigDC.enableSeasonEffect) {
 					EnumSeason season = DCTimeHelper.getSeasonEnum(ClimateCore.proxy.getWorld());
 					temp += CoreConfigDC.getSeasonTempOffset(season);
 				}
@@ -43,11 +47,11 @@ public class BiomeTempEventDC {
 				temp += (h * 0.05F);
 			}
 
-			if (temp < -3) {
-				temp = -3;
+			if (temp < -10) {
+				temp = -10;
 			}
-			if (temp > 3) {
-				temp = 3;
+			if (temp > 200) {
+				temp = 200;
 			}
 
 			if (pos.getY() > 64) {

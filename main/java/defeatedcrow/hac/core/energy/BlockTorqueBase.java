@@ -177,7 +177,7 @@ public abstract class BlockTorqueBase extends BlockContainerDC {
 				float d2 = d * 0.01F;
 
 				EntityLivingBase living = (EntityLivingBase) entity;
-				if (d > 2F && living.attackEntityFrom(DamageSourceClimate.machineDamage, d * 0.25F)) {
+				if (d > 2F && living.attackEntityFrom(DamageSourceClimate.machineDamage, d)) {
 					double x = pos.getX() + 0.5D - living.posX;
 					double z = pos.getZ() + 0.5D - living.posZ;
 					x *= d2;

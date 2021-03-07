@@ -459,16 +459,16 @@ public class MobResistantRegister implements IMobHeatResistant {
 		putMap(EntityWither.class, new MobResistanceData(DCHeatTier.OVEN, 4.0F));
 		putMap(EntityDragon.class, new MobResistanceData(DCHeatTier.COLD, 4.0F));
 		putMap(EntitySheep.class, new MobResistanceData(DCHeatTier.COOL, 3.0F));
-		putMap(EntityPig.class, new MobResistanceData(DCHeatTier.WARM, 3.0F));
+		putMap(EntityPig.class, new MobResistanceData(DCHeatTier.WARM, 2.0F));
 		putMap(EntityCow.class, new MobResistanceData(DCHeatTier.COOL, 3.0F));
 		putMap(EntityHorse.class, new MobResistanceData(DCHeatTier.COOL, 3.0F));
-		putMap(EntityChicken.class, new MobResistanceData(DCHeatTier.NORMAL, 3.0F));
+		putMap(EntityChicken.class, new MobResistanceData(DCHeatTier.NORMAL, 2.0F));
 		putMap(EntityOcelot.class, new MobResistanceData(DCHeatTier.WARM, 3.0F));
 		putMap(EntityRabbit.class, new MobResistanceData(DCHeatTier.COOL, 2.0F));
 		putMap(EntityWolf.class, new MobResistanceData(DCHeatTier.COOL, 3.0F));
 		putMap(EntityPolarBear.class, new MobResistanceData(DCHeatTier.COLD, 3.0F));
 		putMap(EntityLlama.class, new MobResistanceData(DCHeatTier.COOL, 4.0F));
-		putMap(EntityEnderman.class, new MobResistanceData(DCHeatTier.COLD, 8.0F));
+		putMap(EntityEnderman.class, new MobResistanceData(DCHeatTier.COLD, 6.0F));
 		putMap(EntityShulker.class, new MobResistanceData(DCHeatTier.COLD, 4.0F));
 		putMap(EntityHusk.class, new MobResistanceData(DCHeatTier.NORMAL, 2.0F, DCHumidity.DRY, 2.0F, DCAirflow.NORMAL,
 				2.0F));

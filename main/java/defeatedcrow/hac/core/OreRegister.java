@@ -107,6 +107,9 @@ public class OreRegister {
 		OreDictionary.registerOre("listAllporkcooked", new ItemStack(Items.COOKED_PORKCHOP, 1, 0));
 		OreDictionary.registerOre("listAllrabbitcooked", new ItemStack(Items.COOKED_RABBIT, 1, 0));
 
+		OreDictionary.registerOre("itemClay", new ItemStack(Items.CLAY_BALL));
+		OreDictionary.registerOre("clay", new ItemStack(Items.CLAY_BALL));
+
 		OreDictionary.registerOre("vineLeaves", new ItemStack(Blocks.VINE, 1, 0));
 
 		Item cod = Item.REGISTRY.getObject(new ResourceLocation("minecraft:cod"));

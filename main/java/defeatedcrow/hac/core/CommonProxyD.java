@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
+import defeatedcrow.hac.core.client.event.ClimateBiomeColorEvent;
 import defeatedcrow.hac.core.climate.WeatherChecker;
 import defeatedcrow.hac.core.event.BiomeTempEventDC;
 import defeatedcrow.hac.core.event.BlockFreezeEventDC;
@@ -75,6 +76,9 @@ public class CommonProxyD {
 		}
 		if (CoreConfigDC.enableDropItemSmelting) {
 			MinecraftForge.EVENT_BUS.register(new DropItemUpdateEvent());
+		}
+		if (CoreConfigDC.enableSeasonTemp) {
+			MinecraftForge.EVENT_BUS.register(new ClimateBiomeColorEvent());
 		}
 
 		for (Item item : DispenseEntityItem.getInstance().dispenceList) {
