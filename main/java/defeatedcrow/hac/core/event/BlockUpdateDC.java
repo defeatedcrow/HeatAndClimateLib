@@ -88,7 +88,9 @@ public class BlockUpdateDC {
 							world.setBlockToAir(p);
 						}
 					} else {
-						event.setCanceled(true);
+						int c = 1 - clm.get().getHeat().getTier();
+						if (world.rand.nextInt(c) > 0)
+							event.setCanceled(true);
 					}
 				} else if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT) && clm_down
 						.get().getHumidity() == DCHumidity.WET) {

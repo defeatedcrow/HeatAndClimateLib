@@ -97,10 +97,12 @@ public class AdvancedHUDEvent {
 						GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 						GlStateManager.enableBlend();
 
-						int offsetX = CoreConfigDC.iconHX;
-						int offsetY = CoreConfigDC.iconHY;
+						double adjX = event.getResolution().getScaledWidth_double() / 854.0D;
+						double adjY = event.getResolution().getScaledHeight_double() / 480.0D;
+						int offsetX = MathHelper.ceil(CoreConfigDC.offsetHUD[0] * adjX);
+						int offsetY = MathHelper.ceil(CoreConfigDC.offsetHUD[1] * adjY);
 						int x = offsetX;
-						int y = event.getResolution().getScaledHeight() + offsetY;
+						int y = offsetY;
 
 						int fontX = 0;
 						int fontY = 0;

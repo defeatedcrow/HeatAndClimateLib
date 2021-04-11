@@ -59,6 +59,10 @@ public class CoreConfigDC {
 	public static boolean useAnalogueHUD = true;
 	public static int iconHX = 0;
 	public static int iconHY = -48;
+	public static int[] offsetHUD = {
+			0,
+			300
+	};
 	public static String tex1 = "textures/gui/hud_climate_normal.png";
 	public static String tex2 = "textures/gui/hud_climate_drought.png";
 	public static String tex3 = "textures/gui/hud_climate_rain.png";
@@ -267,6 +271,9 @@ public class CoreConfigDC {
 
 			Property hud_climate = cfg
 					.get("render setting", "Enable HUD Climate Name", showClimate, "Enable display the climate parameter on HUD.");
+
+			Property off_hud = cfg
+					.get("render setting", "Offset Climate Info HUD", offsetHUD, "Set the amount of offset of the climate info HUD. 0,0 is the upper left.");
 
 			Property off_biome = cfg
 					.get("render setting", "Offset HUD Biome Name", offsetBiome, "Set the amount of offset of the biome name in HUD.");
@@ -517,12 +524,18 @@ public class CoreConfigDC {
 
 			enableAdvHUD = hud_icon2.getBoolean();
 			useAnalogueHUD = hud_icon3.getBoolean();
-			iconHX = hud_x2.getInt();
-			iconHY = hud_y2.getInt();
 			showBiome = hud_biome.getBoolean();
 			showSeason = hud_season.getBoolean();
 			showDay = hud_day.getBoolean();
 			showClimate = hud_climate.getBoolean();
+			if (off_hud.isIntList() && off_hud.getIntList().length > 1) {
+				for (int i = 0; i < 2; i++) {
+					offsetHUD[i] = off_hud.getIntList()[i];
+				}
+			} else {
+				offsetHUD[0] = 0;
+				offsetHUD[1] = 300;
+			}
 			offsetBiome = off_biome.getIntList();
 			offsetSeason = off_season.getIntList();
 			offsetClimate = off_climate.getIntList();

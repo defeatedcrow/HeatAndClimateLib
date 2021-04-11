@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.6.3 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.6.4 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -282,6 +282,12 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.6.4
+　変更
+　　・気候HUDの位置調整コンフィグの作り直し
+　修正
+　　・寒冷地での作物の成長確率の低下を緩和
 
 ○3.6.3
 　変更
