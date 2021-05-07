@@ -280,10 +280,13 @@ public class DCInventory implements IInventory {
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < this.getSizeInventory(); ++i) {
+			NBTTagCompound tag1 = new NBTTagCompound();
+			tag1.setByte("Slot", (byte) i);
 			if (!DCUtil.isEmpty(getStackInSlot(i))) {
-				NBTTagCompound tag1 = new NBTTagCompound();
-				tag1.setByte("Slot", (byte) i);
 				getStackInSlot(i).writeToNBT(tag1);
+				nbttaglist.appendTag(tag1);
+			} else {
+				ItemStack.EMPTY.writeToNBT(tag1);
 				nbttaglist.appendTag(tag1);
 			}
 		}
