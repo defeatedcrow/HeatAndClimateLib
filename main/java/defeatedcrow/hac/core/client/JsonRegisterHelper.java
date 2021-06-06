@@ -59,8 +59,7 @@ public class JsonRegisterHelper {
 			return;
 		int m = 0;
 		while (m < max + 1) {
-			if (active)
-				this.checkAndBuildJson(item, domein, name, dir, m, true);
+			this.checkAndBuildJson(item, domein, name, dir, m, true);
 			ModelLoader.setCustomModelResourceLocation(item, m, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name + m, "inventory"));
 			m++;
@@ -76,8 +75,7 @@ public class JsonRegisterHelper {
 			return;
 		int m = 0;
 		while (m < max + 1) {
-			if (active)
-				this.checkAndBuildJson(block, domein, name, dir, m, true);
+			this.checkAndBuildJson(block, domein, name, dir, m, true);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), m, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name + m, "inventory"));
 			m++;
@@ -106,14 +104,12 @@ public class JsonRegisterHelper {
 		}
 
 		if (maxMeta == 0) {
-			if (active)
-				this.checkAndBuildJson(block, domein, name, dir, 0, false);
+			this.checkAndBuildJson(block, domein, name, dir, 0, false);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
-				if (active)
-					this.checkAndBuildJson(block, domein, name, dir, i, true);
+				this.checkAndBuildJson(block, domein, name, dir, i, true);
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
 						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
@@ -131,14 +127,12 @@ public class JsonRegisterHelper {
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
 				domein + ":" + "basetile"));
 		if (maxMeta == 0) {
-			if (active)
-				this.checkAndBuildJson(block, domein, name, dir, 0, false);
+			this.checkAndBuildJson(block, domein, name, dir, 0, false);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
 			for (int i = 0; i < maxMeta + 1; i++) {
-				if (active)
-					this.checkAndBuildJson(block, domein, name, dir, i, true);
+				this.checkAndBuildJson(block, domein, name, dir, i, true);
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
 						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
@@ -191,8 +185,7 @@ public class JsonRegisterHelper {
 		if (maxMeta == 0) {
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
 					domein + ":" + dir + "/" + name, "type"));
-			if (active)
-				this.checkAndBuildJsonItemBlock(domein, name, dir, 0, false);
+			this.checkAndBuildJsonItemBlock(domein, name, dir, 0, false);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
@@ -202,8 +195,7 @@ public class JsonRegisterHelper {
 			}
 			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), models);
 			for (int i = 0; i < maxMeta + 1; i++) {
-				if (active)
-					this.checkAndBuildJsonItemBlock(domein, name, dir, i, true);
+				this.checkAndBuildJsonItemBlock(domein, name, dir, i, true);
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
 						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
@@ -217,6 +209,9 @@ public class JsonRegisterHelper {
 	 */
 	public void checkAndBuildJson(Object item, String domein, String name, String dir, int meta, boolean useMeta) {
 		if (!(item instanceof ITexturePath))
+			return;
+
+		if (!active)
 			return;
 
 		String filePath = null;
@@ -296,6 +291,8 @@ public class JsonRegisterHelper {
 	 * blockstate用Jsonは生成しないため、ぬくもりある手作りを用いて下さい。
 	 */
 	public void checkAndBuildJsonItemBlock(String domein, String name, String dir, int meta, boolean useMeta) {
+		if (!active)
+			return;
 
 		String filePath = null;
 		File gj = null;
@@ -361,6 +358,8 @@ public class JsonRegisterHelper {
 	 */
 	public void checkAndBuildJsonCube(ITexturePath block, String domein, String name, String dir, int meta,
 			boolean useMeta) {
+		if (!active)
+			return;
 		if (block == null)
 			return;
 
@@ -427,6 +426,8 @@ public class JsonRegisterHelper {
 	 */
 	public void checkAndBuildSidedCube(ISidedTexture block, String domein, String name, String dir, int meta,
 			boolean useMeta) {
+		if (!active)
+			return;
 		if (block == null)
 			return;
 
@@ -498,6 +499,8 @@ public class JsonRegisterHelper {
 	 */
 	public void checkAndBuildJsonCross(ISidedTexture block, String domein, String name, String dir, int meta,
 			boolean useMeta) {
+		if (!active)
+			return;
 		if (block == null)
 			return;
 
@@ -563,6 +566,8 @@ public class JsonRegisterHelper {
 	 * こちらはTorqueBlock用6方向版。
 	 */
 	public void checkAndBuildJsonBlockStateA(String domein, String name) {
+		if (!active)
+			return;
 
 		String filePath = null;
 		File gj = null;
@@ -632,6 +637,8 @@ public class JsonRegisterHelper {
 	 * こちらはTEBlock用4方向版。
 	 */
 	public void checkAndBuildJsonBlockStateB(String domein, String name) {
+		if (!active)
+			return;
 
 		String filePath = null;
 		File gj = null;
@@ -699,6 +706,8 @@ public class JsonRegisterHelper {
 	 * こちらは無方向版。
 	 */
 	public void checkAndBuildJsonBlockStateC(String domein, String name) {
+		if (!active)
+			return;
 
 		String filePath = null;
 		File gj = null;
