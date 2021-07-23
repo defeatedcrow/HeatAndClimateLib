@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
+import defeatedcrow.hac.api.item.ICutleryItem;
 import defeatedcrow.hac.api.placeable.IItemDropEntity;
 import defeatedcrow.hac.api.placeable.IRapidCollectables;
 import defeatedcrow.hac.config.CoreConfigDC;
@@ -467,9 +468,23 @@ public abstract class FoodEntityBase extends Entity implements IItemDropEntity, 
 			return true;
 		}
 		if (player != null && !player.isSneaking()) {
-			this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
-			deadPos = player.getPosition();
-			return true;
+			ItemStack held = player.getHeldItem(hand);
+			ItemStack drop = this.getDropItem();
+			if (!DCUtil.isEmpty(held) && held.getItem() instanceof ICutleryItem) {
+				if (!DCUtil.isEmpty(drop) && drop.getItem() instanceof DCFoodItem) {
+					DCFoodItem food = (DCFoodItem) drop.getItem();
+					if (food.getFoodAmo(drop.getItemDamage()) > 0) {
+						food.onItemUseFinish(drop.copy(), world, player);
+						this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
+						this.setDead();
+						return true;
+					}
+				}
+			} else {
+				this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
+				deadPos = player.getPosition();
+				return true;
+			}
 		}
 		return false;
 	}

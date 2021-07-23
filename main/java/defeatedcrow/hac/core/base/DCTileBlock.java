@@ -30,7 +30,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
@@ -74,11 +73,6 @@ public abstract class DCTileBlock extends BlockContainerDC implements IClimateOb
 
 	public int getMaxMeta() {
 		return maxMeta;
-	}
-
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
 	}
 
 	@Override
@@ -205,10 +199,7 @@ public abstract class DCTileBlock extends BlockContainerDC implements IClimateOb
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {
-				DCState.FACING,
-				DCState.TYPE4
-		});
+		return new BlockStateContainer(this, new IProperty[] { DCState.FACING, DCState.TYPE4 });
 	}
 
 	@Override

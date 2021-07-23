@@ -1,10 +1,10 @@
-﻿#### Heat&Climate Lib 3.6.6 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.6.7 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
 
 ・Minecraft1.12.2
-・MincraftForge 1.12.2-14.23.5.2768
+・MincraftForge 1.12.2-14.23.5.2847
 
 *** 3.0.0～ (ver3) は2.X.X以前とは互換性がありません。ご注意ください。　***
 
@@ -282,6 +282,15 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.6.7
+　修正
+　　・不要クラスの削除
+　　・Crusherレシピは触媒必須になった
+　EX
+　　・Forge2847に更新
+　API
+　　・ICutleryItemを追加
 
 ○3.6.6
 　修正

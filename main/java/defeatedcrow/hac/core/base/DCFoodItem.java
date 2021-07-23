@@ -75,7 +75,7 @@ public abstract class DCFoodItem extends ItemFood implements ITexturePath {
 
 			EntityPlayer player = (EntityPlayer) living;
 			player.getFoodStats().addStats(this, stack);
-			worldIn.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand
+			worldIn.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.PLAYERS, 0.5F, worldIn.rand
 					.nextFloat() * 0.1F + 0.9F);
 			this.addEffects(stack, worldIn, living);
 			this.dropContainerItem(worldIn, stack, living);

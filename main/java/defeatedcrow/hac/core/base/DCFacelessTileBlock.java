@@ -165,9 +165,7 @@ public abstract class DCFacelessTileBlock extends BlockContainerDC implements IC
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {
-				DCState.TYPE16
-		});
+		return new BlockStateContainer(this, new IProperty[] { DCState.TYPE16 });
 	}
 
 	/* climate */

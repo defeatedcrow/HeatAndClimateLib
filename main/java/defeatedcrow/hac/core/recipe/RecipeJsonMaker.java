@@ -13,6 +13,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonWriter;
 
+import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -53,6 +54,8 @@ public class RecipeJsonMaker {
 	}
 
 	public static void buildShapedRecipe(String domain, int num, ItemStack result, String[] pattern, Pairs... keys) {
+		if (!ClimateCore.isDebug)
+			return;
 		if (dir != null && canUse && !DCUtil.isEmpty(result)) {
 			Map<String, Map<String, Object>> key = keys(keys);
 			Map<String, Object> res = result(result);
@@ -102,6 +105,8 @@ public class RecipeJsonMaker {
 	}
 
 	public static void buildShapelessRecipe(String domain, int num, ItemStack result, Object... keys) {
+		if (!ClimateCore.isDebug)
+			return;
 		if (dir != null && canUse && !DCUtil.isEmpty(result)) {
 			// DCLogger.infoLog("**** start 2 ****");
 			List<Map<String, Object>> key = ing(keys);

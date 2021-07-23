@@ -167,9 +167,7 @@ public class ItemClimateChecker extends DCItem {
 
 	@Override
 	public String[] getNameSuffix() {
-		String[] s = {
-				"normal"
-		};
+		String[] s = { "normal" };
 		return s;
 	}
 

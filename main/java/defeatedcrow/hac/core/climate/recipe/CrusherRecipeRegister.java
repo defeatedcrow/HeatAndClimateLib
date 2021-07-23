@@ -42,8 +42,8 @@ public class CrusherRecipeRegister implements ICrusherRecipeRegister {
 		if (tertialy == null) {
 			tertialy = ItemStack.EMPTY;
 		}
-		if (catalyst == null) {
-			catalyst = ItemStack.EMPTY;
+		if (catalyst == null || DCUtil.isEmpty(catalyst)) {
+			return;
 		}
 		if (input != null && (!DCUtil.isEmpty(output) || outputFluid != null)) {
 			if (input instanceof String && OreDictionary.getOres((String) input).isEmpty()) {
