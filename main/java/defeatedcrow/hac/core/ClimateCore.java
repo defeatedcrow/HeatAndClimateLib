@@ -45,7 +45,7 @@ public class ClimateCore {
 	public static final String PACKAGE_BASE = "dcs";
 	public static final String PACKAGE_ID = "dcs_climate";
 	public static final String UPDATE_JSON = "https://defeatedcrow.jp/version/haclib.json";
-	public static final String KEY = "da39a3ee5e6b4b0d3255bfef95601890afd80709";
+	public static final String KEY = "4cd12b92959105443b7b694fffe0cea9ed004886";
 
 	@SidedProxy(clientSide = "defeatedcrow.hac.core.client.ClientProxyD",
 			serverSide = "defeatedcrow.hac.core.CommonProxyD")
