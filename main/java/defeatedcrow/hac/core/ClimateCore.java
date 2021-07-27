@@ -30,7 +30,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
-// @SortingIndex(1102)
 @Mod(modid = ClimateCore.MOD_ID, name = ClimateCore.MOD_NAME,
 		version = ClimateCore.MOD_MEJOR + "." + ClimateCore.MOD_MINOR + "." + ClimateCore.MOD_BUILD,
 		dependencies = ClimateCore.MOD_DEPENDENCIES, acceptedMinecraftVersions = ClimateCore.MOD_ACCEPTED_MC_VERSIONS,
@@ -40,13 +39,13 @@ public class ClimateCore {
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 3;
 	public static final int MOD_MINOR = 6;
-	public static final int MOD_BUILD = 7;
+	public static final int MOD_BUILD = 8;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.12,1.12.2]";
 	public static final String PACKAGE_BASE = "dcs";
 	public static final String PACKAGE_ID = "dcs_climate";
 	public static final String UPDATE_JSON = "https://defeatedcrow.jp/version/haclib.json";
-	public static final String KEY = "4cd12b92959105443b7b694fffe0cea9ed004886";
+	public static final String KEY = "da39a3ee5e6b4b0d3255bfef95601890afd80709";
 
 	@SidedProxy(clientSide = "defeatedcrow.hac.core.client.ClientProxyD",
 			serverSide = "defeatedcrow.hac.core.CommonProxyD")
@@ -112,4 +111,5 @@ public class ClimateCore {
 		event.registerServerCommand(new DCServerCommand());
 		serverStarted = true;
 	}
+
 }

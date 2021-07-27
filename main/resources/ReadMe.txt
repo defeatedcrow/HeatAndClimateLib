@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.6.7 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.6.8 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -282,6 +282,10 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.6.8
+　修正
+　　・壊れていたcoremod機能の復旧
 
 ○3.6.7
 　修正

@@ -4,20 +4,17 @@ import java.io.File;
 import java.util.Map;
 
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 
 @MCVersion("1.12.2")
-public class DCASMPlugin implements IFMLLoadingPlugin, IFMLCallHook {
+public class DCASMPlugin implements IFMLLoadingPlugin {
 
 	static File file;
 
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[] {
-				"defeatedcrow.hac.asm.DCMethodTransformer"
-		};
+		return new String[] { "defeatedcrow.hac.asm.DCMethodTransformer" };
 	}
 
 	@Override
@@ -39,9 +36,9 @@ public class DCASMPlugin implements IFMLLoadingPlugin, IFMLCallHook {
 		if (file != null) {
 			File config = new File(file, "config/defeatedcrow/climate/dcs_asm.cfg");
 			loadConfig(config);
-			// LogManager.getLogger("dcs_asm").debug("loaded config:" + config.toPath().toString());
+			// LOGGER.debug("loaded config:" + config.toPath().toString());
 		} else {
-			// LogManager.getLogger("dcs_asm").debug("failed to load config");
+			// LOGGER.debug("failed to load config");
 		}
 	}
 
@@ -50,13 +47,7 @@ public class DCASMPlugin implements IFMLLoadingPlugin, IFMLCallHook {
 		return null;
 	}
 
-	@Override
-	public Void call() throws Exception {
-		return null;
-	}
-
 	private void loadConfig(File configFile) {
 		ClimateAsmConfig.INSTANCE.load(new Configuration(configFile));
 	}
-
 }
