@@ -20,7 +20,7 @@ dcs_climate.crop=气候作物
 dcs_climate.effective=气候效果
 dcs_climate.spinning=纺织机
 dcs_climate.biome=生物群系气候信息
-dcs_climate.crusher=锤式粉碎机
+dcs_climate.crusher=锤式粉碎机配方
 
 death.attack.dcs_heat=%1$s 被烤的焦黄。
 death.attack.dcs_cold=%1$s 变成了冰冻果子露。
