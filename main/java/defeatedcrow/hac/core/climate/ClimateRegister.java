@@ -319,6 +319,8 @@ public class ClimateRegister implements IBiomeClimateRegister {
 		private final DCHumidity hum;
 		private final DCAirflow flow;
 		private final int code; // 0bAABBCCCC;
+		private BlockPos heatPos;
+		private BlockPos coldPos;
 
 		public DCClimate(DCHeatTier t, DCHumidity h, DCAirflow f) {
 			temp = t;

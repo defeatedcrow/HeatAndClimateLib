@@ -32,11 +32,7 @@ public class ClimateCalculator implements IClimateCalculator {
 
 	@Override
 	public IClimate getClimate(World world, BlockPos pos) {
-		int[] r = new int[] {
-				2,
-				1,
-				1
-		};
+		int[] r = new int[] { 2, 1, 1 };
 		return getClimate(world, pos, r);
 	}
 
@@ -58,11 +54,7 @@ public class ClimateCalculator implements IClimateCalculator {
 	@Override
 	public IClimate getClimate(World world, BlockPos pos, int[] r) {
 		if (r == null || r.length < 3)
-			r = new int[] {
-					2,
-					1,
-					1
-			};
+			r = new int[] { 2, 1, 1 };
 		DCHeatTier temp = ClimateAPI.calculator.getAverageTemp(world, pos, r[0], false);
 		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, r[1], false);
 		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, r[2], false);
@@ -611,5 +603,129 @@ public class ClimateCalculator implements IClimateCalculator {
 			return ret;
 		}
 		return DCAirflow.TIGHT;
+	}
+
+	@Override
+	public BlockPos getMaxHeatPos(World world, BlockPos pos, int r) {
+		if (world == null || pos == null || !world.isAreaLoaded(pos, r)) {
+			return null;
+		}
+		BlockPos ret = null;
+		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
+		if (temp == null) {
+			temp = DCHeatTier.NORMAL;
+		}
+		/*
+		 * biomeの気温
+		 * 屋根あり: Tierが1段階Normalに近づく
+		 */
+		DCHeatTier hot = temp;
+		if (hasRoof(world, pos)) {
+			if (temp.getTier() < 0) {
+				hot = temp.addTier(1);
+			} else if (temp.getTier() > 0) {
+				hot = temp.addTier(-1);
+			}
+		}
+
+		/*
+		 * blockの気温
+		 */
+		if (r < 0) {
+			r = 0;
+		}
+		for (int x = pos.getX() - r; x <= pos.getX() + r; x++) {
+			for (int z = pos.getZ() - r; z <= pos.getZ() + r; z++) {
+				for (int y = pos.getY() - r; y <= pos.getY() + r; y++) {
+					BlockPos up = new BlockPos(x, y + 1, z);
+					IBlockState upb = world.getBlockState(up);
+					if (upb != null && upb.getBlock() instanceof IHeatCanceler) {
+						if (((IHeatCanceler) upb.getBlock()).isActive(upb)) {
+							continue;
+						}
+					}
+
+					BlockPos p2 = new BlockPos(x, y, z);
+					if (world.isBlockLoaded(p2)) {
+						DCHeatTier current = getBlockHeatTier(world, pos, p2);
+						if (current != null) {
+							BlockHeatTierEvent event = new BlockHeatTierEvent(world, p2, current, true);
+							current = event.result();
+
+							if (current.getTier() > hot.getTier()) {
+								hot = current;
+								ret = p2;
+							} else if (current.getTier() == hot.getTier()) {
+								if (ret == null || p2.distanceSq(pos) < ret.distanceSq(pos)) {
+									hot = current;
+									ret = p2;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return ret;
+	}
+
+	@Override
+	public BlockPos getMaxColdPos(World world, BlockPos pos, int r) {
+		if (world == null || pos == null || !world.isAreaLoaded(pos, r)) {
+			return null;
+		}
+		BlockPos ret = null;
+		DCHeatTier temp = ClimateAPI.register.getHeatTier(world, pos);
+		if (temp == null) {
+			temp = DCHeatTier.NORMAL;
+		}
+		/*
+		 * biomeの気温
+		 * 屋根あり: Tierが1段階Normalに近づく
+		 */
+		DCHeatTier cold = temp;
+		if (hasRoof(world, pos)) {
+			if (temp.getTier() < 0) {
+				cold = cold.addTier(1);
+			} else if (temp.getTier() > 0) {
+				cold = cold.addTier(-1);
+			}
+		}
+
+		/*
+		 * blockの気温
+		 */
+		if (r < 0) {
+			r = 0;
+		}
+		for (int x = pos.getX() - r; x <= pos.getX() + r; x++) {
+			for (int z = pos.getZ() - r; z <= pos.getZ() + r; z++) {
+				for (int y = pos.getY() - r; y <= pos.getY() + r; y++) {
+					BlockPos up = new BlockPos(x, y + 1, z);
+					IBlockState upb = world.getBlockState(up);
+					if (upb != null && upb.getBlock() instanceof IHeatCanceler) {
+						if (((IHeatCanceler) upb.getBlock()).isActive(upb)) {
+							continue;
+						}
+					}
+
+					BlockPos p2 = new BlockPos(x, y, z);
+					if (world.isBlockLoaded(p2)) {
+						DCHeatTier current = getBlockHeatTier(world, pos, p2);
+						if (current != null) {
+							BlockHeatTierEvent event = new BlockHeatTierEvent(world, p2, current, false);
+							current = event.result();
+
+							if (current.getTier() < cold.getTier()) {
+								cold = current;
+								ret = p2;
+							}
+						}
+
+					}
+				}
+			}
+		}
+		return ret;
 	}
 }

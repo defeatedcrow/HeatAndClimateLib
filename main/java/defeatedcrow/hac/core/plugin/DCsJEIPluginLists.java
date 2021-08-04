@@ -14,7 +14,7 @@ public class DCsJEIPluginLists {
 
 	public static final List<ItemStack> millstones = new ArrayList<>();
 	public static final List<ItemStack> fluidcrafters = new ArrayList<>();
-	public static final List<ItemStack> reactors = new ArrayList<>();
+
 	public static final List<ItemStack> crops = new ArrayList<>();
 	public static final List<ItemStack> spinning = new ArrayList<>();
 	public static final List<ItemStack> crusher = new ArrayList<>();
@@ -31,5 +31,8 @@ public class DCsJEIPluginLists {
 	public static final List<ItemStack> fluidcrafters_pot = new ArrayList<>();
 	public static final List<ItemStack> fluidcrafters_drink = new ArrayList<>();
 	public static final List<ItemStack> fluidcrafters_skillet = new ArrayList<>();
+
+	public static final List<ItemStack> reactors = new ArrayList<>();
+	public static final List<ItemStack> reactors_simple = new ArrayList<>();
 
 }

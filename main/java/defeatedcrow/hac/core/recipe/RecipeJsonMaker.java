@@ -13,6 +13,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonWriter;
 
+import defeatedcrow.hac.api.module.HaCModule;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
@@ -22,12 +23,12 @@ public class RecipeJsonMaker {
 
 	public static final RecipeJsonMaker INSTANCE = new RecipeJsonMaker();
 
-	public static boolean canUse = false;
-	public static boolean canDeprecate = false;
+	public static boolean canUse = true;
+	public static boolean canDeprecate = true;
 
 	public static Path dir = null;
 
-	public static void buildShapedRecipe(String domain, int num, ItemStack result, Object... keys) {
+	public static void buildShapedRecipe(HaCModule module, String domain, int num, ItemStack result, Object... keys) {
 		int count = 0;
 		for (Object o : keys) {
 			if (o instanceof String) {
@@ -50,16 +51,18 @@ public class RecipeJsonMaker {
 			// DCLogger.infoLog("**** pair " + pair.ch + " " + pair.obj.toString());
 			obj[i1] = pair;
 		}
-		buildShapedRecipe(domain, num, result, pat, obj);
+		buildShapedRecipe(module, domain, num, result, pat, obj);
 	}
 
-	public static void buildShapedRecipe(String domain, int num, ItemStack result, String[] pattern, Pairs... keys) {
+	public static void buildShapedRecipe(HaCModule module, String domain, int num, ItemStack result, String[] pattern,
+			Pairs... keys) {
 		if (!ClimateCore.isDebug)
 			return;
 		if (dir != null && canUse && !DCUtil.isEmpty(result)) {
 			Map<String, Map<String, Object>> key = keys(keys);
 			Map<String, Object> res = result(result);
-			Shaped ret = INSTANCE.new Shaped(pattern, key, res);
+			List<Map<String, String>> conditions = conditions(module);
+			Shaped ret = INSTANCE.new Shaped(pattern, key, res, conditions);
 
 			String filename = result.getItem().getRegistryName().getResourcePath() + "_" + result.getItemDamage();
 			if (result.getItem().getRegistryName().getResourceDomain().equalsIgnoreCase("minecraft")) {
@@ -104,14 +107,16 @@ public class RecipeJsonMaker {
 		}
 	}
 
-	public static void buildShapelessRecipe(String domain, int num, ItemStack result, Object... keys) {
+	public static void buildShapelessRecipe(HaCModule module, String domain, int num, ItemStack result,
+			Object... keys) {
 		if (!ClimateCore.isDebug)
 			return;
 		if (dir != null && canUse && !DCUtil.isEmpty(result)) {
 			// DCLogger.infoLog("**** start 2 ****");
 			List<Map<String, Object>> key = ing(keys);
 			Map<String, Object> res = result(result);
-			Shapeless ret = INSTANCE.new Shapeless(key, res);
+			List<Map<String, String>> conditions = conditions(module);
+			Shapeless ret = INSTANCE.new Shapeless(key, res, conditions);
 
 			String filename = result.getItem().getRegistryName().getResourcePath() + "_" + result.getItemDamage();
 			if (result.getItem().getRegistryName().getResourceDomain().equalsIgnoreCase("minecraft")) {
@@ -161,11 +166,14 @@ public class RecipeJsonMaker {
 		final String[] pattern;
 		final Map<String, Map<String, Object>> key;
 		final Map<String, Object> result;
+		List<Map<String, String>> conditions;
 
-		private Shaped(String[] s, Map<String, Map<String, Object>> k, final Map<String, Object> res) {
+		private Shaped(String[] s, Map<String, Map<String, Object>> k, final Map<String, Object> res,
+				List<Map<String, String>> con) {
 			pattern = s;
 			key = k;
 			result = res;
+			conditions = con;
 		}
 	}
 
@@ -173,10 +181,12 @@ public class RecipeJsonMaker {
 		final String type = "forge:ore_shapeless";
 		final List<Map<String, Object>> ingredients;
 		final Map<String, Object> result;
+		List<Map<String, String>> conditions;
 
-		private Shapeless(List<Map<String, Object>> i, final Map<String, Object> res) {
+		private Shapeless(List<Map<String, Object>> i, final Map<String, Object> res, List<Map<String, String>> con) {
 			ingredients = i;
 			result = res;
+			conditions = con;
 		}
 	}
 
@@ -243,6 +253,18 @@ public class RecipeJsonMaker {
 		map.put("count", item.getCount());
 		map.put("data", item.getItemDamage());
 		return map;
+	}
+
+	private static List<Map<String, String>> conditions(HaCModule module) {
+		List<Map<String, String>> ingredients = Lists.newArrayList();
+		Map<String, String> map = Maps.newLinkedHashMap();
+		map.put("type", "dcs_climate:recipe_enabled");
+		map.put("module", module.id);
+		if (module == HaCModule.PLUGIN) {
+			map.put("modid", module.modid);
+		}
+		ingredients.add(map);
+		return ingredients;
 	}
 
 }

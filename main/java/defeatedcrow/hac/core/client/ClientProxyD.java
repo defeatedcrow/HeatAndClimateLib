@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import org.lwjgl.input.Keyboard;
 
+import defeatedcrow.hac.api.module.HaCModule;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.CommonProxyD;
@@ -170,13 +171,25 @@ public class ClientProxyD extends CommonProxyD {
 	}
 
 	@Override
+	public void addShapedRecipeJson(HaCModule module, String name, int num, @Nonnull ItemStack result,
+			Object... recipe) {
+		RecipeJsonMaker.buildShapedRecipe(module, name, num, result, recipe);
+	}
+
+	@Override
 	public void addShapedRecipeJson(String name, int num, @Nonnull ItemStack result, Object... recipe) {
-		RecipeJsonMaker.buildShapedRecipe(name, num, result, recipe);
+		RecipeJsonMaker.buildShapedRecipe(HaCModule.CORE, name, num, result, recipe);
+	}
+
+	@Override
+	public void addShapelessRecipeJson(HaCModule module, String name, int num, @Nonnull ItemStack result,
+			Object... recipe) {
+		RecipeJsonMaker.buildShapelessRecipe(module, name, num, result, recipe);
 	}
 
 	@Override
 	public void addShapelessRecipeJson(String name, int num, @Nonnull ItemStack result, Object... recipe) {
-		RecipeJsonMaker.buildShapelessRecipe(name, num, result, recipe);
+		RecipeJsonMaker.buildShapelessRecipe(HaCModule.CORE, name, num, result, recipe);
 	}
 
 	@Override

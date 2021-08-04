@@ -2,6 +2,7 @@ package defeatedcrow.hac.core;
 
 import javax.annotation.Nonnull;
 
+import defeatedcrow.hac.api.module.HaCModule;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
 import defeatedcrow.hac.core.client.event.ClimateBiomeColorEvent;
@@ -41,8 +42,7 @@ public class CommonProxyD {
 		DCInit.prevFreeze = new PotionFreezeResistance().setRegistryName(ClimateCore.MOD_ID, "dcs.potion.freeze_res");
 		ForgeRegistries.POTIONS.register(DCInit.prevFreeze);
 		DCInit.prevFreezeType = new PotionType("dcs.freeze_res", new PotionEffect[] {
-				new PotionEffect(DCInit.prevFreeze, 3600, 0)
-		}).setRegistryName(ClimateCore.MOD_ID, "dcs.freeze_res");
+			new PotionEffect(DCInit.prevFreeze, 3600, 0) }).setRegistryName(ClimateCore.MOD_ID, "dcs.freeze_res");
 		ForgeRegistries.POTION_TYPES.register(DCInit.prevFreezeType);
 	}
 
@@ -151,10 +151,22 @@ public class CommonProxyD {
 		return 0;
 	}
 
+	public void addShapedRecipeJson(HaCModule module, String name, int num, @Nonnull ItemStack result,
+			Object... recipe) {
+
+	}
+
+	@Deprecated
 	public void addShapedRecipeJson(String name, int num, @Nonnull ItemStack result, Object... recipe) {
 
 	}
 
+	public void addShapelessRecipeJson(HaCModule module, String name, int num, @Nonnull ItemStack result,
+			Object... recipe) {
+
+	}
+
+	@Deprecated
 	public void addShapelessRecipeJson(String name, int num, @Nonnull ItemStack result, Object... recipe) {
 
 	}

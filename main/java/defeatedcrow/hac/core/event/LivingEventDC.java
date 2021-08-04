@@ -26,9 +26,10 @@ import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -41,9 +42,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
@@ -279,6 +280,29 @@ public class LivingEventDC {
 
 				if (damTemp >= 1.0F) {
 					living.attackEntityFrom(source2, damTemp);
+					if (living instanceof EntityCreature) {
+						Vec3d vec = null;
+						BlockPos p2 = null;
+						if (isCold) {
+							p2 = ClimateAPI.calculator.getMaxColdPos(living.world, living.getPosition(), 2);
+						} else {
+							p2 = ClimateAPI.calculator.getMaxHeatPos(living.world, living.getPosition(), 2);
+						}
+
+						if (p2 != null) {
+							vec = new Vec3d(p2);
+							// 逃げるAIを差し込む
+							EntityCreature animal = (EntityCreature) living;
+							for (EntityAITaskEntry task : animal.tasks.taskEntries) {
+								if (task != null && task.action instanceof EntityAIRunFromHeatsource) {
+									EntityAIRunFromHeatsource ai = (EntityAIRunFromHeatsource) task.action;
+									ai.avoidPos = vec;
+									return;
+								}
+							}
+							animal.tasks.addTask(3, new EntityAIRunFromHeatsource(animal, vec));
+						}
+					}
 				}
 
 			}
@@ -399,20 +423,4 @@ public class LivingEventDC {
 		}
 	}
 
-	/* dropが消えなくなる */
-	@SubscribeEvent
-	public void livingDropItemEvent(ItemExpireEvent event) {
-		EntityItem item = event.getEntityItem();
-		int life = event.getExtraLife();
-		if (item != null && !item.world.isRemote) {
-			BlockPos pos = item.getPosition();
-			IClimate clm = ClimateAPI.calculator.getClimate(item.world, pos);
-			if (CoreConfigDC.enableFreezeDrop && clm.getHeat().getTier() < DCHeatTier.COLD.getTier()) {
-				// frostbite以下
-				life += 6000;
-				event.setExtraLife(life);
-				event.setCanceled(true);
-			}
-		}
-	}
 }

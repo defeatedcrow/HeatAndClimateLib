@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.module.HaCModule;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.climate.recipe.ClimateSmelting;
@@ -69,100 +70,90 @@ public class DCRecipe {
 	static void addAltRecipes() {
 		// コンパス
 
-		jsonShapedRecipe("core", new ItemStack(Items.COMPASS, 1, 0), new Object[] {
-				" X ",
-				"XYX",
-				" X ",
-				'X',
-				"ingotIron",
-				'Y',
-				"dustMagnetite"
-		});
+		jsonShapedRecipe(HaCModule.CORE, "core", new ItemStack(Items.COMPASS, 1, 0), new Object[] {
+			" X ",
+			"XYX",
+			" X ",
+			'X',
+			"ingotIron",
+			'Y',
+			"dustMagnetite" });
 
 		// 火打ち石のアナザー
-		jsonShapelessRecipe("core", new ItemStack(Items.FLINT_AND_STEEL, 1, 0), new Object[] {
-				new ItemStack(Items.IRON_INGOT, 1, 0),
-				"gemChalcedony"
-		});
+		jsonShapelessRecipe(HaCModule.CORE, "core", new ItemStack(Items.FLINT_AND_STEEL, 1, 0), new Object[] {
+			new ItemStack(Items.IRON_INGOT, 1, 0),
+			"gemChalcedony" });
 
 		// 火薬
-		jsonShapelessRecipe("core", new ItemStack(Items.GUNPOWDER, 4, 0), new Object[] {
-				"dustGraphite",
-				"dustGraphite",
-				"dustGraphite",
-				"gemNiter",
-				"gemNiter",
-				"gemSulfur"
-		});
+		jsonShapelessRecipe(HaCModule.CORE, "core", new ItemStack(Items.GUNPOWDER, 4, 0), new Object[] {
+			"dustGraphite",
+			"dustGraphite",
+			"dustGraphite",
+			"gemNiter",
+			"gemNiter",
+			"gemSulfur" });
 
-		jsonShapelessRecipe("core", new ItemStack(Items.GUNPOWDER, 4, 0), new Object[] {
-				"dustGraphite",
-				"dustGraphite",
-				"dustGraphite",
-				"dustNiter",
-				"dustNiter",
-				"dustSulfur"
-		});
+		jsonShapelessRecipe(HaCModule.CORE, "core", new ItemStack(Items.GUNPOWDER, 4, 0), new Object[] {
+			"dustGraphite",
+			"dustGraphite",
+			"dustGraphite",
+			"dustNiter",
+			"dustNiter",
+			"dustSulfur" });
 
 		// 代替系
-		jsonShapedRecipe("core", new ItemStack(Items.CAKE, 1, 0), new Object[] {
-				"XXX",
-				"YZY",
-				"WWW",
-				'X',
-				"bucketMilk",
-				'Y',
-				"dustSugar",
-				'Z',
-				"egg",
-				'W',
-				"foodFlour"
-		});
+		jsonShapedRecipe(HaCModule.CORE, "core", new ItemStack(Items.CAKE, 1, 0), new Object[] {
+			"XXX",
+			"YZY",
+			"WWW",
+			'X',
+			"bucketMilk",
+			'Y',
+			"dustSugar",
+			'Z',
+			"egg",
+			'W',
+			"foodFlour" });
 
-		jsonShapedRecipe("core", new ItemStack(Items.COOKIE, 8, 0), new Object[] {
-				"YZY",
-				'Y',
-				"foodFlour",
-				'Z',
-				"cropCocoa"
-		});
+		jsonShapedRecipe(HaCModule.CORE, "core", new ItemStack(Items.COOKIE, 8, 0), new Object[] {
+			"YZY",
+			'Y',
+			"foodFlour",
+			'Z',
+			"cropCocoa" });
 
-		jsonShapedRecipe("core", new ItemStack(Items.BREAD, 1, 0), new Object[] {
-				"YYY",
-				'Y',
-				"foodFlour"
-		});
+		jsonShapedRecipe(HaCModule.CORE, "core", new ItemStack(Items.BREAD, 1, 0), new Object[] {
+			"YYY",
+			'Y',
+			"foodFlour" });
 
-		jsonShapedRecipe("core", new ItemStack(Items.BED, 1, 0), new Object[] {
-				"XXX",
-				"YYY",
-				'X',
-				"itemCloth",
-				'Y',
-				"plankWood"
-		});
+		jsonShapedRecipe(HaCModule.CORE, "core", new ItemStack(Items.BED, 1, 0), new Object[] {
+			"XXX",
+			"YYY",
+			'X',
+			"itemCloth",
+			'Y',
+			"plankWood" });
 
-		jsonShapedRecipe("core", new ItemStack(Items.PAINTING, 1, 0), new Object[] {
-				"XXX",
-				"XYX",
-				"XXX",
-				'X',
-				"stickWood",
-				'Y',
-				"itemCloth"
-		});
+		jsonShapedRecipe(HaCModule.CORE, "core", new ItemStack(Items.PAINTING, 1, 0), new Object[] {
+			"XXX",
+			"XYX",
+			"XXX",
+			'X',
+			"stickWood",
+			'Y',
+			"itemCloth" });
 
-		jsonShapedRecipe("core", new ItemStack(Items.SADDLE, 1, 0), new Object[] {
-				"X",
-				"Y",
-				"Z",
-				'X',
-				"leather",
-				'Y',
-				"itemCloth",
-				'Z',
-				"ingotIron"
-		});
+		jsonShapedRecipe(HaCModule.CORE, "core", new ItemStack(Items.SADDLE, 1, 0), new Object[] {
+			"X",
+			"Y",
+			"Z",
+			'X',
+			"leather",
+			'Y',
+			"itemCloth",
+			'Z',
+			"ingotIron" });
 
 	}
 
@@ -307,20 +298,22 @@ public class DCRecipe {
 		ForgeRegistries.RECIPES.register(ret);
 	}
 
-	public static void jsonShapedRecipe(String name, @Nonnull ItemStack result, Object... recipe) {
-		ClimateCore.proxy.addShapedRecipeJson(name, 0, result, recipe);
+	public static void jsonShapedRecipe(HaCModule module, String name, @Nonnull ItemStack result, Object... recipe) {
+		ClimateCore.proxy.addShapedRecipeJson(module, name, 0, result, recipe);
 	}
 
-	public static void jsonShapedRecipe(String name, int num, @Nonnull ItemStack result, Object... recipe) {
-		ClimateCore.proxy.addShapedRecipeJson(name, num, result, recipe);
+	public static void jsonShapedRecipe(HaCModule module, String name, int num, @Nonnull ItemStack result,
+			Object... recipe) {
+		ClimateCore.proxy.addShapedRecipeJson(module, name, num, result, recipe);
 	}
 
-	public static void jsonShapelessRecipe(String name, @Nonnull ItemStack result, Object... recipe) {
-		ClimateCore.proxy.addShapelessRecipeJson(name, 0, result, recipe);
+	public static void jsonShapelessRecipe(HaCModule module, String name, @Nonnull ItemStack result, Object... recipe) {
+		ClimateCore.proxy.addShapelessRecipeJson(module, name, 0, result, recipe);
 	}
 
-	public static void jsonShapelessRecipe(String name, int num, @Nonnull ItemStack result, Object... recipe) {
-		ClimateCore.proxy.addShapelessRecipeJson(name, num, result, recipe);
+	public static void jsonShapelessRecipe(HaCModule module, String name, int num, @Nonnull ItemStack result,
+			Object... recipe) {
+		ClimateCore.proxy.addShapelessRecipeJson(module, name, num, result, recipe);
 	}
 
 }

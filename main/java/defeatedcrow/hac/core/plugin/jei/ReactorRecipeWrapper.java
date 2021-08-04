@@ -83,11 +83,10 @@ public class ReactorRecipeWrapper implements IRecipeWrapper {
 		catalyst.addAll(recipe.getCatalyst());
 
 		machine = new ArrayList<>();
-		if (!recipe.isSimpleRecipe()) {
-			machine.add(DCsJEIPluginLists.reactors.get(0));
-		} else {
-			machine.addAll(DCsJEIPluginLists.reactors);
+		if (recipe.isSimpleRecipe()) {
+			machine.addAll(DCsJEIPluginLists.reactors_simple);
 		}
+		machine.addAll(DCsJEIPluginLists.reactors);
 
 		input2.addAll(input);
 		input2.add(catalyst);

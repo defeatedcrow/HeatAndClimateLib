@@ -196,4 +196,32 @@ public interface IClimateCalculator {
 	 */
 	DCAirflow getBlockAirflow(World world, BlockPos target, BlockPos source);
 
+	/**
+	 * 範囲内の最も低いHeatTierの座標を求める。
+	 *
+	 * @param world
+	 *        : 対象のWorld
+	 * @param pos
+	 *        : 対象のBlockPos
+	 * @param range
+	 *        : 走査半径
+	 * @param horizontal
+	 *        : posと同高度の平面範囲を調べる
+	 */
+	BlockPos getMaxHeatPos(World world, BlockPos pos, int range);
+
+	/**
+	 * 範囲内の最も低いHeatTierの座標を求める。
+	 *
+	 * @param world
+	 *        : 対象のWorld
+	 * @param pos
+	 *        : 対象のBlockPos
+	 * @param range
+	 *        : 走査半径
+	 * @param horizontal
+	 *        : posと同高度の平面範囲を調べる
+	 */
+	BlockPos getMaxColdPos(World world, BlockPos pos, int range);
+
 }

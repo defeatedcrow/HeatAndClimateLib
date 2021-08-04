@@ -1,12 +1,20 @@
 package defeatedcrow.hac.core.event;
 
+import defeatedcrow.hac.api.item.IAnimalFood;
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
 import defeatedcrow.hac.api.placeable.IRapidCollectables;
+import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
+import net.minecraft.entity.ai.EntityAITempt;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -65,6 +73,49 @@ public class ClickEventDC {
 					}
 
 					event.setUseBlock(Result.ALLOW);
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onRightClickEntity(PlayerInteractEvent.EntityInteract event) {
+		EntityPlayer player = event.getEntityPlayer();
+		Entity target = event.getTarget();
+		ItemStack held = event.getItemStack();
+		if (!DCUtil.isEmpty(held) && player != null && target instanceof EntityAnimal) {
+			EntityAnimal living = (EntityAnimal) target;
+			boolean b = held.getItem() instanceof IAnimalFood && ((IAnimalFood) held.getItem())
+					.isTargetAnimal(living, held);
+			boolean b2 = held.getItem() == Items.APPLE && ClimateCore.isDebug;
+			if (b || b2) {
+				boolean flag = false;
+				if (living.getHealth() < living.getMaxHealth()) {
+					living.heal(2.0F);
+					flag = true;
+				} else {
+					if (living.isChild()) {
+						living.ageUp((int) (-living.getGrowingAge() / 20 * 0.1F), true);
+						flag = true;
+					} else if (!living.isInLove()) {
+						living.setInLove(player);
+						flag = true;
+					}
+				}
+
+				if (flag) {
+					if (!player.capabilities.isCreativeMode) {
+						held.shrink(1);
+					}
+					for (EntityAITaskEntry task : living.tasks.taskEntries) {
+						if (task != null && task.action instanceof EntityAITempt) {
+							EntityAITempt ai = (EntityAITempt) task.action;
+							if (!ai.temptItem.contains(held.getItem())) {
+								ai.temptItem.add(held.getItem());
+							}
+						}
+					}
+					event.setCancellationResult(EnumActionResult.SUCCESS);
 				}
 			}
 		}
