@@ -20,9 +20,15 @@ dcs_climate.crop=气候作物
 dcs_climate.effective=气候效果
 dcs_climate.spinning=纺织机
 dcs_climate.biome=生物群系气候信息
+dcs_climate.crusher=锤式粉碎机
 
 death.attack.dcs_heat=%1$s 被烤的焦黄。
 death.attack.dcs_cold=%1$s 变成了冰冻果子露。
+death.attack.dcs_water=%1$s 淹死了。
+death.attack.dcs_dry=%1$s 被风干了。
+death.attack.dcs_wind=%1$s 被风吹走了。
+death.attack.dcs_suffocation=%1$s 窒息了。
+death.attack.dcs_machine=%1$s 因工伤去世。
 
 dcs.potion.freeze_resistance=严寒耐性
 dcs.freeze_resistance=严寒耐性
@@ -31,3 +37,6 @@ dcs.potion.freeze_res=严寒耐性
 potion.effect.dcs.freeze_res=严寒耐性药水
 splash_potion.effect.dcs.freeze_res=喷溅型严寒耐性药水
 lingering_potion.effect.dcs.freeze_res=滞留型严寒耐性药水
+tipped_arrow.effect.dcs.freeze_res=严寒耐性箭矢
+
+
