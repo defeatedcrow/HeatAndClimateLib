@@ -326,11 +326,10 @@ public class DCUtil {
 
 	// 防具の登録時の並び
 	public static final EntityEquipmentSlot[] SLOTS = new EntityEquipmentSlot[] {
-			EntityEquipmentSlot.HEAD,
-			EntityEquipmentSlot.CHEST,
-			EntityEquipmentSlot.LEGS,
-			EntityEquipmentSlot.FEET
-	};
+		EntityEquipmentSlot.HEAD,
+		EntityEquipmentSlot.CHEST,
+		EntityEquipmentSlot.LEGS,
+		EntityEquipmentSlot.FEET };
 
 	// チャームを保持しているかのチェック
 	public static NonNullList<ItemStack> getPlayerCharm(EntityPlayer player, CharmType type) {
@@ -648,6 +647,10 @@ public class DCUtil {
 			for (String name : names) {
 				if (name != null) {
 					ResourceLocation res = new ResourceLocation(name);
+					if (res.getResourceDomain().equalsIgnoreCase("minecraft")) {
+						String n = res.getResourcePath();
+						res = new ResourceLocation(n);
+					}
 					if (EntityList.getClass(res) != null) {
 						Class<? extends Entity> entity = EntityList.getClass(res);
 						if (entity != null) {

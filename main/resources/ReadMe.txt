@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.7.0 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.7.1 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -287,6 +287,13 @@ Z=赤石
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
 
+○3.7.1
+　修正
+　　・未使用のコンフィグを除去
+　　・窒息ダメージを水中呼吸ポーションで軽減できるように
+　　・コンフィグのEntityBlackListの読み込みの改善
+　　・バニラアイテムへのOreDic追加を増やした
+
 ○3.7.0
 　変更
 　　・Moduleコンフィグでjsonレシピの読み込みをOFFする機能の追加
@@ -294,6 +301,8 @@ Z=赤石
 　API
 　　・IClimateCalculatorに範囲内の最も温度の高い/低いブロックのある座標を取得するメソッドを追加
 　　・家畜に食べ物を追加するIAnimalFoodインターフェースの追加
+　EX
+　　・AccessTransformerを追加
 
 ○3.6.8
 　修正

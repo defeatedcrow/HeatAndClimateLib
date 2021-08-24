@@ -23,6 +23,7 @@ public class OreRegister {
 		OreDictionary.registerOre("dustBlaze", new ItemStack(Items.BLAZE_POWDER));
 		OreDictionary.registerOre("dustGunpowder", new ItemStack(Items.GUNPOWDER));
 		OreDictionary.registerOre("dustSugar", new ItemStack(Items.SUGAR));
+		OreDictionary.registerOre("listAllsugar", new ItemStack(Items.SUGAR));
 
 		OreDictionary.registerOre("gemCoal", new ItemStack(Items.COAL));
 		OreDictionary.registerOre("gemFlint", new ItemStack(Items.FLINT));
@@ -50,12 +51,18 @@ public class OreRegister {
 		OreDictionary.registerOre("listAllrabbitraw", new ItemStack(Items.RABBIT));
 		OreDictionary.registerOre("listAllsugar", new ItemStack(Items.SUGAR));
 
+		OreDictionary.registerOre("listAllgrain", new ItemStack(Items.WHEAT));
+		OreDictionary.registerOre("listAllveggie", new ItemStack(Items.CARROT));
+		OreDictionary.registerOre("listAllveggie", new ItemStack(Items.POTATO));
 		OreDictionary.registerOre("cropApple", new ItemStack(Items.APPLE));
+		OreDictionary.registerOre("listAllfruit", new ItemStack(Items.APPLE));
 		OreDictionary.registerOre("cropCocoa", new ItemStack(Items.DYE, 1, 3));
 		OreDictionary.registerOre("cropPumpkin", new ItemStack(Blocks.PUMPKIN));
+		OreDictionary.registerOre("listAllveggie", new ItemStack(Blocks.PUMPKIN));
 		OreDictionary.registerOre("cropMelon", new ItemStack(Items.MELON));
 		OreDictionary.registerOre("cropReeds", new ItemStack(Items.REEDS));
 		OreDictionary.registerOre("cropBeetroot", new ItemStack(Items.BEETROOT));
+		OreDictionary.registerOre("listAllveggie", new ItemStack(Items.BEETROOT));
 		OreDictionary.registerOre("flowerRed", new ItemStack(Blocks.RED_FLOWER));
 		OreDictionary.registerOre("flowerYellow", new ItemStack(Blocks.YELLOW_FLOWER));
 		OreDictionary.registerOre("listAllmushroom", new ItemStack(Blocks.RED_MUSHROOM));

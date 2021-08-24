@@ -27,21 +27,9 @@ public class CoreConfigDC {
 	public static int altJumpKey = -1;
 	public static int altSneakKey = -1;
 
-	public static int[] ranges = new int[] {
-			2,
-			1,
-			1
-	};
-	public static double[] seasonEffects = new double[] {
-			0.05D,
-			0.4D,
-			0.0D,
-			-0.4D
-	};
-	public static double[] weatherEffects = new double[] {
-			-0.2D,
-			0.2D
-	};
+	public static int[] ranges = new int[] { 2, 1, 1 };
+	public static double[] seasonEffects = new double[] { 0.05D, 0.4D, 0.0D, -0.4D };
+	public static double[] weatherEffects = new double[] { -0.2D, 0.2D };
 	public static double nightEffect = -0.2D;
 
 	public static boolean wall = true;
@@ -57,12 +45,9 @@ public class CoreConfigDC {
 
 	public static boolean enableAdvHUD = true;
 	public static boolean useAnalogueHUD = true;
-	public static int iconHX = 0;
-	public static int iconHY = -48;
-	public static int[] offsetHUD = {
-			0,
-			300
-	};
+	// public static int iconHX = 0;
+	// public static int iconHY = -48;
+	public static int[] offsetHUD = { 0, 300 };
 	public static String tex1 = "textures/gui/hud_climate_normal.png";
 	public static String tex2 = "textures/gui/hud_climate_drought.png";
 	public static String tex3 = "textures/gui/hud_climate_rain.png";
@@ -71,18 +56,9 @@ public class CoreConfigDC {
 	public static boolean showSeason = true;
 	public static boolean showDay = true;
 	public static boolean showClimate = true;
-	public static int[] offsetBiome = {
-			15,
-			5
-	};
-	public static int[] offsetSeason = {
-			5,
-			-8
-	};
-	public static int[] offsetClimate = {
-			10,
-			15
-	};
+	public static int[] offsetBiome = { 15, 5 };
+	public static int[] offsetSeason = { 5, -8 };
+	public static int[] offsetClimate = { 10, 15 };
 
 	// difficulty
 	public static boolean climateDam = true;
@@ -97,11 +73,10 @@ public class CoreConfigDC {
 	public static boolean sharePotionWithRidingMob = true;
 	public static int entityInterval = 60;
 	public static String[] entityBlackList = new String[] {
-			"minecraft:squid",
-			"minecraft:bat",
-			"minecraft:villager",
-			"ModID:entityRegistryName"
-	};
+		"minecraft:squid",
+		"minecraft:bat",
+		"minecraft:villager",
+		"ModID:entityRegistryName" };
 	public static final List<Class<? extends Entity>> blackListEntity = Lists.newArrayList();
 
 	// recipe
@@ -129,29 +104,14 @@ public class CoreConfigDC {
 
 	// time
 	public static int yearLength = 240;
-	public static boolean enableRealSeason = false;
+	// public static boolean enableRealSeason = false;
 	public static boolean enableRealTime = false;
 	public static boolean enableSouthernHemisphere = false;
-	public static int[] springDate = {
-			59,
-			150
-	};
-	public static int[] summerDate = {
-			151,
-			242
-	};
-	public static int[] autumnDate = {
-			243,
-			303
-	};
-	public static int[] winterDate = {
-			304,
-			58
-	};
-	public static int[] dayTime = {
-			6,
-			17
-	};
+	public static int[] springDate = { 59, 150 };
+	public static int[] summerDate = { 151, 242 };
+	public static int[] autumnDate = { 243, 303 };
+	public static int[] winterDate = { 304, 58 };
+	public static int[] dayTime = { 6, 17 };
 	public static EnumSeason overYear = EnumSeason.WINTER;
 	public static int startDate = 40;
 	public static String dateFormat = "yyyy/MM/dd";
@@ -166,12 +126,11 @@ public class CoreConfigDC {
 	public static boolean harderCrop = false;
 
 	public static String[] updateBlackList = new String[] {
-			"minecraft:leaves:32767",
-			"minecraft:leaves2:32767",
-			"minecraft:tallgrass:32767",
-			"minecraft:snow_layer:32767",
-			"ModID:sampleBlock:sampleMeta"
-	};
+		"minecraft:leaves:32767",
+		"minecraft:leaves2:32767",
+		"minecraft:tallgrass:32767",
+		"minecraft:snow_layer:32767",
+		"ModID:sampleBlock:sampleMeta" };
 	public static final List<BlockSet> blackListBlock = Lists.newArrayList();
 
 	public void load(Configuration cfg) {
@@ -255,11 +214,13 @@ public class CoreConfigDC {
 			Property hud_icon3 = cfg
 					.get("render setting", "Climate HUD Analogue Thermometer", useAnalogueHUD, "Enable display the analogue thermometer on HUD.");
 
-			Property hud_x2 = cfg
-					.get("render setting", "Climate HUD Info Offset X", iconHX, "Set the amount of Xoffset of the climate info.");
-
-			Property hud_y2 = cfg
-					.get("render setting", "Climate HUD Info Offset Y", iconHY, "Set the amount of Yoffset of the climate info.");
+			// Property hud_x2 = cfg
+			// .get("render setting", "Climate HUD Info Offset X", iconHX, "Set the amount of Xoffset of the climate
+			// info.");
+			//
+			// Property hud_y2 = cfg
+			// .get("render setting", "Climate HUD Info Offset Y", iconHY, "Set the amount of Yoffset of the climate
+			// info.");
 
 			Property hud_biome = cfg
 					.get("render setting", "Enable HUD Biome Name", showBiome, "Enable display the biome name on HUD.");
@@ -388,8 +349,9 @@ public class CoreConfigDC {
 			Property realT = cfg
 					.get("time setting", "Enable Real Time", enableRealTime, "Use the real time for the season of HaC.");
 
-			Property realS = cfg
-					.get("time setting", "Enable Real Season", enableRealSeason, "Use the real season for the season of HaC.");
+			// Property realS = cfg
+			// .get("time setting", "Enable Real Season", enableRealSeason, "Use the real season for the season of
+			// HaC.");
 
 			Property startD = cfg
 					.get("time setting", "Start Date", startDate, "Set the date of the world beginning." + BR + "Default: first day of spring.");
@@ -541,7 +503,7 @@ public class CoreConfigDC {
 			offsetClimate = off_climate.getIntList();
 
 			enableRealTime = realT.getBoolean();
-			enableRealSeason = realS.getBoolean();
+			// enableRealSeason = realS.getBoolean();
 
 			if (sprPeriod.isIntList() && sprPeriod.getIntList().length == 2) {
 				for (int i = 0; i < 2; i++) {

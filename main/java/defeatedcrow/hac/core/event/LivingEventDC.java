@@ -313,6 +313,7 @@ public class LivingEventDC {
 				float damAir = CoreConfigDC.damageDifficulty;
 				float prevHum = DamageAPI.resistantData.getHumResistant(living, clm.getHumidity());
 				float prevAir = DamageAPI.resistantData.getAirResistant(living, clm.getAirflow());
+
 				damHum -= prevHum;
 				damAir -= prevAir;
 
@@ -326,6 +327,10 @@ public class LivingEventDC {
 				if (prevAir <= 0F && CoreConfigDC.enableSuffocation) {
 					DamageSourceClimate sourceAir = clm.getAirflow() == DCAirflow.TIGHT ?
 							DamageSourceClimate.climateSuffocationDamage : DamageSourceClimate.climateWindDamage;
+					if (sourceAir == DamageSourceClimate.climateSuffocationDamage && living
+							.isPotionActive(MobEffects.WATER_BREATHING)) {
+						prevAir += 2.0F;
+					}
 					living.hurtResistantTime = 0;
 					living.attackEntityFrom(sourceAir, damAir);
 				}
