@@ -38,8 +38,8 @@ public class ClimateCore {
 	public static final String MOD_ID = "dcs_lib";
 	public static final String MOD_NAME = "HeatAndClimateLib";
 	public static final int MOD_MEJOR = 3;
-	public static final int MOD_MINOR = 7;
-	public static final int MOD_BUILD = 1;
+	public static final int MOD_MINOR = 8;
+	public static final int MOD_BUILD = 0;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";
 	public static final String MOD_ACCEPTED_MC_VERSIONS = "[1.12,1.12.2]";
 	public static final String PACKAGE_BASE = "dcs";
@@ -91,6 +91,7 @@ public class ClimateCore {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+		// json config
 		MobResistantRegister.pre();
 		ArmorResistantRegister.pre();
 		HeatBlockRegister.pre();
@@ -104,6 +105,8 @@ public class ClimateCore {
 		ArmorResistantRegister.post();
 		HeatBlockRegister.post();
 		ClimateRegister.post();
+
+		ClimateConfig.INSTANCE.loadRecipeConfig();
 	}
 
 	@EventHandler

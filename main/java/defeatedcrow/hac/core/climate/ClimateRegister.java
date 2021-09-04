@@ -157,6 +157,12 @@ public class ClimateRegister implements IBiomeClimateRegister {
 
 	@Override
 	public IClimate getClimateFromParam(DCHeatTier heat, DCHumidity hum, DCAirflow air) {
+		if (heat == null)
+			heat = DCHeatTier.NORMAL;
+		if (hum == null)
+			hum = DCHumidity.NORMAL;
+		if (air == null)
+			air = DCAirflow.NORMAL;
 		return new DCClimate(heat, hum, air);
 	}
 

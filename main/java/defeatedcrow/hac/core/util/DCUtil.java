@@ -280,6 +280,37 @@ public class DCUtil {
 		return ret;
 	}
 
+	public static ArrayList<ItemStack> getProcessedList(Object obj, int count) {
+		ArrayList<ItemStack> ret = Lists.newArrayList();
+		if (obj == null) {
+			return ret;
+		}
+		if (obj instanceof String) {
+			List<ItemStack> ores = new ArrayList<ItemStack>();
+			ores.addAll(OreDictionary.getOres((String) obj));
+			for (ItemStack o : ores) {
+				if (!DCUtil.isEmpty(o)) {
+					ret.add(new ItemStack(o.getItem(), count, o.getItemDamage()));
+				}
+			}
+		} else if (obj instanceof List && !((List) obj).isEmpty()) {
+			ret.addAll((List<ItemStack>) obj);
+		} else if (obj instanceof ItemStack) {
+			if (!DCUtil.isEmpty((ItemStack) obj)) {
+				ItemStack copy = ((ItemStack) obj).copy();
+				copy.setCount(count);
+				ret.add(copy);
+			}
+		} else if (obj instanceof Item) {
+			ret.add(new ItemStack((Item) obj, count, 0));
+		} else if (obj instanceof Block) {
+			ret.add(new ItemStack((Block) obj, count, 0));
+		} else {
+			throw new IllegalArgumentException("Unknown Object passed to recipe!");
+		}
+		return ret;
+	}
+
 	/* Playerの所持チェック */
 	public static boolean isPlayerHeldItem(Item item, EntityPlayer player) {
 		if (item == null || player == null)

@@ -22,6 +22,7 @@ public class CoreConfigDC {
 
 	// key
 	public static int charmWarpKey = 0x2D; // X
+	public static int gauntletKey = 0x2E; // C
 	public static int sitKey = 0x0F; // Tab
 
 	public static int altJumpKey = -1;
@@ -254,8 +255,8 @@ public class CoreConfigDC {
 			Property warp_key = cfg
 					.get("key setting", "Charm Use Key", charmWarpKey, "Set key number for using jewel charm effects. Default key is X(45)." + BR + "If you don't want this effect, set 0.");
 
-			Property sit_key = cfg
-					.get("key setting", "Sit Cushion Key", sitKey, "Set key number for sitting on cushion. Default key is TAB(15)." + BR + "If you don't want this effect, set 0.");
+			Property gauntlet_key = cfg
+					.get("key setting", "Gauntlet Use Key", gauntletKey, "Set key number for using jewel gauntlet effects. Default key is C(46)." + BR + "If you don't want this effect, set 0.");
 
 			Property jump_key = cfg
 					.get("key setting", "Jump Key", altJumpKey, "Set key number for jumping. Default key is same as the vanilla setting." + BR + "If you want to use the default setting, set -1.");
@@ -434,7 +435,7 @@ public class CoreConfigDC {
 			iconY = hud_y.getInt();
 
 			charmWarpKey = warp_key.getInt();
-			sitKey = sit_key.getInt();
+			gauntletKey = gauntlet_key.getInt();
 
 			altJumpKey = jump_key.getInt();
 			altSneakKey = sneak_key.getInt();

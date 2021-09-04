@@ -6,8 +6,6 @@ import java.util.List;
 
 import defeatedcrow.hac.api.recipe.ISpinningRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -22,30 +20,7 @@ public class SpinningRecipe implements ISpinningRecipe {
 		input = i;
 		output = o;
 		count = c;
-		processedInput = new ArrayList<ItemStack>();
-		if (input instanceof String) {
-			List<ItemStack> ret = new ArrayList<ItemStack>();
-			ret.addAll(OreDictionary.getOres((String) input));
-			for (ItemStack r : ret) {
-				if (!DCUtil.isEmpty(r)) {
-					processedInput.add(new ItemStack(r.getItem(), count, r.getItemDamage()));
-				}
-			}
-		} else if (input instanceof List && !((List) input).isEmpty()) {
-			List<ItemStack> ret = (List<ItemStack>) input;
-			processedInput.addAll(ret);
-		} else if (input instanceof ItemStack) {
-			if (!DCUtil.isEmpty((ItemStack) input)) {
-				processedInput.add(
-						(new ItemStack(((ItemStack) input).getItem(), count, ((ItemStack) input).getItemDamage())));
-			}
-		} else if (input instanceof Item) {
-			processedInput.add(new ItemStack((Item) input, count, 0));
-		} else if (input instanceof Block) {
-			processedInput.add(new ItemStack((Block) input, count, 0));
-		} else {
-			throw new IllegalArgumentException("Unknown Object passed to recipe!");
-		}
+		processedInput = DCUtil.getProcessedList(input, count);
 	}
 
 	@Override

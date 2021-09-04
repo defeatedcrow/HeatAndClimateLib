@@ -34,6 +34,8 @@ public final class BlockSet {
 
 	@Override
 	public int hashCode() {
+		if (block == null)
+			return 0;
 		int i = block.getUnlocalizedName().hashCode() + meta;
 		return i;
 	}
@@ -43,4 +45,6 @@ public final class BlockSet {
 		String name = block == null ? "null" : block.getRegistryName().toString();
 		return name + ":" + meta;
 	}
+
+	public static final BlockSet AIR = new BlockSet(Blocks.AIR, 0);
 }

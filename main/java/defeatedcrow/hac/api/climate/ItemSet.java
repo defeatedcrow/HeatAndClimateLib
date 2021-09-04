@@ -11,14 +11,29 @@ public class ItemSet {
 
 	public final Item item;
 	public final int meta;
+	public static final ItemSet EMPTY = new ItemSet(null, 0);
 
 	public ItemSet(Item i, int j) {
 		item = i;
 		meta = j;
 	}
 
+	public static boolean isEmpty(ItemSet set) {
+		if (set == null || set.item == null)
+			return true;
+		return false;
+	}
+
 	public ItemStack getSingleStack() {
+		if (item == null)
+			return ItemStack.EMPTY;
 		return new ItemStack(item, 1, meta);
+	}
+
+	public String localizedname() {
+		if (item == null)
+			return "empty";
+		return getSingleStack().getDisplayName();
 	}
 
 	/**
@@ -35,6 +50,8 @@ public class ItemSet {
 
 	@Override
 	public int hashCode() {
+		if (item == null)
+			return 0;
 		int i = item.getUnlocalizedName().hashCode() + meta;
 		return i;
 	}

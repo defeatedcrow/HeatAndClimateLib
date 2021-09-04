@@ -26,9 +26,8 @@ import defeatedcrow.hac.api.climate.IHeatBlockRegister;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.plugin.DCsJEIPluginLists;
 import defeatedcrow.hac.core.plugin.jei.ClimateEffectiveTile;
+import defeatedcrow.hac.core.util.JsonUtilDC;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class HeatBlockRegister implements IHeatBlockRegister {
@@ -225,44 +224,20 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 	/* json */
 	public static void registerBlockClimate(String name, IClimate clm) {
 		if (name != null) {
-			String itemName = name;
-			String modid = "minecraft";
-			int meta = 32767;
-			if (name.contains(":")) {
-				String[] n2 = name.split(":");
-				if (n2 != null && n2.length > 0) {
-					if (n2.length == 1) {
-						itemName = n2[0];
-					} else {
-						modid = n2[0];
-						itemName = n2[1];
-						if (n2.length > 2) {
-							Integer m = Integer.parseInt(n2[2]);
-							if (m != null && m >= 0) {
-								meta = m;
-							}
-						}
-					}
+			BlockSet set = JsonUtilDC.getBlockSetFromString(name);
 
-				} else {
-					DCLogger.warnLog("fail to register target block from json: " + name);
-					return;
-				}
-			}
-
-			Block item = Block.REGISTRY.getObject(new ResourceLocation(modid, itemName));
-			if (item != null && item != Blocks.AIR && clm != null) {
-				DCLogger.infoLog("register target block climate from json: " + modid + ":" + itemName + ", " + meta);
+			if (set != null && set != BlockSet.AIR && clm != null) {
+				DCLogger.infoLog("register target block climate from json: " + set.toString());
 				if (clm.getHeat() != DCHeatTier.NORMAL) {
-					ClimateAPI.registerBlock.registerHeatBlock(item, meta, clm.getHeat());
+					ClimateAPI.registerBlock.registerHeatBlock(set.block, set.meta, clm.getHeat());
 					DCLogger.infoLog("* HeatTier: " + clm.getHeat());
 				}
 				if (clm.getHumidity() != DCHumidity.NORMAL) {
-					ClimateAPI.registerBlock.registerHumBlock(item, meta, clm.getHumidity());
+					ClimateAPI.registerBlock.registerHumBlock(set.block, set.meta, clm.getHumidity());
 					DCLogger.infoLog("* Humidity: " + clm.getHumidity());
 				}
 				if (clm.getAirflow() != DCAirflow.TIGHT) {
-					ClimateAPI.registerBlock.registerAirBlock(item, meta, clm.getAirflow());
+					ClimateAPI.registerBlock.registerAirBlock(set.block, set.meta, clm.getAirflow());
 					DCLogger.infoLog("* Airflow: " + clm.getAirflow());
 				}
 			} else {

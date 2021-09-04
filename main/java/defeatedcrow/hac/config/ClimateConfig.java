@@ -2,6 +2,12 @@ package defeatedcrow.hac.config;
 
 import java.io.File;
 
+import defeatedcrow.hac.config.recipe.ClimateSmeltingJson;
+import defeatedcrow.hac.config.recipe.CrusherRecipeJson;
+import defeatedcrow.hac.config.recipe.FluidRecipeJson;
+import defeatedcrow.hac.config.recipe.MillRecipeJson;
+import defeatedcrow.hac.config.recipe.ReactorRecipeJson;
+import defeatedcrow.hac.config.recipe.SpinningRecipeJson;
 import defeatedcrow.hac.core.climate.ArmorResistantRegister;
 import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
@@ -33,6 +39,24 @@ public class ClimateConfig {
 		HeatBlockRegister.setDir(configDir);
 		ClimateRegister.setDir(configDir);
 		FluidDictionaryDC.setDir(configDir);
+	}
+
+	public void loadRecipeConfig() {
+		// json recipe pre
+		ClimateSmeltingJson.pre();
+		MillRecipeJson.pre();
+		CrusherRecipeJson.pre();
+		FluidRecipeJson.pre();
+		ReactorRecipeJson.pre();
+		SpinningRecipeJson.pre();
+
+		// json recipe post
+		ClimateSmeltingJson.post();
+		MillRecipeJson.post();
+		CrusherRecipeJson.post();
+		FluidRecipeJson.post();
+		ReactorRecipeJson.post();
+		SpinningRecipeJson.post();
 	}
 
 }

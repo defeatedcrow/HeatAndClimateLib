@@ -19,9 +19,8 @@ import defeatedcrow.hac.api.climate.ItemSet;
 import defeatedcrow.hac.api.damage.IArmorItemRegister;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.util.DCUtil;
-import net.minecraft.item.Item;
+import defeatedcrow.hac.core.util.JsonUtilDC;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ArmorResistantRegister implements IArmorItemRegister {
@@ -93,35 +92,9 @@ public class ArmorResistantRegister implements IArmorItemRegister {
 
 	public void registerArmorResistant(String name, float heat, float cold) {
 		if (name != null) {
-			String itemName = name;
-			String modid = "minecraft";
-			int meta = 32767;
-			if (name.contains(":")) {
-				String[] n2 = name.split(":");
-				if (n2 != null && n2.length > 0) {
-					if (n2.length == 1) {
-						itemName = n2[0];
-					} else {
-						modid = n2[0];
-						itemName = n2[1];
-						if (n2.length > 2) {
-							Integer m = Integer.parseInt(n2[2]);
-							if (m != null && m >= 0) {
-								meta = m;
-							}
-						}
-					}
-
-				} else {
-					DCLogger.debugLog("fail to register target item from json: " + name);
-					return;
-				}
-			}
-
-			Item item = Item.REGISTRY.getObject(new ResourceLocation(modid, itemName));
-			if (item != null) {
-				DCLogger.debugLog("register target item from json: " + modid + ":" + itemName + ", " + meta);
-				ItemSet set = new ItemSet(item, meta);
+			ItemSet set = JsonUtilDC.getItemSetFromString(name);
+			if (set != null) {
+				DCLogger.debugLog("register target item from json: " + set.localizedname());
 				INSTANCE.registerMaterial(set.getSingleStack(), heat, cold);
 			}
 		}
