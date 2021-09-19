@@ -11,9 +11,9 @@ public enum HaCModule {
 	FOOD("food", false, true),
 	FOOD_ADVANCED("food_advanced", true, true),
 	TOOL("tool", false, true),
-	WEAPON_ADVANCED("weapon_advanced", false, true),
-	CLOTH_ADVANCED("cloth_advanced", false, true),
-	BUILD_ADVANCED("build_advanced", false, true),
+	WEAPON_ADVANCED("weapon_advanced", true, true),
+	CLOTH_ADVANCED("cloth_advanced", true, true),
+	BUILD_ADVANCED("build_advanced", true, true),
 	PLUGIN("plugin", false, false);
 
 	public final String id;

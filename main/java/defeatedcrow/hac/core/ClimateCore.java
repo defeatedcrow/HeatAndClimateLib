@@ -31,13 +31,13 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 @Mod(modid = ClimateCore.MOD_ID, name = ClimateCore.MOD_NAME,
-		version = ClimateCore.MOD_MEJOR + "." + ClimateCore.MOD_MINOR + "." + ClimateCore.MOD_BUILD,
+		version = ClimateCore.MOD_MAJOR + "." + ClimateCore.MOD_MINOR + "." + ClimateCore.MOD_BUILD,
 		dependencies = ClimateCore.MOD_DEPENDENCIES, acceptedMinecraftVersions = ClimateCore.MOD_ACCEPTED_MC_VERSIONS,
 		updateJSON = ClimateCore.UPDATE_JSON, certificateFingerprint = ClimateCore.KEY, useMetadata = true)
 public class ClimateCore {
 	public static final String MOD_ID = "dcs_lib";
 	public static final String MOD_NAME = "HeatAndClimateLib";
-	public static final int MOD_MEJOR = 3;
+	public static final int MOD_MAJOR = 3;
 	public static final int MOD_MINOR = 8;
 	public static final int MOD_BUILD = 0;
 	public static final String MOD_DEPENDENCIES = "before:cavern;before:mekanism";

@@ -340,7 +340,7 @@ public class ClimateCalculator implements IClimateCalculator {
 		int ret = hum.getID() - 1;
 		boolean isUnderwater = false;
 		boolean hasWater = false;
-		boolean hasAir = false;
+		int hasAir = 0;
 
 		// さきに水没判定をやる
 		// 中心
@@ -359,11 +359,11 @@ public class ClimateCalculator implements IClimateCalculator {
 					hasWater = true;
 				}
 				if (!world.getBlockState(p1).isNormalCube()) {
-					hasAir = true;
+					hasAir++; // 2blockまでOK
 				}
 			}
 		}
-		if (hasWater && !hasAir) {
+		if (hasWater && hasAir < 3) {
 			return DCHumidity.UNDERWATER;
 		}
 
