@@ -36,9 +36,7 @@ public class CustomizeVanillaRecipe {
 
 	private static ArrayList<ItemStack> exclusions = new ArrayList<ItemStack>();
 
-	private static ItemStack[] shapelessOnly = new ItemStack[] {
-			new ItemStack(Items.WHEAT)
-	};
+	private static ItemStack[] shapelessOnly = new ItemStack[] { new ItemStack(Items.WHEAT) };
 
 	static void initializeMap() {
 
@@ -187,28 +185,8 @@ public class CustomizeVanillaRecipe {
 		ArrayList<Object> inputArray = new ArrayList<Object>();
 
 		// 3x3より大きなレシピには全く対応していない
-		String[] s = {
-				"A",
-				"B",
-				"C",
-				"D",
-				"E",
-				"F",
-				"G",
-				"H",
-				"I"
-		};
-		Character[] c = {
-				'A',
-				'B',
-				'C',
-				'D',
-				'E',
-				'F',
-				'G',
-				'H',
-				'I'
-		};
+		String[] s = { "A", "B", "C", "D", "E", "F", "G", "H", "I" };
+		Character[] c = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' };
 
 		String[] returnArray = new String[y];
 
@@ -258,7 +236,7 @@ public class CustomizeVanillaRecipe {
 		Object[] newInputs = inputArray.toArray();
 		DCRecipe.addShapedRecipe(new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
 				.getResourcePath() + "_dcs"), output, newInputs);
-		DCLogger.debugLog("Customized ShapdRecipe : " + inputArray.toString());
+		DCLogger.debugLog("Customized ShapdRecipe : " + output.getDisplayName());
 	}
 
 	// Shapeless
@@ -292,7 +270,7 @@ public class CustomizeVanillaRecipe {
 		Object[] newInputs = inputs.toArray();
 		DCRecipe.addShapelessRecipe(new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
 				.getResourcePath() + "_dcs"), output, newInputs);
-		DCLogger.debugLog("Customized ShapelessRecipe : " + inputs.toString());
+		DCLogger.debugLog("Customized ShapelessRecipe : " + output.getDisplayName());
 
 	}
 
@@ -324,28 +302,8 @@ public class CustomizeVanillaRecipe {
 		}
 
 		// 3x3より大きなレシピには全く対応していない
-		String[] s = {
-				"A",
-				"B",
-				"C",
-				"D",
-				"E",
-				"F",
-				"G",
-				"H",
-				"I"
-		};
-		Character[] c = {
-				'A',
-				'B',
-				'C',
-				'D',
-				'E',
-				'F',
-				'G',
-				'H',
-				'I'
-		};
+		String[] s = { "A", "B", "C", "D", "E", "F", "G", "H", "I" };
+		Character[] c = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I' };
 
 		String[] returnArray = new String[y];
 
@@ -425,7 +383,7 @@ public class CustomizeVanillaRecipe {
 		Object[] newInputs = inputs.toArray();
 		DCRecipe.addShapedRecipe(new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
 				.getResourcePath() + "_dcs"), output, newInputs);
-		DCLogger.debugLog("Customized ShapedOreRecipe : " + inputs.toString());
+		DCLogger.debugLog("Customized ShapedOreRecipe : " + output.getDisplayName());
 
 	}
 
@@ -489,7 +447,7 @@ public class CustomizeVanillaRecipe {
 		Object[] newInputs = inputs.toArray();
 		DCRecipe.addShapelessRecipe(new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
 				.getResourcePath() + "_dcs"), output, newInputs);
-		DCLogger.debugLog("Customized ShapelessOreRecipe : " + inputs.toString());
+		DCLogger.debugLog("Customized ShapelessOreRecipe : " + output.getDisplayName());
 
 	}
 

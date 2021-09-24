@@ -82,7 +82,7 @@ public class JsonUtilDC {
 		return list;
 	}
 
-	public static BlockSet getBlockSetFromString(String name) {
+	public static BlockSet getBlockSetFromStringWildcard(String name) {
 		if (name == null || name.equalsIgnoreCase("empty")) {
 			return BlockSet.AIR;
 		} else {
@@ -118,7 +118,43 @@ public class JsonUtilDC {
 		return BlockSet.AIR;
 	}
 
-	public static ItemSet getItemSetFromString(String name) {
+	public static BlockSet getBlockSetFromString(String name) {
+		if (name == null || name.equalsIgnoreCase("empty")) {
+			return BlockSet.AIR;
+		} else {
+			String itemName = name;
+			String modid = "minecraft";
+			int meta = 0;
+
+			if (name.contains(":")) {
+				String[] n2 = name.split(":");
+				if (n2 != null && n2.length > 0) {
+					if (n2.length > 2) {
+						meta = parseInt(n2[2], 0);
+					}
+
+					if (n2.length == 1) {
+						itemName = n2[0];
+					} else {
+						modid = n2[0];
+						itemName = n2[1];
+					}
+				}
+			}
+
+			Block block = Block.REGISTRY.getObject(new ResourceLocation(modid, itemName));
+			if (block != null && block != Blocks.AIR) {
+				// DCLogger.debugTrace("Find target: " + modid + ":" + itemName + ", " + meta);
+				BlockSet set = new BlockSet(block, meta);
+				return set;
+			} else {
+				DCLogger.debugLog("Failed find target: " + modid + ":" + itemName);
+			}
+		}
+		return BlockSet.AIR;
+	}
+
+	public static ItemSet getItemSetFromStringWildcard(String name) {
 		if (name == null || name.equalsIgnoreCase("empty")) {
 			return ItemSet.EMPTY;
 		} else {
@@ -131,6 +167,42 @@ public class JsonUtilDC {
 				if (n2 != null && n2.length > 0) {
 					if (n2.length > 2) {
 						meta = parseInt(n2[2], 32767);
+					}
+
+					if (n2.length == 1) {
+						itemName = n2[0];
+					} else {
+						modid = n2[0];
+						itemName = n2[1];
+					}
+				}
+			}
+
+			Item item = Item.REGISTRY.getObject(new ResourceLocation(modid, itemName));
+			if (item != null && item != Item.getItemFromBlock(Blocks.AIR)) {
+				// DCLogger.debugTrace("Find target: " + modid + ":" + itemName + ", " + meta);
+				ItemSet ret = new ItemSet(item, meta);
+				return ret;
+			} else {
+				DCLogger.debugLog("Failed find target: " + modid + ":" + itemName);
+			}
+		}
+		return ItemSet.EMPTY;
+	}
+
+	public static ItemSet getItemSetFromString(String name) {
+		if (name == null || name.equalsIgnoreCase("empty")) {
+			return ItemSet.EMPTY;
+		} else {
+			String itemName = name;
+			String modid = "minecraft";
+			int meta = 0;
+
+			if (name.contains(":")) {
+				String[] n2 = name.split(":");
+				if (n2 != null && n2.length > 0) {
+					if (n2.length > 2) {
+						meta = parseInt(n2[2], 0);
 					}
 
 					if (n2.length == 1) {

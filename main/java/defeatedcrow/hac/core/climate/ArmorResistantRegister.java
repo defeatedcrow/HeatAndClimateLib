@@ -92,7 +92,7 @@ public class ArmorResistantRegister implements IArmorItemRegister {
 
 	public void registerArmorResistant(String name, float heat, float cold) {
 		if (name != null) {
-			ItemSet set = JsonUtilDC.getItemSetFromString(name);
+			ItemSet set = JsonUtilDC.getItemSetFromStringWildcard(name);
 			if (set != null) {
 				DCLogger.debugLog("register target item from json: " + set.localizedname());
 				INSTANCE.registerMaterial(set.getSingleStack(), heat, cold);

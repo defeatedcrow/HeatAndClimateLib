@@ -224,7 +224,7 @@ public class HeatBlockRegister implements IHeatBlockRegister {
 	/* json */
 	public static void registerBlockClimate(String name, IClimate clm) {
 		if (name != null) {
-			BlockSet set = JsonUtilDC.getBlockSetFromString(name);
+			BlockSet set = JsonUtilDC.getBlockSetFromStringWildcard(name);
 
 			if (set != null && set != BlockSet.AIR && clm != null) {
 				DCLogger.infoLog("register target block climate from json: " + set.toString());

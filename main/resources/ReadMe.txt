@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.8.0 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.8.1 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -286,6 +286,11 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.8.1
+　修正
+　　・Jsonレシピコンフィグの読み込み時の処理を修正
+　　・レシピコンバータの成功時ログの内容を変えた
 
 ○3.8.0
 　変更
