@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.google.common.collect.ImmutableList;
+
+import defeatedcrow.hac.api.climate.ItemSet;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.DCRecipe;
@@ -32,21 +35,21 @@ public class CustomizeVanillaRecipe {
 
 	private CustomizeVanillaRecipe() {}
 
-	private static Map<ItemStack, String> replaceTable = new HashMap<ItemStack, String>();
+	private static Map<ItemSet, String> replaceTable = new HashMap<ItemSet, String>();
 
-	private static ArrayList<ItemStack> exclusions = new ArrayList<ItemStack>();
+	private static ArrayList<ItemSet> exclusions = new ArrayList<ItemSet>();
 
-	private static ItemStack[] shapelessOnly = new ItemStack[] { new ItemStack(Items.WHEAT) };
+	private static List<ItemSet> shapelessOnly = ImmutableList.of(new ItemSet(Items.WHEAT));
 
 	static void initializeMap() {
 
 		if (!ConvertTargetList.getExclusionList().isEmpty()) {
-			DCLogger.debugLog("convert ex: " + ConvertTargetList.getExclusionList().size());
+			DCLogger.debugLog("#HaCRecipeConverter# convert ex: " + ConvertTargetList.getExclusionList().size());
 			exclusions.addAll(ConvertTargetList.getExclusionList());
 		}
 
 		if (!ConvertTargetList.getReplaceTable().isEmpty()) {
-			DCLogger.debugLog("convert target: " + ConvertTargetList.getReplaceTable().size());
+			DCLogger.debugLog("#HaCRecipeConverter# convert target: " + ConvertTargetList.getReplaceTable().size());
 			replaceTable.putAll(ConvertTargetList.getReplaceTable());
 		}
 	}
@@ -54,13 +57,14 @@ public class CustomizeVanillaRecipe {
 	public static void initCustomize() {
 		initializeMap();
 
+		DCLogger.debugLog("#HaCRecipeConverter# Target recipe: " + CraftingManager.REGISTRY.getKeys().size());
 		Iterator<IRecipe> targetRecipes = CraftingManager.REGISTRY.iterator();
 		List<IRecipe> addRecipes = new ArrayList<IRecipe>();
 		List<IRecipe> addOreRecipes = new ArrayList<IRecipe>();
 		List<IRecipe> addShapelessRecipes = new ArrayList<IRecipe>();
 		List<IRecipe> addShapelessOreRecipes = new ArrayList<IRecipe>();
 
-		ItemStack[] replaces = replaceTable.keySet().toArray(new ItemStack[replaceTable.keySet().size()]);
+		List<ItemSet> replaces = ImmutableList.copyOf(replaceTable.keySet());
 
 		int count = 0;
 
@@ -73,67 +77,44 @@ public class CustomizeVanillaRecipe {
 			if (rec instanceof ShapedRecipes) {
 				ShapedRecipes recipe = (ShapedRecipes) rec;
 				ItemStack output = recipe.getRecipeOutput();
-				if (!DCUtil.isEmpty(output) && containsMatch2(false, exclusions, output)) {
+				if (DCUtil.isEmpty(output) || containsMatch2(false, exclusions, output)) {
 					continue;
 				}
 
-				if (!containsMatch(true, recipe.recipeItems, shapelessOnly) && containsMatch(true, recipe.recipeItems, replaces)) {
+				if (!containsMatch(true, shapelessOnly, recipe.recipeItems) && containsMatch(true, replaces, recipe.recipeItems)) {
 					addRecipes.add(recipe);
 				}
 			} else if (rec instanceof ShapelessRecipes) {
 				ShapelessRecipes recipe = (ShapelessRecipes) rec;
 				ItemStack output = recipe.getRecipeOutput();
-				if (!DCUtil.isEmpty(output) && containsMatch2(false, exclusions, output)) {
+				if (DCUtil.isEmpty(output) || containsMatch2(false, exclusions, output)) {
 					continue;
 				}
 
-				if (containsMatch(true, recipe.recipeItems, replaces)) {
+				if (containsMatch(true, replaces, recipe.recipeItems)) {
 					addShapelessRecipes.add(recipe);
 				}
 			}
 			if (rec instanceof ShapedOreRecipe) {
 				ShapedOreRecipe recipe = (ShapedOreRecipe) rec;
 				ItemStack output = recipe.getRecipeOutput();
-				if (!DCUtil.isEmpty(output) && containsMatch2(false, exclusions, output)) {
+				if (DCUtil.isEmpty(output) || containsMatch2(false, exclusions, output)) {
 					continue;
 				}
 
-				ArrayList<ItemStack> check = new ArrayList<ItemStack>();
-				for (Ingredient object : recipe.getIngredients()) {
-					if (DCUtil.isEmptyIngredient(object)) {
-						continue;
-					}
-					ItemStack item = object.getMatchingStacks()[0];
-
-					if (object.getMatchingStacks().length == 1 && !DCUtil.isEmpty(item)) {
-						check.add(item);
-					}
-				}
-
-				if (!check
-						.isEmpty() && !containsMatch2(true, check, shapelessOnly) && containsMatch2(true, check, replaces)) {
+				if (!containsMatch(true, shapelessOnly, recipe.getIngredients()) && containsMatch(true, replaces, recipe
+						.getIngredients())) {
 					addOreRecipes.add(recipe);
 				}
+
 			} else if (rec instanceof ShapelessOreRecipe) {
 				ShapelessOreRecipe recipe = (ShapelessOreRecipe) rec;
 				ItemStack output = recipe.getRecipeOutput();
-				if (!DCUtil.isEmpty(output) && containsMatch2(false, exclusions, output)) {
+				if (DCUtil.isEmpty(output) || containsMatch2(false, exclusions, output)) {
 					continue;
 				}
 
-				ArrayList<ItemStack> check = new ArrayList<ItemStack>();
-				for (Ingredient object : recipe.getIngredients()) {
-					if (DCUtil.isEmptyIngredient(object)) {
-						continue;
-					}
-					ItemStack item = object.getMatchingStacks()[0];
-
-					if (object.getMatchingStacks().length == 1 && !DCUtil.isEmpty(item)) {
-						check.add(item);
-					}
-				}
-
-				if (!check.isEmpty() && containsMatch2(true, check, replaces)) {
+				if (containsMatch(true, replaces, recipe.getIngredients())) {
 					addShapelessOreRecipes.add(recipe);
 				}
 			}
@@ -167,7 +148,7 @@ public class CustomizeVanillaRecipe {
 			}
 		}
 
-		DCLogger.debugLog("Replaced " + count + " recipes.");
+		DCLogger.debugLog("#HaCRecipeConverter# Replaced " + count + " recipes.");
 	}
 
 	// Shaped
@@ -216,8 +197,8 @@ public class CustomizeVanillaRecipe {
 				Ingredient item = items.get(i);
 				boolean b = false;
 
-				for (Entry<ItemStack, String> entry : replaceTable.entrySet()) {
-					if (itemMatches(entry.getKey(), item.getMatchingStacks()[0], true)) {
+				for (Entry<ItemSet, String> entry : replaceTable.entrySet()) {
+					if (itemMatches(item.getMatchingStacks()[0], entry.getKey(), true)) {
 						String oreName = entry.getValue();
 
 						inputArray.add(c[i]);
@@ -234,9 +215,10 @@ public class CustomizeVanillaRecipe {
 		}
 
 		Object[] newInputs = inputArray.toArray();
-		DCRecipe.addShapedRecipe(new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
-				.getResourcePath() + "_dcs"), output, newInputs);
-		DCLogger.debugLog("Customized ShapdRecipe : " + output.getDisplayName());
+		ResourceLocation name = new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
+				.getResourcePath() + "_dcs");
+		DCRecipe.addShapedRecipe(name, output, newInputs);
+		DCLogger.debugLog("#HaCRecipeConverter# Customized ShapdRecipe : " + name.toString());
 	}
 
 	// Shapeless
@@ -244,6 +226,9 @@ public class CustomizeVanillaRecipe {
 		ItemStack output = recipe.getRecipeOutput();
 		NonNullList<Ingredient> items = recipe.recipeItems;
 		ArrayList<Object> inputs = new ArrayList<Object>();
+
+		if (DCUtil.isEmpty(output))
+			return;
 
 		if (items == null || items.isEmpty() || items.size() > 9) {
 			DCLogger.debugLog("Failed ShapelessRecipe : " + output.toString());
@@ -253,8 +238,8 @@ public class CustomizeVanillaRecipe {
 		for (Ingredient item : items) {
 			boolean b = false;
 			if (!DCUtil.isEmptyIngredient(item)) {
-				for (Entry<ItemStack, String> entry : replaceTable.entrySet()) {
-					if (itemMatches(entry.getKey(), item.getMatchingStacks()[0], true)) {
+				for (Entry<ItemSet, String> entry : replaceTable.entrySet()) {
+					if (itemMatches(item.getMatchingStacks()[0], entry.getKey(), true)) {
 						String oreName = entry.getValue();
 						inputs.add(oreName);
 						b = true;
@@ -268,9 +253,10 @@ public class CustomizeVanillaRecipe {
 		}
 
 		Object[] newInputs = inputs.toArray();
-		DCRecipe.addShapelessRecipe(new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
-				.getResourcePath() + "_dcs"), output, newInputs);
-		DCLogger.debugLog("Customized ShapelessRecipe : " + output.getDisplayName());
+		ResourceLocation name = new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
+				.getResourcePath() + "_dcs");
+		DCRecipe.addShapelessRecipe(name, output, newInputs);
+		DCLogger.debugLog("#HaCRecipeConverter# Customized ShapelessRecipe : " + name.toString());
 
 	}
 
@@ -364,8 +350,8 @@ public class CustomizeVanillaRecipe {
 			}
 
 			if (!DCUtil.isEmpty(item)) {
-				for (Entry<ItemStack, String> entry : replaceTable.entrySet()) {
-					if (itemMatches(entry.getKey(), item, true)) {
+				for (Entry<ItemSet, String> entry : replaceTable.entrySet()) {
+					if (itemMatches(item, entry.getKey(), true)) {
 						String oreName = entry.getValue();
 						inputs.add(c[i]);
 						inputs.add(oreName);
@@ -381,9 +367,10 @@ public class CustomizeVanillaRecipe {
 		}
 
 		Object[] newInputs = inputs.toArray();
-		DCRecipe.addShapedRecipe(new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
-				.getResourcePath() + "_dcs"), output, newInputs);
-		DCLogger.debugLog("Customized ShapedOreRecipe : " + output.getDisplayName());
+		ResourceLocation name = new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
+				.getResourcePath() + "_dcs");
+		DCRecipe.addShapedRecipe(name, output, newInputs);
+		DCLogger.debugLog("#HaCRecipeConverter# Customized ShapedOreRecipe : " + name.toString());
 
 	}
 
@@ -430,8 +417,8 @@ public class CustomizeVanillaRecipe {
 			}
 
 			if (!DCUtil.isEmpty(item)) {
-				for (Entry<ItemStack, String> entry : replaceTable.entrySet()) {
-					if (itemMatches(entry.getKey(), item, true)) {
+				for (Entry<ItemSet, String> entry : replaceTable.entrySet()) {
+					if (itemMatches(item, entry.getKey(), true)) {
 						String oreName = entry.getValue();
 						inputs.add(oreName);
 						b = true;
@@ -445,44 +432,60 @@ public class CustomizeVanillaRecipe {
 		}
 
 		Object[] newInputs = inputs.toArray();
-		DCRecipe.addShapelessRecipe(new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
-				.getResourcePath() + "_dcs"), output, newInputs);
-		DCLogger.debugLog("Customized ShapelessOreRecipe : " + output.getDisplayName());
+		ResourceLocation name = new ResourceLocation(ClimateCore.MOD_ID, recipe.getRegistryName()
+				.getResourcePath() + "_dcs");
+		DCRecipe.addShapelessRecipe(name, output, newInputs);
+		DCLogger.debugLog("#HaCRecipeConverter# Customized ShapelessOreRecipe : " + name.toString());
 
 	}
 
-	private static boolean containsMatch(boolean strict, List<Ingredient> inputs, ItemStack... targets) {
-		for (Ingredient input : inputs) {
-			if (input.getMatchingStacks() != null && input.getMatchingStacks().length < 2)
-				for (ItemStack item : input.getMatchingStacks()) {
-					for (ItemStack target : targets) {
-						if (itemMatches(target, item, strict)) {
-							return true;
-						}
-					}
-				}
-		}
-		return false;
-	}
-
-	private static boolean containsMatch2(boolean strict, List<ItemStack> inputs, ItemStack... targets) {
-		for (ItemStack input : inputs) {
-			for (ItemStack target : targets) {
-				if (itemMatches(target, input, strict)) {
-					return true;
-				}
+	private static boolean containsMatch(boolean strict, List<ItemSet> inputs, List<Ingredient> targets) {
+		for (Ingredient target : targets) {
+			if (DCUtil.isEmptyIngredient(target) || target.getMatchingStacks().length > 1) {
+				continue;
+			}
+			if (target.getMatchingStacks() != null) {
+				ItemStack stack = target.getMatchingStacks()[0];
+				return inputs.contains(new ItemSet(stack));
 			}
 		}
 		return false;
 	}
 
-	public static boolean itemMatches(ItemStack target, ItemStack input, boolean strict) {
-		if (DCUtil.isEmpty(input) || DCUtil.isEmpty(target)) {
-			return DCUtil.isEmpty(input) && DCUtil.isEmpty(target);
+	private static boolean containsMatch2(boolean strict, List<ItemSet> inputs, ItemStack... targets) {
+		for (ItemSet input : inputs) {
+			for (ItemStack target : targets) {
+				return inputs.contains(new ItemSet(target));
+			}
 		}
-		return (target.getItem() == input.getItem() && ((target
-				.getItemDamage() == OreDictionary.WILDCARD_VALUE && !strict) || target.getItemDamage() == input
-						.getItemDamage()));
+		return false;
+	}
+
+	private static boolean containsMatch2(boolean strict, List<ItemSet> inputs, List<ItemStack> targets) {
+		for (ItemSet input : inputs) {
+			for (ItemStack target : targets) {
+				return inputs.contains(new ItemSet(target));
+			}
+		}
+		return false;
+	}
+
+	public static boolean itemMatches(ItemStack target, ItemSet input, boolean strict) {
+		return itemMatches(new ItemSet(target), input, strict);
+	}
+
+	public static boolean itemMatches(ItemSet target, ItemSet input, boolean strict) {
+		if (ItemSet.isEmpty(target) || ItemSet.isEmpty(input)) {
+			return ItemSet.isEmpty(target) && ItemSet.isEmpty(input);
+		}
+		if (target.equals(input)) {
+			if (strict) {
+				return target.meta == input.meta || (target.meta == 0 && input.meta == 32767);
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

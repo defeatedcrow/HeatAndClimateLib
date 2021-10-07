@@ -3,6 +3,8 @@ package defeatedcrow.hac.api.climate;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /** ItemStackのようなBlock、metaのセットが欲しかったので作成 */
 public final class BlockSet {
@@ -18,6 +20,12 @@ public final class BlockSet {
 	public IBlockState getState() {
 		return block == null ? Blocks.AIR.getDefaultState() : meta == 32767 ? block.getDefaultState() : block
 				.getStateFromMeta(meta);
+	}
+
+	public ItemStack getSingleStack() {
+		if (block == null)
+			return ItemStack.EMPTY;
+		return new ItemStack(Item.getItemFromBlock(block), 1, meta);
 	}
 
 	/**

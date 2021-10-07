@@ -18,6 +18,8 @@ import defeatedcrow.hac.api.damage.DamageAPI;
 import defeatedcrow.hac.api.energy.IWrenchDC;
 import defeatedcrow.hac.api.magic.CharmType;
 import defeatedcrow.hac.api.magic.IJewelCharm;
+import defeatedcrow.hac.api.magic.IMagicCost;
+import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
 import defeatedcrow.hac.core.plugin.ChastMobPlugin;
@@ -42,6 +44,7 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
@@ -87,7 +90,7 @@ public class DCUtil {
 	}
 
 	public static boolean isEmptyIngredient(Ingredient item) {
-		return item == null || item.getMatchingStacks().length < 1 || isEmpty(item.getMatchingStacks()[0]);
+		return item == null || item.getMatchingStacks().length <= 0 || isEmpty(item.getMatchingStacks()[0]);
 	}
 
 	public static int reduceStackSize(ItemStack item, int i) {
@@ -506,6 +509,72 @@ public class DCUtil {
 			}
 		}
 		return false;
+	}
+
+	// ハードコア魔法モード
+	public static boolean playerCanUseCharm(EntityPlayer player, ItemStack charm) {
+		if (!DCUtil.isEmpty(charm)) {
+			if (CoreConfigDC.harderMagic && charm.getItem() instanceof IMagicCost) {
+				if (((IMagicCost) charm.getItem()).canUseMagic(player, charm)) {
+					float cost = ((IMagicCost) charm.getItem()).getCost(charm);
+					if (cost == 0) {
+						return true;
+					}
+					if (CoreConfigDC.harderMagicCost == 0) {
+						// exp
+						return player.experienceTotal > cost;
+					} else if (CoreConfigDC.harderMagicCost == 2) {
+						// hunger
+						return player.getFoodStats().getFoodLevel() - cost > 1F;
+					} else if (CoreConfigDC.harderMagicCost == 1) {
+						// heart
+						return player.getHealth() - cost > 0.5F;
+					}
+				} else {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public static void playerConsumeCharm(EntityPlayer player, ItemStack charm) {
+		if (!DCUtil.isEmpty(charm)) {
+			if (CoreConfigDC.harderMagic && charm.getItem() instanceof IMagicCost) {
+				if (((IMagicCost) charm.getItem()).beforeConsumption(player, charm)) {
+					float cost = ((IMagicCost) charm.getItem()).getCost(charm);
+					if (cost == 0) {
+						return;
+					}
+					if (CoreConfigDC.harderMagicCost == 0) {
+						// exp
+						if (player.experience > cost) {
+							player.experience -= cost;
+						} else {
+							float f = cost - player.experience;
+							player.experienceLevel -= 1;
+							if (player.experienceLevel < 0) {
+								player.experienceLevel = 0;
+								player.experience = 0.0F;
+								player.experienceTotal = 0;
+							} else {
+								float exp = player.xpBarCap() - f;
+								player.experience = exp;
+							}
+						}
+					} else if (CoreConfigDC.harderMagicCost == 1) {
+						// hunger
+						player.addExhaustion(0.1F * cost);
+					} else if (CoreConfigDC.harderMagicCost == 2) {
+						// heart
+						if (player.getHealth() - cost < 0.5F) {
+							cost = player.getHealth() - 0.5F;
+						}
+						player.attackEntityFrom(DamageSource.MAGIC, cost);
+					}
+				}
+			}
+		}
 	}
 
 	// レンチアイテム

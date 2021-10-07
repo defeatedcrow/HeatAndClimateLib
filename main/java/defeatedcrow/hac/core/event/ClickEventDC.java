@@ -35,8 +35,11 @@ public class ClickEventDC {
 			NonNullList<ItemStack> charms = DCUtil.getPlayerCharm(event.getPlayer(), CharmType.TOOL);
 			for (ItemStack item : charms) {
 				IJewelCharm charm = ((IJewelCharm) item.getItem());
-				if (charm.onToolUsing(event.getPlayer(), event.getPos(), event.getState(), item)) {
-					event.setCanceled(true);
+				if (DCUtil.playerCanUseCharm(event.getPlayer(), item)) {
+					if (charm.onToolUsing(event.getPlayer(), event.getPos(), event.getState(), item)) {
+						DCUtil.playerConsumeCharm(event.getPlayer(), item);
+						event.setCanceled(true);
+					}
 				}
 			}
 		}

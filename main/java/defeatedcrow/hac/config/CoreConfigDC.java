@@ -125,6 +125,9 @@ public class CoreConfigDC {
 	public static boolean tightUnderworld = false;
 	public static boolean harderMachine = false;
 	public static boolean harderCrop = false;
+	public static boolean harderMagic = false;
+	public static int harderMagicCost = 0;
+	public static double harderMagicCostAmount = 1.0D;
 
 	public static String[] updateBlackList = new String[] {
 		"minecraft:leaves:32767",
@@ -288,6 +291,15 @@ public class CoreConfigDC {
 			Property harderC = cfg
 					.get("hardmode setting", "Harder Crop Mode", harderCrop, "The growing conditions of the crop become very narrow.");
 
+			Property harderM2 = cfg
+					.get("hardmode setting", "Harder Magic", harderMagic, "Some magic accessories require a consumption the player resource to use.");
+
+			Property harderMCostT = cfg
+					.get("hardmode setting", "Harder Magic Cost Type", harderMagicCost, "Select player resources that hardmode magic accessories consume." + BR + "0: Exp, 1: Hunger, 2: Health");
+
+			Property harderMCostA = cfg
+					.get("hardmode setting", "Harder Magic Cost Amount", harderMagicCostAmount, "Set the herdmode magic consumption. 0.0-100.0" + BR + "The static ability: x0, the triggered ability: x1/2, the X-key ability: x1, all: xTier.");
+
 			Property drought = cfg
 					.get("world setting", "Drought Frequency", droughtFrequency, "Set the number of days of fine weather required for drought.");
 
@@ -398,6 +410,7 @@ public class CoreConfigDC {
 			tightUnderworld = tight.getBoolean();
 			harderMachine = harderM.getBoolean();
 			harderCrop = harderC.getBoolean();
+			harderMagic = harderM2.getBoolean();
 			enableWeatherEffect = weather.getBoolean();
 			enableTimeEffect = time.getBoolean();
 			enableSeasonEffect = season.getBoolean();
@@ -415,6 +428,17 @@ public class CoreConfigDC {
 			if (d < 0 || d > 2)
 				d = 2;
 			damageDifficulty = d;
+
+			int mc = harderMCostT.getInt();
+			if (mc < 0 || mc > 2)
+				mc = 0;
+			harderMagicCost = mc;
+
+			double dm = harderMCostA.getDouble();
+			if (dm < 0D || dm > 100D) {
+				dm = 1D;
+			}
+			harderMagicCostAmount = dm;
 
 			int h = update_block.getInt();
 			if (h < 0 || h > 20)

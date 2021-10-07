@@ -105,6 +105,12 @@ public class ClientProxyD extends CommonProxyD {
 	}
 
 	@Override
+	public boolean isGauntletKeyDown() {
+		return CoreConfigDC.gauntletKey <= 0 || CoreConfigDC.gauntletKey >= Keyboard.KEYBOARD_SIZE ? false : Keyboard
+				.isCreated() && Keyboard.isKeyDown(CoreConfigDC.gauntletKey);
+	}
+
+	@Override
 	public EntityPlayer getPlayer() {
 		return Minecraft.getMinecraft().player;
 	}

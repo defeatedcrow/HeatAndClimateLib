@@ -16,7 +16,6 @@ import defeatedcrow.hac.core.climate.ClimateRegister;
 import defeatedcrow.hac.core.climate.HeatBlockRegister;
 import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.packet.command.DCServerCommand;
-import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
 import defeatedcrow.hac.core.util.DCWaterOpaque;
 import net.minecraft.creativetab.CreativeTabs;
@@ -84,9 +83,6 @@ public class ClimateCore {
 		proxy.loadInit();
 		proxy.loadTE();
 		proxy.loadWorldGen();
-		if (!CoreConfigDC.disableCustomRecipe) {
-			CustomizeVanillaRecipe.initCustomize();
-		}
 	}
 
 	@EventHandler
@@ -107,6 +103,7 @@ public class ClimateCore {
 		ClimateRegister.post();
 
 		ClimateConfig.INSTANCE.loadRecipeConfig();
+
 	}
 
 	@EventHandler

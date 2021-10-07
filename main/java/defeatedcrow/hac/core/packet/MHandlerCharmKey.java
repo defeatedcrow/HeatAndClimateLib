@@ -22,7 +22,8 @@ public class MHandlerCharmKey implements IMessageHandler<MessageCharmKey, IMessa
 			// 発動するのは最も左の一つだけ
 			for (ItemStack check : charms) {
 				IJewelCharm charm = (IJewelCharm) check.getItem();
-				if (charm.onUsing(player, check)) {
+				if (DCUtil.playerCanUseCharm(player, check) && charm.onUsing(player, check)) {
+					DCUtil.playerConsumeCharm(player, check);
 					return null;
 				}
 			}

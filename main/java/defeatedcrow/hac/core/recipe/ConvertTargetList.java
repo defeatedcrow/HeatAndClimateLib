@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import defeatedcrow.hac.api.climate.ItemSet;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
 
@@ -11,15 +12,15 @@ public class ConvertTargetList {
 
 	private ConvertTargetList() {}
 
-	private static ArrayList<ItemStack> EXCLUSIONS = new ArrayList<ItemStack>();
+	private static ArrayList<ItemSet> EXCLUSIONS = new ArrayList<ItemSet>();
 
-	private static Map<ItemStack, String> REPLACES = new HashMap<ItemStack, String>();
+	private static Map<ItemSet, String> REPLACES = new HashMap<ItemSet, String>();
 
-	public static ArrayList<ItemStack> getExclusionList() {
+	public static ArrayList<ItemSet> getExclusionList() {
 		return EXCLUSIONS;
 	}
 
-	public static Map<ItemStack, String> getReplaceTable() {
+	public static Map<ItemSet, String> getReplaceTable() {
 		return REPLACES;
 	}
 
@@ -27,14 +28,9 @@ public class ConvertTargetList {
 		if (DCUtil.isEmpty(item)) {
 			return;
 		}
-		boolean f = true;
-		for (ItemStack tar : EXCLUSIONS) {
-			if (DCUtil.isSameItem(item, tar, false)) {
-				f = false;
-			}
-		}
-		if (f) {
-			EXCLUSIONS.add(item);
+		ItemSet add = new ItemSet(item);
+		if (!EXCLUSIONS.contains(add)) {
+			EXCLUSIONS.add(add);
 			// DCLogger.debugLog("add ex: " + item.toString());
 		}
 	}
@@ -43,14 +39,9 @@ public class ConvertTargetList {
 		if (DCUtil.isEmpty(item) || name == null) {
 			return;
 		}
-		boolean f = true;
-		for (ItemStack tar : REPLACES.keySet()) {
-			if (DCUtil.isSameItem(item, tar, false)) {
-				f = false;
-			}
-		}
-		if (f) {
-			REPLACES.put(item, name);
+		ItemSet add = new ItemSet(item);
+		if (!REPLACES.keySet().contains(add)) {
+			REPLACES.put(add, name);
 			// DCLogger.debugLog("add rep: " + item.toString());
 		}
 	}

@@ -18,6 +18,16 @@ public class ItemSet {
 		meta = j;
 	}
 
+	public ItemSet(Item i) {
+		item = i;
+		meta = 0;
+	}
+
+	public ItemSet(ItemStack stack) {
+		item = stack.getItem();
+		meta = stack.getItemDamage();
+	}
+
 	public static boolean isEmpty(ItemSet set) {
 		if (set == null || set.item == null)
 			return true;

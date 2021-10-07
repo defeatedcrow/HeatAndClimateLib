@@ -31,9 +31,12 @@ public class LivingHurtDC {
 				NonNullList<ItemStack> charms = DCUtil.getPlayerCharm(player, CharmType.DEFFENCE);
 				for (ItemStack check : charms) {
 					// DCLogger.debugLog("hurt charm");
-					IJewelCharm charm = (IJewelCharm) check.getItem();
-					prev += charm.reduceDamage(source, check);
-					charm.onDiffence(source, player, newDam, check);
+					if (DCUtil.playerCanUseCharm(player, check)) {
+						IJewelCharm charm = (IJewelCharm) check.getItem();
+						prev += charm.reduceDamage(source, check);
+						charm.onDiffence(source, player, newDam, check);
+						DCUtil.playerConsumeCharm(player, check);
+					}
 				}
 			} else {
 				NonNullList<ItemStack> charms = DCUtil.getMobCharm(living);
@@ -51,9 +54,12 @@ public class LivingHurtDC {
 					NonNullList<ItemStack> charms2 = DCUtil.getPlayerCharm(attacker, CharmType.ATTACK);
 					for (ItemStack check : charms2) {
 						// DCLogger.debugLog("attack charm");
-						IJewelCharm charm = (IJewelCharm) check.getItem();
-						add *= charm.increaceDamage(living, source, check);
-						charm.onPlayerAttacking(attacker, living, source, newDam - prev, check);
+						if (DCUtil.playerCanUseCharm(attacker, check)) {
+							IJewelCharm charm = (IJewelCharm) check.getItem();
+							add *= charm.increaceDamage(living, source, check);
+							charm.onPlayerAttacking(attacker, living, source, newDam - prev, check);
+							DCUtil.playerConsumeCharm(attacker, check);
+						}
 					}
 				} else if (source.getTrueSource() instanceof EntityLivingBase) {
 					EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();

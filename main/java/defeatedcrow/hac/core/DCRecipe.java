@@ -68,8 +68,8 @@ public class DCRecipe {
 	}
 
 	static void addAltRecipes() {
-		// コンパス
 
+		// コンパス
 		jsonShapedRecipe(HaCModule.CORE, "core", new ItemStack(Items.COMPASS, 1, 0), new Object[] {
 			" X ",
 			"XYX",

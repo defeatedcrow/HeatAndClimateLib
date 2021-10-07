@@ -21,6 +21,7 @@ import defeatedcrow.hac.core.event.LivingHurtDC;
 import defeatedcrow.hac.core.event.SuffocationEventDC;
 import defeatedcrow.hac.core.event.TickEventDC;
 import defeatedcrow.hac.core.packet.HaCPacket;
+import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
 import defeatedcrow.hac.core.util.PotionFreezeResistance;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.entity.player.EntityPlayer;
@@ -58,6 +59,7 @@ public class CommonProxyD {
 			DCRecipe.load();
 			MinecraftForge.EVENT_BUS.register(new BlockFreezeEventDC());
 		}
+
 		MinecraftForge.EVENT_BUS.register(new LivingEventDC());
 		MinecraftForge.EVENT_BUS.register(new BlockUpdateDC());
 		MinecraftForge.EVENT_BUS.register(new LivingHurtDC());
@@ -86,6 +88,9 @@ public class CommonProxyD {
 		}
 
 		HaCPacket.init();
+		if (!CoreConfigDC.disableCustomRecipe) {
+			CustomizeVanillaRecipe.initCustomize();
+		}
 	}
 
 	public ModelThinBiped getArmorModel(int slot) {
@@ -105,6 +110,10 @@ public class CommonProxyD {
 	}
 
 	public boolean isWarpKeyDown() {
+		return false;
+	}
+
+	public boolean isGauntletKeyDown() {
 		return false;
 	}
 
