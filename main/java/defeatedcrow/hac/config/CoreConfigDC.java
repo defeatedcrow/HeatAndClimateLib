@@ -133,7 +133,6 @@ public class CoreConfigDC {
 		"minecraft:leaves:32767",
 		"minecraft:leaves2:32767",
 		"minecraft:tallgrass:32767",
-		"minecraft:snow_layer:32767",
 		"ModID:sampleBlock:sampleMeta" };
 	public static final List<BlockSet> blackListBlock = Lists.newArrayList();
 
