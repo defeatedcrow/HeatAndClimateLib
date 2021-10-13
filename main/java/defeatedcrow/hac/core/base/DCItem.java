@@ -43,8 +43,8 @@ public abstract class DCItem extends Item implements ITexturePath {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		int j = Math.min(stack.getMetadata(), getMaxMeta());
-		return getNameSuffix() != null && j < getNameSuffix().length
-				? super.getUnlocalizedName() + "_" + getNameSuffix()[j] : super.getUnlocalizedName();
+		return getNameSuffix() != null && j < getNameSuffix().length ?
+				super.getUnlocalizedName() + "_" + getNameSuffix()[j] : super.getUnlocalizedName();
 	}
 
 	public int getMaxMeta() {

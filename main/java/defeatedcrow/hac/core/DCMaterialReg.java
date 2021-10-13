@@ -21,6 +21,8 @@ public class DCMaterialReg {
 		DCInit.climate_checker = new ItemClimateChecker().setCreativeTab(ClimateCore.climate)
 				.setUnlocalizedName(ClimateCore.PACKAGE_BASE + "_checker");
 		registerItem(DCInit.climate_checker, ClimateCore.PACKAGE_BASE + "_checker", ClimateCore.MOD_ID);
+
+		ClimateCore.climate.addSubItem(DCInit.climate_checker);
 	}
 
 	private static void registerHarvestLevel() {}

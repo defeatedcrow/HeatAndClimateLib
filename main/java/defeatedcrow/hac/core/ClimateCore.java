@@ -18,7 +18,6 @@ import defeatedcrow.hac.core.climate.MobResistantRegister;
 import defeatedcrow.hac.core.packet.command.DCServerCommand;
 import defeatedcrow.hac.core.util.DCUtil;
 import defeatedcrow.hac.core.util.DCWaterOpaque;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -55,7 +54,7 @@ public class ClimateCore {
 
 	public static final Logger LOGGER = LogManager.getLogger(PACKAGE_ID);
 
-	public static final CreativeTabs climate = new CreativeTabClimate(MOD_ID);
+	public static final CreativeTabClimate climate = new CreativeTabClimate(MOD_ID);
 
 	public static boolean isDebug = false;
 	public static boolean serverStarted = false;
