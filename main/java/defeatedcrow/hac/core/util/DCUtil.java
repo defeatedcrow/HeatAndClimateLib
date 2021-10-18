@@ -514,7 +514,9 @@ public class DCUtil {
 	// ハードコア魔法モード
 	public static boolean playerCanUseCharm(EntityPlayer player, ItemStack charm) {
 		if (!DCUtil.isEmpty(charm)) {
-			if (CoreConfigDC.harderMagic && charm.getItem() instanceof IMagicCost) {
+			if (!CoreConfigDC.harderMagic)
+				return true;
+			else if (charm.getItem() instanceof IMagicCost) {
 				if (((IMagicCost) charm.getItem()).canUseMagic(player, charm)) {
 					float cost = ((IMagicCost) charm.getItem()).getCost(charm);
 					if (cost == 0) {
@@ -540,7 +542,9 @@ public class DCUtil {
 
 	public static void playerConsumeCharm(EntityPlayer player, ItemStack charm) {
 		if (!DCUtil.isEmpty(charm)) {
-			if (CoreConfigDC.harderMagic && charm.getItem() instanceof IMagicCost) {
+			if (!CoreConfigDC.harderMagic)
+				return;
+			else if (charm.getItem() instanceof IMagicCost) {
 				if (((IMagicCost) charm.getItem()).beforeConsumption(player, charm)) {
 					float cost = ((IMagicCost) charm.getItem()).getCost(charm);
 					if (cost == 0) {

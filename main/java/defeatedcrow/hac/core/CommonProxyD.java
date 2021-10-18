@@ -57,17 +57,18 @@ public class CommonProxyD {
 		OreRegister.load();
 		if (CoreConfigDC.enableVanilla) {
 			DCRecipe.load();
-			MinecraftForge.EVENT_BUS.register(new BlockFreezeEventDC());
 		}
+		if (CoreConfigDC.enableIce)
+			MinecraftForge.EVENT_BUS.register(new BlockFreezeEventDC());
 
 		MinecraftForge.EVENT_BUS.register(new LivingEventDC());
 		MinecraftForge.EVENT_BUS.register(new BlockUpdateDC());
 		MinecraftForge.EVENT_BUS.register(new LivingHurtDC());
 		MinecraftForge.EVENT_BUS.register(new ClickEventDC());
-		MinecraftForge.TERRAIN_GEN_BUS.register(new CaveGenLavaDC());
 		MinecraftForge.EVENT_BUS.register(new TickEventDC());
 		if (CoreConfigDC.enableDeepWater) {
 			MinecraftForge.EVENT_BUS.register(new CaveDigEventDC());
+			MinecraftForge.TERRAIN_GEN_BUS.register(new CaveGenLavaDC());
 		}
 		if (CoreConfigDC.enableSuffocation) {
 			MinecraftForge.EVENT_BUS.register(new SuffocationEventDC());
