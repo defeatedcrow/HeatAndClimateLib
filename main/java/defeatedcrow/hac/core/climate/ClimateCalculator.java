@@ -359,11 +359,11 @@ public class ClimateCalculator implements IClimateCalculator {
 					hasWater = true;
 				}
 				if (!world.getBlockState(p1).isNormalCube()) {
-					hasAir++; // 2blockまでOK
+					hasAir++; // 3blockまでOK
 				}
 			}
 		}
-		if (hasWater && hasAir < 3) {
+		if (hasWater && hasAir < 4) {
 			return DCHumidity.UNDERWATER;
 		}
 
