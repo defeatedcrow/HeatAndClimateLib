@@ -265,7 +265,8 @@ public class ReactorRecipe implements IReactorRecipe {
 
 					if (next instanceof ItemStack) {
 						// DCLogger.debugInfoLog("target: item");
-						match = DCUtil.isSameItem((ItemStack) next, slot, false);
+						match = DCUtil.isSameItem((ItemStack) next, slot, false) && slot
+								.getCount() >= ((ItemStack) next).getCount();
 					} else if (next instanceof String) {
 						// DCLogger.debugInfoLog("target: string " + "[" + (String) next + "]");
 						match = DCUtil.matchDicName((String) next, slot);

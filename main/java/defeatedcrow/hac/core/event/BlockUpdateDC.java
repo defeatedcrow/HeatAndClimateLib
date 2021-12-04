@@ -5,6 +5,7 @@ import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.ClimateSupplier;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
+import defeatedcrow.hac.api.cultivate.IClimateCrop;
 import defeatedcrow.hac.api.hook.DCBlockUpdateEvent;
 import defeatedcrow.hac.api.recipe.IClimateObject;
 import defeatedcrow.hac.api.recipe.IClimateSmelting;
@@ -78,19 +79,27 @@ public class BlockUpdateDC {
 			} else if (CoreConfigDC.enableVanillaCrop && block instanceof IGrowable) {
 				// 寒冷地では枯れる
 				if (clm.get().getHeat().isCold()) {
-					if (CoreConfigDC.harderCrop && world.getLight(p) < 8) {
-						event.setCanceled(true);
-					}
-					if (CoreConfigDC.harderVanilla && clm.get().getHeat().getTier() < DCHeatTier.FROSTBITE.getTier()) {
-						if (block == Blocks.TALLGRASS && world.rand.nextInt(3) == 0) {
-							world.setBlockState(p, Blocks.DEADBUSH.getDefaultState(), 2);
-						} else {
-							world.setBlockToAir(p);
-						}
+					// 寒冷耐性のある作物はスキップ
+					if (block instanceof IClimateCrop && ((IClimateCrop) block).getSuitableTemp(st).contains(clm.get()
+							.getHeat())) {
+
 					} else {
-						int c = 1 - clm.get().getHeat().getTier();
-						if (world.rand.nextInt(c) > 0)
+						// 光が必要
+						if (CoreConfigDC.harderCrop && world.getLight(p) < 8) {
 							event.setCanceled(true);
+						}
+						if (CoreConfigDC.harderVanilla && clm.get().getHeat().getTier() < DCHeatTier.FROSTBITE
+								.getTier()) {
+							if (block == Blocks.TALLGRASS && world.rand.nextInt(3) == 0) {
+								world.setBlockState(p, Blocks.DEADBUSH.getDefaultState(), 2);
+							} else {
+								world.setBlockToAir(p);
+							}
+						} else {
+							int c = 1 - clm.get().getHeat().getTier();
+							if (world.rand.nextInt(c) > 0)
+								event.setCanceled(true);
+						}
 					}
 				} else if ((clm.get().getHeat() == DCHeatTier.WARM || clm.get().getHeat() == DCHeatTier.HOT) && clm_down
 						.get().getHumidity() == DCHumidity.WET) {

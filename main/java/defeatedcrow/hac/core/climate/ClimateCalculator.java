@@ -9,6 +9,7 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IAirflowTile;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.climate.IClimateCalculator;
+import defeatedcrow.hac.api.climate.IClimateIgnoreBlock;
 import defeatedcrow.hac.api.climate.IHeatCanceler;
 import defeatedcrow.hac.api.climate.IHeatTile;
 import defeatedcrow.hac.api.climate.IHumidityTile;
@@ -131,6 +132,13 @@ public class ClimateCalculator implements IClimateCalculator {
 
 					BlockPos p2 = new BlockPos(x, y, z);
 					if (world.isBlockLoaded(p2)) {
+						IBlockState st = world.getBlockState(p2);
+						if (st != null && st.getBlock() instanceof IClimateIgnoreBlock) {
+							if (((IClimateIgnoreBlock) st.getBlock()).isActive(st)) {
+								continue;
+							}
+						}
+
 						DCHeatTier current = getBlockHeatTier(world, pos, p2);
 						if (current == null) {
 							current = hot;
@@ -249,6 +257,13 @@ public class ClimateCalculator implements IClimateCalculator {
 
 					BlockPos p2 = new BlockPos(x, y, z);
 					if (world.isBlockLoaded(p2)) {
+						IBlockState st = world.getBlockState(p2);
+						if (st != null && st.getBlock() instanceof IClimateIgnoreBlock) {
+							if (((IClimateIgnoreBlock) st.getBlock()).isActive(st)) {
+								continue;
+							}
+						}
+
 						DCHeatTier current = getBlockHeatTier(world, pos, p2);
 
 						if (current == null) {
@@ -354,6 +369,12 @@ public class ClimateCalculator implements IClimateCalculator {
 					.getZ() + face.getFrontOffsetZ());
 			if (world.isBlockLoaded(p1)) {
 				Block block = world.getBlockState(p1).getBlock();
+				if (block instanceof IClimateIgnoreBlock) {
+					if (((IClimateIgnoreBlock) block).isActive(world.getBlockState(p1))) {
+						continue;
+					}
+				}
+
 				DCHumidity target2 = getBlockHumidity(world, pos, p1);
 				if (target2 == DCHumidity.UNDERWATER) {
 					hasWater = true;
@@ -381,6 +402,13 @@ public class ClimateCalculator implements IClimateCalculator {
 				for (int y = pos.getY() - h1; y <= pos.getY() + h1; y++) {
 					BlockPos p2 = new BlockPos(x, y, z);
 					if (world.isBlockLoaded(p2)) {
+						IBlockState st = world.getBlockState(p2);
+						if (st != null && st.getBlock() instanceof IClimateIgnoreBlock) {
+							if (((IClimateIgnoreBlock) st.getBlock()).isActive(st)) {
+								continue;
+							}
+						}
+
 						DCHumidity current = getBlockHumidity(world, pos, p2);
 						if (current != null) {
 							if (current == DCHumidity.DRY) {
@@ -440,6 +468,13 @@ public class ClimateCalculator implements IClimateCalculator {
 				for (int y = pos.getY() - h1; y <= pos.getY() + h1; y++) {
 					BlockPos p2 = new BlockPos(x, y, z);
 					if (world.isBlockLoaded(p2)) {
+						IBlockState st = world.getBlockState(p2);
+						if (st != null && st.getBlock() instanceof IClimateIgnoreBlock) {
+							if (((IClimateIgnoreBlock) st.getBlock()).isActive(st)) {
+								continue;
+							}
+						}
+
 						DCAirflow current = getBlockAirflow(world, pos, p2);
 						if (current == null)
 							continue;
