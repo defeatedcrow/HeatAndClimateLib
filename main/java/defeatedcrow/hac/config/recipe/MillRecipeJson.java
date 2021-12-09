@@ -34,7 +34,7 @@ public class MillRecipeJson {
 	private static void load() {
 		if (!INSTANCE.jsonMap.isEmpty()) {
 			for (Entry<String, Object> e : INSTANCE.jsonMap.entrySet()) {
-				if (e == null || e.getValue() instanceof Map) {
+				if (e == null || !(e.getValue() instanceof Map)) {
 					continue;
 				}
 				if (e.getKey() == null || e.getValue() == null || ((Map) e.getValue()).isEmpty()) {
@@ -66,10 +66,10 @@ public class MillRecipeJson {
 									Map<String, Object> inputs = (Map) o2;
 									list = JsonUtilDC.getIngredient(inputs);
 								} catch (Error err) {
-									DCLogger.debugLog("MillRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("MillRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("MillRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("MillRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -81,10 +81,10 @@ public class MillRecipeJson {
 									Map<String, Object> items = (Map) o2;
 									output = JsonUtilDC.getOutput(items);
 								} catch (Error err) {
-									DCLogger.debugLog("MillRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("MillRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("MillRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("MillRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -102,10 +102,10 @@ public class MillRecipeJson {
 									}
 
 								} catch (Error err) {
-									DCLogger.debugLog("MillRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("MillRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("MillRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("MillRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -113,13 +113,13 @@ public class MillRecipeJson {
 
 						if (reg == EnumRecipeReg.ADD && !DCUtil.isEmpty(output) && !list.isEmpty()) {
 							if (addRecipe(output, secondary, chance, list))
-								DCLogger.debugLog("MillRecipeJson : Successfully added a mill recipe. " + recipeID);
+								DCLogger.traceLog("MillRecipeJson : Successfully added a mill recipe. " + recipeID);
 						} else if (reg == EnumRecipeReg.REPLACE && !DCUtil.isEmpty(output) && !list.isEmpty()) {
 							if (changeRecipe(output, secondary, chance, list))
-								DCLogger.debugLog("MillRecipeJson : Successfully replaced a mill recipe. " + recipeID);
+								DCLogger.traceLog("MillRecipeJson : Successfully replaced a mill recipe. " + recipeID);
 						} else if (reg == EnumRecipeReg.REMOVE && !list.isEmpty()) {
 							if (removeRecipe(list))
-								DCLogger.debugLog("MillRecipeJson : Successfully removed a mill recipe. " + recipeID);
+								DCLogger.traceLog("MillRecipeJson : Successfully removed a mill recipe. " + recipeID);
 						}
 					}
 				}

@@ -35,7 +35,7 @@ public class CrusherRecipeJson {
 	private static void load() {
 		if (!INSTANCE.jsonMap.isEmpty()) {
 			for (Entry<String, Object> e : INSTANCE.jsonMap.entrySet()) {
-				if (e == null || e.getValue() instanceof Map) {
+				if (e == null || !(e.getValue() instanceof Map)) {
 					continue;
 				}
 				if (e.getKey() == null || e.getValue() == null || ((Map) e.getValue()).isEmpty()) {
@@ -72,10 +72,10 @@ public class CrusherRecipeJson {
 									Map<String, Object> inputs = (Map) o2;
 									list = JsonUtilDC.getIngredient(inputs);
 								} catch (Error err) {
-									DCLogger.debugLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -88,10 +88,10 @@ public class CrusherRecipeJson {
 									Map<String, Object> items = (Map) o2;
 									output = JsonUtilDC.getOutput(items);
 								} catch (Error err) {
-									DCLogger.debugLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -110,10 +110,10 @@ public class CrusherRecipeJson {
 									}
 
 								} catch (Error err) {
-									DCLogger.debugLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -132,10 +132,10 @@ public class CrusherRecipeJson {
 									}
 
 								} catch (Error err) {
-									DCLogger.debugLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -148,10 +148,10 @@ public class CrusherRecipeJson {
 									Map<String, Object> items = (Map) of;
 									outputF = JsonUtilDC.getFluid(items);
 								} catch (Error err) {
-									DCLogger.debugLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -164,10 +164,10 @@ public class CrusherRecipeJson {
 									Map<String, Object> items = (Map) o4;
 									catalyst = JsonUtilDC.getOutput(items);
 								} catch (Error err) {
-									DCLogger.debugLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("CrusherRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -176,14 +176,14 @@ public class CrusherRecipeJson {
 						if (reg == EnumRecipeReg.ADD && !DCUtil.isEmpty(output) && !DCUtil.isEmpty(catalyst) && !list
 								.isEmpty()) {
 							if (addRecipe(output, secondary, chance2, tertiary, chance3, outputF, catalyst, list))
-								DCLogger.debugLog("CrusherRecipeJson : Successfully added a hammer mill recipe. " + recipeID);
+								DCLogger.traceLog("CrusherRecipeJson : Successfully added a hammer mill recipe. " + recipeID);
 						} else if (reg == EnumRecipeReg.REPLACE && !DCUtil.isEmpty(output) && !DCUtil
 								.isEmpty(catalyst) && !list.isEmpty()) {
 							if (changeRecipe(output, secondary, chance2, tertiary, chance3, outputF, catalyst, list))
-								DCLogger.debugLog("CrusherRecipeJson : Successfully replaced a hammer mill recipe. " + recipeID);
+								DCLogger.traceLog("CrusherRecipeJson : Successfully replaced a hammer mill recipe. " + recipeID);
 						} else if (reg == EnumRecipeReg.REMOVE && !DCUtil.isEmpty(catalyst) && !list.isEmpty()) {
 							if (removeRecipe(list, catalyst))
-								DCLogger.debugLog("CrusherRecipeJson : Successfully removed a hammer mill recipe. " + recipeID);
+								DCLogger.traceLog("CrusherRecipeJson : Successfully removed a hammer mill recipe. " + recipeID);
 						}
 					}
 				}
@@ -240,6 +240,7 @@ public class CrusherRecipeJson {
 		}
 
 		if (!INSTANCE.jsonMap.isEmpty()) {
+			DCLogger.traceLog("count: " + INSTANCE.jsonMap.size());
 			load();
 		}
 	}

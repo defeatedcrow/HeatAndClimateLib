@@ -39,7 +39,7 @@ public class ClimateSmeltingJson {
 	private static void load() {
 		if (!INSTANCE.jsonMap.isEmpty()) {
 			for (Entry<String, Object> e : INSTANCE.jsonMap.entrySet()) {
-				if (e == null || e.getValue() instanceof Map) {
+				if (e == null || !(e.getValue() instanceof Map)) {
 					continue;
 				}
 				if (e.getKey() == null || e.getValue() == null || ((Map) e.getValue()).isEmpty()) {
@@ -94,10 +94,10 @@ public class ClimateSmeltingJson {
 									Map<String, Object> inputs = (Map) o2;
 									list = JsonUtilDC.getIngredient(inputs);
 								} catch (Error err) {
-									DCLogger.debugLog("ClimateSmeltingJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ClimateSmeltingJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("ClimateSmeltingJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ClimateSmeltingJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -109,10 +109,10 @@ public class ClimateSmeltingJson {
 									Map<String, Object> iunputs = (Map) o2;
 									output = JsonUtilDC.getOutput(iunputs);
 								} catch (Error err) {
-									DCLogger.debugLog("ClimateSmeltingJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ClimateSmeltingJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("ClimateSmeltingJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ClimateSmeltingJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -120,13 +120,13 @@ public class ClimateSmeltingJson {
 
 						if (reg == EnumRecipeReg.ADD && !DCUtil.isEmpty(output) && !list.isEmpty()) {
 							if (addRecipe(output, heat, hum, air, list))
-								DCLogger.debugLog("ClimateSmeltingJson : Successfully added a ClimateSmelting recipe. " + recipeID);
+								DCLogger.traceLog("ClimateSmeltingJson : Successfully added a ClimateSmelting recipe. " + recipeID);
 						} else if (reg == EnumRecipeReg.REPLACE && !DCUtil.isEmpty(output) && !list.isEmpty()) {
 							if (changeRecipe(output, heat, hum, air, list))
-								DCLogger.debugLog("ClimateSmeltingJson : Successfully replaced a ClimateSmelting recipe. " + recipeID);
+								DCLogger.traceLog("ClimateSmeltingJson : Successfully replaced a ClimateSmelting recipe. " + recipeID);
 						} else if (reg == EnumRecipeReg.REMOVE && !DCUtil.isEmpty(output)) {
 							if (removeRecipe(output, heat, hum, air))
-								DCLogger.debugLog("ClimateSmeltingJson : Successfully removed a ClimateSmelting recipe. " + recipeID);
+								DCLogger.traceLog("ClimateSmeltingJson : Successfully removed a ClimateSmelting recipe. " + recipeID);
 						}
 					}
 				}

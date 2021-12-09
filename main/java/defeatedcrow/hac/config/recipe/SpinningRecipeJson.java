@@ -34,7 +34,7 @@ public class SpinningRecipeJson {
 	private static void load() {
 		if (!INSTANCE.jsonMap.isEmpty()) {
 			for (Entry<String, Object> e : INSTANCE.jsonMap.entrySet()) {
-				if (e == null || e.getValue() instanceof Map) {
+				if (e == null || !(e.getValue() instanceof Map)) {
 					continue;
 				}
 				if (e.getKey() == null || e.getValue() == null || ((Map) e.getValue()).isEmpty()) {
@@ -70,10 +70,10 @@ public class SpinningRecipeJson {
 										count = JsonUtilDC.parseInt(i, 1);
 									}
 								} catch (Error err) {
-									DCLogger.debugLog("SpinningRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("SpinningRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("SpinningRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("SpinningRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -85,10 +85,10 @@ public class SpinningRecipeJson {
 									Map<String, Object> items = (Map) o2;
 									output = JsonUtilDC.getOutput(items);
 								} catch (Error err) {
-									DCLogger.debugLog("SpinningRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("SpinningRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("SpinningRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("SpinningRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -96,13 +96,13 @@ public class SpinningRecipeJson {
 
 						if (reg == EnumRecipeReg.ADD && !DCUtil.isEmpty(output) && !list.isEmpty()) {
 							if (addRecipe(output, count, list))
-								DCLogger.debugLog("SpinningRecipeJson : Successfully added a spinning recipe. " + recipeID);
+								DCLogger.traceLog("SpinningRecipeJson : Successfully added a spinning recipe. " + recipeID);
 						} else if (reg == EnumRecipeReg.REPLACE && !DCUtil.isEmpty(output) && !list.isEmpty()) {
 							if (changeRecipe(output, count, list))
-								DCLogger.debugLog("SpinningRecipeJson : Successfully replaced a spinning recipe. " + recipeID);
+								DCLogger.traceLog("SpinningRecipeJson : Successfully replaced a spinning recipe. " + recipeID);
 						} else if (reg == EnumRecipeReg.REMOVE && !list.isEmpty()) {
 							if (removeRecipe(list))
-								DCLogger.debugLog("SpinningRecipeJson : Successfully removed a spinning recipe. " + recipeID);
+								DCLogger.traceLog("SpinningRecipeJson : Successfully removed a spinning recipe. " + recipeID);
 						}
 					}
 				}

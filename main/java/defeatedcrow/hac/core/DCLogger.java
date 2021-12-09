@@ -26,6 +26,10 @@ public class DCLogger {
 		}
 	}
 
+	public static void traceLog(String s) {
+		ClimateCore.LOGGER.trace(s);
+	}
+
 	public static void infoLog(String id, String s) {
 		ClimateCore.LOGGER.info(id + ": " + s);
 	}

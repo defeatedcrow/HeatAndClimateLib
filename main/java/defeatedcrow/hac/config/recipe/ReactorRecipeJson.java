@@ -36,7 +36,7 @@ public class ReactorRecipeJson {
 	private static void load() {
 		if (!INSTANCE.jsonMap.isEmpty()) {
 			for (Entry<String, Object> e : INSTANCE.jsonMap.entrySet()) {
-				if (e == null || e.getValue() instanceof Map) {
+				if (e == null || !(e.getValue() instanceof Map)) {
 					continue;
 				}
 				if (e.getKey() == null || e.getValue() == null || ((Map) e.getValue()).isEmpty()) {
@@ -83,10 +83,10 @@ public class ReactorRecipeJson {
 									List<String> inputs = (List) o2;
 									list = JsonUtilDC.getInputObjects(inputs);
 								} catch (Error err) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -99,10 +99,10 @@ public class ReactorRecipeJson {
 									Map<String, Object> items = (Map) o2;
 									catalyst = JsonUtilDC.getOutput(items);
 								} catch (Error err) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -115,10 +115,10 @@ public class ReactorRecipeJson {
 									Map<String, Object> items = (Map) o2;
 									output = JsonUtilDC.getOutput(items);
 								} catch (Error err) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -137,10 +137,10 @@ public class ReactorRecipeJson {
 									}
 
 								} catch (Error err) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -153,10 +153,10 @@ public class ReactorRecipeJson {
 									Map<String, Object> items = (Map) of;
 									inputF = JsonUtilDC.getFluid(items);
 								} catch (Error err) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -169,10 +169,10 @@ public class ReactorRecipeJson {
 									Map<String, Object> items = (Map) of;
 									inputF_secondary = JsonUtilDC.getFluid(items);
 								} catch (Error err) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -185,10 +185,10 @@ public class ReactorRecipeJson {
 									Map<String, Object> items = (Map) of;
 									outputF = JsonUtilDC.getFluid(items);
 								} catch (Error err) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -201,10 +201,10 @@ public class ReactorRecipeJson {
 									Map<String, Object> items = (Map) of;
 									outputF_secondary = JsonUtilDC.getFluid(items);
 								} catch (Error err) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("ReactorRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -214,13 +214,13 @@ public class ReactorRecipeJson {
 						boolean b2 = list != null || inputF != null;
 						if (reg == EnumRecipeReg.ADD && b) {
 							if (addRecipe(output, secondary, chance, outputF, outputF_secondary, inputF, inputF_secondary, catalyst, heat, list))
-								DCLogger.debugLog("ReactorRecipeJson : Successfully added a reactor recipe. " + recipeID);
+								DCLogger.traceLog("ReactorRecipeJson : Successfully added a reactor recipe. " + recipeID);
 						} else if (reg == EnumRecipeReg.REPLACE && b) {
 							if (changeRecipe(output, secondary, chance, outputF, outputF_secondary, inputF, inputF_secondary, catalyst, heat, list))
-								DCLogger.debugLog("ReactorRecipeJson : Successfully replaced a reactor recipe. " + recipeID);
+								DCLogger.traceLog("ReactorRecipeJson : Successfully replaced a reactor recipe. " + recipeID);
 						} else if (reg == EnumRecipeReg.REMOVE && b2) {
 							if (removeRecipe(inputF, inputF_secondary, catalyst, heat, list))
-								DCLogger.debugLog("ReactorRecipeJson : Successfully removed a reactor recipe. " + recipeID);
+								DCLogger.traceLog("ReactorRecipeJson : Successfully removed a reactor recipe. " + recipeID);
 						}
 					}
 				}

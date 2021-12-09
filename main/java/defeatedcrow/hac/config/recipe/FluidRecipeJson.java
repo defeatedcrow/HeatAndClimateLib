@@ -40,7 +40,7 @@ public class FluidRecipeJson {
 	private static void load() {
 		if (!INSTANCE.jsonMap.isEmpty()) {
 			for (Entry<String, Object> e : INSTANCE.jsonMap.entrySet()) {
-				if (e == null || e.getValue() instanceof Map) {
+				if (e == null || !(e.getValue() instanceof Map)) {
 					continue;
 				}
 				if (e.getKey() == null || e.getValue() == null || ((Map) e.getValue()).isEmpty()) {
@@ -100,10 +100,10 @@ public class FluidRecipeJson {
 									List<String> inputs = (List) o2;
 									list = JsonUtilDC.getInputObjects(inputs);
 								} catch (Error err) {
-									DCLogger.debugLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -116,10 +116,10 @@ public class FluidRecipeJson {
 									Map<String, Object> items = (Map) o2;
 									output = JsonUtilDC.getOutput(items);
 								} catch (Error err) {
-									DCLogger.debugLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -138,10 +138,10 @@ public class FluidRecipeJson {
 									}
 
 								} catch (Error err) {
-									DCLogger.debugLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -154,10 +154,10 @@ public class FluidRecipeJson {
 									Map<String, Object> items = (Map) of;
 									inputF = JsonUtilDC.getFluid(items);
 								} catch (Error err) {
-									DCLogger.debugLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -170,10 +170,10 @@ public class FluidRecipeJson {
 									Map<String, Object> items = (Map) of;
 									outputF = JsonUtilDC.getFluid(items);
 								} catch (Error err) {
-									DCLogger.debugLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								} catch (Exception exp) {
-									DCLogger.debugLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
+									DCLogger.infoLog("FluidRecipeJson : Error entry found. This entry is ignored. " + recipeID);
 									continue;
 								}
 							}
@@ -181,13 +181,13 @@ public class FluidRecipeJson {
 
 						if (reg == EnumRecipeReg.ADD && !DCUtil.isEmpty(output)) {
 							if (addRecipe(output, secondary, chance, outputF, inputF, heat, hum, air, list))
-								DCLogger.debugLog("FluidRecipeJson : Successfully added a fluid craft recipe. " + recipeID);
+								DCLogger.traceLog("FluidRecipeJson : Successfully added a fluid craft recipe. " + recipeID);
 						} else if (reg == EnumRecipeReg.REPLACE && !DCUtil.isEmpty(output)) {
 							if (changeRecipe(output, secondary, chance, outputF, inputF, heat, hum, air, list))
-								DCLogger.debugLog("FluidRecipeJson : Successfully replaced a fluid craft recipe. " + recipeID);
+								DCLogger.traceLog("FluidRecipeJson : Successfully replaced a fluid craft recipe. " + recipeID);
 						} else if (reg == EnumRecipeReg.REMOVE && list != null) {
 							if (removeRecipe(inputF, heat, hum, air, list))
-								DCLogger.debugLog("FluidRecipeJson : Successfully removed a fluid craft recipe. " + recipeID);
+								DCLogger.traceLog("FluidRecipeJson : Successfully removed a fluid craft recipe. " + recipeID);
 						}
 					}
 				}
