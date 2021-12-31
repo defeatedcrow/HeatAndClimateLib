@@ -4,6 +4,7 @@ import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.DCLogger;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.MathHelper;
 
 public class DCWaterOpaque {
 
@@ -16,13 +17,22 @@ public class DCWaterOpaque {
 			Block water = Blocks.WATER;
 			Block flow = Blocks.FLOWING_WATER;
 
-			water.setLightOpacity(1);
-			int op = water.getLightOpacity(null);
-			DCLogger.debugLog("stil water op: " + op);
+			int i = MathHelper.floor(CoreConfigDC.waterFix * 255D);
+			if (i < 0 || i > 255) {
+				i = 1;
+			}
 
-			flow.setLightOpacity(1);
-			int op2 = flow.getLightOpacity(null);
-			DCLogger.debugLog("flowing water op: " + op2);
+			if (water != null) {
+				water.setLightOpacity(1);
+				int op = Blocks.WATER.getDefaultState().getLightOpacity();
+				DCLogger.debugLog("stil water op: " + op);
+			}
+
+			if (flow != null) {
+				flow.setLightOpacity(1);
+				int op2 = Blocks.FLOWING_WATER.getDefaultState().getLightOpacity();
+				DCLogger.debugLog("flowing water op: " + op2);
+			}
 
 			DCLogger.debugLog("#####");
 		}
