@@ -88,7 +88,7 @@ public class CrusherRecipe implements ICrusherRecipe {
 
 	@Override
 	public boolean matches(ItemStack in) {
-		ArrayList<ItemStack> required = new ArrayList<ItemStack>(this.processedInput);
+		ArrayList<ItemStack> required = new ArrayList<>(DCUtil.getProcessedList(input));
 		if (!DCUtil.isEmpty(in) && !required.isEmpty()) {
 			Iterator<ItemStack> itr = required.iterator();
 			while (itr.hasNext()) {

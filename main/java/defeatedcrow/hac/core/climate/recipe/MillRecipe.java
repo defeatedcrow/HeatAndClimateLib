@@ -67,7 +67,7 @@ public class MillRecipe implements IMillRecipe {
 
 	@Override
 	public boolean matchInput(ItemStack item) {
-		ArrayList<ItemStack> required = new ArrayList<ItemStack>(this.processedInput);
+		ArrayList<ItemStack> required = new ArrayList<>(DCUtil.getProcessedList(input));
 		if (!DCUtil.isEmpty(item) && !required.isEmpty()) {
 			// DCLogger.debugLog("in stonemill debug");
 			Iterator<ItemStack> itr = required.iterator();

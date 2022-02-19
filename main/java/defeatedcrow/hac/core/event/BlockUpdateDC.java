@@ -129,19 +129,19 @@ public class BlockUpdateDC {
 				if (block == Blocks.ICE) {
 					DCHeatTier h2 = clm.get().getHeat();
 					float f2 = ClimateAPI.register.getBiomeTemp(world, p);
-					if (clm.get().getHeat().isCold()) {
+					if (h2.isCold()) {
 						if (clm.get().getHeat() == DCHeatTier.ABSOLUTE) {
 							world.setBlockState(p, Blocks.PACKED_ICE.getDefaultState(), 2);
 							world.notifyNeighborsOfStateChange(p, Blocks.PACKED_ICE, false);
 							event.setCanceled(true);
 							return;
 							// DCLogger.debugLog("Freeze!!");
-						} else if (roof || f2 < 0.3F) {
+						} else if (roof || f2 < 0.15F) {
 							event.setCanceled(true);
 							return;
 						}
 					}
-					if ((!roof && f2 > 0.3F) || h2.getTier() > 0) {
+					if ((!roof && f2 >= 0.4F) || h2.getTier() > DCHeatTier.NORMAL.getTier()) {
 						world.setBlockState(p, Blocks.WATER.getDefaultState(), 2);
 						world.notifyNeighborsOfStateChange(p, Blocks.WATER, false);
 						event.setCanceled(true);
@@ -157,17 +157,17 @@ public class BlockUpdateDC {
 					float f2 = ClimateAPI.register.getBiomeTemp(world, p);
 					/*
 					 * SNOW
-					 * COOL以下であれば氷が溶けなくなり、WARM以上で強制溶解
+					 * バニラの雨/雪境界の0.15Fを境にする
 					 */
-					if ((clm.get().getHeat().isCold() && roof) || f2 < 0.0F) {
+					if ((clm.get().getHeat().isCold() && roof) || f2 < 0.15F) {
 						event.setCanceled(true);
 						return;
 					}
-					if ((!roof && f2 > 0.3F) || h2.getTier() > 0) {
+					if ((!roof && f2 >= 0.15F) || h2.getTier() > DCHeatTier.NORMAL.getTier()) {
 						world.setBlockToAir(p);
 						event.setCanceled(true);
 						return;
-						// DCLogger.debugLog("Melted");
+						// DCLogger.debugLog("Snow Melted");
 					}
 					return;
 				}

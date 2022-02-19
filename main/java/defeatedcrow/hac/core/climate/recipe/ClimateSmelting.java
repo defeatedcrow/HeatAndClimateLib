@@ -61,8 +61,8 @@ public class ClimateSmelting implements IClimateSmelting {
 		processedInput = DCUtil.getProcessedList(input);
 		if (!processedInput.isEmpty()) {
 			ItemStack check = processedInput.get(0);
-			if (!DCUtil.isEmpty(check) && !(check.getItem() instanceof ItemBlock)
-					&& !(check.getItem() instanceof IEntityItem)) {
+			if (!DCUtil.isEmpty(check) && !(check.getItem() instanceof ItemBlock) && !(check
+					.getItem() instanceof IEntityItem)) {
 				dropItem = true;
 			}
 		}
@@ -115,7 +115,7 @@ public class ClimateSmelting implements IClimateSmelting {
 
 	@Override
 	public boolean matcheInput(ItemStack item) {
-		ArrayList<ItemStack> required = new ArrayList<ItemStack>(this.processedInput);
+		ArrayList<ItemStack> required = new ArrayList<>(DCUtil.getProcessedList(input));
 		if (!DCUtil.isEmpty(item) && !required.isEmpty()) {
 			Iterator<ItemStack> itr = required.iterator();
 			boolean match = false;

@@ -47,7 +47,7 @@ public class BlockFreezeEventDC {
 		if (clm.getTier() < DCHeatTier.COLD.getTier())
 			return true;
 
-		return clm.getTier() < DCHeatTier.NORMAL.getTier() && world.canSeeSky(pos) && f2 < 0.3F;
+		return clm.getTier() < DCHeatTier.COOL.getTier() && world.canSeeSky(pos) && f2 < 0.15F;
 	}
 
 }

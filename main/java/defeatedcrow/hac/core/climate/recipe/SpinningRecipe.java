@@ -7,7 +7,6 @@ import java.util.List;
 import defeatedcrow.hac.api.recipe.ISpinningRecipe;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class SpinningRecipe implements ISpinningRecipe {
 
@@ -48,25 +47,14 @@ public class SpinningRecipe implements ISpinningRecipe {
 		if (DCUtil.isEmpty(item))
 			return false;
 
-		if (input instanceof String) {
-			String inputName = (String) input;
-			int[] ids = OreDictionary.getOreIDs(item);
-			if (OreDictionary.doesOreNameExist(inputName) && ids != null) {
-				for (int i : ids) {
-					if (i == OreDictionary.getOreID(inputName) && item.getCount() >= count)
+		ArrayList<ItemStack> required = new ArrayList<>(DCUtil.getProcessedList(input, count));
+		if (!required.isEmpty()) {
+			Iterator<ItemStack> itr = required.iterator();
+			while (itr.hasNext()) {
+				ItemStack next = itr.next();
+				if (DCUtil.isIntegratedItem(item, next, false)) {
+					if (item.getCount() >= count) {
 						return true;
-				}
-			}
-		} else {
-			ArrayList<ItemStack> required = new ArrayList<ItemStack>(this.processedInput);
-			if (!required.isEmpty()) {
-				Iterator<ItemStack> itr = required.iterator();
-				while (itr.hasNext()) {
-					ItemStack next = itr.next();
-					if (DCUtil.isIntegratedItem(item, next, false)) {
-						if (item.getCount() >= count) {
-							return true;
-						}
 					}
 				}
 			}
