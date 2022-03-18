@@ -415,15 +415,17 @@ public abstract class ClimateCropBase extends BlockDC implements ISidedTexture, 
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {
-				DCState.STAGE4
-		});
+		return new BlockStateContainer(this, new IProperty[] { DCState.STAGE4 });
 	}
 
 	// drop
 	@Override
 	public int damageDropped(IBlockState state) {
-		return 0;
+		if (this.getSeedItem(state) != null) {
+			return this.getSeedItem(state).getItemDamage();
+		} else {
+			return 0;
+		}
 	}
 
 	@Override

@@ -450,16 +450,17 @@ public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTex
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {
-				DCState.STAGE8,
-				DCState.DOUBLE
-		});
+		return new BlockStateContainer(this, new IProperty[] { DCState.STAGE8, DCState.DOUBLE });
 	}
 
 	// drop
 	@Override
 	public int damageDropped(IBlockState state) {
-		return 0;
+		if (this.getSeedItem(state) != null) {
+			return this.getSeedItem(state).getItemDamage();
+		} else {
+			return 0;
+		}
 	}
 
 	@Override
