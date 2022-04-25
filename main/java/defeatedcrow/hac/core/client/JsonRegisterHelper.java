@@ -17,12 +17,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
 
-import defeatedcrow.hac.api.blockstate.DCState;
 import defeatedcrow.hac.api.placeable.ISidedTexture;
 import defeatedcrow.hac.core.ClimateCore;
 import defeatedcrow.hac.core.DCLogger;
+import defeatedcrow.hac.core.base.EnumStateType;
+import defeatedcrow.hac.core.base.IPropertyIgnore;
 import defeatedcrow.hac.core.base.ITexturePath;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -70,7 +72,7 @@ public class JsonRegisterHelper {
 	 * 汎用BakedBlock使用メソッド
 	 * Blockのモデルには一切手を付けず、一枚絵アイコンの標準的なItemJsonを生成
 	 */
-	public void regBakedBlock(Block block, String domein, String name, String dir, int max) {
+	public void regSimpleItemBlock(Block block, String domein, String name, String dir, int max) {
 		if (block == null)
 			return;
 		int m = 0;
@@ -83,92 +85,61 @@ public class JsonRegisterHelper {
 	}
 
 	/**
-	 * 汎用Tile使用メソッド
-	 * 外見は仮のJsonファイルに紐付け、TESRで描画する
+	 * 汎用Blockメソッド
 	 */
-	public void regTEBlock(Block block, String domein, String name, String dir, int maxMeta, boolean useFacing) {
+	public void regStateAndBlock(Block block, String domein, String name, String dir, int maxMeta, boolean tesr) {
 		if (block == null)
 			return;
 
-		if (useFacing) {
-			ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.TYPE4).build());
-			this.checkAndBuildJsonBlockStateB(domein, name);
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
-					domein + ":" + "basetile"));
-		} else {
-			ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.FACING, DCState.TYPE4)
-					.build());
-			this.checkAndBuildJsonBlockStateC(domein, name);
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
-					domein + ":" + "basetile"));
-		}
+		if (block instanceof IPropertyIgnore) {
+			IProperty[] ignore = ((IPropertyIgnore) block).ignoreTarget();
+			EnumStateType type = ((IPropertyIgnore) block).getType();
 
-		if (maxMeta == 0) {
-			this.checkAndBuildJson(block, domein, name, dir, 0, false);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
-					domein + ":" + dir + "/" + name, "inventory"));
-		} else {
-			for (int i = 0; i < maxMeta + 1; i++) {
-				this.checkAndBuildJson(block, domein, name, dir, i, true);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
-						domein + ":" + dir + "/" + name + i, "inventory"));
+			if (ignore != null && ignore.length > 0) {
+				ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(ignore).build());
+			}
+
+			switch (type) {
+			case CUSTOM:
+				// なにもしない
+				break;
+			case FACING:
+				this.checkAndBuildJsonBlockState_Face(domein, dir, name, tesr);
+				break;
+			case NORMAL:
+				this.checkAndBuildJsonBlockState_Normal(domein, dir, name, tesr);
+				break;
+			case SIDE:
+				this.checkAndBuildJsonBlockState_Sided(domein, dir, name, tesr);
+				break;
+			default:
+				break;
+
 			}
 		}
-	}
 
-	/**
-	 * 汎用Tile使用メソッド2
-	 * FACINGがないやつ
-	 */
-	public void regTESimpleBlock(Block block, String domein, String name, String dir, int maxMeta) {
-		if (block == null)
-			return;
-		ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.TYPE16).build());
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
-				domein + ":" + "basetile"));
 		if (maxMeta == 0) {
-			this.checkAndBuildJson(block, domein, name, dir, 0, false);
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
-					domein + ":" + dir + "/" + name, "inventory"));
-		} else {
-			for (int i = 0; i < maxMeta + 1; i++) {
-				this.checkAndBuildJson(block, domein, name, dir, i, true);
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
-						domein + ":" + dir + "/" + name + i, "inventory"));
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
+					domein + ":" + dir + "/" + name));
+			if (tesr) {
+				this.checkAndBuildJson(block, domein, name, dir, 0, true);
+			} else {
+				this.checkAndBuildJsonItemBlock(domein, name, dir, 0, false);
 			}
-		}
-	}
-
-	/**
-	 * 汎用Tile使用メソッド3
-	 * SIDEをもつ、TorqueTile用
-	 */
-	public void regTETorqueBlock(Block block, String domein, String name, String dir, int maxMeta, boolean useSide) {
-		if (block == null)
-			return;
-
-		if (useSide) {
-			ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.POWERED).build());
-			this.checkAndBuildJsonBlockStateA(domein, name);
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
-					domein + ":" + "basetile"));
-		} else {
-			ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(DCState.SIDE, DCState.POWERED)
-					.build());
-			this.checkAndBuildJsonBlockStateC(domein, name);
-			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(
-					domein + ":" + "basetile"));
-		}
-
-		if (maxMeta == 0) {
-			if (active)
-				this.checkAndBuildJson(block, domein, name, dir, 0, false);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(
 					domein + ":" + dir + "/" + name, "inventory"));
 		} else {
+			ModelResourceLocation[] models = new ModelResourceLocation[maxMeta + 1];
 			for (int i = 0; i < maxMeta + 1; i++) {
-				if (active)
+				models[i] = new ModelResourceLocation(domein + ":" + dir + "/" + name + i);
+			}
+			ModelBakery.registerItemVariants(Item.getItemFromBlock(block), models);
+			for (int i = 0; i < maxMeta + 1; i++) {
+				if (tesr) {
 					this.checkAndBuildJson(block, domein, name, dir, i, true);
+				} else {
+					this.checkAndBuildJsonItemBlock(domein, name, dir, i, false);
+				}
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(
 						domein + ":" + dir + "/" + name + i, "inventory"));
 			}
@@ -565,7 +536,7 @@ public class JsonRegisterHelper {
 	 * basetileを指定するシンプルなblockstate用jsonファイルを生成する。<br>
 	 * こちらはTorqueBlock用6方向版。
 	 */
-	public void checkAndBuildJsonBlockStateA(String domein, String name) {
+	public void checkAndBuildJsonBlockState_Sided(String pack, String dir, String name, boolean baseTile) {
 		if (!active)
 			return;
 
@@ -576,7 +547,7 @@ public class JsonRegisterHelper {
 		try {
 			Path path = Paths.get(basePath);
 			path.normalize();
-			filePath = path.toString() + "\\assets\\" + domein + "\\blockstates\\";
+			filePath = path.toString() + "\\assets\\" + pack + "\\blockstates\\";
 			// DCLogger.debugLog("dcs_climate", "current pass " + filePath.toString());
 			if (filePath != null) {
 				gj = new File(filePath + name + ".json");
@@ -597,14 +568,15 @@ public class JsonRegisterHelper {
 					gj.getParentFile().mkdirs();
 				}
 				Map<String, Object> jsonMap = new HashMap<String, Object>();
+				String s = "dcs_climate:" + dir + "/" + name;
 
 				Map<String, Object> variants = new HashMap<String, Object>();
-				variants.put("side=north", new ModelsA(0));
-				variants.put("side=south", new ModelsA(180));
-				variants.put("side=west", new ModelsA(270));
-				variants.put("side=east", new ModelsA(90));
-				variants.put("side=up", new ModelsB(90));
-				variants.put("side=down", new ModelsB(270));
+				variants.put("side=north", baseTile ? new ModelsA(0) : new ModelsA(0, s));
+				variants.put("side=south", baseTile ? new ModelsA(180) : new ModelsA(180, s));
+				variants.put("side=west", baseTile ? new ModelsA(270) : new ModelsA(270, s));
+				variants.put("side=east", baseTile ? new ModelsA(90) : new ModelsA(90, s));
+				variants.put("side=up", baseTile ? new ModelsB(90) : new ModelsB(90, s));
+				variants.put("side=down", baseTile ? new ModelsB(270) : new ModelsB(270, s));
 
 				jsonMap.put("variants", variants);
 				// jsonMap.put("display", display);
@@ -636,7 +608,7 @@ public class JsonRegisterHelper {
 	 * basetileを指定するシンプルなblockstate用jsonファイルを生成する。<br>
 	 * こちらはTEBlock用4方向版。
 	 */
-	public void checkAndBuildJsonBlockStateB(String domein, String name) {
+	public void checkAndBuildJsonBlockState_Face(String pack, String dir, String name, boolean baseTile) {
 		if (!active)
 			return;
 
@@ -647,7 +619,7 @@ public class JsonRegisterHelper {
 		try {
 			Path path = Paths.get(basePath);
 			path.normalize();
-			filePath = path.toString() + "\\assets\\" + domein + "\\blockstates\\";
+			filePath = path.toString() + "\\assets\\" + pack + "\\blockstates\\";
 			// DCLogger.debugLog("dcs_climate", "current pass " + filePath.toString());
 			if (filePath != null) {
 				gj = new File(filePath + name + ".json");
@@ -668,12 +640,13 @@ public class JsonRegisterHelper {
 					gj.getParentFile().mkdirs();
 				}
 				Map<String, Object> jsonMap = new HashMap<String, Object>();
+				String s = "dcs_climate:" + dir + "/" + name;
 
 				Map<String, Object> variants = new HashMap<String, Object>();
-				variants.put("facing=north", new ModelsA(0));
-				variants.put("facing=south", new ModelsA(180));
-				variants.put("facing=west", new ModelsA(270));
-				variants.put("facing=east", new ModelsA(90));
+				variants.put("facing=north", baseTile ? new ModelsA(0) : new ModelsA(0, s));
+				variants.put("facing=south", baseTile ? new ModelsA(180) : new ModelsA(180, s));
+				variants.put("facing=west", baseTile ? new ModelsA(270) : new ModelsA(270, s));
+				variants.put("facing=east", baseTile ? new ModelsA(90) : new ModelsA(90, s));
 
 				jsonMap.put("variants", variants);
 				// jsonMap.put("display", display);
@@ -705,7 +678,7 @@ public class JsonRegisterHelper {
 	 * basetileを指定するシンプルなblockstate用jsonファイルを生成する。<br>
 	 * こちらは無方向版。
 	 */
-	public void checkAndBuildJsonBlockStateC(String domein, String name) {
+	public void checkAndBuildJsonBlockState_Normal(String pack, String dir, String name, boolean baseTile) {
 		if (!active)
 			return;
 
@@ -716,7 +689,7 @@ public class JsonRegisterHelper {
 		try {
 			Path path = Paths.get(basePath);
 			path.normalize();
-			filePath = path.toString() + "\\assets\\" + domein + "\\blockstates\\";
+			filePath = path.toString() + "\\assets\\" + pack + "\\blockstates\\";
 			// DCLogger.debugLog("dcs_climate", "current pass " + filePath.toString());
 			if (filePath != null) {
 				gj = new File(filePath + name + ".json");
@@ -739,7 +712,11 @@ public class JsonRegisterHelper {
 				Map<String, Object> jsonMap = new HashMap<String, Object>();
 
 				Map<String, Object> variants = new HashMap<String, Object>();
-				variants.put("normal", new ModelsC());
+				if (baseTile) {
+					variants.put("normal", new ModelsC());
+				} else {
+					variants.put("normal", new ModelsC("dcs_climate:" + dir + "/" + name));
+				}
 
 				jsonMap.put("variants", variants);
 				// jsonMap.put("display", display);
@@ -773,6 +750,11 @@ public class JsonRegisterHelper {
 		private ModelsA(int i) {
 			y = i;
 		}
+
+		private ModelsA(int i, String name) {
+			y = i;
+			model = name;
+		}
 	}
 
 	private class ModelsB {
@@ -782,10 +764,21 @@ public class JsonRegisterHelper {
 		private ModelsB(int i) {
 			x = i;
 		}
+
+		private ModelsB(int i, String name) {
+			x = i;
+			model = name;
+		}
 	}
 
 	private class ModelsC {
 		String model = "dcs_climate:basetile";
+
+		private ModelsC() {}
+
+		private ModelsC(String name) {
+			model = name;
+		}
 	}
 
 	private class Textures {
@@ -827,53 +820,26 @@ public class JsonRegisterHelper {
 	}
 
 	private class Disp {
-		Third thirdperson = new Third(new int[] {
-				-90,
-				0,
-				0
-		}, new double[] {
-				0,
-				1,
-				-3
-		}, new double[] {
-				0.55D,
-				0.55D,
-				0.55D
-		});
+		Third thirdperson = new Third(new int[] { -90, 0, 0 }, new double[] { 0, 1, -3 }, new double[] {
+			0.55D,
+			0.55D,
+			0.55D });
 		First firstperson = new First();
 	}
 
 	private class Disp2 {
-		Third thirdperson = new Third(new int[] {
-				0,
-				90,
-				-35
-		}, new double[] {
-				0,
-				1.25D,
-				-3.5D
-		}, new double[] {
-				0.85D,
-				0.85D,
-				0.85D
-		});
+		Third thirdperson = new Third(new int[] { 0, 90, -35 }, new double[] { 0, 1.25D, -3.5D }, new double[] {
+			0.85D,
+			0.85D,
+			0.85D });
 		First firstperson = new First();
 	}
 
 	private class Disp3 {
-		Third thirdperson = new Third(new int[] {
-				10,
-				45,
-				170
-		}, new double[] {
-				0,
-				1.5D,
-				-2.75D
-		}, new double[] {
-				0.35D,
-				0.35D,
-				0.35D
-		});
+		Third thirdperson = new Third(new int[] { 10, 45, 170 }, new double[] { 0, 1.5D, -2.75D }, new double[] {
+			0.35D,
+			0.35D,
+			0.35D });
 	}
 
 	private class Third {
@@ -889,21 +855,9 @@ public class JsonRegisterHelper {
 	}
 
 	private class First {
-		int[] rotation = new int[] {
-				0,
-				-135,
-				25
-		};
-		int[] translation = new int[] {
-				0,
-				4,
-				2
-		};
-		double[] scale = new double[] {
-				1.7D,
-				1.7D,
-				1.7D
-		};
+		int[] rotation = new int[] { 0, -135, 25 };
+		int[] translation = new int[] { 0, 4, 2 };
+		double[] scale = new double[] { 1.7D, 1.7D, 1.7D };
 	}
 
 }

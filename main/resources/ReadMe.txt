@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.8.7 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.9.0 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -286,6 +286,13 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.9.0
+　変更
+　　・BlockState用Jsonの登録処理を変更
+　　・気候ダメージ発生間隔の設定コンフィグをより大きな値に変更できるように(最大6000tick)
+　　・湿度と通気によるダメージの軽減方法を変更
+　　・ClimateDoubleCropの上段の気候チェック座標を修正
 
 ○3.8.7
 　修正

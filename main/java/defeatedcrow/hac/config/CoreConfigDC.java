@@ -476,12 +476,12 @@ public class CoreConfigDC {
 			lavaFix = d2;
 
 			int ei = entityRate.getInt();
-			if (ei < 20 || ei > 1200)
+			if (ei < 20 || ei > 6000)
 				ei = 100;
 			entityInterval = ei;
 
 			int ci = cropInterval.getInt();
-			if (ci < 20 || ci > 1200)
+			if (ci < 20 || ci > 6000)
 				ci = 100;
 			entityInterval = ci;
 

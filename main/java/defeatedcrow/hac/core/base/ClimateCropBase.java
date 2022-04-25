@@ -218,6 +218,16 @@ public abstract class ClimateCropBase extends BlockDC implements ISidedTexture, 
 	}
 
 	@Override
+	public IProperty[] ignoreTarget() {
+		return null;
+	}
+
+	@Override
+	public EnumStateType getType() {
+		return EnumStateType.CUSTOM;
+	}
+
+	@Override
 	public boolean isSuitableClimate(IClimate climate, IBlockState thisState) {
 		if (climate == null || thisState == null || !(thisState.getBlock() instanceof ClimateCropBase))
 			return false;
@@ -299,7 +309,7 @@ public abstract class ClimateCropBase extends BlockDC implements ISidedTexture, 
 				}
 				if (ret) {
 					if (canStayOnHarvest()) {
-						IBlockState next = thisState.withProperty(DCState.STAGE4, 0);
+						IBlockState next = this.setGroundState(thisState);
 						world.setBlockState(pos, next, 2);
 					} else {
 						world.setBlockToAir(pos);

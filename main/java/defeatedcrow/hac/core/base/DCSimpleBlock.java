@@ -124,9 +124,17 @@ public class DCSimpleBlock extends ClimateBlock implements ISidedTexture, INameS
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {
-				DCState.TYPE16
-		});
+		return new BlockStateContainer(this, new IProperty[] { DCState.TYPE16 });
+	}
+
+	@Override
+	public IProperty[] ignoreTarget() {
+		return null;
+	}
+
+	@Override
+	public EnumStateType getType() {
+		return EnumStateType.CUSTOM;
 	}
 
 	/** T, B, N, S, W, E */

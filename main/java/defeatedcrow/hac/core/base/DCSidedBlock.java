@@ -49,15 +49,15 @@ public class DCSidedBlock extends ClimateBlock implements ISidedTexture, INameSu
 		forceUpdate = force;
 	}
 
-	/*
-	 * ItemのUnlocalizedNameとかTexture指定とかに使う、メタと名前末尾の照合用リスト。
-	 * 各Blockで中身を入れる
-	 */
 	@Override
 	public int tickRate(World world) {
 		return 100;
 	}
 
+	/*
+	 * ItemのUnlocalizedNameとかTexture指定とかに使う、メタと名前末尾の照合用リスト。
+	 * 各Blockで中身を入れる
+	 */
 	@Override
 	public String[] getNameSuffix() {
 		return null;
@@ -145,10 +145,17 @@ public class DCSidedBlock extends ClimateBlock implements ISidedTexture, INameSu
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {
-				DCState.FLAG,
-				DCState.TYPE8
-		});
+		return new BlockStateContainer(this, new IProperty[] { DCState.FLAG, DCState.TYPE8 });
+	}
+
+	@Override
+	public IProperty[] ignoreTarget() {
+		return null;
+	}
+
+	@Override
+	public EnumStateType getType() {
+		return EnumStateType.CUSTOM;
 	}
 
 	@Override

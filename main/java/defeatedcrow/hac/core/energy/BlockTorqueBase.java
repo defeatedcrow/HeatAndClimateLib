@@ -5,6 +5,7 @@ import defeatedcrow.hac.api.blockstate.EnumSide;
 import defeatedcrow.hac.api.damage.DamageSourceClimate;
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.base.BlockContainerDC;
+import defeatedcrow.hac.core.base.EnumStateType;
 import defeatedcrow.hac.core.util.DCUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -151,6 +152,16 @@ public abstract class BlockTorqueBase extends BlockContainerDC {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] { DCState.SIDE, DCState.POWERED });
+	}
+
+	@Override
+	public IProperty[] ignoreTarget() {
+		return new IProperty[] { DCState.POWERED };
+	}
+
+	@Override
+	public EnumStateType getType() {
+		return EnumStateType.SIDE;
 	}
 
 	/* HardMode */

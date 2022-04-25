@@ -38,10 +38,10 @@ public class DCServerCommand extends CommandBase {
 		if (args.length > 0) {
 			if (args[0].equalsIgnoreCase("help")) {
 				sender.sendMessage(new TextComponentTranslation("\u00a7c*** HeatAndClimate command help ***"));
-				sender.sendMessage(
-						new TextComponentTranslation("\u00a7c1./climate season <params>: you can forced the season"));
-				sender.sendMessage(
-						new TextComponentTranslation("\u00a7c -The forced season will be cleared by restarting."));
+				sender.sendMessage(new TextComponentTranslation(
+						"\u00a7c1./climate season <params>: you can forced the season"));
+				sender.sendMessage(new TextComponentTranslation(
+						"\u00a7c -The forced season will be cleared by restarting."));
 				sender.sendMessage(new TextComponentTranslation(
 						"\u00a7c -The following strings can be used for <params>: spring, summer, autumn, winter"));
 				sender.sendMessage(new TextComponentTranslation("\u00a7c -Other strings: Cancel the forced season."));
@@ -51,17 +51,17 @@ public class DCServerCommand extends CommandBase {
 						"\u00a7c3./climate drought cancel: you can cancel the drought in the overworld"));
 			} else if (args[0].equalsIgnoreCase("season") && args.length > 1) {
 				EnumSeason season = null;
-				if (args[1].equalsIgnoreCase("spring") || args[1].equalsIgnoreCase("spr")
-						|| args[1].equalsIgnoreCase("0")) {
+				if (args[1].equalsIgnoreCase("spring") || args[1].equalsIgnoreCase("spr") || args[1]
+						.equalsIgnoreCase("0")) {
 					season = EnumSeason.SPRING;
-				} else if (args[1].equalsIgnoreCase("summer") || args[1].equalsIgnoreCase("smr")
-						|| args[1].equalsIgnoreCase("1")) {
+				} else if (args[1].equalsIgnoreCase("summer") || args[1].equalsIgnoreCase("smr") || args[1]
+						.equalsIgnoreCase("1")) {
 					season = EnumSeason.SUMMER;
-				} else if (args[1].equalsIgnoreCase("autumn") || args[1].equalsIgnoreCase("aut")
-						|| args[1].equalsIgnoreCase("2")) {
+				} else if (args[1].equalsIgnoreCase("autumn") || args[1].equalsIgnoreCase("aut") || args[1]
+						.equalsIgnoreCase("2")) {
 					season = EnumSeason.AUTUMN;
-				} else if (args[1].equalsIgnoreCase("winter") || args[1].equalsIgnoreCase("wtr")
-						|| args[1].equalsIgnoreCase("3")) {
+				} else if (args[1].equalsIgnoreCase("winter") || args[1].equalsIgnoreCase("wtr") || args[1]
+						.equalsIgnoreCase("3")) {
 					season = EnumSeason.WINTER;
 				}
 				DCTimeHelper.forcedSeason = season;
@@ -92,18 +92,15 @@ public class DCServerCommand extends CommandBase {
 					HaCPacket.INSTANCE.sendToAll(new MessageComConfig((byte) 0));
 				} else if (args[1].contains("armor")) {
 					ArmorResistantRegister.pre();
-					notifyCommandListener(sender, this, "\u00a7b armor_item_resistant.json has been reloaded.",
-							new Object[] {});
+					notifyCommandListener(sender, this, "\u00a7b armor_item_resistant.json has been reloaded.", new Object[] {});
 					HaCPacket.INSTANCE.sendToAll(new MessageComConfig((byte) 1));
 				} else if (args[1].contains("block")) {
 					HeatBlockRegister.pre();
-					notifyCommandListener(sender, this, "\u00a7b block_climate_parameter.json has been reloaded.",
-							new Object[] {});
+					notifyCommandListener(sender, this, "\u00a7b block_climate_parameter.json has been reloaded.", new Object[] {});
 					HaCPacket.INSTANCE.sendToAll(new MessageComConfig((byte) 2));
 				} else if (args[1].contains("mob")) {
 					MobResistantRegister.pre();
-					notifyCommandListener(sender, this, "\u00a7b mob_resistant.json has been reloaded.",
-							new Object[] {});
+					notifyCommandListener(sender, this, "\u00a7b mob_resistant.json has been reloaded.", new Object[] {});
 					HaCPacket.INSTANCE.sendToAll(new MessageComConfig((byte) 3));
 				} else if (args[1].contains("main") && ClimateCore.loadedMain) {
 					MainComHelper.reloadMainConfig();
@@ -116,6 +113,9 @@ public class DCServerCommand extends CommandBase {
 				} else {
 					sender.sendMessage(new TextComponentTranslation("\u00a7c This file name can not be used."));
 				}
+			} else if (args[0].equalsIgnoreCase("totaltime")) {
+				long time = server.getWorld(0).getWorldInfo().getWorldTime();
+				sender.sendMessage(new TextComponentTranslation("\u00a7c Show world totaltime: " + time));
 			} else {
 				sender.sendMessage(new TextComponentTranslation(
 						"\u00a7c/climate help: You can see the help of HeatAndClimate command."));

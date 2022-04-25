@@ -141,8 +141,9 @@ public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTex
 			if (CoreConfigDC.harderCrop && world.getLight(pos) < 8) {
 				return;
 			}
-			IClimate clm = this.getClimate(world, pos, state);
-			DCHumidity underHum = ClimateAPI.calculator.getHumidity(world, pos.down());
+			boolean d = world.getBlockState(pos.down()).getBlock() instanceof IClimateCrop;
+			IClimate clm = this.getClimate(world, d ? pos.down() : pos, state);
+			DCHumidity underHum = ClimateAPI.calculator.getHumidity(world, d ? pos.down(2) : pos.down());
 			GrowingStage stage = this.getCurrentStage(state);
 			int chance = 30;
 			if (this.isSuitableClimate(clm, state)) {
@@ -238,6 +239,16 @@ public abstract class ClimateDoubleCropBase extends BlockDC implements ISidedTex
 	@Override
 	public IBlockState setGroundState(IBlockState state) {
 		return state.withProperty(DCState.STAGE8, 4);
+	}
+
+	@Override
+	public IProperty[] ignoreTarget() {
+		return null;
+	}
+
+	@Override
+	public EnumStateType getType() {
+		return EnumStateType.CUSTOM;
 	}
 
 	@Override

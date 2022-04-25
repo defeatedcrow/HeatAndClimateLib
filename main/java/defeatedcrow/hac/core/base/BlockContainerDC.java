@@ -32,7 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * 移植時に苦労するので代替レシピへの置き換えを作成
  */
-public abstract class BlockContainerDC extends BlockContainer {
+public abstract class BlockContainerDC extends BlockContainer implements IPropertyIgnore {
 
 	public BlockContainerDC(Material m, String s) {
 		super(m);

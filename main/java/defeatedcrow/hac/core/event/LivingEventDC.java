@@ -314,23 +314,31 @@ public class LivingEventDC {
 				float prevHum = DamageAPI.resistantData.getHumResistant(living, clm.getHumidity());
 				float prevAir = DamageAPI.resistantData.getAirResistant(living, clm.getAirflow());
 
+				DamageSourceClimate sourceHum = clm.getHumidity() == DCHumidity.DRY ?
+						DamageSourceClimate.climateDryDamage : DamageSourceClimate.climateWaterDamage;
+				if (sourceHum == DamageSourceClimate.climateWaterDamage) {
+					if (living.canBreatheUnderwater()) {
+						prevHum += 2.0F;
+					}
+				}
+
+				DamageSourceClimate sourceAir = clm.getAirflow() == DCAirflow.TIGHT ?
+						DamageSourceClimate.climateSuffocationDamage : DamageSourceClimate.climateWindDamage;
+				if (sourceAir == DamageSourceClimate.climateSuffocationDamage) {
+					if (living.canBreatheUnderwater() || living.isPotionActive(MobEffects.WATER_BREATHING)) {
+						prevAir += 2.0F;
+					}
+				}
+
 				damHum -= prevHum;
 				damAir -= prevAir;
 
 				if (prevHum <= 0F && CoreConfigDC.enableHumidity) {
-					DamageSourceClimate sourceHum = clm.getHumidity() == DCHumidity.DRY ?
-							DamageSourceClimate.climateDryDamage : DamageSourceClimate.climateWaterDamage;
 					living.hurtResistantTime = 0;
 					living.attackEntityFrom(sourceHum, damHum);
 				}
 
 				if (prevAir <= 0F && CoreConfigDC.enableSuffocation) {
-					DamageSourceClimate sourceAir = clm.getAirflow() == DCAirflow.TIGHT ?
-							DamageSourceClimate.climateSuffocationDamage : DamageSourceClimate.climateWindDamage;
-					if (sourceAir == DamageSourceClimate.climateSuffocationDamage && living
-							.isPotionActive(MobEffects.WATER_BREATHING)) {
-						prevAir += 2.0F;
-					}
 					living.hurtResistantTime = 0;
 					living.attackEntityFrom(sourceAir, damAir);
 				}

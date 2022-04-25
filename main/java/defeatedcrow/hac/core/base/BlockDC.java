@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * 移植時に苦労するので代替レシピへの置き換えを作成
  */
-public class BlockDC extends Block {
+public abstract class BlockDC extends Block implements IPropertyIgnore {
 
 	public BlockDC(Material m, String s) {
 		super(m);
