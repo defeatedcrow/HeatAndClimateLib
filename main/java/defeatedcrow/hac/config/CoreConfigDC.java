@@ -335,7 +335,7 @@ public class CoreConfigDC {
 					.get("entity setting", "Enable Sharing Potion", sharePotionWithRidingMob, "Enable sharing potion effects with riding mob.");
 
 			Property entityRate = cfg
-					.get("entity setting", "Entity Update Interval", entityInterval, "Set the number of tick of entity update interval. 20-1200");
+					.get("entity setting", "Entity Update Interval", entityInterval, "Set the number of tick of entity update interval. 20-6000");
 
 			Property b_list = cfg
 					.get("world setting", "Tick Update Blacklist", updateBlackList, "Please add block registry names you want exclude from climate tick update for reducing lag.");
@@ -481,9 +481,9 @@ public class CoreConfigDC {
 			entityInterval = ei;
 
 			int ci = cropInterval.getInt();
-			if (ci < 20 || ci > 6000)
-				ci = 100;
-			entityInterval = ci;
+			if (ci < 20 || ci > 1200)
+				ci = 80;
+			cropUpdateInterval = ci;
 
 			food_amount = food_a.getDouble();
 			if (food_amount < 0) {

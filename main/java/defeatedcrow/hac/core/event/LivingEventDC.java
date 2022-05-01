@@ -325,7 +325,8 @@ public class LivingEventDC {
 				DamageSourceClimate sourceAir = clm.getAirflow() == DCAirflow.TIGHT ?
 						DamageSourceClimate.climateSuffocationDamage : DamageSourceClimate.climateWindDamage;
 				if (sourceAir == DamageSourceClimate.climateSuffocationDamage) {
-					if (living.canBreatheUnderwater() || living.isPotionActive(MobEffects.WATER_BREATHING)) {
+					if (living.canBreatheUnderwater() || living.isPotionActive(MobEffects.WATER_BREATHING) || living
+							.getAir() > 0F) {
 						prevAir += 2.0F;
 					}
 				}
