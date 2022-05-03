@@ -14,7 +14,7 @@ public class MainComHelper {
 
 		File dir = new File(ClimateConfig.configDir, "main.cfg");
 		if (dir.exists()) {
-			MainConfig.INSTANCE.load(dir);
+			MainConfig.INSTANCE.load(ClimateConfig.configDir);
 			return true;
 		}
 		return false;
