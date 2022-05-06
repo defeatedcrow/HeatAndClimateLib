@@ -5,7 +5,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -28,6 +30,15 @@ public abstract class DCTileBlockFaced extends DCTileBlock {
 				world.notifyNeighborsOfStateChange(pos, state.getBlock(), true);
 			}
 		}
+	}
+
+	// 設置・破壊処理
+	@Override
+	public IBlockState getPlaceState(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ,
+			int meta, EntityLivingBase placer, EnumHand hand) {
+		IBlockState state = super.getPlaceState(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
+		state = state.withProperty(DCState.FACING, placer.getHorizontalFacing());
+		return state;
 	}
 
 	@Override
