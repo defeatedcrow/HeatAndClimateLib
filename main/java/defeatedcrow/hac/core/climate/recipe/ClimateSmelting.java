@@ -29,7 +29,7 @@ public class ClimateSmelting implements IClimateSmelting {
 	private final ItemStack secondary;
 	private final float chance;
 	private final boolean needCooling;
-	private boolean dropItem = false;
+	private boolean dropItem = true;
 	private List<DCHeatTier> heat = new ArrayList<DCHeatTier>();
 	private List<DCHumidity> hum = new ArrayList<DCHumidity>();
 	private List<DCAirflow> air = new ArrayList<DCAirflow>();

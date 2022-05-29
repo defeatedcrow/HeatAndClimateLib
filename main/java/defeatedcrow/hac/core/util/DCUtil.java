@@ -524,11 +524,11 @@ public class DCUtil {
 					}
 					if (CoreConfigDC.harderMagicCost == 0) {
 						// exp
-						return player.experienceTotal > cost;
-					} else if (CoreConfigDC.harderMagicCost == 2) {
+						return player.experienceLevel > 0 || player.xpBarCap() * player.experience > cost;
+					} else if (CoreConfigDC.harderMagicCost == 1) {
 						// hunger
 						return player.getFoodStats().getFoodLevel() - cost > 1F;
-					} else if (CoreConfigDC.harderMagicCost == 1) {
+					} else if (CoreConfigDC.harderMagicCost == 2) {
 						// heart
 						return player.getHealth() - cost > 0.5F;
 					}
@@ -551,24 +551,38 @@ public class DCUtil {
 						return;
 					}
 					if (CoreConfigDC.harderMagicCost == 0) {
+						if (ClimateCore.isDebug) {
+							DCLogger.debugInfoLog("EXP: total " + player.experienceTotal);
+							DCLogger.debugInfoLog("EXP: cur " + player.experience + " cap " + player
+									.xpBarCap() + " level " + player.experienceLevel);
+						}
 						// exp
-						if (player.experience > cost) {
-							player.experience -= cost;
-						} else {
-							float f = cost - player.experience;
+						if (player.experienceTotal > cost) {
+							player.experienceTotal -= cost;
+						}
+						float f = cost / player.xpBarCap();
+						while (f > 1.0F) {
 							player.experienceLevel -= 1;
+							f -= 1F;
+						}
+
+						if (player.experience > f) {
+							player.experience -= f;
+						} else {
+							player.experienceLevel -= 1;
+							float f2 = f - player.experience;
 							if (player.experienceLevel < 0) {
 								player.experienceLevel = 0;
 								player.experience = 0.0F;
 								player.experienceTotal = 0;
 							} else {
-								float exp = player.xpBarCap() - f;
+								float exp = 1F - f2;
 								player.experience = exp;
 							}
 						}
 					} else if (CoreConfigDC.harderMagicCost == 1) {
 						// hunger
-						player.addExhaustion(0.1F * cost);
+						player.addExhaustion(cost);
 					} else if (CoreConfigDC.harderMagicCost == 2) {
 						// heart
 						if (player.getHealth() - cost < 0.5F) {

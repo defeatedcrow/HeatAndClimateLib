@@ -1,4 +1,4 @@
-﻿#### Heat&Climate Lib 3.9.1 for Minecraft 1.12.2 ####
+﻿#### Heat&Climate Lib 3.9.2 for Minecraft 1.12.2 ####
 
 
 # 前提Ver&Mod
@@ -286,6 +286,11 @@ Z=赤石
 ### 更新履歴 ###
 
 1.X.Xの内容は1.10.2版HaCLibのReadMeをご確認ください。
+
+○3.9.2
+　修正
+　　・ハードモード魔法モードの魔法使用コストが正常に消費されない
+　　・DropItemの気候精錬がIetmFood以外のアイテムに有効化されない
 
 ○3.9.1
 　修正

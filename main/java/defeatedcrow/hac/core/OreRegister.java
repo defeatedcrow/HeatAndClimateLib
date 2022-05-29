@@ -97,10 +97,6 @@ public class OreRegister {
 
 		OreDictionary.registerOre("egg", new ItemStack(Items.EGG));
 
-		OreDictionary.registerOre("listAllveggie", new ItemStack(Items.CARROT, 1, 0));
-		OreDictionary.registerOre("listAllveggie", new ItemStack(Items.POTATO, 1, 0));
-		OreDictionary.registerOre("listAllveggie", new ItemStack(Items.BEETROOT, 1, 0));
-		OreDictionary.registerOre("listAllveggie", new ItemStack(Blocks.PUMPKIN, 1, 0));
 		OreDictionary.registerOre("bread", new ItemStack(Items.BREAD, 1, 0));
 
 		OreDictionary.registerOre("listAllmeatcooked", new ItemStack(Items.COOKED_BEEF, 1, 0));
@@ -118,6 +114,15 @@ public class OreRegister {
 		OreDictionary.registerOre("clay", new ItemStack(Items.CLAY_BALL));
 
 		OreDictionary.registerOre("vineLeaves", new ItemStack(Blocks.VINE, 1, 0));
+
+		OreDictionary.registerOre("blockWheat", new ItemStack(Blocks.HAY_BLOCK, 1, 0));
+
+		OreDictionary.registerOre("fenceWood", new ItemStack(Blocks.OAK_FENCE, 1, 0));
+		OreDictionary.registerOre("fenceWood", new ItemStack(Blocks.BIRCH_FENCE, 1, 0));
+		OreDictionary.registerOre("fenceWood", new ItemStack(Blocks.JUNGLE_FENCE, 1, 0));
+		OreDictionary.registerOre("fenceWood", new ItemStack(Blocks.SPRUCE_FENCE, 1, 0));
+		OreDictionary.registerOre("fenceWood", new ItemStack(Blocks.ACACIA_FENCE, 1, 0));
+		OreDictionary.registerOre("fenceWood", new ItemStack(Blocks.DARK_OAK_FENCE, 1, 0));
 
 		Item cod = Item.REGISTRY.getObject(new ResourceLocation("minecraft:cod"));
 		if (cod != null) {

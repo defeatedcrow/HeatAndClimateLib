@@ -33,6 +33,7 @@ public class DropItemUpdateEvent {
 					if (tag.hasKey("dcs.counter")) {
 						c = tag.getShort("dcs.counter");
 					}
+
 					if (c > 0) {
 						c--;
 					} else {

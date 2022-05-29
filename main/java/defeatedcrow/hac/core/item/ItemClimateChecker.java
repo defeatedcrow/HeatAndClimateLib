@@ -176,4 +176,9 @@ public class ItemClimateChecker extends DCItem {
 		return true;
 	}
 
+	@Override
+	public boolean onEntityItemUpdate(net.minecraft.entity.item.EntityItem entityItem) {
+		return false;
+	}
+
 }

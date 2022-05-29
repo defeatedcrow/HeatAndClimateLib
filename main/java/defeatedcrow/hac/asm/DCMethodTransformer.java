@@ -105,8 +105,10 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 			String targetMethodName = "updateTick";
 			String targetMethodNameSRG = "func_180650_b";
 
-			String targetMethoddesc = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
-			String targetMethoddescSRG = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
+			String targetMethoddesc =
+					"(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
+			String targetMethoddescSRG =
+					"(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
 
 			MethodNode mnode = null;
 
@@ -130,7 +132,8 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 
 				InsnList overrideList = new InsnList();
 				final LabelNode lavel = new LabelNode();
-				String newdesc = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
+				String newdesc =
+						"(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Ljava/util/Random;)V";
 
 				/*
 				 * eventをよぶ
@@ -390,7 +393,8 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 
 			// 改変対象メソッドの戻り値型および、引数型をあらわします
 			String targetDesc2 = "(Layw;IIIIIZLawt;Lawt;)V";
-			String targetDesc2SRG = "(Lnet/minecraft/world/chunk/ChunkPrimer;IIIIIZLnet/minecraft/block/state/IBlockState;Lnet/minecraft/block/state/IBlockState;)V";
+			String targetDesc2SRG =
+					"(Lnet/minecraft/world/chunk/ChunkPrimer;IIIIIZLnet/minecraft/block/state/IBlockState;Lnet/minecraft/block/state/IBlockState;)V";
 
 			// 対象のメソッドを検索取得します。
 			MethodNode mnode2 = null;
@@ -628,8 +632,10 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 			String targetMethodName = "onItemUseFinish";
 			String targetMethodNameSRG = "func_77654_b";
 
-			String targetMethoddesc = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/EntityLivingBase;)Lnet/minecraft/item/ItemStack;";
-			String targetMethoddescSRG = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/EntityLivingBase;)Lnet/minecraft/item/ItemStack;";
+			String targetMethoddesc =
+					"(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/EntityLivingBase;)Lnet/minecraft/item/ItemStack;";
+			String targetMethoddescSRG =
+					"(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/EntityLivingBase;)Lnet/minecraft/item/ItemStack;";
 
 			MethodNode mnode = null;
 			String mdesc = null;
@@ -643,13 +649,12 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 			MethodNode mnode2 = null;
 			String mdesc2 = null;
 
-			if (className.contains("ItemFood")) {
-				for (MethodNode curMnode : cnode.methods) {
+			for (MethodNode curMnode : cnode.methods) {
 
-					String mName = FMLDeobfuscatingRemapper.INSTANCE
-							.mapMethodName(className, curMnode.name, curMnode.desc);
-					String mdName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(curMnode.desc);
+				String mName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(className, curMnode.name, curMnode.desc);
+				String mdName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(curMnode.desc);
 
+				if (className.contains("ItemFood"))
 					if ((targetMethodName.equals(curMnode.name) && targetMethoddesc
 							.equals(curMnode.desc)) || (targetMethodNameSRG.equals(mName) && targetMethoddescSRG
 									.equals(mdName))) {
@@ -658,13 +663,12 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 						break;
 					}
 
-					if ((targetMethodName2.equals(curMnode.name) && targetMethoddesc2
-							.equals(curMnode.desc)) || (targetMethodNameSRG2.equals(mName) && targetMethoddescSRG2
-									.equals(mdName))) {
-						mnode2 = curMnode;
-						mdesc2 = curMnode.desc;
-						break;
-					}
+				if ((targetMethodName2.equals(curMnode.name) && targetMethoddesc2
+						.equals(curMnode.desc)) || (targetMethodNameSRG2.equals(mName) && targetMethoddescSRG2
+								.equals(mdName))) {
+					mnode2 = curMnode;
+					mdesc2 = curMnode.desc;
+					break;
 				}
 			}
 
