@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.ClimateCalculateEvent;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
@@ -27,8 +28,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public abstract class TileTorqueLockable extends TileTorqueBase
-		implements IInteractionObject, ILockableContainer, ITagGetter {
+public abstract class TileTorqueLockable extends TileTorqueBase implements IInteractionObject, ILockableContainer,
+		ITagGetter {
 
 	protected final List<BlockPos> effectiveTiles = new ArrayList<BlockPos>();
 	protected IClimate current = null;
@@ -79,7 +80,12 @@ public abstract class TileTorqueLockable extends TileTorqueBase
 				}
 			}
 			int code = (air.getID() << 6) + (hum.getID() << 4) + heat.getID();
-			current = ClimateAPI.register.getClimateFromInt(code);
+			IClimate clm = ClimateAPI.register.getClimateFromInt(code);
+
+			ClimateCalculateEvent event = new ClimateCalculateEvent(world, pos, clm);
+			clm = event.result();
+
+			current = clm;
 		}
 	}
 

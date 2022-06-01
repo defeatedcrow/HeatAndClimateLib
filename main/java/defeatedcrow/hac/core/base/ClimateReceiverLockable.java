@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.ClimateCalculateEvent;
 import defeatedcrow.hac.api.climate.DCAirflow;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.climate.DCHumidity;
@@ -72,7 +73,12 @@ public abstract class ClimateReceiverLockable extends DCLockableTE {
 				}
 			}
 			int code = (air.getID() << 6) + (hum.getID() << 4) + heat.getID();
-			current = ClimateAPI.register.getClimateFromInt(code);
+			IClimate clm = ClimateAPI.register.getClimateFromInt(code);
+
+			ClimateCalculateEvent event = new ClimateCalculateEvent(world, pos, clm);
+			clm = event.result();
+
+			current = clm;
 
 			if (!remove.isEmpty()) {
 				effectiveTiles.removeAll(remove);

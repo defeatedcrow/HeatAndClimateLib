@@ -67,10 +67,7 @@ public abstract class ClimateBlock extends BlockDC implements IClimateObject {
 
 	@Override
 	public IClimate onUpdateClimate(World world, BlockPos pos, IBlockState state) {
-		DCHeatTier heat = ClimateAPI.calculator.getAverageTemp(world, pos, checkingRange()[0], false);
-		DCHumidity hum = ClimateAPI.calculator.getHumidity(world, pos, checkingRange()[1], false);
-		DCAirflow air = ClimateAPI.calculator.getAirflow(world, pos, checkingRange()[2], false);
-		IClimate c = ClimateAPI.register.getClimateFromParam(heat, hum, air);
+		IClimate c = ClimateAPI.calculator.getClimate(world, pos, checkingRange());
 		return c;
 	}
 
