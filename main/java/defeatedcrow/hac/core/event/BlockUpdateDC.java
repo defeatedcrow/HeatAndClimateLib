@@ -65,12 +65,13 @@ public class BlockUpdateDC {
 			boolean roof = hasRoof(world, p);
 
 			// 直接指定の仕様
-			if (CoreConfigDC.enableFarmland && BlockFarmland.class.isInstance(block)) {
+			if (CoreConfigDC.enableFarmland && BlockFarmland.class.isInstance(block) && st.getProperties()
+					.containsKey(BlockFarmland.MOISTURE)) {
 				DCHumidity hum = ClimateAPI.calculator.getHumidity(world, p, 4, true);
 				DCHumidity hum2 = clm.get().getHumidity();
 				// 耕地はWET以上の湿度では湿る
 				if (hum.getID() > 1 || hum2.getID() > 1) {
-					IBlockState next = Blocks.FARMLAND.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7);
+					IBlockState next = st.withProperty(BlockFarmland.MOISTURE, 7);
 					world.setBlockState(p, next, 2);
 					// DCLogger.debugLog("farmland update");
 					event.setCanceled(true);

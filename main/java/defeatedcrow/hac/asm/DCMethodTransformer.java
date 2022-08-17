@@ -29,6 +29,7 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 	private static final String TARGET_PACKAGE_7 = "net.minecraft.world.gen.MapGenRavine";
 	private static final String TARGET_PACKAGE_8 = "net.minecraft.item.Item";
 	private static final String TARGET_PACKAGE_9 = "net.minecraft.item.ItemFood";
+	private static final String TARGET_PACKAGE_10 = "net.minecraft.entity.EntityLivingBase";
 	private static final String TARGET_IGNORE1 = "net.minecraft.block.Block";
 
 	public static boolean enableBlockUpdate = true;
@@ -746,6 +747,67 @@ public class DCMethodTransformer implements IClassTransformer, Opcodes {
 		} catch (Exception e) {
 			LogManager.getLogger("dcs_asm")
 					.fatal("Failed to load DCMethodTransformer:ItemFood#onItemUseFinish. It's not work correctly.");
+		}
+		return bytes;
+	}
+
+	private byte[] hookOnElytraFlying(String className, byte[] bytes) {
+		try {
+			ClassNode cnode = new ClassNode();
+			ClassReader reader = new ClassReader(bytes);
+			reader.accept(cnode, 0);
+
+			String targetMethodName = "isElytraFlying";
+			String targetMethodNameSRG = "func_184613_cA";
+
+			String targetMethoddesc = "()Z";
+			String targetMethoddescSRG = "()Z";
+
+			MethodNode mnode = null;
+			String mdesc = null;
+
+			for (MethodNode curMnode : cnode.methods) {
+
+				String mName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(className, curMnode.name, curMnode.desc);
+				String mdName = FMLDeobfuscatingRemapper.INSTANCE.mapMethodDesc(curMnode.desc);
+
+				if ((targetMethodName.equals(curMnode.name) && targetMethoddesc
+						.equals(curMnode.desc)) || (targetMethodNameSRG.equals(mName) && targetMethoddescSRG
+								.equals(mdName))) {
+					mnode = curMnode;
+					mdesc = curMnode.desc;
+					break;
+				}
+			}
+
+			if (mnode != null) {
+
+				InsnList overrideList = new InsnList();
+				final LabelNode lavel = new LabelNode();
+				final LabelNode lavel2 = new LabelNode();
+
+				/*
+				 * eventをよぶ
+				 * resultはResult == ARROW時のみtrueを返す。
+				 */
+				overrideList.add(new TypeInsnNode(NEW, "defeatedcrow/hac/api/hook/DCElytraFlyingEvent"));
+				overrideList.add(new InsnNode(DUP));
+				overrideList.add(new VarInsnNode(ALOAD, 0));
+				overrideList.add(new MethodInsnNode(INVOKESPECIAL, "defeatedcrow/hac/api/hook/DCElytraFlyingEvent",
+						"<init>", "(Lnet/minecraft/entity/EntityLivingBase;)V", false));
+				overrideList.add(new MethodInsnNode(INVOKEVIRTUAL, "defeatedcrow/hac/api/hook/DCElytraFlyingEvent",
+						"result", "()Z", false));
+				overrideList.add(new InsnNode(IRETURN));
+
+				mnode.instructions.insert(overrideList);
+
+				ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+				cnode.accept(cw);
+				bytes = cw.toByteArray();
+			}
+		} catch (Exception e) {
+			LogManager.getLogger("dcs_asm")
+					.fatal("Failed to load DCMethodTransformer:Entity#isInsideOfMaterial. It's not work correctly.");
 		}
 		return bytes;
 	}

@@ -39,6 +39,8 @@ public class ClimateConfig {
 		HeatBlockRegister.setDir(configDir);
 		ClimateRegister.setDir(configDir);
 		FluidDictionaryDC.setDir(configDir);
+
+		ForcedSeasonJson.lead();
 	}
 
 	public void loadRecipeConfig() {

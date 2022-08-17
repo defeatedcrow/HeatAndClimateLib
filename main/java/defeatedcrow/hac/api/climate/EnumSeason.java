@@ -24,4 +24,15 @@ public enum EnumSeason {
 		return I18n.format(name);
 	}
 
+	public static EnumSeason getSeasonFromID(int i) {
+		if (i == 1)
+			return SUMMER;
+		else if (i == 2)
+			return AUTUMN;
+		else if (i == 3)
+			return WINTER;
+		else
+			return SPRING;
+	}
+
 }

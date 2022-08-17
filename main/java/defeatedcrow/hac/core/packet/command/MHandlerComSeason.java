@@ -1,7 +1,8 @@
 package defeatedcrow.hac.core.packet.command;
 
 import defeatedcrow.hac.api.climate.EnumSeason;
-import defeatedcrow.hac.core.util.DCTimeHelper;
+import defeatedcrow.hac.core.ClimateCore;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -24,7 +25,17 @@ public class MHandlerComSeason implements IMessageHandler<MessageComSeason, IMes
 			} else if (data == 3) {
 				season = EnumSeason.WINTER;
 			}
-			DCTimeHelper.forcedSeason = season;
+			World world = ClimateCore.proxy.getClientWorld();
+			if (world != null && world.hasCapability(CapabilityForcedSeason.FORCED_SEASON_CAPABILITY, null)) {
+				IForcedSeason cap = world.getCapability(CapabilityForcedSeason.FORCED_SEASON_CAPABILITY, null);
+				if (season == null) {
+					cap.setForced(false);
+					cap.setForcedSeason(EnumSeason.SPRING);
+				} else {
+					cap.setForced(true);
+					cap.setForcedSeason(season);
+				}
+			}
 		}
 		return null;
 	}

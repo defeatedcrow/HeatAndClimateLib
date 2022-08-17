@@ -1,9 +1,6 @@
 package defeatedcrow.hac.core.packet;
 
 import defeatedcrow.hac.core.ClimateCore;
-import defeatedcrow.hac.core.base.ClimateReceiveTile;
-import defeatedcrow.hac.core.base.ClimateReceiverLockable;
-import defeatedcrow.hac.core.energy.TileTorqueLockable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -23,12 +20,8 @@ public class MHandlerClimateTile implements IMessageHandler<MessageClimateUpdate
 			int z = message.z;
 			int clm = message.climate;
 			TileEntity tile = player.world.getTileEntity(new BlockPos(x, y, z));
-			if (tile instanceof ClimateReceiveTile) {
-				((ClimateReceiveTile) tile).setClimate(clm);
-			} else if (tile != null && tile instanceof ClimateReceiverLockable) {
-				((ClimateReceiverLockable) tile).setClimate(clm);
-			} else if (tile != null && tile instanceof TileTorqueLockable) {
-				((TileTorqueLockable) tile).setClimate(clm);
+			if (tile instanceof IClimateUpdateTile) {
+				((IClimateUpdateTile) tile).setClimate(clm);
 			}
 		}
 		return null;

@@ -11,6 +11,7 @@ import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.api.climate.IClimate;
 import defeatedcrow.hac.api.climate.IClimateTileEntity;
 import defeatedcrow.hac.core.base.ITagGetter;
+import defeatedcrow.hac.core.packet.IClimateUpdateTile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -29,7 +30,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 public abstract class TileTorqueLockable extends TileTorqueBase implements IInteractionObject, ILockableContainer,
-		ITagGetter {
+		ITagGetter, IClimateUpdateTile {
 
 	protected final List<BlockPos> effectiveTiles = new ArrayList<BlockPos>();
 	protected IClimate current = null;
@@ -89,10 +90,12 @@ public abstract class TileTorqueLockable extends TileTorqueBase implements IInte
 		}
 	}
 
+	@Override
 	public IClimate getClimate() {
 		return current;
 	}
 
+	@Override
 	public void setClimate(int i) {
 		IClimate ret = ClimateAPI.register.getClimateFromInt(i);
 		if (ret != null) {

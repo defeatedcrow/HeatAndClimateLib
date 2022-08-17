@@ -85,6 +85,15 @@ public class DCTank implements IFluidTank, IFluidHandler {
 		}
 	}
 
+	public void setFluidNameAndAmount(String id, int amo) {
+		FluidStack ret = null;
+		if (FluidRegistry.isFluidRegistered(id)) {
+			Fluid f = FluidRegistry.getFluid(id);
+			ret = new FluidStack(f, amo);
+		}
+		fluid = ret;
+	}
+
 	public void setFluidByIdName(String id) {
 		FluidStack ret = null;
 		if (FluidRegistry.isFluidRegistered(id)) {
@@ -180,9 +189,7 @@ public class DCTank implements IFluidTank, IFluidHandler {
 
 	@Override
 	public IFluidTankProperties[] getTankProperties() {
-		return new IFluidTankProperties[] {
-				new FluidTankProperties(getFluid(), capacity)
-		};
+		return new IFluidTankProperties[] { new FluidTankProperties(getFluid(), capacity) };
 	}
 
 	@Override

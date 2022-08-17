@@ -13,12 +13,12 @@ import defeatedcrow.hac.core.climate.WeatherChecker;
 import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import defeatedcrow.hac.core.packet.HaCPacket;
 import defeatedcrow.hac.core.plugin.main.MainComHelper;
-import defeatedcrow.hac.core.util.DCTimeHelper;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 
 public class DCServerCommand extends CommandBase {
@@ -64,7 +64,17 @@ public class DCServerCommand extends CommandBase {
 						.equalsIgnoreCase("3")) {
 					season = EnumSeason.WINTER;
 				}
-				DCTimeHelper.forcedSeason = season;
+				World world = server.worlds[0];
+				if (world != null && world.hasCapability(CapabilityForcedSeason.FORCED_SEASON_CAPABILITY, null)) {
+					IForcedSeason cap = world.getCapability(CapabilityForcedSeason.FORCED_SEASON_CAPABILITY, null);
+					if (season == null) {
+						cap.setForced(false);
+						cap.setForcedSeason(EnumSeason.SPRING);
+					} else {
+						cap.setForced(true);
+						cap.setForcedSeason(season);
+					}
+				}
 				byte num = season == null ? 4 : (byte) season.id;
 				HaCPacket.INSTANCE.sendToAll(new MessageComSeason(num));
 				if (season == null) {

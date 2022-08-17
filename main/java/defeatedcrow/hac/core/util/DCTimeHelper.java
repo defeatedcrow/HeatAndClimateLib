@@ -6,6 +6,8 @@ import java.util.Date;
 
 import defeatedcrow.hac.api.climate.EnumSeason;
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.core.packet.command.CapabilityForcedSeason;
+import defeatedcrow.hac.core.packet.command.IForcedSeason;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -14,8 +16,6 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 public class DCTimeHelper {
 
 	private DCTimeHelper() {}
-
-	public static EnumSeason forcedSeason = null;
 
 	public static long time(World world) {
 		return world.getWorldInfo().getWorldTime() % 24000L;
@@ -139,8 +139,11 @@ public class DCTimeHelper {
 	}
 
 	public static EnumSeason getSeasonEnum(World world) {
-		if (forcedSeason != null) {
-			return forcedSeason;
+		if (world.hasCapability(CapabilityForcedSeason.FORCED_SEASON_CAPABILITY, null)) {
+			IForcedSeason cap = world.getCapability(CapabilityForcedSeason.FORCED_SEASON_CAPABILITY, null);
+			if (cap.isForced()) {
+				return cap.getSeason();
+			}
 		}
 		int s = getSeason(world);
 		if (s == 1) {

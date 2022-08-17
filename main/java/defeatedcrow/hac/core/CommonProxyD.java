@@ -7,6 +7,7 @@ import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.client.base.ModelThinBiped;
 import defeatedcrow.hac.core.client.event.ClimateBiomeColorEvent;
 import defeatedcrow.hac.core.climate.WeatherChecker;
+import defeatedcrow.hac.core.event.AttachCapabilityDC;
 import defeatedcrow.hac.core.event.BiomeTempEventDC;
 import defeatedcrow.hac.core.event.BlockFreezeEventDC;
 import defeatedcrow.hac.core.event.BlockUpdateDC;
@@ -21,6 +22,7 @@ import defeatedcrow.hac.core.event.LivingHurtDC;
 import defeatedcrow.hac.core.event.SuffocationEventDC;
 import defeatedcrow.hac.core.event.TickEventDC;
 import defeatedcrow.hac.core.packet.HaCPacket;
+import defeatedcrow.hac.core.packet.command.CapabilityForcedSeason;
 import defeatedcrow.hac.core.recipe.CustomizeVanillaRecipe;
 import defeatedcrow.hac.core.util.PotionFreezeResistance;
 import net.minecraft.block.BlockDispenser;
@@ -54,6 +56,7 @@ public class CommonProxyD {
 	public void loadEntity() {}
 
 	public void loadInit() {
+		CapabilityForcedSeason.register();
 		OreRegister.load();
 		if (CoreConfigDC.enableVanilla) {
 			DCRecipe.load();
@@ -66,6 +69,7 @@ public class CommonProxyD {
 		MinecraftForge.EVENT_BUS.register(new LivingHurtDC());
 		MinecraftForge.EVENT_BUS.register(new ClickEventDC());
 		MinecraftForge.EVENT_BUS.register(new TickEventDC());
+		MinecraftForge.EVENT_BUS.register(new AttachCapabilityDC());
 		if (CoreConfigDC.enableDeepWater) {
 			MinecraftForge.EVENT_BUS.register(new CaveDigEventDC());
 			MinecraftForge.TERRAIN_GEN_BUS.register(new CaveGenLavaDC());
